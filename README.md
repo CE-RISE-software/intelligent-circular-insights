@@ -35,8 +35,4 @@ Neither the European Union nor the granting authority can be held responsible fo
 Licensed under the [European Union Public Licence v1.2 (EUPL-1.2)](LICENSE).  
 Attribution: CE-RISE project (Grant Agreement No. 101092281) and the individual authors/partners as indicated.
 
-<a href="https://www.nilu.com" target="_blank" rel="noopener noreferrer">
-  <img src="https://nilu.no/wp-content/uploads/2023/12/nilu-logo-seagreen-rgb-300px.png" alt="NILU logo" height="20"/>
-</a>
-
-Developed by NILU (Riccardo Boero — ribo@nilu.no) within the CE-RISE project.
+Developed by UiO within the CE-RISE project.
