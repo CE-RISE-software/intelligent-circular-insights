@@ -15,6 +15,7 @@
 - [Releasing](RELEASE.md)
 - [Codex task list](CODEX_TASKS.md)
 - [Codex: start here](CODEX_START_HERE.md)
+- [Codex: push prompt](CODEX_PUSH_PROMPT.md)
 
 # Decisions
 
