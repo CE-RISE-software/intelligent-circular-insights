@@ -12,7 +12,7 @@ This module and ``deps.py`` are the only places that know both adapter sets exis
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from apps.api.settings import Settings, get_settings
 from ici_core.domain.errors import CapabilityError
@@ -63,8 +63,36 @@ def _build(mode: BackendMode, settings: Settings) -> ProviderBundle | None:
     if mode is BackendMode.NORMAL:
         return _build_normal(settings)
     if mode is BackendMode.CE_RISE:
-        return None  # Sprint 2
+        return _build_ce_rise(settings)
     return None
+
+
+def _build_ce_rise(settings: Settings) -> ProviderBundle:
+    """The CE-RISE adapter set.
+
+    Differs from Normal in exactly one place: the substrate registry mounts the WP3
+    knowledge graph, which carries real triples for the symbolic layer to reason over
+    and a graph-solved assessment behind PEF Studio.
+
+    It *adds*; it does not replace. The deterministic CSV carbon path stays, because
+    running both side by side is the demonstration — one workbench, two levels of
+    rigour, with a visible upgrade path between them. Everything else is shared,
+    deliberately: two modes that differed everywhere would be two products.
+
+    Built on top of the Normal bundle rather than beside it, so a difference between
+    them is visible here as an override rather than hidden in two parallel lists.
+    """
+    from ici_core.ledger import InMemoryLedger
+    from ici_substrates.pefdpp import PefdppSubstrateRegistry, build_services
+
+    graph, lca = build_services()
+    normal = _build_normal(settings)
+    return replace(
+        normal,
+        mode=BackendMode.CE_RISE,
+        substrates=PefdppSubstrateRegistry(graph=graph, lca=lca),
+        ledger=InMemoryLedger(mode=BackendMode.CE_RISE),
+    )
 
 
 def _build_normal(settings: Settings) -> ProviderBundle:

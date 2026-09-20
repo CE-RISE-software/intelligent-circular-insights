@@ -25,9 +25,11 @@ class TestService:
         assert "normal" in body["modes_built"]
 
     def test_settings_offers_only_modes_that_exist(self, client) -> None:
-        # The UI must not be able to offer a switch that would fail.
+        # The UI must not be able to offer a switch that would fail, so this reports
+        # what was *built*, not what was configured. It said ["normal"] until the
+        # CE-RISE bundle existed, which is the check earning its keep.
         body = client.get("/api/settings").json()
-        assert body["mode_allowed"] == ["normal"]
+        assert set(body["mode_allowed"]) == {"normal", "ce-rise"}
 
 
 class TestCarbon:
@@ -120,14 +122,14 @@ class TestModeHandling:
         assert r.status_code == 200
         assert r.json()["mode"] == "normal"
 
-    def test_requesting_an_unbuilt_mode_is_422_with_a_reason(self, client) -> None:
+    def test_ce_rise_mode_serves_shared_features(self, client) -> None:
         r = client.post(
             "/api/carbon/calculate",
             json={"product_id": "fairphone_4"},
             headers={"X-Backend-Mode": "ce-rise"},
         )
-        # CE-RISE is not built until Sprint 2. It says so rather than 500ing.
-        assert r.status_code in (200, 422)
+        assert r.status_code == 200
+        assert r.json()["mode"] == "ce-rise"
 
 
 class TestSearchBoundaries:

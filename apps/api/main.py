@@ -58,9 +58,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.state.settings = settings
 
-    from apps.api.routers import carbon, models, search, validate
+    from apps.api.routers import carbon, models, pef, search, validate
 
-    for module in (search, carbon, validate, models):
+    for module in (search, carbon, validate, models, pef):
         app.include_router(module.router, prefix="/api")
 
     app.add_middleware(

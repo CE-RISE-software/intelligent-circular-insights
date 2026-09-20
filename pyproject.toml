@@ -76,6 +76,13 @@ ignore = [
 # would put the numbers at risk for no functional gain, so the file keeps its
 # original shape and its exemption is recorded here rather than sprinkled as
 # noqa comments through the source. See the module docstring.
+# Carried across with the same reasoning as the carbon engine: these produce the
+# figures the WP3 paper publishes, verified against them, and restyling correct RDF
+# and LCA code risks the numbers for nothing. Real defects found while porting — a
+# dead assignment and an unclear lazy-load idiom — were fixed rather than exempted.
+"packages/ici_substrates/src/ici_substrates/pefdpp/graph.py" = ["E501", "E741", "RUF005", "C408", "C416"]
+"packages/ici_substrates/src/ici_substrates/pefdpp/lca.py" = ["E501", "E741", "RUF005", "C408", "C416", "PLR0912"]
+
 "packages/ici_substrates/src/ici_substrates/carbon/engine.py" = [
     "E501",    # long lines in factor tables and trace strings
     "ANN204",  # untyped __init__ in the original

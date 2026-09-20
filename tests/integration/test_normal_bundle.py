@@ -114,10 +114,31 @@ def test_the_data_trust_seat_is_declared_empty(bundle) -> None:
     assert bundle.data_trust.is_null is True
 
 
-def test_ce_rise_mode_is_absent_and_says_so(bundle) -> None:
+def test_both_modes_build_and_differ_only_where_they_should(bundle) -> None:
+    """Two modes, one product.
+
+    They share evidence, memory, schemas, reliability and policy; they differ in
+    the impact engine and the substrate registry. If that list ever grows, the two
+    backends are drifting into two products and this test should fail.
+    """
+    registry = build_registry((BackendMode.NORMAL, BackendMode.CE_RISE), Settings())
+    assert set(registry.available()) == {BackendMode.NORMAL, BackendMode.CE_RISE}
+
+    normal = registry.for_mode(BackendMode.NORMAL)
+    ce_rise = registry.for_mode(BackendMode.CE_RISE)
+
+    differing = {
+        name for name in PORTS if type(getattr(normal, name)) is not type(getattr(ce_rise, name))
+    }
+    assert differing == {"substrates"}, (
+        f"modes differ in {sorted(differing)}; CE-RISE should add the graph, not\n"
+        f"replace anything — the CSV carbon path must survive the switch"
+    )
+
+
+def test_an_unbuilt_mode_is_a_typed_capability_error(bundle) -> None:
     from ici_core.domain.errors import CapabilityError
 
-    registry = build_registry((BackendMode.NORMAL, BackendMode.CE_RISE), Settings())
-    assert BackendMode.CE_RISE not in registry.available()
+    registry = build_registry((BackendMode.NORMAL,), Settings())
     with pytest.raises(CapabilityError, match="not enabled"):
         registry.for_mode(BackendMode.CE_RISE)
