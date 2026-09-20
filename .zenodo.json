@@ -1,0 +1,27 @@
+{
+  "title": "Intelligent Circular Insights: reliability-first question answering over Digital Product Passports",
+  "description": "A neuro-symbolic workbench for querying Digital Product Passports. Every output is an evidence-grounded answer with provenance or an explicit abstention. Two interchangeable backends, switchable per request: a fast path over flat product profiles and published emission factors, and a CE-RISE path over the consortium data models and the WP3 PEFDPP ontology. Vendored CE-RISE data models are separately licensed CC-BY-NC-4.0 in schemas/ce-rise/.",
+  "license": "EUPL-1.2",
+  "upload_type": "software",
+  "creators": [
+    { "name": "Esfar-E-Alam, A M", "affiliation": "University of Oslo" },
+    { "name": "Boero, Riccardo", "affiliation": "NILU", "orcid": "0000-0002-7468-9096" }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Digital Product Passport",
+    "Neuro-symbolic",
+    "Selective prediction",
+    "Open Source",
+    "Open Science"
+  ],
+  "communities": [{ "identifier": "ce-rise" }, { "identifier": "impact" }],
+  "grants": [{ "id": "101092281" }],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE-software/intelligent-circular-insights",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}

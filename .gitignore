@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+.venv/
+.uv/
+*.egg-info/
+dist/
+build/
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.import_linter_cache/
+.coverage
+htmlcov/
+
+.env
+var/
+node_modules/
+apps/web/dist/
+
+.DS_Store
+
+# session-local
+.venv-ici/
+var/
