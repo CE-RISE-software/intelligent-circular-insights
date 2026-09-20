@@ -1,0 +1,194 @@
+{
+  "body": {
+    "fallback_reason": null,
+    "findings": [
+      {
+        "confidence": 1.0,
+        "current_value": "1.0",
+        "issue": null,
+        "path": "schema_version",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": "ref-001",
+        "issue": null,
+        "path": "dpp_id",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": null,
+        "issue": null,
+        "path": "issued_at_utc",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": {
+          "category": "battery",
+          "name": "Reference product"
+        },
+        "issue": null,
+        "path": "product",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 0.0,
+        "current_value": null,
+        "issue": "required field absent",
+        "path": "product.id",
+        "status": "missing",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 0.0,
+        "current_value": null,
+        "issue": "required field absent",
+        "path": "product.brand",
+        "status": "missing",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 0.0,
+        "current_value": null,
+        "issue": "required field absent",
+        "path": "product.model",
+        "status": "missing",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": "battery",
+        "issue": null,
+        "path": "product.category",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": null,
+        "issue": null,
+        "path": "product.display_name",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": null,
+        "issue": null,
+        "path": "product.geography",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": null,
+        "issue": null,
+        "path": "product.image_url",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 0.0,
+        "current_value": null,
+        "issue": "required field absent",
+        "path": "materials",
+        "status": "missing",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 0.0,
+        "current_value": null,
+        "issue": "required field absent",
+        "path": "compliance",
+        "status": "missing",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": null,
+        "issue": null,
+        "path": "lifecycle",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": null,
+        "issue": null,
+        "path": "carbon",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": null,
+        "issue": null,
+        "path": "circularity",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": null,
+        "issue": null,
+        "path": "end_of_life",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": null,
+        "issue": null,
+        "path": "sources",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      },
+      {
+        "confidence": 1.0,
+        "current_value": null,
+        "issue": null,
+        "path": "notes",
+        "status": "valid",
+        "suggested_source": null,
+        "suggested_value": null
+      }
+    ],
+    "llm_used": false,
+    "model": "gpt-4o-mini",
+    "repaired_preview": {
+      "dpp_id": "ref-001",
+      "product": {
+        "category": "battery",
+        "name": "Reference product"
+      },
+      "schema_version": "1.0"
+    },
+    "schema_id": "https://ce-rise.example.eu/dpp/eu_dpp_schema_v0_1.json",
+    "score": 0.737
+  },
+  "status": 200
+}

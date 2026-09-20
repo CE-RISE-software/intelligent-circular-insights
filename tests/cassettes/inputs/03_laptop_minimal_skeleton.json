@@ -1,0 +1,8 @@
+{
+  "dpp_id": "dpp-broken-003",
+  "product": {
+    "brand": "Dell",
+    "model": "XPS 14"
+  },
+  "notes": "Broken DPP example #3: skeletal record — most required fields (schema_version, product.id, product.category, materials, compliance) are missing entirely."
+}

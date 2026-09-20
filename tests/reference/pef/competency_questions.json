@@ -1,0 +1,122 @@
+{
+  "body": {
+    "count": 16,
+    "note": "The PEFDPP paper derives 173 competency questions from Annex I of the PEF Recommendation and uses them to validate the ontology. This is a curated subset that runs live against the case study graph. Each one names the PEF requirement it comes from.",
+    "questions": [
+      {
+        "id": "cq-fu",
+        "pef_requirement": "PEF Annex I \u00a74.2 \u2014 the functional unit shall specify what, how well, how much and how long.",
+        "question": "What is the functional unit, and how does it convert to a physical reference flow?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?what ?howWell ?amount ?unit ?conversion ?referenceFlow WHERE {\n  ?fu a ps:FunctionalUnit ;\n      ps:whatProvided ?what ;\n      ps:howWellProvided ?howWell ;\n      ps:howMuchProvided ?m ;\n      ps:RFtoFUConversion ?conversion ;\n      ps:hasReferenceFlow ?referenceFlow .\n  ?m om:hasNumericalValue ?amount ; om:hasUnit ?unit .\n}",
+        "why_it_matters": "Two PEF studies can only be compared if their functional units match. Making the conversion machine-readable is what lets a downstream actor re-base the result."
+      },
+      {
+        "id": "cq-goal",
+        "pef_requirement": "PEF Annex I \u00a74.1 \u2014 the goal shall report intended application, audience, commissioner and whether the study is subject to verification.",
+        "question": "Who commissioned the study, who verified it, and for what decision context?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?application ?context ?commissioner ?verifier WHERE {\n  ?g a ps:Goal ;\n     ps:intendedApplication ?application ;\n     ps:decisionContext ?context ;\n     ps:commissioner ?cIri ;\n     ps:verifier ?vIri .\n  OPTIONAL { ?cIri foaf:name ?cName }\n  OPTIONAL { ?vIri foaf:name ?vName }\n  BIND(COALESCE(?cName, STR(?cIri)) AS ?commissioner)\n  BIND(COALESCE(?vName, STR(?vIri)) AS ?verifier)\n}",
+        "why_it_matters": "Verification is what makes a declared footprint trustworthy. If the verifier is a triple rather than a sentence in a PDF, a machine can check it."
+      },
+      {
+        "id": "cq-boundary",
+        "pef_requirement": "PEF Annex I \u00a75.4 \u2014 the system boundary shall be described and any exclusion justified.",
+        "question": "What is the system boundary, what is excluded from it, and on what justification?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?boundaryType ?cutOff ?justification ?excludes WHERE {\n  ?sb a ps:SystemBoundary ;\n      ps:hasBoundaryType ?boundaryType ;\n      ps:cutOffCriteria ?cutOff ;\n      ps:hasJustification ?justification .\n  OPTIONAL { ?sb ps:excludesActivity ?excludes }\n}",
+        "why_it_matters": "Most footprint disputes are boundary disputes. Structuring the exclusions makes them auditable instead of buried in prose."
+      },
+      {
+        "id": "cq-stages",
+        "pef_requirement": "PEF Annex I \u00a75.3 \u2014 results shall be reported per life cycle stage.",
+        "question": "Which activities make up the product system, and at which life cycle stage does each sit?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?stage ?activity ?geography WHERE {\n  ?ps a prs:ProductSystem ; prs:hasActivityLink ?link .\n  ?link prs:forActivity ?activity ; prs:hasLifeCycleStage ?stage .\n  OPTIONAL { ?activity act:hasGeography ?geography }\n} ORDER BY ?stage ?activity",
+        "why_it_matters": "The same unit process sits at a different stage in a different product system. PEFDPP puts the stage on the ActivityLink, not the Activity, so inventory stays reusable."
+      },
+      {
+        "id": "cq-dataset-type",
+        "pef_requirement": "PEF Annex I \u00a76.1 / CFB-EV \u00a75 \u2014 all manufacturing-stage processes shall be company-specific; non-most-relevant processes may use secondary datasets.",
+        "question": "Which datasets are company-specific and which are secondary, and are they EF-compliant?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?dataset ?title ?type ?compliance WHERE {\n  ?dataset a dataset:LCIDataset .\n  OPTIONAL { ?dataset dcterms:title ?title }\n  OPTIONAL { ?dataset dataset:hasDatasetType ?type }\n  OPTIONAL { ?dataset dataset:hasComplianceLevel ?compliance }\n} ORDER BY ?dataset",
+        "why_it_matters": "This is the check a verifier runs first. It is a two-line query here."
+      },
+      {
+        "id": "cq-dqr",
+        "pef_requirement": "PEF Annex I \u00a76.5 \u2014 DQR shall be calculated from technological, temporal and geographical representativeness and precision, and reported per dataset and per study.",
+        "question": "What is the data quality rating of each dataset, broken down by DQR dimension?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?dataset ?overallDQR ?dimension ?score ?justification WHERE {\n  ?dataset a dataset:LCIDataset ; dq:hasDataQuality ?dqNode .\n  ?dqNode dq:hasOverallDQR ?overallDQR ; dq:hasDQRCriterion ?crit .\n  ?crit dq:forDimension ?dimension ; dq:hasValue ?score .\n  OPTIONAL { ?crit dq:hasJustification ?justification }\n} ORDER BY ?dataset ?dimension",
+        "why_it_matters": "A footprint without a DQR is a number without an error bar. The workbench weights each dataset's DQR by how much it actually contributes."
+      },
+      {
+        "id": "cq-geography",
+        "pef_requirement": "PEF Annex I \u00a76.5 \u2014 geographical representativeness shall be documented per dataset.",
+        "question": "Where does each activity take place?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?activity ?geography ?companySpecific WHERE {\n  ?activity a act:Activity ; act:hasGeography ?geography .\n  OPTIONAL { ?activity act:isCompanySpecific ?companySpecific }\n} ORDER BY ?geography ?activity",
+        "why_it_matters": "This drives the electricity grid factor in the calculation. The engine reads the geography off the graph rather than asking a human to pick a grid."
+      },
+      {
+        "id": "cq-cell-inputs",
+        "pef_requirement": "PEF Annex I \u00a76 \u2014 the inventory shall report all inputs and outputs per unit process.",
+        "question": "What goes into cell manufacturing, in what quantity, and in what unit?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?label ?flowType ?amount ?unit WHERE {\n  ?flow act:inputOf ?activity ; flow:hasFlowType ?flowType ; flow:hasMeasure ?m .\n  ?activity act:hasActivityType act:CellManufacturing .\n  ?m om:hasNumericalValue ?amount ; om:hasUnit ?unit .\n  OPTIONAL { ?flow flow:contextualLabel ?label }\n} ORDER BY DESC(?amount)",
+        "why_it_matters": "This is the level of detail a declared footprint value cannot give you. It is what makes an assessment reproducible rather than merely verified."
+      },
+      {
+        "id": "cq-secondary",
+        "pef_requirement": "PEF Annex I \u00a76.1 \u2014 the origin of every dataset used shall be documented.",
+        "question": "Which flows are sourced from a secondary background database rather than measured?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?flowType ?label ?sourceDataset WHERE {\n  ?flowType flow:sourcedFrom ?sourceDataset .\n  OPTIONAL { ?flowType rdfs:label ?label }\n} ORDER BY ?sourceDataset ?flowType",
+        "why_it_matters": "This is the boundary between what the manufacturer knows and what it borrowed. It is exactly the set of flows the workbench has to proxy, and it is queryable."
+      },
+      {
+        "id": "cq-elementary",
+        "pef_requirement": "PEF Annex I \u00a76.3 \u2014 elementary flows shall be taken from the EF reference package.",
+        "question": "Which elementary flows does the foreground emit directly, and which EF 3.1 flow is each one?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?activity ?label ?amount ?unit ?ef31Match WHERE {\n  ?flow flow:hasFlowType ?ft ; flow:hasMeasure ?m .\n  ?ft a flow:ElementaryFlow .\n  OPTIONAL { ?flow act:outputOf ?activity }\n  OPTIONAL { ?flow flow:contextualLabel ?label }\n  OPTIONAL { ?ft skos:exactMatch ?ef31Match }\n  ?m om:hasNumericalValue ?amount ; om:hasUnit ?unit .\n}",
+        "why_it_matters": "Because each one carries its EF 3.1 UUID, characterisation is a machine join. No name matching, no spreadsheet lookup, no transcription error."
+      },
+      {
+        "id": "cq-cff",
+        "pef_requirement": "PEF Annex I \u00a77 \u2014 the CFF shall be applied and its parameters reported.",
+        "question": "What Circular Footprint Formula parameters are declared for the end-of-life flows?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?label ?amount ?R2 ?R3 ?virginEquivalent ?recyclingFlow ?disposalFlow WHERE {\n  ?flow flow:hasEndOfLifeScenario ?eol ; flow:hasMeasure ?m .\n  OPTIONAL { ?flow flow:contextualLabel ?label }\n  ?m om:hasNumericalValue ?amount .\n  OPTIONAL { ?eol flow:recyclingRate ?r2n . ?r2n flow:hasValue ?R2 }\n  OPTIONAL { ?eol flow:energyRecoveryRate ?r3n . ?r3n flow:hasValue ?R3 }\n  OPTIONAL { ?eol flow:virginEquivalent ?virginEquivalent }\n  OPTIONAL { ?eol flow:recyclingFlowType ?recyclingFlow }\n  OPTIONAL { ?eol flow:disposalFlowType ?disposalFlow }\n}",
+        "why_it_matters": "The CFF decides who gets the recycling credit. Carrying R2, the virgin equivalent and the disposal route as triples means the split can be recomputed, not just believed."
+      },
+      {
+        "id": "cq-upstream-primary",
+        "pef_requirement": "PEF Annex I \u00a76.1 \u2014 company-specific data shall be used for processes under the company's control; supplier-specific data may be used where available.",
+        "question": "Which activities carry primary data contributed by an upstream actor rather than the battery maker?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?dataset ?title ?activity ?geography WHERE {\n  ?dataset a dataset:LCIDataset ; dataset:hasDatasetType dataset:DPP ;\n           dataset:containsActivity ?activity .\n  OPTIONAL { ?dataset dcterms:title ?title }\n  ?activity act:isCompanySpecific true .\n  OPTIONAL { ?activity act:hasGeography ?geography }\n} ORDER BY ?dataset",
+        "why_it_matters": "This is the DPP argument in one query. The brazing service sits below the PEF cut-off and would normally vanish into a background average \u2014 but its supplier measured it, so the passport carries the real number."
+      },
+      {
+        "id": "cq-transport",
+        "pef_requirement": "PEF Annex I \u00a76.2 / CFB-EV \u00a77.4 \u2014 transport shall report distance, load factor and empty return share, or use the prescribed defaults.",
+        "question": "Which transport flows declare a distance, a loading rate and empty returns?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?label ?distance ?distanceUnit ?loadingRate ?emptyReturns WHERE {\n  ?flow flow:transportDistance ?d .\n  ?d om:hasNumericalValue ?distance ; om:hasUnit ?distanceUnit .\n  OPTIONAL { ?flow flow:contextualLabel ?label }\n  OPTIONAL { ?flow flow:transportLoadingRate ?loadingRate }\n  OPTIONAL { ?flow flow:transportEmptyReturns ?emptyReturns }\n}",
+        "why_it_matters": "Distribution is usually a footnote in a footprint report. Here the parameters are addressable, so a different distribution scenario is a re-query, not a re-study."
+      },
+      {
+        "id": "cq-reuse",
+        "pef_requirement": "Derived from PEF Annex I \u00a76.1 and the paper's reuse argument \u2014 Activity is modelled independently of PEFStudy precisely so it can be referenced by other studies.",
+        "question": "Which flow types are produced inside this value chain, so a downstream study could reuse them?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?flowType ?label ?activity ?geography WHERE {\n  ?activity act:hasDeterminingFlow ?flow .\n  ?flow flow:hasFlowType ?flowType .\n  OPTIONAL { ?flowType rdfs:label ?label }\n  OPTIONAL { ?activity act:hasGeography ?geography }\n} ORDER BY ?flowType",
+        "why_it_matters": "This is the payoff of modelling Activity outside PEFStudy. Every row here is a unit process another manufacturer could cite instead of re-measuring."
+      },
+      {
+        "id": "cq-impact-categories",
+        "pef_requirement": "PEF Annex I \u00a75.5 \u2014 all EF impact categories shall be included unless justified.",
+        "question": "Which impact categories are declared in scope, and which method calculates each one?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?impactCategory WHERE {\n  ?scope a ps:Scope ; ps:includesImpactCategory ?impactCategory .\n} ORDER BY ?impactCategory",
+        "why_it_matters": "The Battery Regulation only mandates climate change, but the PEF requires all 16. The scope declaration and the results can be cross-checked automatically."
+      },
+      {
+        "id": "cq-standard",
+        "pef_requirement": "PEF Annex I \u00a74 \u2014 the applicable PEFCR or sector guidance shall be identified.",
+        "question": "Which methodological standard does the study declare conformity to?",
+        "sparql": "PREFIX ps:      <https://w3id.org/mintjesba/pefdpp/pefstudy#>\nPREFIX prs:     <https://w3id.org/mintjesba/pefdpp/product-system#>\nPREFIX act:     <https://w3id.org/mintjesba/pefdpp/activity#>\nPREFIX flow:    <https://w3id.org/mintjesba/pefdpp/flow#>\nPREFIX dataset: <https://w3id.org/mintjesba/pefdpp/dataset#>\nPREFIX dq:      <https://w3id.org/mintjesba/pefdpp/dataquality#>\nPREFIX om:      <http://www.ontology-of-units-of-measure.org/resource/om-2/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX foaf:    <http://xmlns.com/foaf/0.1/>\nPREFIX skos:    <http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?standard ?title ?issued ?source WHERE {\n  ?study a ps:PEFStudy ; dcterms:conformsTo ?standard .\n  OPTIONAL { ?standard dcterms:title ?title }\n  OPTIONAL { ?standard dcterms:issued ?issued }\n  OPTIONAL { ?standard dcterms:source ?source }\n}",
+        "why_it_matters": "Regulation (EU) 2023/1542 Article 7 requires the battery carbon footprint to follow PEF. Declaring the exact guidance document as a resolvable IRI is how that becomes checkable."
+      }
+    ],
+    "total_in_paper": 173
+  },
+  "status": 200
+}

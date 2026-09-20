@@ -1,0 +1,15 @@
+{
+  "body": {
+    "abstained": true,
+    "answer": "Insufficient evidence in the provided records.",
+    "confidence": 0.45,
+    "derived_triples": [],
+    "domain_guess": null,
+    "evidence": [],
+    "fallback_reason": "APIConnectionError: Connection error.",
+    "fired_rules": [],
+    "llm_used": false,
+    "model": "gpt-4o-mini"
+  },
+  "status": 200
+}

@@ -1,0 +1,27 @@
+{
+  "687bdd4a94652ce4e8ae3969f1de2eb3d9e0fbff42f9f7a16d1acb4dc45acbb8": {
+    "version": 1,
+    "response": {
+      "id": "synthetic-chat",
+      "object": "chat.completion",
+      "created": 0,
+      "model": "gpt-4o-mini",
+      "choices": [
+        {
+          "index": 0,
+          "finish_reason": "stop",
+          "message": {
+            "role": "assistant",
+            "content": "The declared capacity is 60 kWh [e1].",
+            "refusal": null
+          }
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 100,
+        "completion_tokens": 20,
+        "total_tokens": 120
+      }
+    }
+  }
+}

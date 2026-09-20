@@ -1,0 +1,1863 @@
+{
+  "body": {
+    "edges": [
+      {
+        "amount": 0.018199,
+        "flow_type": "SheetRollingAluminium",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow10_CellContainerAluminiumSh",
+        "from": "SheetRollingAluminium",
+        "kind": "background",
+        "label": "cell container aluminium sheet rolling",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.902917,
+        "flow_type": "ElectricityMediumVoltage",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow11_ElectricityForCellAssemb",
+        "from": "ElectricityMediumVoltage",
+        "kind": "background",
+        "label": "electricity for cell assembly",
+        "to": "CellManufacturingAct",
+        "unit": "kilowattHour"
+      },
+      {
+        "amount": 12.5095,
+        "flow_type": "HeatDistrictOrIndustrialNaturalGas",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow12_HeatSteamFromNaturalGasF",
+        "from": "HeatDistrictOrIndustrialNaturalGas",
+        "kind": "background",
+        "label": "Heat/steam from natural gas for cell assembly",
+        "to": "CellManufacturingAct",
+        "unit": "Megajoule"
+      },
+      {
+        "amount": 0.284556,
+        "flow_type": "ElectricityMediumVoltage",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow13_CellFormingAndChargingEl",
+        "from": "ElectricityMediumVoltage",
+        "kind": "background",
+        "label": "Cell forming and charging, electricity",
+        "to": "CellManufacturingAct",
+        "unit": "kilowattHour"
+      },
+      {
+        "amount": 0.1238,
+        "flow_type": "CopperCollectorFoilForLiIonBattery",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow14_CuCurrentCollector",
+        "from": "CopperCollectorFoilForLiIonBattery",
+        "kind": "background",
+        "label": "Cu current collector",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.010101,
+        "flow_type": "AluminiumWroughtAlloy",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow15_CellContainerAluminiumPo",
+        "from": "AluminiumWroughtAlloy",
+        "kind": "background",
+        "label": "cell container: aluminium positive terminal",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.010101,
+        "flow_type": "SheetRollingAluminium",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow16_CellContainerAluminiumPo",
+        "from": "SheetRollingAluminium",
+        "kind": "background",
+        "label": "cell container: aluminium positive terminal, sheet rolling",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.031,
+        "flow_type": "AluminiumCollectorFoilForLiIonBattery",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow17_AlCurrentCollector",
+        "from": "AluminiumCollectorFoilForLiIonBattery",
+        "kind": "background",
+        "label": "Al current collector",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.033475,
+        "flow_type": "Copper",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow18_CellContainerCopperNegat",
+        "from": "Copper",
+        "kind": "background",
+        "label": "cell container: copper negative terminal",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.033475,
+        "flow_type": "SheetRollingCopper",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow19_CellContainerCopperNegat",
+        "from": "SheetRollingCopper",
+        "kind": "background",
+        "label": "cell container: copper negative terminal, sheet rolling",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.146,
+        "flow_type": "ElectrolyteForLithiumIonBattery",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow1_Electrolyte",
+        "from": "ElectrolyteManufacturingAct",
+        "kind": "foreground",
+        "label": "Electrolyte",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.337591,
+        "flow_type": "AnodeGraphiteForLithiumIonBattery",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow2_Anode",
+        "from": "AnodeManufacturingAct",
+        "kind": "foreground",
+        "label": "Anode",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.476334,
+        "flow_type": "CathodeNMC111ForLithiumIonBattery",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow3_Cathode",
+        "from": "CathodeManufacturingAct",
+        "kind": "foreground",
+        "label": "Cathode",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.017531,
+        "flow_type": "BatterySeparator",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow4_Separator",
+        "from": "BatterySeparator",
+        "kind": "background",
+        "label": "Separator",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.002822,
+        "flow_type": "PolyethyleneTerephthalateGranulateAmorphous",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow5_CellContainerPlasticPET",
+        "from": "PolyethyleneTerephthalateGranulateAmorphous",
+        "kind": "background",
+        "label": "cell container plastic PET",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.002822,
+        "flow_type": "ExtrusionPlasticFilm",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow6_CellContainerPlasticPETE",
+        "from": "ExtrusionPlasticFilm",
+        "kind": "background",
+        "label": "cell container plastic PET extrusion",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.001268,
+        "flow_type": "PolypropyleneGranulate",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow7_CellContainerPlasticPP",
+        "from": "PolypropyleneGranulate",
+        "kind": "background",
+        "label": "cell container plastic PP",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.001268,
+        "flow_type": "ExtrusionPlasticFilm",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow8_CellContainerPlasticPPEx",
+        "from": "ExtrusionPlasticFilm",
+        "kind": "background",
+        "label": "cell container plastic PP extrusion",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.018199,
+        "flow_type": "AluminiumWroughtAlloy",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellManufacturingAct_flow9_CellContainerAluminium",
+        "from": "AluminiumWroughtAlloy",
+        "kind": "background",
+        "label": "cell container aluminium",
+        "to": "CellManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.126,
+        "flow_type": "LithiumHexafluorophosphate",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#ElectrolyteManufacturingAct_flow1_LithiumHexafluorophospha",
+        "from": "LithiumHexafluorophosphate",
+        "kind": "background",
+        "label": "lithium hexafluorophosphate",
+        "to": "ElectrolyteManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.425,
+        "flow_type": "EthyleneCarbonate",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#ElectrolyteManufacturingAct_flow2_EthyleneCarbonate",
+        "from": "EthyleneCarbonate",
+        "kind": "background",
+        "label": "ethylene carbonate",
+        "to": "ElectrolyteManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.425,
+        "flow_type": "DimethylCarbonate",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#ElectrolyteManufacturingAct_flow3_DimethylCarbonate",
+        "from": "DimethylCarbonate",
+        "kind": "background",
+        "label": "dimethyl carbonate",
+        "to": "ElectrolyteManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.024,
+        "flow_type": "VinylCarbonate",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#ElectrolyteManufacturingAct_flow4_VinylCarbonateAdditive",
+        "from": "VinylCarbonate",
+        "kind": "background",
+        "label": "vinyl carbonate (additive)",
+        "to": "ElectrolyteManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.416,
+        "flow_type": "ElectricityMediumVoltage",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#ElectrolyteManufacturingAct_flow5_ElectricityForElectrolyt",
+        "from": "ElectricityMediumVoltage",
+        "kind": "background",
+        "label": "electricity for electrolyte production",
+        "to": "ElectrolyteManufacturingAct",
+        "unit": "kilowattHour"
+      },
+      {
+        "amount": 0.95,
+        "flow_type": "LiNMCO2ActiveMaterial",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CathodeManufacturingAct_flow1_LiNMCO2ActiveMaterial",
+        "from": "CathodeActiveMaterialManufacturingAct",
+        "kind": "foreground",
+        "label": "Li-NMC-O2 (active material)",
+        "to": "CathodeManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.025,
+        "flow_type": "CarbonBlack",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CathodeManufacturingAct_flow2_CarbonBlack",
+        "from": "CarbonBlack",
+        "kind": "background",
+        "label": "carbon black",
+        "to": "CathodeManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.025,
+        "flow_type": "PolyvinylfluorideKg",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CathodeManufacturingAct_flow3_PVDF",
+        "from": "PolyvinylfluorideKg",
+        "kind": "background",
+        "label": "PVDF",
+        "to": "CathodeManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.0056,
+        "flow_type": "NMethyl2Pyrrolidone",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CathodeManufacturingAct_flow4_NMethyl2PyrrolidoneNMP",
+        "from": "NMethyl2Pyrrolidone",
+        "kind": "background",
+        "label": "N-methyl-2-pyrrolidone (NMP)",
+        "to": "CathodeManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 25.747936,
+        "flow_type": "HeatDistrictOrIndustrialNaturalGas",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CathodeManufacturingAct_flow5_EnergyForCathodeDryingAn",
+        "from": "HeatDistrictOrIndustrialNaturalGas",
+        "kind": "background",
+        "label": "energy for cathode drying and NMP recovery, from steam, from natural gas",
+        "to": "CathodeManufacturingAct",
+        "unit": "Megajoule"
+      },
+      {
+        "amount": 0.440588,
+        "flow_type": "ElectricityMediumVoltage",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CathodeManufacturingAct_flow6_ElectricityForMixingCutt",
+        "from": "ElectricityMediumVoltage",
+        "kind": "background",
+        "label": "electricity for mixing, cutting and calendaring",
+        "to": "CathodeManufacturingAct",
+        "unit": "kilowattHour"
+      },
+      {
+        "amount": 0.94,
+        "flow_type": "SyntheticGraphiteBatteryGrade",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeManufacturingAct_flow1_SyntheticGraphite",
+        "from": "AnodeActiveMaterialManufacturingAct",
+        "kind": "foreground",
+        "label": "synthetic graphite",
+        "to": "AnodeManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.03,
+        "flow_type": "CarboxymethylCellulosePowder",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeManufacturingAct_flow2_CarboxymethylCelluloseCM",
+        "from": "CarboxymethylCellulosePowder",
+        "kind": "background",
+        "label": "carboxymethyl cellulose  (CMC)",
+        "to": "AnodeManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 1.0,
+        "flow_type": "WaterDeionised",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeManufacturingAct_flow3_WaterDeionised",
+        "from": "WaterDeionised",
+        "kind": "background",
+        "label": "water, deionised",
+        "to": "AnodeManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.01,
+        "flow_type": "CarbonBlack",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeManufacturingAct_flow4_CarbonBlack",
+        "from": "CarbonBlack",
+        "kind": "background",
+        "label": "carbon black",
+        "to": "AnodeManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.02,
+        "flow_type": "Latex",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeManufacturingAct_flow5_StyreneButadieneSBR",
+        "from": "Latex",
+        "kind": "background",
+        "label": "styrene butadiene (SBR)",
+        "to": "AnodeManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 7.724381,
+        "flow_type": "HeatDistrictOrIndustrialNaturalGas",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeManufacturingAct_flow6_EnergyForElectrodeDrying",
+        "from": "HeatDistrictOrIndustrialNaturalGas",
+        "kind": "background",
+        "label": "energy for electrode drying, from steam, from natural gas",
+        "to": "AnodeManufacturingAct",
+        "unit": "Megajoule"
+      },
+      {
+        "amount": 0.440588,
+        "flow_type": "ElectricityMediumVoltage",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeManufacturingAct_flow7_ElectricityForMixingCutt",
+        "from": "ElectricityMediumVoltage",
+        "kind": "background",
+        "label": "electricity for mixing, cutting and calendaring",
+        "to": "AnodeManufacturingAct",
+        "unit": "kilowattHour"
+      },
+      {
+        "amount": 0.96,
+        "flow_type": "PetroleumCoke",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeActiveMaterialManufacturingAct_flow1_PetroleumCoke",
+        "from": "PetroleumCoke",
+        "kind": "background",
+        "label": "petroleum coke",
+        "to": "AnodeActiveMaterialManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.24,
+        "flow_type": "CoalTar",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeActiveMaterialManufacturingAct_flow2_CoalTar",
+        "from": "CoalTar",
+        "kind": "background",
+        "label": "coal tar",
+        "to": "AnodeActiveMaterialManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.317859,
+        "flow_type": "e2fb04b0-6555-11dd-ad8b-0800200c9a66",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeActiveMaterialManufacturingAct_flow3_Oxygen",
+        "from": "e2fb04b0-6555-11dd-ad8b-0800200c9a66",
+        "kind": "background",
+        "label": "oxygen",
+        "to": "AnodeActiveMaterialManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 5.431428,
+        "flow_type": "HeatDistrictOrIndustrialNaturalGas",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeActiveMaterialManufacturingAct_flow4_NaturalGas",
+        "from": "HeatDistrictOrIndustrialNaturalGas",
+        "kind": "background",
+        "label": "natural gas",
+        "to": "AnodeActiveMaterialManufacturingAct",
+        "unit": "Megajoule"
+      },
+      {
+        "amount": 4.082484,
+        "flow_type": "ElectricityMediumVoltage",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#AnodeActiveMaterialManufacturingAct_flow5_Electricity",
+        "from": "ElectricityMediumVoltage",
+        "kind": "background",
+        "label": "electricity",
+        "to": "AnodeActiveMaterialManufacturingAct",
+        "unit": "kilowattHour"
+      },
+      {
+        "amount": 0.12362,
+        "flow_type": "ElectronicComponentPassiveUnspecified",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#ModuleAssemblyAct_flow10_ElectronicsPart",
+        "from": "ElectronicComponentPassiveUnspecified",
+        "kind": "background",
+        "label": "Electronics part ",
+        "to": "ModuleAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.047461,
+        "flow_type": "Copper",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#ModuleAssemblyAct_flow1_ModuleTerminalCopper80",
+        "from": "Copper",
+        "kind": "background",
+        "label": "Module terminal: Copper (80%)",
+        "to": "ModuleAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.047461,
+        "flow_type": "SheetRollingCopper",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#ModuleAssemblyAct_flow2_ModuleTerminalCopperShee",
+        "from": "SheetRollingCopper",
+        "kind": "background",
+        "label": "Module terminal: Copper, sheet rolling",
+        "to": "ModuleAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.012141,
+        "flow_type": "GlassFibreReinforcedPlasticPolyamideInjectionMoulded",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#ModuleAssemblyAct_flow3_ModuleTerminalPlasticIns",
+        "from": "GlassFibreReinforcedPlasticPolyamideInjectionMoulded",
+        "kind": "background",
+        "label": "Module terminal: plastic insulation (20%)",
+        "to": "ModuleAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.359823,
+        "flow_type": "AluminiumWroughtAlloy",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#ModuleAssemblyAct_flow4_ModuleEnclosureAluminium",
+        "from": "AluminiumWroughtAlloy",
+        "kind": "background",
+        "label": "Module enclosure: Aluminium",
+        "to": "ModuleAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.359823,
+        "flow_type": "ImpactExtrusionOfAluminium1Stroke",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#ModuleAssemblyAct_flow5_ModuleEnclosureAluminium",
+        "from": "ImpactExtrusionOfAluminium1Stroke",
+        "kind": "background",
+        "label": "Module enclosure: aluminium, impact extrusion",
+        "to": "ModuleAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.019868,
+        "flow_type": "PolyethyleneHighDensityGranulate",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#ModuleAssemblyAct_flow6_SpacerForGasReleasePolye",
+        "from": "PolyethyleneHighDensityGranulate",
+        "kind": "background",
+        "label": "Spacer for gas release: polyethylene",
+        "to": "ModuleAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.019868,
+        "flow_type": "ExtrusionPlasticFilm",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#ModuleAssemblyAct_flow7_SpacerForGasReleasePolye",
+        "from": "ExtrusionPlasticFilm",
+        "kind": "background",
+        "label": "Spacer for gas release: polyethylene, extrusion",
+        "to": "ModuleAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.437086,
+        "flow_type": "AluminiumWroughtAlloy",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#ModuleAssemblyAct_flow8_HeatConductorAluminium",
+        "from": "AluminiumWroughtAlloy",
+        "kind": "background",
+        "label": "Heat conductor: Aluminium ",
+        "to": "ModuleAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.437086,
+        "flow_type": "SheetRollingAluminium",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#ModuleAssemblyAct_flow9_HeatConductorAluminiumSh",
+        "from": "SheetRollingAluminium",
+        "kind": "background",
+        "label": "Heat conductor: Aluminium, sheet rolling",
+        "to": "ModuleAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.731637,
+        "flow_type": "AluminiumWroughtAlloy",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#HousingCoolingManufacturingAct_flow1_BatteryJacketAluminium",
+        "from": "AluminiumWroughtAlloy",
+        "kind": "background",
+        "label": "Battery jacket: Aluminium",
+        "to": "HousingCoolingManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.731637,
+        "flow_type": "ImpactExtrusionOfAluminium1Stroke",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#HousingCoolingManufacturingAct_flow2_BatteryJacketImpactExtru",
+        "from": "ImpactExtrusionOfAluminium1Stroke",
+        "kind": "background",
+        "label": "Battery jacket: Impact Extrusion of Aluminium",
+        "to": "HousingCoolingManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.022628,
+        "flow_type": "PolyethyleneHighDensityGranulate",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#HousingCoolingManufacturingAct_flow3_BatteryJacketPlastic3",
+        "from": "PolyethyleneHighDensityGranulate",
+        "kind": "background",
+        "label": "Battery jacket: Plastic (3%)",
+        "to": "HousingCoolingManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.022628,
+        "flow_type": "InjectionMoulding",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#HousingCoolingManufacturingAct_flow4_BatteryJacketPlasticInje",
+        "from": "InjectionMoulding",
+        "kind": "background",
+        "label": "Battery jacket: Plastic Injection Moulding",
+        "to": "HousingCoolingManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.116315,
+        "flow_type": "EthyleneGlycol",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#HousingCoolingManufacturingAct_flow5_CoolantEthyleneGlycol50",
+        "from": "EthyleneGlycol",
+        "kind": "background",
+        "label": "Coolant: ethylene glycol (50%)",
+        "to": "HousingCoolingManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.116315,
+        "flow_type": "TapWater",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#HousingCoolingManufacturingAct_flow6_CoolantWater50",
+        "from": "TapWater",
+        "kind": "background",
+        "label": "Coolant: water (50%)",
+        "to": "HousingCoolingManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.006553,
+        "flow_type": "AluminiumWroughtAlloy",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#HousingCoolingManufacturingAct_flow7_ElectronicPartsBatteryPa",
+        "from": "AluminiumWroughtAlloy",
+        "kind": "background",
+        "label": "Electronic parts: Battery pack heater",
+        "to": "HousingCoolingManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.006553,
+        "flow_type": "SheetRollingAluminium",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#HousingCoolingManufacturingAct_flow8_BatteryPackHeaterAlumini",
+        "from": "SheetRollingAluminium",
+        "kind": "background",
+        "label": "Battery pack heater: Aluminium sheet rolling",
+        "to": "HousingCoolingManufacturingAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.004302,
+        "flow_type": "ElectronicComponentPassiveUnspecified",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryAssemblyAct_flow10_ElectronicPartsModuleInt",
+        "from": "ElectronicComponentPassiveUnspecified",
+        "kind": "background",
+        "label": "Electronic parts: Module interconnect ",
+        "to": "BatteryAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.000278,
+        "flow_type": "ElectricityLowVoltage",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryAssemblyAct_flow11_ElectricityPackAssembly",
+        "from": "ElectricityLowVoltage",
+        "kind": "background",
+        "label": "Electricity pack assembly",
+        "to": "BatteryAssemblyAct",
+        "unit": "kilowattHour"
+      },
+      {
+        "amount": 0.725909,
+        "flow_type": "BatteryCellNMC111LiIon",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryAssemblyAct_flow1_BatteryCell",
+        "from": "CellManufacturingAct",
+        "kind": "foreground",
+        "label": "Battery cell",
+        "to": "BatteryAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.18495,
+        "flow_type": "HousingAndCoolingSystem",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryAssemblyAct_flow2_HousingAndCoolingSystem",
+        "from": "HousingCoolingManufacturingAct",
+        "kind": "foreground",
+        "label": "Housing and cooling system",
+        "to": "BatteryAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.054902,
+        "flow_type": "BatteryModuleLiIon",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryAssemblyAct_flow3_BatteryModule",
+        "from": "ModuleAssemblyAct",
+        "kind": "foreground",
+        "label": "Battery module",
+        "to": "BatteryAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.000545,
+        "flow_type": "Copper",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryAssemblyAct_flow4_BatteryPackTerminalsCopp",
+        "from": "Copper",
+        "kind": "background",
+        "label": "Battery pack terminals: Copper (75%)",
+        "to": "BatteryAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.000545,
+        "flow_type": "SheetRollingCopper",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryAssemblyAct_flow5_CopperSheetRolling",
+        "from": "SheetRollingCopper",
+        "kind": "background",
+        "label": "Copper sheet rolling",
+        "to": "BatteryAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.000182,
+        "flow_type": "GlassFibreReinforcedPlasticPolyamideInjectionMoulded",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryAssemblyAct_flow6_BatteryPackTerminalsPlas",
+        "from": "GlassFibreReinforcedPlasticPolyamideInjectionMoulded",
+        "kind": "background",
+        "label": "Battery pack terminals: plastic insulation (25%)",
+        "to": "BatteryAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.006181,
+        "flow_type": "ReinforcingSteel",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryAssemblyAct_flow7_ModuleCompressionPlatesA",
+        "from": "ReinforcingSteel",
+        "kind": "background",
+        "label": "Module compression plates and straps: Steel ",
+        "to": "BatteryAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.006181,
+        "flow_type": "SheetRollingSteel",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryAssemblyAct_flow8_SteelSheetRolling",
+        "from": "SheetRollingSteel",
+        "kind": "background",
+        "label": "Steel sheet rolling",
+        "to": "BatteryAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.024239,
+        "flow_type": "BatteryManagementSystem",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryAssemblyAct_flow9_ElectronicPartsBMS",
+        "from": "BatteryManagementSystem",
+        "kind": "background",
+        "label": "Electronic parts: BMS ",
+        "to": "BatteryAssemblyAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 1.0,
+        "flow_type": "BatteryLiIonNMC111AtPlant",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryDistributionAct_flow1_BatteryPackAtPlant",
+        "from": "BatteryAssemblyAct",
+        "kind": "foreground",
+        "label": "Battery pack, at plant",
+        "to": "BatteryDistributionAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 1.0,
+        "flow_type": "TransportFreightLorry3575MetricTonDieselEURO4",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryDistributionAct_flow2_TruckTransportFromFactor",
+        "from": "TransportFreightLorry3575MetricTonDieselEURO4",
+        "kind": "background",
+        "label": "truck transport from factory to EV factory (1000 km standard distance)",
+        "to": "BatteryDistributionAct",
+        "unit": "TonneKilometre"
+      },
+      {
+        "amount": 0.005,
+        "flow_type": "NOCOLOK",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/brazing#BrazingServiceAct_flow1_NOCOLOK",
+        "from": "NocolokAct",
+        "kind": "foreground",
+        "label": "NOCOLOK",
+        "to": "BrazingServiceAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 2250.0,
+        "flow_type": "ElectricityMediumVoltage",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/brazing#BrazingServiceAct_flow2_BrazingElectricityUse",
+        "from": "ElectricityMediumVoltage",
+        "kind": "background",
+        "label": "brazing electricity use",
+        "to": "BrazingServiceAct",
+        "unit": "kilowattHour"
+      },
+      {
+        "amount": 0.0005,
+        "flow_type": "TapWater",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/brazing#BrazingServiceAct_flow3_TapWater",
+        "from": "TapWater",
+        "kind": "background",
+        "label": "tap water",
+        "to": "BrazingServiceAct",
+        "unit": "CubicMetre"
+      },
+      {
+        "amount": 292.5,
+        "flow_type": "VentingOfNitrogenLiquid",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/brazing#BrazingServiceAct_flow4_ShieldingGas",
+        "from": "VentingOfNitrogenLiquid",
+        "kind": "background",
+        "label": "shielding gas",
+        "to": "BrazingServiceAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.537,
+        "flow_type": "HydrogenFluoride",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/brazing#NocolokAct_flow2_HydrogenFluoride",
+        "from": "HydrogenFluoride",
+        "kind": "background",
+        "label": "Hydrogen fluoride",
+        "to": "NocolokAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.491,
+        "flow_type": "AluminiumHydroxide",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/brazing#NocolokAct_flow3_AluminiumHydroxide",
+        "from": "AluminiumHydroxide",
+        "kind": "background",
+        "label": "Aluminium hydroxide",
+        "to": "NocolokAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.725909,
+        "flow_type": "PyrometallurgicalTreatmentOfBatteryCells",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#BatteryDisassemblyAct_flow1_PyrometallurgicalTreatme",
+        "from": "BatteryDisassemblyAct",
+        "kind": "treatment",
+        "label": "Pyrometallurgical treatment, battery cells",
+        "to": "BatteryCellTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 1.0,
+        "flow_type": "ElectricityMediumVoltage",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#BatteryCellTreatmentAct_flow1_ElectricityForPyrometall",
+        "from": "ElectricityMediumVoltage",
+        "kind": "background",
+        "label": "electricity for pyrometallurgical treatment",
+        "to": "BatteryCellTreatmentAct",
+        "unit": "kilowattHour"
+      },
+      {
+        "amount": 0.238,
+        "flow_type": "ThermalEnergyFromNaturalGas",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#BatteryCellTreatmentAct_flow2_ProcessHeat",
+        "from": "ThermalEnergyFromNaturalGas",
+        "kind": "background",
+        "label": "process heat",
+        "to": "BatteryCellTreatmentAct",
+        "unit": "Megajoule"
+      },
+      {
+        "amount": 2.268,
+        "flow_type": "SteamFromNaturalGas",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#BatteryCellTreatmentAct_flow3_ProcessHeat",
+        "from": "SteamFromNaturalGas",
+        "kind": "background",
+        "label": "process heat",
+        "to": "BatteryCellTreatmentAct",
+        "unit": "Megajoule"
+      },
+      {
+        "amount": 0.238,
+        "flow_type": "ThermalEnergyFromLightFuelOil",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#BatteryCellTreatmentAct_flow4_ProcessHeat",
+        "from": "ThermalEnergyFromLightFuelOil",
+        "kind": "background",
+        "label": "process heat",
+        "to": "BatteryCellTreatmentAct",
+        "unit": "Megajoule"
+      },
+      {
+        "amount": 0.142,
+        "flow_type": "LimeProductionTechnologyMix",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#BatteryCellTreatmentAct_flow5_LimestoneWashed",
+        "from": "LimeProductionTechnologyMix",
+        "kind": "background",
+        "label": "limestone, washed",
+        "to": "BatteryCellTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.122,
+        "flow_type": "SilicaSandProductionMix",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#BatteryCellTreatmentAct_flow6_SilicaSand",
+        "from": "SilicaSandProductionMix",
+        "kind": "background",
+        "label": "silica sand",
+        "to": "BatteryCellTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.08,
+        "flow_type": "QuicklimeProductionTechnologyMix",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#BatteryCellTreatmentAct_flow7_QuicklimeCAO",
+        "from": "QuicklimeProductionTechnologyMix",
+        "kind": "background",
+        "label": "quicklime (CAO)",
+        "to": "BatteryCellTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.001,
+        "flow_type": "CarbonBlack",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#BatteryCellTreatmentAct_flow8_CarbonBlack",
+        "from": "CarbonBlack",
+        "kind": "background",
+        "label": "carbon black",
+        "to": "BatteryCellTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.577,
+        "flow_type": "HydrometallurgicalTreatmentOfMetals",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#BatteryCellTreatmentAct_flow9_MetalsToHydrometallurgic",
+        "from": "BatteryCellTreatmentAct",
+        "kind": "treatment",
+        "label": "metals to hydrometallurgical treatment",
+        "to": "MetalTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.00278,
+        "flow_type": "TapWater",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#MetalTreatmentAct_flow10_WaterTapWater",
+        "from": "TapWater",
+        "kind": "background",
+        "label": "Water (tap water)",
+        "to": "MetalTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.0248,
+        "flow_type": "ElectricityMediumVoltage",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#MetalTreatmentAct_flow1_ElectricityForHydrometal",
+        "from": "ElectricityMediumVoltage",
+        "kind": "background",
+        "label": "electricity for hydrometallurgical treatment",
+        "to": "MetalTreatmentAct",
+        "unit": "kilowattHour"
+      },
+      {
+        "amount": 1.84218,
+        "flow_type": "ThermalEnergyFromNaturalGas",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#MetalTreatmentAct_flow2_ProcessHeat",
+        "from": "ThermalEnergyFromNaturalGas",
+        "kind": "background",
+        "label": "process heat",
+        "to": "MetalTreatmentAct",
+        "unit": "Megajoule"
+      },
+      {
+        "amount": 0.04058,
+        "flow_type": "ThermalEnergyFromLightFuelOil",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#MetalTreatmentAct_flow3_ProcessHeat",
+        "from": "ThermalEnergyFromLightFuelOil",
+        "kind": "background",
+        "label": "process heat",
+        "to": "MetalTreatmentAct",
+        "unit": "Megajoule"
+      },
+      {
+        "amount": 0.02435,
+        "flow_type": "AmmoniumNitrate",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#MetalTreatmentAct_flow4_AmmoniumNitrate",
+        "from": "AmmoniumNitrate",
+        "kind": "background",
+        "label": "Ammonium nitrate",
+        "to": "MetalTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.00974,
+        "flow_type": "HydrochloricAcid",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#MetalTreatmentAct_flow5_HydrochloricAcid100",
+        "from": "HydrochloricAcid",
+        "kind": "background",
+        "label": "Hydrochloric acid (100%)",
+        "to": "MetalTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.30027,
+        "flow_type": "HydrogenPeroxide",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#MetalTreatmentAct_flow6_HydrogenPeroxide100",
+        "from": "HydrogenPeroxide",
+        "kind": "background",
+        "label": "Hydrogen peroxide (100%)",
+        "to": "MetalTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.01623,
+        "flow_type": "Soda",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#MetalTreatmentAct_flow7_SodaSodiumCarbonate",
+        "from": "Soda",
+        "kind": "background",
+        "label": "Soda (sodium carbonate)",
+        "to": "MetalTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.45446,
+        "flow_type": "SodiumHydroxide",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#MetalTreatmentAct_flow8_SodiumHydroxide100Causti",
+        "from": "SodiumHydroxide",
+        "kind": "background",
+        "label": "Sodium hydroxide (100%; caustic soda)",
+        "to": "MetalTreatmentAct",
+        "unit": "Kilogram"
+      },
+      {
+        "amount": 0.87646,
+        "flow_type": "SulphuricAcidAq",
+        "flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#MetalTreatmentAct_flow9_SulphuricAcidAq96",
+        "from": "SulphuricAcidAq",
+        "kind": "background",
+        "label": "Sulphuric acid aq. (96%)",
+        "to": "MetalTreatmentAct",
+        "unit": "Kilogram"
+      }
+    ],
+    "legend": {
+      "activity": "A unit process declared in an LCIDataset in the graph.",
+      "background": "A flow type referenced by name/UUID only \u2014 the licensed background dataset behind it is not shipped with the ontology.",
+      "foreground": "A product flow linking two activities inside the value chain.",
+      "treatment": "An output routed to a downstream treatment activity."
+    },
+    "nodes": [
+      {
+        "company_specific": true,
+        "dataset": "CellDataset",
+        "dataset_title": "CellDataset",
+        "determining_amount": 1.0,
+        "determining_flow_type": "BatteryCellNMC111LiIon",
+        "determining_unit": "Kilogram",
+        "geography": "NO",
+        "id": "CellManufacturingAct",
+        "input_count": 19,
+        "kind": "activity",
+        "label": "CellManufacturing",
+        "life_cycle_stage": "Manufacturing",
+        "output_count": 1,
+        "source_file": "case-study/lcidatasets/dpp/battery-cell.ttl"
+      },
+      {
+        "company_specific": true,
+        "dataset": "CellDataset",
+        "dataset_title": "CellDataset",
+        "determining_amount": 1.0,
+        "determining_flow_type": "ElectrolyteForLithiumIonBattery",
+        "determining_unit": "Kilogram",
+        "geography": "NO",
+        "id": "ElectrolyteManufacturingAct",
+        "input_count": 5,
+        "kind": "activity",
+        "label": "ElectrolyteManufacturing",
+        "life_cycle_stage": "Manufacturing",
+        "output_count": 1,
+        "source_file": "case-study/lcidatasets/dpp/battery-cell.ttl"
+      },
+      {
+        "company_specific": true,
+        "dataset": "CellDataset",
+        "dataset_title": "CellDataset",
+        "determining_amount": 1.0,
+        "determining_flow_type": "CathodeNMC111ForLithiumIonBattery",
+        "determining_unit": "Kilogram",
+        "geography": "NO",
+        "id": "CathodeManufacturingAct",
+        "input_count": 6,
+        "kind": "activity",
+        "label": "CathodeManufacturing",
+        "life_cycle_stage": "Manufacturing",
+        "output_count": 2,
+        "source_file": "case-study/lcidatasets/dpp/battery-cell.ttl"
+      },
+      {
+        "company_specific": true,
+        "dataset": "CellDataset",
+        "dataset_title": "CellDataset",
+        "determining_amount": 1.0,
+        "determining_flow_type": "LiNMCO2ActiveMaterial",
+        "determining_unit": "Kilogram",
+        "geography": "CN",
+        "id": "CathodeActiveMaterialManufacturingAct",
+        "input_count": 0,
+        "kind": "activity",
+        "label": "CathodeActiveMaterialManufacturing",
+        "life_cycle_stage": "Manufacturing",
+        "output_count": 1,
+        "source_file": "case-study/lcidatasets/dpp/battery-cell.ttl"
+      },
+      {
+        "company_specific": true,
+        "dataset": "CellDataset",
+        "dataset_title": "CellDataset",
+        "determining_amount": 1.0,
+        "determining_flow_type": "AnodeGraphiteForLithiumIonBattery",
+        "determining_unit": "Kilogram",
+        "geography": "NO",
+        "id": "AnodeManufacturingAct",
+        "input_count": 7,
+        "kind": "activity",
+        "label": "AnodeManufacturing",
+        "life_cycle_stage": "Manufacturing",
+        "output_count": 2,
+        "source_file": "case-study/lcidatasets/dpp/battery-cell.ttl"
+      },
+      {
+        "company_specific": true,
+        "dataset": "CellDataset",
+        "dataset_title": "CellDataset",
+        "determining_amount": 1.0,
+        "determining_flow_type": "SyntheticGraphiteBatteryGrade",
+        "determining_unit": "Kilogram",
+        "geography": "CN",
+        "id": "AnodeActiveMaterialManufacturingAct",
+        "input_count": 5,
+        "kind": "activity",
+        "label": "AnodeActiveMaterialManufacturing",
+        "life_cycle_stage": "Manufacturing",
+        "output_count": 6,
+        "source_file": "case-study/lcidatasets/dpp/battery-cell.ttl"
+      },
+      {
+        "company_specific": true,
+        "dataset": "ModuleDataset",
+        "dataset_title": "ModuleDataset",
+        "determining_amount": 1.0,
+        "determining_flow_type": "BatteryModuleLiIon",
+        "determining_unit": "Kilogram",
+        "geography": "NO",
+        "id": "ModuleAssemblyAct",
+        "input_count": 10,
+        "kind": "activity",
+        "label": "ModuleAssembly",
+        "life_cycle_stage": "Manufacturing",
+        "output_count": 1,
+        "source_file": "case-study/lcidatasets/dpp/battery-module.ttl"
+      },
+      {
+        "company_specific": true,
+        "dataset": "ModuleDataset",
+        "dataset_title": "ModuleDataset",
+        "determining_amount": 1.0,
+        "determining_flow_type": "HousingAndCoolingSystem",
+        "determining_unit": "Kilogram",
+        "geography": "NO",
+        "id": "HousingCoolingManufacturingAct",
+        "input_count": 8,
+        "kind": "activity",
+        "label": "HousingCoolingManufacturing",
+        "life_cycle_stage": "Manufacturing",
+        "output_count": 1,
+        "source_file": "case-study/lcidatasets/dpp/battery-module.ttl"
+      },
+      {
+        "company_specific": true,
+        "dataset": "PackDataset",
+        "dataset_title": "PackDataset",
+        "determining_amount": 1.0,
+        "determining_flow_type": "BatteryLiIonNMC111AtPlant",
+        "determining_unit": "Kilogram",
+        "geography": "NO",
+        "id": "BatteryAssemblyAct",
+        "input_count": 11,
+        "kind": "activity",
+        "label": "BatteryAssembly",
+        "life_cycle_stage": "Manufacturing",
+        "output_count": 1,
+        "source_file": "case-study/lcidatasets/dpp/battery-pack.ttl"
+      },
+      {
+        "company_specific": true,
+        "dataset": "PackDataset",
+        "dataset_title": "PackDataset",
+        "determining_amount": 1.0,
+        "determining_flow_type": "BatteryLiIonNMC111AtCustomer",
+        "determining_unit": "Kilogram",
+        "geography": "DE",
+        "id": "BatteryDistributionAct",
+        "input_count": 2,
+        "kind": "activity",
+        "label": "BatteryDistribution",
+        "life_cycle_stage": "Distribution",
+        "output_count": 1,
+        "source_file": "case-study/lcidatasets/dpp/battery-pack.ttl"
+      },
+      {
+        "company_specific": true,
+        "dataset": "BrazingDataset",
+        "dataset_title": "BrazingDataset",
+        "determining_amount": 70.0,
+        "determining_flow_type": "BrazingServiceForBatteryCase",
+        "determining_unit": "Item",
+        "geography": "ES",
+        "id": "BrazingServiceAct",
+        "input_count": 4,
+        "kind": "activity",
+        "label": "BrazingService",
+        "life_cycle_stage": "Manufacturing",
+        "output_count": 1,
+        "source_file": "case-study/lcidatasets/dpp/brazing.ttl"
+      },
+      {
+        "company_specific": true,
+        "dataset": "BrazingDataset",
+        "dataset_title": "BrazingDataset",
+        "determining_amount": 1.0,
+        "determining_flow_type": "NOCOLOK",
+        "determining_unit": "Kilogram",
+        "geography": "DE",
+        "id": "NocolokAct",
+        "input_count": 2,
+        "kind": "activity",
+        "label": "NocolokProduction",
+        "life_cycle_stage": "Manufacturing",
+        "output_count": 2,
+        "source_file": "case-study/lcidatasets/dpp/brazing.ttl"
+      },
+      {
+        "company_specific": false,
+        "dataset": "BatteryEoL",
+        "dataset_title": "BatteryEoL",
+        "determining_amount": 1.0,
+        "determining_flow_type": "EoLBatteryDisassembly",
+        "determining_unit": "Kilogram",
+        "geography": "RER",
+        "id": "BatteryDisassemblyAct",
+        "input_count": 0,
+        "kind": "activity",
+        "label": "BattteryDisassembly",
+        "life_cycle_stage": "EndOfLife",
+        "output_count": 8,
+        "source_file": "case-study/lcidatasets/secondary/battery-eol.ttl"
+      },
+      {
+        "company_specific": false,
+        "dataset": "BatteryEoL",
+        "dataset_title": "BatteryEoL",
+        "determining_amount": 1.0,
+        "determining_flow_type": "PyrometallurgicalTreatmentOfBatteryCells",
+        "determining_unit": "Kilogram",
+        "geography": "RER",
+        "id": "BatteryCellTreatmentAct",
+        "input_count": 8,
+        "kind": "activity",
+        "label": "BatteryCellTreatment",
+        "life_cycle_stage": "EndOfLife",
+        "output_count": 4,
+        "source_file": "case-study/lcidatasets/secondary/battery-eol.ttl"
+      },
+      {
+        "company_specific": false,
+        "dataset": "BatteryEoL",
+        "dataset_title": "BatteryEoL",
+        "determining_amount": 0.577,
+        "determining_flow_type": "HydrometallurgicalTreatmentOfMetals",
+        "determining_unit": "Kilogram",
+        "geography": "RER",
+        "id": "MetalTreatmentAct",
+        "input_count": 10,
+        "kind": "activity",
+        "label": "MetalTreatment",
+        "life_cycle_stage": "EndOfLife",
+        "output_count": 2,
+        "source_file": "case-study/lcidatasets/secondary/battery-eol.ttl"
+      },
+      {
+        "consumer_count": 8,
+        "consumers": [
+          "AnodeActiveMaterialManufacturingAct",
+          "AnodeManufacturingAct",
+          "BatteryCellTreatmentAct",
+          "BrazingServiceAct",
+          "CathodeManufacturingAct",
+          "CellManufacturingAct",
+          "ElectrolyteManufacturingAct",
+          "MetalTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "ElectricityMediumVoltage",
+        "kind": "background",
+        "label": "electricity, medium voltage",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 4,
+        "consumers": [
+          "AnodeActiveMaterialManufacturingAct",
+          "AnodeManufacturingAct",
+          "CathodeManufacturingAct",
+          "CellManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "HeatDistrictOrIndustrialNaturalGas",
+        "kind": "background",
+        "label": "Heat, district or industrial, natural gas",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 3,
+        "consumers": [
+          "CellManufacturingAct",
+          "HousingCoolingManufacturingAct",
+          "ModuleAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "SheetRollingAluminium",
+        "kind": "background",
+        "label": "sheet rolling, aluminium",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 3,
+        "consumers": [
+          "CellManufacturingAct",
+          "HousingCoolingManufacturingAct",
+          "ModuleAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "AluminiumWroughtAlloy",
+        "kind": "background",
+        "label": "aluminium, wrought alloy",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 3,
+        "consumers": [
+          "BatteryAssemblyAct",
+          "CellManufacturingAct",
+          "ModuleAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "Copper",
+        "kind": "background",
+        "label": "copper",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 3,
+        "consumers": [
+          "BatteryAssemblyAct",
+          "CellManufacturingAct",
+          "ModuleAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "SheetRollingCopper",
+        "kind": "background",
+        "label": "sheet rolling, copper",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 3,
+        "consumers": [
+          "AnodeManufacturingAct",
+          "BatteryCellTreatmentAct",
+          "CathodeManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "CarbonBlack",
+        "kind": "background",
+        "label": "carbon black",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 3,
+        "consumers": [
+          "BrazingServiceAct",
+          "HousingCoolingManufacturingAct",
+          "MetalTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "TapWater",
+        "kind": "background",
+        "label": "tap water",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 2,
+        "consumers": [
+          "CellManufacturingAct",
+          "ModuleAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "ExtrusionPlasticFilm",
+        "kind": "background",
+        "label": "extrusion, plastic film",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 2,
+        "consumers": [
+          "BatteryAssemblyAct",
+          "ModuleAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "ElectronicComponentPassiveUnspecified",
+        "kind": "background",
+        "label": "electronic component, passive, unspecified",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 2,
+        "consumers": [
+          "BatteryAssemblyAct",
+          "ModuleAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "GlassFibreReinforcedPlasticPolyamideInjectionMoulded",
+        "kind": "background",
+        "label": "glass fibre reinforced plastic, polyamide, injection moulded",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 2,
+        "consumers": [
+          "HousingCoolingManufacturingAct",
+          "ModuleAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "ImpactExtrusionOfAluminium1Stroke",
+        "kind": "background",
+        "label": "impact extrusion of aluminium, 1 stroke",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 2,
+        "consumers": [
+          "HousingCoolingManufacturingAct",
+          "ModuleAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "PolyethyleneHighDensityGranulate",
+        "kind": "background",
+        "label": "polyethylene, high density, granulate",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 2,
+        "consumers": [
+          "BatteryCellTreatmentAct",
+          "MetalTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "ThermalEnergyFromNaturalGas",
+        "kind": "background",
+        "label": "thermal energy from natural gas",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 2,
+        "consumers": [
+          "BatteryCellTreatmentAct",
+          "MetalTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "ThermalEnergyFromLightFuelOil",
+        "kind": "background",
+        "label": "thermal energy from light fuel oil",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "CellManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "CopperCollectorFoilForLiIonBattery",
+        "kind": "background",
+        "label": "copper collector foil, for Li-ion battery",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "CellManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "AluminiumCollectorFoilForLiIonBattery",
+        "kind": "background",
+        "label": "aluminium collector foil, for Li-ion battery",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "CellManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "BatterySeparator",
+        "kind": "background",
+        "label": "battery separator",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "CellManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "PolyethyleneTerephthalateGranulateAmorphous",
+        "kind": "background",
+        "label": "polyethylene terephthalate, granulate, amorphous",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "CellManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "PolypropyleneGranulate",
+        "kind": "background",
+        "label": "polypropylene, granulate",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "ElectrolyteManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "LithiumHexafluorophosphate",
+        "kind": "background",
+        "label": "lithium hexafluorophosphate",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "ElectrolyteManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "EthyleneCarbonate",
+        "kind": "background",
+        "label": "ethylene carbonate",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "ElectrolyteManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "DimethylCarbonate",
+        "kind": "background",
+        "label": "dimethyl carbonate",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "ElectrolyteManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "VinylCarbonate",
+        "kind": "background",
+        "label": "vinyl carbonate",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "CathodeManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "PolyvinylfluorideKg",
+        "kind": "background",
+        "label": "polyvinylfluoride [kg]",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "CathodeManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "NMethyl2Pyrrolidone",
+        "kind": "background",
+        "label": "N-methyl-2-pyrrolidone",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "AnodeManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "CarboxymethylCellulosePowder",
+        "kind": "background",
+        "label": "carboxymethyl cellulose, powder",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "AnodeManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "WaterDeionised",
+        "kind": "background",
+        "label": "water, deionised",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "AnodeManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "Latex",
+        "kind": "background",
+        "label": "latex",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "AnodeActiveMaterialManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "PetroleumCoke",
+        "kind": "background",
+        "label": "petroleum coke",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "AnodeActiveMaterialManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "CoalTar",
+        "kind": "background",
+        "label": "coal tar",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "AnodeActiveMaterialManufacturingAct"
+        ],
+        "flow_class": "ElementaryFlow",
+        "id": "e2fb04b0-6555-11dd-ad8b-0800200c9a66",
+        "kind": "background",
+        "label": "oxygen",
+        "source_dataset": "biosphere"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "HousingCoolingManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "InjectionMoulding",
+        "kind": "background",
+        "label": "injection moulding",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "HousingCoolingManufacturingAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "EthyleneGlycol",
+        "kind": "background",
+        "label": "ethylene glycol",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "BatteryAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "ElectricityLowVoltage",
+        "kind": "background",
+        "label": "electricity, low voltage",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "BatteryAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "ReinforcingSteel",
+        "kind": "background",
+        "label": "reinforcing steel",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "BatteryAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "SheetRollingSteel",
+        "kind": "background",
+        "label": "sheet rolling, steel",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "BatteryAssemblyAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "BatteryManagementSystem",
+        "kind": "background",
+        "label": "battery management system",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "BatteryDistributionAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "TransportFreightLorry3575MetricTonDieselEURO4",
+        "kind": "background",
+        "label": "transport, freight, lorry, 3.5-7.5 metric ton, diesel, EURO 4",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "BrazingServiceAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "VentingOfNitrogenLiquid",
+        "kind": "background",
+        "label": "venting of nitrogen, liquid",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "NocolokAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "HydrogenFluoride",
+        "kind": "background",
+        "label": "hydrogen fluoride",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "NocolokAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "AluminiumHydroxide",
+        "kind": "background",
+        "label": "aluminium hydroxide",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "BatteryCellTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "SteamFromNaturalGas",
+        "kind": "background",
+        "label": "steam from natural gas",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "BatteryCellTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "LimeProductionTechnologyMix",
+        "kind": "background",
+        "label": "lime production, technology mix",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "BatteryCellTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "SilicaSandProductionMix",
+        "kind": "background",
+        "label": "silica sand, production mix",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "BatteryCellTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "QuicklimeProductionTechnologyMix",
+        "kind": "background",
+        "label": "quicklime production, technology mix",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "MetalTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "AmmoniumNitrate",
+        "kind": "background",
+        "label": "ammonium nitrate",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "MetalTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "HydrochloricAcid",
+        "kind": "background",
+        "label": "hydrochloric acid",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "MetalTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "HydrogenPeroxide",
+        "kind": "background",
+        "label": "hydrogen peroxide",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "MetalTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "Soda",
+        "kind": "background",
+        "label": "soda",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "MetalTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "SodiumHydroxide",
+        "kind": "background",
+        "label": "sodium hydroxide",
+        "source_dataset": "ecoinvent"
+      },
+      {
+        "consumer_count": 1,
+        "consumers": [
+          "MetalTreatmentAct"
+        ],
+        "flow_class": "ProductFlow",
+        "id": "SulphuricAcidAq",
+        "kind": "background",
+        "label": "sulphuric acid aq.",
+        "source_dataset": "ecoinvent"
+      }
+    ],
+    "stage_map": {
+      "AnodeActiveMaterialManufacturingAct": "Manufacturing",
+      "AnodeManufacturingAct": "Manufacturing",
+      "BatteryAssemblyAct": "Manufacturing",
+      "BatteryCellTreatmentAct": "EndOfLife",
+      "BatteryDisassemblyAct": "EndOfLife",
+      "BatteryDistributionAct": "Distribution",
+      "BrazingServiceAct": "Manufacturing",
+      "CathodeActiveMaterialManufacturingAct": "Manufacturing",
+      "CathodeManufacturingAct": "Manufacturing",
+      "CellManufacturingAct": "Manufacturing",
+      "ElectrolyteManufacturingAct": "Manufacturing",
+      "HousingCoolingManufacturingAct": "Manufacturing",
+      "MetalTreatmentAct": "EndOfLife",
+      "ModuleAssemblyAct": "Manufacturing",
+      "NocolokAct": "Manufacturing"
+    }
+  },
+  "status": 200
+}

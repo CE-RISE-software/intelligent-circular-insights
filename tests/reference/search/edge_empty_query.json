@@ -1,0 +1,72 @@
+{
+  "body": {
+    "abstained": true,
+    "answer": "Insufficient evidence in the provided records.",
+    "confidence": 0.45,
+    "derived_triples": [],
+    "domain_guess": null,
+    "evidence": [
+      {
+        "detail": null,
+        "id": "viessmann_seed_0000",
+        "score": 0.222,
+        "snippet": "DIGITAL PRODUCT PASSPORT (TXT) \u2014 Viessmann Vitocal 250\u2011A (AWO\u2011E\u2011AC 251.A08) \u2014 Full Sample ============================================================================  IMPORTANT NOTE -------------- This is an illustrative Digital Product Pa\u2026",
+        "source": "document"
+      },
+      {
+        "detail": null,
+        "id": "battery_seed_0000",
+        "score": 0.22,
+        "snippet": "DIGITAL PRODUCT PASSPORT (TXT) \u2014 BMZ Group (DE) e\u2011Bike LMT 36V\u201114Ah (504 Wh) \u2014 Full Sample ============================================================================  IMPORTANT NOTE -------------- This is an illustrative Digital Product P\u2026",
+        "source": "document"
+      },
+      {
+        "detail": null,
+        "id": "viessmann_seed_0009",
+        "score": 0.198,
+        "snippet": "14) LINKED DOCUMENTATION (insert your URLs or files) ---------------------------------------------------- \u2022 Product page (regional):  \u2022 Installation / Service manual (PDF):  \u2022 Parts catalogue:  \u2022 Safety instructions (R290 (propane)):  15) G\u2026",
+        "source": "document"
+      },
+      {
+        "detail": null,
+        "id": "battery_seed_0007",
+        "score": 0.193,
+        "snippet": "14) LINKED DOCUMENTATION (insert your URLs or files) ---------------------------------------------------- \u2022 Test summary UN 38.3 (PDF): (enter) \u2022 IEC/EN certificates (PDF): (enter) \u2022 Safety information & SDS: (enter) \u2022 Installation/Use manu\u2026",
+        "source": "document"
+      },
+      {
+        "detail": null,
+        "id": "ontology",
+        "score": 1.0,
+        "snippet": "@prefix ex:        <http://example.com/dpp#> .",
+        "source": "symbolic"
+      },
+      {
+        "detail": null,
+        "id": "ontology",
+        "score": 1.0,
+        "snippet": "# CIRPASS-2 EU DPP Core Ontology Proposal (Requirements Spec v1.0, March 2025).",
+        "source": "symbolic"
+      },
+      {
+        "detail": null,
+        "id": "ontology",
+        "score": 1.0,
+        "snippet": "@prefix cirpass2:  <https://w3id.org/cirpass2/dpp/core#> .",
+        "source": "symbolic"
+      },
+      {
+        "detail": null,
+        "id": "ontology",
+        "score": 1.0,
+        "snippet": "<http://example.com/dpp> a owl:Ontology ;",
+        "source": "symbolic"
+      }
+    ],
+    "fallback_reason": "APIConnectionError: Connection error.",
+    "fired_rules": [],
+    "llm_used": false,
+    "model": "gpt-4o-mini"
+  },
+  "status": 200
+}

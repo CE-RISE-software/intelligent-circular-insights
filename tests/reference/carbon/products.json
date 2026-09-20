@@ -1,0 +1,41 @@
+{
+  "body": [
+    {
+      "brand": "Apple",
+      "category": "smartphone",
+      "display_name": "Apple iPhone 15 Pro (128 GB)",
+      "product_id": "apple_iphone15_pro_128gb"
+    },
+    {
+      "brand": "Daikin Europe N.V.",
+      "category": "heat_pump",
+      "display_name": "Daikin Altherma M HW (Indoor Monobloc) 260 L",
+      "product_id": "daikin_altherma_m_hw_260l"
+    },
+    {
+      "brand": "Dell",
+      "category": "laptop",
+      "display_name": "Dell XPS 14 (DA14260)",
+      "product_id": "dell_xps14_da14260"
+    },
+    {
+      "brand": "Fairphone",
+      "category": "smartphone",
+      "display_name": "Fairphone 4",
+      "product_id": "fairphone_4"
+    },
+    {
+      "brand": "Generic",
+      "category": "ev_battery",
+      "display_name": "Generic BEV Pack (60 kWh)",
+      "product_id": "generic_bev_pack_60kwh"
+    },
+    {
+      "brand": "Lexmark",
+      "category": "monochrome_laser_mfp",
+      "display_name": "Lexmark MX431adn",
+      "product_id": "lexmark_mx431adn"
+    }
+  ],
+  "status": 200
+}

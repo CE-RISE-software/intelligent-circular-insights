@@ -1,0 +1,393 @@
+{
+  "search:capacity": {
+    "decision": "answer",
+    "answer": "The battery pack has a declared capacity of 60 kWh [e1].",
+    "grounding": {
+      "claims_total": 1,
+      "claims_resolved": 1,
+      "unresolved": [],
+      "verdict": "fully_grounded"
+    }
+  },
+  "search:recyclability": {
+    "decision": "answer",
+    "answer": "The battery pack's estimated recyclability is 85 percent [e2].",
+    "grounding": {
+      "claims_total": 1,
+      "claims_resolved": 1,
+      "unresolved": [],
+      "verdict": "fully_grounded"
+    }
+  },
+  "search:unanswerable": {
+    "decision": "abstain",
+    "answer": null
+  },
+  "grounding:paraphrase": {
+    "claims_total": 1,
+    "claims_resolved": 1,
+    "unresolved": [],
+    "verdict": "fully_grounded"
+  },
+  "grounding:fabricated": {
+    "claims_total": 3,
+    "claims_resolved": 1,
+    "unresolved": [
+      {
+        "id": "claim:2",
+        "text": "The pack has a 10-year warranty.",
+        "cited": []
+      },
+      {
+        "id": "uncovered-answer",
+        "text": "The pack has a declared capacity of 60 kWh and a 10-year warranty [e1].",
+        "cited": []
+      }
+    ],
+    "verdict": "unresolved_claims"
+  },
+  "repair:grounded": {
+    "record": {
+      "schema_version": "ce-rise-demo-0.1",
+      "dpp_id": "synthetic-demo-dpp-001",
+      "product": {
+        "id": "SYNTHETIC-BAT-001",
+        "brand": "Demo",
+        "model": "Example 1",
+        "category": "battery"
+      },
+      "materials": [
+        {
+          "name": "Steel",
+          "share_pct": 100
+        }
+      ],
+      "notes": "Synthetic test record, not a claim about any real product or regulatory conformity.",
+      "compliance": {
+        "ce_marking": false,
+        "standards": [
+          "DEMO-STANDARD-1"
+        ]
+      }
+    },
+    "fills": [
+      {
+        "path": "/compliance",
+        "value": {
+          "ce_marking": false,
+          "standards": [
+            "DEMO-STANDARD-1"
+          ]
+        },
+        "support": {
+          "path": "/compliance",
+          "evidence_id": "record:1",
+          "evidence_ref": "fixture:synthetic-demo-record",
+          "source_pointer": "/compliance"
+        },
+        "confidence": 0.9
+      }
+    ],
+    "cannot_be_grounded": [],
+    "rejected": [],
+    "suggestions": []
+  },
+  "repair:01_battery_missing_compliance": {
+    "record": {
+      "schema_version": "ce-rise-demo-0.1",
+      "dpp_id": "dpp-broken-001",
+      "product": {
+        "id": "BMZ-EBIKE-001",
+        "brand": "BMZ Group",
+        "model": "LMT 36V-14Ah",
+        "category": "battery"
+      },
+      "materials": [
+        {
+          "name": "Lithium iron phosphate",
+          "share_pct": 58
+        },
+        {
+          "name": "Graphite",
+          "share_pct": 18
+        },
+        {
+          "name": "Aluminium casing",
+          "share_pct": 14
+        },
+        {
+          "name": "Copper",
+          "share_pct": 6
+        },
+        {
+          "name": "Polymer separator",
+          "share_pct": 4
+        }
+      ],
+      "lifecycle": {
+        "use_phase": {
+          "lifetime_years": 7
+        }
+      },
+      "notes": "Broken DPP example #1: compliance section is missing entirely; the EU Batteries Regulation 2023/1542 is implied but never listed."
+    },
+    "fills": [],
+    "cannot_be_grounded": [
+      {
+        "path": "/compliance",
+        "reason": "required property is missing"
+      }
+    ],
+    "rejected": [],
+    "suggestions": []
+  },
+  "repair:02_heatpump_malformed_numbers": {
+    "record": {
+      "schema_version": "ce-rise-demo-0.1",
+      "dpp_id": "dpp-broken-002",
+      "product": {
+        "id": "DAIK-ALT-260L",
+        "brand": "Daikin",
+        "model": "Altherma M HW",
+        "category": "heat_pump",
+        "geography": "UK"
+      },
+      "materials": [
+        {
+          "name": "Steel chassis",
+          "share_pct": "55"
+        },
+        {
+          "name": "Copper heat exchanger",
+          "share_pct": 12
+        },
+        {
+          "name": "ABS plastics",
+          "share_pct": 18
+        },
+        {
+          "name": "Refrigerant (R-134a)",
+          "share_pct": 1
+        },
+        {
+          "name": "Other",
+          "share_pct": 14
+        }
+      ],
+      "compliance": {
+        "standards": []
+      },
+      "circularity": {
+        "recyclability_pct": 130,
+        "repairability_index": 12
+      },
+      "notes": "Broken DPP example #2: share_pct given as a string, recyclability >100%, repairability >10, empty compliance list."
+    },
+    "fills": [],
+    "cannot_be_grounded": [
+      {
+        "path": "/circularity/recyclability_pct",
+        "reason": "violates maximum"
+      },
+      {
+        "path": "/circularity/repairability_index",
+        "reason": "violates maximum"
+      },
+      {
+        "path": "/compliance/standards",
+        "reason": "violates minItems"
+      },
+      {
+        "path": "/materials/0/share_pct",
+        "reason": "violates type"
+      }
+    ],
+    "rejected": [],
+    "suggestions": [
+      {
+        "path": "/circularity/recyclability_pct",
+        "value": 100,
+        "rationale": "The maximum recyclability percentage is 100%. A human must verify if this value aligns with the product's actual recyclability.",
+        "confidence": 0.3,
+        "source": "model_training",
+        "status": "unverified",
+        "requires_review": true
+      },
+      {
+        "path": "/circularity/repairability_index",
+        "value": 10,
+        "rationale": "The maximum repairability index is 10. A human must verify if this value reflects the product's repairability capabilities.",
+        "confidence": 0.3,
+        "source": "model_training",
+        "status": "unverified",
+        "requires_review": true
+      },
+      {
+        "path": "/compliance/standards",
+        "value": [
+          "ISO 14001"
+        ],
+        "rationale": "ISO 14001 is a common environmental management standard. A human must verify if this standard applies to the product.",
+        "confidence": 0.3,
+        "source": "model_training",
+        "status": "unverified",
+        "requires_review": true
+      },
+      {
+        "path": "/materials/0/share_pct",
+        "value": 55,
+        "rationale": "The share percentage for materials should be a number. A human must verify if this value is accurate and reflects the material composition.",
+        "confidence": 0.3,
+        "source": "model_training",
+        "status": "unverified",
+        "requires_review": true
+      }
+    ]
+  },
+  "repair:03_laptop_minimal_skeleton": {
+    "record": {
+      "dpp_id": "dpp-broken-003",
+      "product": {
+        "brand": "Dell",
+        "model": "XPS 14"
+      },
+      "notes": "Broken DPP example #3: skeletal record — most required fields (schema_version, product.id, product.category, materials, compliance) are missing entirely."
+    },
+    "fills": [],
+    "cannot_be_grounded": [
+      {
+        "path": "/compliance",
+        "reason": "required property is missing"
+      },
+      {
+        "path": "/materials",
+        "reason": "required property is missing"
+      },
+      {
+        "path": "/product/category",
+        "reason": "required property is missing"
+      },
+      {
+        "path": "/product/id",
+        "reason": "required property is missing"
+      },
+      {
+        "path": "/schema_version",
+        "reason": "required property is missing"
+      }
+    ],
+    "rejected": [],
+    "suggestions": [
+      {
+        "path": "/product/category",
+        "value": "laptop",
+        "rationale": "The product is a Dell XPS 14, which is a known laptop model. A human should verify that this model is indeed categorized as a laptop.",
+        "confidence": 0.2,
+        "source": "model_training",
+        "status": "unverified",
+        "requires_review": true
+      }
+    ]
+  },
+  "synthesis:grounded": {
+    "record": {
+      "compliance": {
+        "ce_marking": false,
+        "standards": [
+          "DEMO-STANDARD-1"
+        ]
+      },
+      "dpp_id": "synthetic-demo-dpp-001",
+      "materials": [
+        {
+          "name": "Steel",
+          "share_pct": 100
+        }
+      ],
+      "notes": "Synthetic test record, not a claim about any real product or regulatory conformity.",
+      "product": {
+        "brand": "Demo",
+        "category": "battery",
+        "id": "SYNTHETIC-BAT-001",
+        "model": "Example 1"
+      },
+      "schema_version": "ce-rise-demo-0.1"
+    },
+    "support": [
+      {
+        "path": "/compliance/ce_marking",
+        "evidence_id": "record:1",
+        "evidence_ref": "fixture:synthetic-demo-record",
+        "source_pointer": "/compliance/ce_marking"
+      },
+      {
+        "path": "/compliance/standards/0",
+        "evidence_id": "record:1",
+        "evidence_ref": "fixture:synthetic-demo-record",
+        "source_pointer": "/compliance/standards/0"
+      },
+      {
+        "path": "/dpp_id",
+        "evidence_id": "record:1",
+        "evidence_ref": "fixture:synthetic-demo-record",
+        "source_pointer": "/dpp_id"
+      },
+      {
+        "path": "/materials/0/name",
+        "evidence_id": "record:1",
+        "evidence_ref": "fixture:synthetic-demo-record",
+        "source_pointer": "/materials/0/name"
+      },
+      {
+        "path": "/materials/0/share_pct",
+        "evidence_id": "record:1",
+        "evidence_ref": "fixture:synthetic-demo-record",
+        "source_pointer": "/materials/0/share_pct"
+      },
+      {
+        "path": "/notes",
+        "evidence_id": "record:1",
+        "evidence_ref": "fixture:synthetic-demo-record",
+        "source_pointer": "/notes"
+      },
+      {
+        "path": "/product/brand",
+        "evidence_id": "record:1",
+        "evidence_ref": "fixture:synthetic-demo-record",
+        "source_pointer": "/product/brand"
+      },
+      {
+        "path": "/product/category",
+        "evidence_id": "record:1",
+        "evidence_ref": "fixture:synthetic-demo-record",
+        "source_pointer": "/product/category"
+      },
+      {
+        "path": "/product/id",
+        "evidence_id": "record:1",
+        "evidence_ref": "fixture:synthetic-demo-record",
+        "source_pointer": "/product/id"
+      },
+      {
+        "path": "/product/model",
+        "evidence_id": "record:1",
+        "evidence_ref": "fixture:synthetic-demo-record",
+        "source_pointer": "/product/model"
+      },
+      {
+        "path": "/schema_version",
+        "evidence_id": "record:1",
+        "evidence_ref": "fixture:synthetic-demo-record",
+        "source_pointer": "/schema_version"
+      }
+    ]
+  },
+  "compat:gpt5": {
+    "capacity_kwh": 60
+  },
+  "embeddings:openai": {
+    "count": 2,
+    "dimensions": 1536,
+    "hash": "a2a5e3cfedb266034daade05ad3cbac45645655bc0f056b0b94ba8a3fd64f622"
+  }
+}

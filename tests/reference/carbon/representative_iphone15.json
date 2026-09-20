@@ -1,0 +1,506 @@
+{
+  "body": {
+    "assumptions": [
+      "Derived lifetime use-phase electricity from annual energy and lifetime years."
+    ],
+    "estimated_fields": [
+      "factory_to_market_ocean",
+      "regional_distribution"
+    ],
+    "missing_inputs": [],
+    "partial_total_kg_co2e": 64.852055,
+    "product_id": "apple_iphone15_pro_128gb",
+    "product_name": "Apple iPhone 15 Pro (128 GB)",
+    "product_profile": {
+      "brand": "Apple",
+      "calculation_scope": {
+        "compliance_standards": [
+          "ISO 14040",
+          "ISO 14044",
+          "ISO 14067"
+        ],
+        "default_basis": "per_device_lifecycle",
+        "default_reporting_unit": "kg CO2e",
+        "notes": [
+          "Apple PER uses GWP100 from IPCC AR6, includes biogenic carbon.",
+          "Use-phase assumes 3-year first-owner period."
+        ],
+        "supported_basis": [
+          "per_device_lifecycle"
+        ]
+      },
+      "category": "smartphone",
+      "defaults": {
+        "annual_energy_kwh": 7.5,
+        "electricity_factor_key": null,
+        "lifetime_years": 3.0,
+        "report_year": 2021,
+        "use_country_code": "DE"
+      },
+      "display_name": "Apple iPhone 15 Pro (128 GB)",
+      "estimation_profile": {
+        "status": "estimate_ready",
+        "uncertainty_defaults_pct": {
+          "end_of_life": 40.0,
+          "raw_materials": 15.0,
+          "total": 12.0,
+          "transportation": 25.0,
+          "use_phase": 20.0
+        }
+      },
+      "identity": {
+        "declared_function": "Premium smartphone (5.7 mm Titanium frame, A17 Pro, 128GB)",
+        "manufacturer": "Apple Inc.",
+        "official_spec_extracted": true,
+        "product_family": "iPhone 15 Pro"
+      },
+      "life_cycle_inputs": {
+        "end_of_life": {
+          "incineration_rate_pct": 30.0,
+          "landfill_rate_pct": 10.0,
+          "mass_kg": 0.187,
+          "notes": [
+            "Apple PER reports <1% lifecycle for end-of-life \u2014 consistent with these small per-kg factors."
+          ],
+          "recycling_rate_pct": 60.0,
+          "route_factors": {
+            "incineration": {
+              "factor_value_kg_co2e_per_kg": 0.35,
+              "source_ref": "eol_incineration_mixed_electronics"
+            },
+            "landfill": {
+              "factor_value_kg_co2e_per_kg": 0.12,
+              "source_ref": "eol_landfill_mixed_electronics"
+            },
+            "recycling": {
+              "factor_value_kg_co2e_per_kg": 0.18,
+              "source_ref": "eol_recycling_mixed_electronics"
+            }
+          },
+          "source_ref_ids": [
+            "apple_iphone15_per_2023"
+          ],
+          "status": "estimated"
+        },
+        "raw_materials": [
+          {
+            "factor_value_kg_co2e_per_kg": 293.0,
+            "mass_kg": 0.187,
+            "material_key": "smartphone_composite_production",
+            "notes": [
+              "Composite factor calibrated to reproduce Apple's reported Production share (83% of 66 kg = 54.8 kg).",
+              "Production line covers materials + manufacturing electricity together because Apple does not disclose them separately."
+            ],
+            "source_ref_ids": [
+              "apple_iphone15_per_2023"
+            ],
+            "status": "grounded_via_per_reverse_engineering"
+          }
+        ],
+        "transport_legs": [
+          {
+            "distance_km": 15000.0,
+            "factor_value_kg_co2e_per_ton_km": 0.012,
+            "leg_id": "factory_to_market_ocean",
+            "mass_kg": 0.5,
+            "mode": "ship",
+            "notes": [
+              "Apple prioritizes ocean freight over air for iPhone."
+            ],
+            "source_ref_ids": [
+              "apple_iphone15_per_2023"
+            ],
+            "status": "estimated"
+          },
+          {
+            "distance_km": 700.0,
+            "factor_value_kg_co2e_per_ton_km": 0.18,
+            "leg_id": "regional_distribution",
+            "mass_kg": 0.5,
+            "mode": "truck",
+            "notes": [
+              "Regional distribution leg balancing Apple's 3% transport share."
+            ],
+            "source_ref_ids": [
+              "apple_iphone15_per_2023"
+            ],
+            "status": "estimated"
+          }
+        ],
+        "use_phase": {
+          "annual_energy_kwh": 7.5,
+          "country_code": "DE",
+          "lifetime_years": 3.0,
+          "notes": [
+            "3-year first-owner use period per Apple PER assumptions.",
+            "Annual energy calibrated so that 3-year use-phase \u2248 15% of 66 kg = 9.9 kg CO2e under DE 2021 grid mix."
+          ],
+          "source_ref_ids": [
+            "apple_iphone15_per_2023"
+          ],
+          "status": "estimated"
+        }
+      },
+      "model": "iPhone 15 Pro 128GB",
+      "observed_facts": {
+        "lifecycle_total_kg_co2e_declared": {
+          "notes": [
+            "Apple PER headline for iPhone 15 Pro 128GB."
+          ],
+          "source_ref_ids": [
+            "apple_iphone15_per_2023"
+          ],
+          "status": "exact",
+          "unit": "kg CO2e",
+          "value": 66.0
+        },
+        "product_mass_kg": {
+          "notes": [
+            "Apple iPhone 15 Pro 128GB spec sheet, U.S. configuration."
+          ],
+          "source_ref_ids": [
+            "apple_iphone15_per_2023"
+          ],
+          "status": "exact",
+          "unit": "kg",
+          "value": 0.187
+        }
+      },
+      "ontology_class": "carb:Smartphone",
+      "product_class_key": "smartphone",
+      "product_id": "apple_iphone15_pro_128gb",
+      "schema_version": "0.2",
+      "source_refs": [
+        {
+          "extract_status": "extracted",
+          "id": "apple_iphone15_per_2023",
+          "kind": "official_product_pdf",
+          "path": "totalCarbonfootprintcalculation/apple_iphone15_pro_PER_2023_extract.md",
+          "upstream_url": "https://www.apple.com/environment/pdf/products/iphone/iPhone_15_Pro_and_iPhone_15_Pro_Max_Sept2023.pdf"
+        },
+        {
+          "extract_status": "curated_web_observation",
+          "id": "ipcc_ar6_gwp",
+          "kind": "background_method",
+          "path": "https://www.ipcc.ch/report/ar6/wg1/"
+        },
+        {
+          "extract_status": "normalized_to_csv",
+          "id": "iea_grid_factors",
+          "kind": "electricity_factor_workbook",
+          "path": "totalCarbonfootprintcalculation/CoM-Emission-factors-for-national-electricity-2024.xlsx"
+        }
+      ]
+    },
+    "product_profile_path": "/sessions/rcw-01vdjelk212fopeh9vju8j7h/mnt/llmmain/CE-RISE-Demo/backend/data/carbon/products/apple_iphone15_pro_128gb.json",
+    "provenance": [
+      {
+        "field_name": "total_product_mass_kg",
+        "label": "Product mass",
+        "method": "official_observation",
+        "notes": [
+          "Apple iPhone 15 Pro 128GB spec sheet, U.S. configuration."
+        ],
+        "source_refs": [
+          "totalCarbonfootprintcalculation/apple_iphone15_pro_PER_2023_extract.md"
+        ],
+        "status": "exact",
+        "uncertainty_pct": 8.0,
+        "unit": "kg",
+        "value": 0.187
+      },
+      {
+        "field_name": "transport_route",
+        "label": "Estimated transport route",
+        "method": "generic_distribution_defaults",
+        "notes": [
+          "Used generic ship plus truck distribution defaults because the real route is not declared."
+        ],
+        "source_refs": [
+          "internal_estimation_profile"
+        ],
+        "status": "estimated",
+        "uncertainty_pct": 25.0,
+        "unit": "route_profile",
+        "value": []
+      }
+    ],
+    "quality_status": "hybrid_estimate",
+    "recyclability": {
+      "incineration_mass_kg": 0.0561,
+      "landfill_mass_kg": 0.0187,
+      "notes": [],
+      "recoverable_mass_kg": 0.1122,
+      "recyclability_pct": 60.0,
+      "status": "complete"
+    },
+    "requested_stages": [
+      "raw_materials",
+      "transportation",
+      "use_phase",
+      "end_of_life"
+    ],
+    "source_ref_details": [
+      {
+        "extract_status": "extracted",
+        "id": "apple_iphone15_per_2023",
+        "is_web": true,
+        "kind": "official_product_pdf",
+        "path": "totalCarbonfootprintcalculation/apple_iphone15_pro_PER_2023_extract.md",
+        "resolved_from_profile": true,
+        "upstream_url": "https://www.apple.com/environment/pdf/products/iphone/iPhone_15_Pro_and_iPhone_15_Pro_Max_Sept2023.pdf"
+      },
+      {
+        "extract_status": "curated_web_observation",
+        "id": "ipcc_ar6_gwp",
+        "is_web": true,
+        "kind": "background_method",
+        "path": "https://www.ipcc.ch/report/ar6/wg1/",
+        "resolved_from_profile": true,
+        "upstream_url": ""
+      },
+      {
+        "extract_status": "normalized_to_csv",
+        "id": "iea_grid_factors",
+        "is_web": false,
+        "kind": "electricity_factor_workbook",
+        "path": "totalCarbonfootprintcalculation/CoM-Emission-factors-for-national-electricity-2024.xlsx",
+        "resolved_from_profile": true,
+        "upstream_url": ""
+      },
+      {
+        "extract_status": "resolved_by_calculator",
+        "id": "scenario_override",
+        "is_web": false,
+        "kind": "calculation_or_factor_reference",
+        "path": "scenario_override",
+        "resolved_from_profile": false
+      },
+      {
+        "extract_status": "resolved_by_calculator",
+        "id": "eol_recycling_mixed_electronics",
+        "is_web": false,
+        "kind": "calculation_or_factor_reference",
+        "path": "eol_recycling_mixed_electronics",
+        "resolved_from_profile": false
+      },
+      {
+        "extract_status": "resolved_by_calculator",
+        "id": "eol_incineration_mixed_electronics",
+        "is_web": false,
+        "kind": "calculation_or_factor_reference",
+        "path": "eol_incineration_mixed_electronics",
+        "resolved_from_profile": false
+      },
+      {
+        "extract_status": "resolved_by_calculator",
+        "id": "eol_landfill_mixed_electronics",
+        "is_web": false,
+        "kind": "calculation_or_factor_reference",
+        "path": "eol_landfill_mixed_electronics",
+        "resolved_from_profile": false
+      },
+      {
+        "extract_status": "resolved_by_calculator",
+        "id": "internal_estimation_profile",
+        "is_web": false,
+        "kind": "calculation_or_factor_reference",
+        "path": "internal_estimation_profile",
+        "resolved_from_profile": false
+      }
+    ],
+    "source_refs": [
+      "totalCarbonfootprintcalculation/apple_iphone15_pro_PER_2023_extract.md",
+      "https://www.ipcc.ch/report/ar6/wg1/",
+      "totalCarbonfootprintcalculation/CoM-Emission-factors-for-national-electricity-2024.xlsx",
+      "scenario_override",
+      "eol_recycling_mixed_electronics",
+      "eol_incineration_mixed_electronics",
+      "eol_landfill_mixed_electronics",
+      "internal_estimation_profile"
+    ],
+    "stage_results": {
+      "end_of_life": {
+        "estimated_inputs": [],
+        "missing_inputs": [],
+        "notes": [],
+        "quality_status": "exact",
+        "stage": "end_of_life",
+        "status": "complete",
+        "total_kg_co2e": 0.042075,
+        "traces": [
+          {
+            "activity_unit": "kg",
+            "activity_value": 0.1122,
+            "emissions_kg_co2e": 0.020196,
+            "factor_unit": "kg CO2e/kg",
+            "factor_value": 0.18,
+            "formula": "route_mass_kg \u00d7 factor_kgCO2e_per_kg",
+            "item_id": "end_of_life_recycling",
+            "label": "End-of-life recycling",
+            "notes": [],
+            "source_refs": [
+              "apple_iphone15_per_2023",
+              "eol_recycling_mixed_electronics"
+            ],
+            "stage": "end_of_life",
+            "status": "computed"
+          },
+          {
+            "activity_unit": "kg",
+            "activity_value": 0.0561,
+            "emissions_kg_co2e": 0.019635,
+            "factor_unit": "kg CO2e/kg",
+            "factor_value": 0.35,
+            "formula": "route_mass_kg \u00d7 factor_kgCO2e_per_kg",
+            "item_id": "end_of_life_incineration",
+            "label": "End-of-life incineration",
+            "notes": [],
+            "source_refs": [
+              "apple_iphone15_per_2023",
+              "eol_incineration_mixed_electronics"
+            ],
+            "stage": "end_of_life",
+            "status": "computed"
+          },
+          {
+            "activity_unit": "kg",
+            "activity_value": 0.0187,
+            "emissions_kg_co2e": 0.002244,
+            "factor_unit": "kg CO2e/kg",
+            "factor_value": 0.12,
+            "formula": "route_mass_kg \u00d7 factor_kgCO2e_per_kg",
+            "item_id": "end_of_life_landfill",
+            "label": "End-of-life landfill",
+            "notes": [],
+            "source_refs": [
+              "apple_iphone15_per_2023",
+              "eol_landfill_mixed_electronics"
+            ],
+            "stage": "end_of_life",
+            "status": "computed"
+          }
+        ],
+        "uncertainty_pct": 8.0
+      },
+      "raw_materials": {
+        "estimated_inputs": [],
+        "missing_inputs": [],
+        "notes": [],
+        "quality_status": "exact",
+        "stage": "raw_materials",
+        "status": "complete",
+        "total_kg_co2e": 54.791,
+        "traces": [
+          {
+            "activity_unit": "kg",
+            "activity_value": 0.187,
+            "emissions_kg_co2e": 54.791,
+            "factor_unit": "kg CO2e/kg",
+            "factor_value": 293.0,
+            "formula": "mass_kg \u00d7 factor_kgCO2e_per_kg",
+            "item_id": "smartphone_composite_production",
+            "label": "smartphone_composite_production",
+            "notes": [],
+            "source_refs": [
+              "apple_iphone15_per_2023",
+              "scenario_override"
+            ],
+            "stage": "raw_materials",
+            "status": "computed"
+          }
+        ],
+        "uncertainty_pct": 8.0
+      },
+      "transportation": {
+        "estimated_inputs": [
+          "factory_to_market_ocean",
+          "regional_distribution"
+        ],
+        "missing_inputs": [],
+        "notes": [],
+        "quality_status": "estimated",
+        "stage": "transportation",
+        "status": "complete",
+        "total_kg_co2e": 0.153,
+        "traces": [
+          {
+            "activity_unit": "ton-km",
+            "activity_value": 7.5,
+            "emissions_kg_co2e": 0.09,
+            "factor_unit": "kg CO2e/ton-km",
+            "factor_value": 0.012,
+            "formula": "(mass_kg / 1000) \u00d7 distance_km \u00d7 factor_kgCO2e_per_ton_km",
+            "item_id": "factory_to_market_ocean",
+            "label": "factory_to_market_ocean",
+            "notes": [],
+            "source_refs": [
+              "apple_iphone15_per_2023",
+              "scenario_override"
+            ],
+            "stage": "transportation",
+            "status": "computed"
+          },
+          {
+            "activity_unit": "ton-km",
+            "activity_value": 0.35,
+            "emissions_kg_co2e": 0.063,
+            "factor_unit": "kg CO2e/ton-km",
+            "factor_value": 0.18,
+            "formula": "(mass_kg / 1000) \u00d7 distance_km \u00d7 factor_kgCO2e_per_ton_km",
+            "item_id": "regional_distribution",
+            "label": "regional_distribution",
+            "notes": [],
+            "source_refs": [
+              "apple_iphone15_per_2023",
+              "scenario_override"
+            ],
+            "stage": "transportation",
+            "status": "computed"
+          }
+        ],
+        "uncertainty_pct": 25.0
+      },
+      "use_phase": {
+        "estimated_inputs": [],
+        "missing_inputs": [],
+        "notes": [],
+        "quality_status": "exact",
+        "stage": "use_phase",
+        "status": "complete",
+        "total_kg_co2e": 9.86598,
+        "traces": [
+          {
+            "activity_unit": "kWh",
+            "activity_value": 22.5,
+            "emissions_kg_co2e": 9.86598,
+            "factor_unit": "kg CO2e/kWh",
+            "factor_value": 0.438488,
+            "formula": "lifetime_energy_kwh \u00d7 electricity_factor_kgCO2e_per_kWh",
+            "item_id": "use_phase_electricity",
+            "label": "Use-phase electricity (DE, 2021)",
+            "notes": [],
+            "source_refs": [
+              "apple_iphone15_per_2023",
+              "totalCarbonfootprintcalculation/CoM-Emission-factors-for-national-electricity-2024.xlsx"
+            ],
+            "stage": "use_phase",
+            "status": "computed"
+          }
+        ],
+        "uncertainty_pct": 8.0
+      }
+    },
+    "status": "complete",
+    "total_kg_co2e": 64.852055,
+    "uncertainty_kg_co2e": 5.214174,
+    "uncertainty_pct": 8.040107,
+    "uncertainty_range_kg_co2e": {
+      "high": 70.066229,
+      "low": 59.637881
+    },
+    "used_bootstrap_estimates": false,
+    "warnings": []
+  },
+  "status": 200
+}

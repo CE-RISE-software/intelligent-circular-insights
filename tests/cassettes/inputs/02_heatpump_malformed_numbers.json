@@ -1,0 +1,26 @@
+{
+  "schema_version": "ce-rise-demo-0.1",
+  "dpp_id": "dpp-broken-002",
+  "product": {
+    "id": "DAIK-ALT-260L",
+    "brand": "Daikin",
+    "model": "Altherma M HW",
+    "category": "heat_pump",
+    "geography": "UK"
+  },
+  "materials": [
+    {"name": "Steel chassis",         "share_pct": "55"},
+    {"name": "Copper heat exchanger", "share_pct": 12},
+    {"name": "ABS plastics",          "share_pct": 18},
+    {"name": "Refrigerant (R-134a)",  "share_pct": 1},
+    {"name": "Other",                 "share_pct": 14}
+  ],
+  "compliance": {
+    "standards": []
+  },
+  "circularity": {
+    "recyclability_pct": 130,
+    "repairability_index": 12
+  },
+  "notes": "Broken DPP example #2: share_pct given as a string, recyclability >100%, repairability >10, empty compliance list."
+}

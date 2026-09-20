@@ -1,0 +1,78 @@
+{
+  "body": {
+    "dpp": {
+      "carbon": {
+        "functional_unit": "per_unit_lifecycle",
+        "methodology": "ISO 14040/44 + EN 15804+A2 (template default).",
+        "stage_split": {
+          "end_of_life": 0.05,
+          "materials": 0.6,
+          "transport": 0.05,
+          "use_phase": 0.3
+        },
+        "total_kg_co2e": 120.0,
+        "uncertainty_pct": 25
+      },
+      "circularity": {
+        "recyclability_pct": 78,
+        "recycled_content_pct": 22,
+        "repairability_index": 6.5,
+        "spare_parts_availability_years": 7
+      },
+      "compliance": {
+        "ce_marking": true,
+        "standards": [
+          "EU Batteries Regulation 2023/1542",
+          "EN 62133-2",
+          "RoHS"
+        ]
+      },
+      "dpp_id": "dpp-a5c86f45fb",
+      "materials": [
+        {
+          "name": "Lithium iron phosphate",
+          "share_pct": 60.0
+        },
+        {
+          "name": "Graphite",
+          "share_pct": 18.0
+        },
+        {
+          "name": "Aluminium",
+          "share_pct": 12.0
+        },
+        {
+          "name": "Copper",
+          "share_pct": 6.0
+        },
+        {
+          "name": "Polymer separator",
+          "share_pct": 4.0
+        }
+      ],
+      "product": {
+        "brand": "ReferenceCo",
+        "category": "battery",
+        "display_name": "ReferenceCo REF-1",
+        "geography": "EU",
+        "id": "dpp-a5c86f45fb",
+        "model": "REF-1"
+      },
+      "schema_version": "ce-rise-demo-0.1",
+      "sources": [
+        {
+          "id": "ce-rise-template",
+          "kind": "category_template",
+          "url": "https://ce-rise.eu/dpp/templates"
+        }
+      ]
+    },
+    "fallback_reason": "APIConnectionError: Connection error.",
+    "llm_used": false,
+    "model": "gpt-4o-mini",
+    "rendered_markdown": "# Digital Product Passport \u2014 ReferenceCo REF-1\n\n- Brand: **ReferenceCo**\n- Model: **REF-1**\n- Category: **battery**\n- Geography: **EU**\n- DPP ID: `dpp-a5c86f45fb`\n\n## Compliance\n- EU Batteries Regulation 2023/1542\n- EN 62133-2\n- RoHS\n\n## Materials\n| Material | Share (%) |\n|---|---:|\n| Lithium iron phosphate | 60.0 |\n| Graphite | 18.0 |\n| Aluminium | 12.0 |\n| Copper | 6.0 |\n| Polymer separator | 4.0 |\n\n## Carbon footprint\n- Total lifecycle: **120.0 kg CO\u2082e**\n- Functional unit: per_unit_lifecycle\n- Methodology: ISO 14040/44 + EN 15804+A2 (template default).\n\n## Circularity\n- Recyclability: **78 %**\n- Recycled content: **22 %**\n- Repairability index: **6.5 / 10**\n",
+    "schema_errors": [],
+    "schema_passed": true
+  },
+  "status": 200
+}

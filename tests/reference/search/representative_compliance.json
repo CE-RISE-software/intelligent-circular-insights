@@ -1,0 +1,100 @@
+{
+  "body": {
+    "abstained": false,
+    "answer": "ProductA standard (conforms to) is EN 62133-2. [mem-000000]",
+    "confidence": 0.85,
+    "derived_triples": [],
+    "domain_guess": null,
+    "evidence": [
+      {
+        "detail": null,
+        "id": "mem-000000",
+        "score": 4.0,
+        "snippet": "ProductA standard (conforms to) is EN 62133-2.",
+        "source": "memory"
+      },
+      {
+        "detail": null,
+        "id": "mem-000001",
+        "score": 4.0,
+        "snippet": "ProductA component is Battery1.",
+        "source": "memory"
+      },
+      {
+        "detail": null,
+        "id": "mem-000002",
+        "score": 4.0,
+        "snippet": "ProductA component is WirelessModule1.",
+        "source": "memory"
+      },
+      {
+        "detail": null,
+        "id": "mem-000003",
+        "score": 4.0,
+        "snippet": "ProductA component is Board1.",
+        "source": "memory"
+      },
+      {
+        "detail": null,
+        "id": "viessmann_seed_0000",
+        "score": 0.222,
+        "snippet": "DIGITAL PRODUCT PASSPORT (TXT) \u2014 Viessmann Vitocal 250\u2011A (AWO\u2011E\u2011AC 251.A08) \u2014 Full Sample ============================================================================  IMPORTANT NOTE -------------- This is an illustrative Digital Product Pa\u2026",
+        "source": "document"
+      },
+      {
+        "detail": null,
+        "id": "battery_seed_0000",
+        "score": 0.22,
+        "snippet": "DIGITAL PRODUCT PASSPORT (TXT) \u2014 BMZ Group (DE) e\u2011Bike LMT 36V\u201114Ah (504 Wh) \u2014 Full Sample ============================================================================  IMPORTANT NOTE -------------- This is an illustrative Digital Product P\u2026",
+        "source": "document"
+      },
+      {
+        "detail": null,
+        "id": "battery_seed_0004",
+        "score": 0.2,
+        "snippet": "7) MAINTENANCE, REPAIR & SPARE PARTS ------------------------------------ Routine maintenance: \u2022 Keep firmware/BMS updated; maintain connectors and cooling paths \u2022 Storage: 30\u201350 % SOC; 10\u201325 \u00b0C; check every 3\u20136 months Serviceability: Modul\u2026",
+        "source": "document"
+      },
+      {
+        "detail": null,
+        "id": "battery_seed_0009",
+        "score": 0.189,
+        "snippet": "COMPLIANCE (VERIFY REGION) -------------------------- \u2022 UN 38.3 \u2014 transport test \u2022 EN 15194 (EPAC systems) \u2014 system level; IEC 62133\u20112 for portable Li\u2011ion safety \u2022 IEC 60335\u20112\u201129 (charger safety) \u2014 charger \u2022 Markings: separate collection sy\u2026",
+        "source": "document"
+      },
+      {
+        "detail": null,
+        "id": "ontology",
+        "score": 1.0,
+        "snippet": "# CIRPASS-2 EU DPP Core Ontology Proposal (Requirements Spec v1.0, March 2025).",
+        "source": "symbolic"
+      },
+      {
+        "detail": null,
+        "id": "ontology",
+        "score": 1.0,
+        "snippet": "rdfs:comment \"Compliance reference reused as a Claim target in CIRPASS-2 terms.\" .",
+        "source": "symbolic"
+      },
+      {
+        "detail": null,
+        "id": "ontology",
+        "score": 1.0,
+        "snippet": "ex:requiresCompliance a rdf:Property ; rdfs:domain ex:Product ;  rdfs:range ex:Standard .",
+        "source": "symbolic"
+      },
+      {
+        "detail": null,
+        "id": "ontology",
+        "score": 1.0,
+        "snippet": "ex:requiresStep       a rdf:Property ; rdfs:domain ex:Product ;  rdfs:range ex:ProcessStep .",
+        "source": "symbolic"
+      }
+    ],
+    "fallback_reason": "APIConnectionError: Connection error.",
+    "fired_rules": [],
+    "llm_used": false,
+    "model": "gpt-4o-mini"
+  },
+  "status": 200
+}

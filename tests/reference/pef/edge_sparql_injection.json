@@ -1,0 +1,6 @@
+{
+  "body": {
+    "detail": "Only read-only queries are allowed (SPARQL Update keyword 'DELETE' found)."
+  },
+  "status": 400
+}

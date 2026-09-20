@@ -1,0 +1,27 @@
+{
+  "7aac1402cfc23cd667fcf2415e75e32864fd4ce6656489cc43b1ec0b04c2e5b2": {
+    "version": 1,
+    "response": {
+      "id": "synthetic-chat",
+      "object": "chat.completion",
+      "created": 0,
+      "model": "gpt-4o-mini",
+      "choices": [
+        {
+          "index": 0,
+          "finish_reason": "stop",
+          "message": {
+            "role": "assistant",
+            "content": "{\"coverage_complete\": true, \"claims\": [{\"text\": \"The declared capacity is 60 kWh [e1].\", \"source_text\": \"The declared capacity is 60 kWh [e1].\", \"supported\": true, \"support\": [{\"evidence_id\": \"e1\", \"quote\": \"The battery pack has a declared capacity of 60 kWh.\"}]}]}",
+            "refusal": null
+          }
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 100,
+        "completion_tokens": 20,
+        "total_tokens": 120
+      }
+    }
+  }
+}

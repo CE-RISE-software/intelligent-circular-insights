@@ -1,0 +1,469 @@
+{
+  "bootstrap_estimates": {
+    "based_on_source_ref_id": "sample_mx622_profile",
+    "circularity_notes": [
+      "Return used cartridges via manufacturer take-back program (where available)",
+      "Recycle printer via WEEE channels; remove consumables before transport",
+      "Materials: plastics/steel/copper boards separated by recycler"
+    ],
+    "declared_function": "Monochrome laser MFP (print/copy/scan/fax)",
+    "material_mix_pct": {
+      "elastomers_generic": 4.0,
+      "electronics_generic": 12.0,
+      "other_generic": 4.0,
+      "plastics_generic": 45.0,
+      "steel_generic": 35.0
+    },
+    "notes": [
+      "This is the nearest structured Lexmark monochrome MFP sample found in the repo.",
+      "These values are kept separate from official life_cycle_inputs so later extraction can replace them cleanly."
+    ],
+    "status": "estimated",
+    "unboxed_weight_kg_range": [
+      22.0,
+      25.0
+    ],
+    "warning": "Illustrative bootstrap values only. Do not use for final reporting."
+  },
+  "brand": "Lexmark",
+  "calculation_scope": {
+    "default_basis": "per_printer_lifetime_excluding_paper",
+    "default_reporting_unit": "kg CO2e",
+    "notes": [
+      "The Lexmark EPD explainer describes printer lifetime reporting with and without paper.",
+      "The exact MX431adn functional unit still needs official product or EPD confirmation."
+    ],
+    "supported_basis": [
+      "per_printer_lifetime_excluding_paper",
+      "per_printer_lifetime_including_paper"
+    ]
+  },
+  "category": "monochrome_laser_mfp",
+  "defaults": {
+    "annual_energy_kwh": null,
+    "electricity_factor_key": null,
+    "include_paper": false,
+    "lifetime_pages": null,
+    "lifetime_years": null,
+    "report_year": 2021,
+    "use_country_code": null
+  },
+  "display_name": "Lexmark MX431adn",
+  "estimation_profile": {
+    "end_of_life": {
+      "incineration_rate_pct": 15.0,
+      "landfill_rate_pct": 5.0,
+      "mass_kg": 12.8,
+      "notes": [
+        "Generic WEEE-style end-of-life split used until an official declared scenario is extracted."
+      ],
+      "recycling_rate_pct": 80.0,
+      "route_factors": {
+        "incineration": {
+          "factor_value_kg_co2e_per_kg": 0.35,
+          "source_ref": "internal_estimation_profile"
+        },
+        "landfill": {
+          "factor_value_kg_co2e_per_kg": 0.12,
+          "source_ref": "internal_estimation_profile"
+        },
+        "recycling": {
+          "factor_value_kg_co2e_per_kg": 0.18,
+          "source_ref": "internal_estimation_profile"
+        }
+      },
+      "source_ref_ids": [
+        "internal_estimation_profile"
+      ],
+      "status": "estimated"
+    },
+    "notes": [
+      "This profile is intended to produce an honest hybrid estimate when official product-internal data is incomplete.",
+      "Exact observations are used first; the remaining missing inputs are filled with explicit default estimates.",
+      "The resulting total should be labeled as estimated or hybrid_estimate in user-facing answers."
+    ],
+    "raw_materials": [
+      {
+        "factor_value_kg_co2e_per_kg": 2.7,
+        "mass_kg": 5.76,
+        "material_key": "plastics_generic",
+        "notes": [
+          "Material share from the nearest structured Lexmark reference.",
+          "Factor is a generic seed value pending curated EF mapping."
+        ],
+        "share_mass_pct": 45.0,
+        "source_ref_ids": [
+          "sample_mx622_profile",
+          "internal_estimation_profile"
+        ],
+        "status": "estimated"
+      },
+      {
+        "factor_value_kg_co2e_per_kg": 2.1,
+        "mass_kg": 4.48,
+        "material_key": "steel_generic",
+        "notes": [
+          "Material share from the nearest structured Lexmark reference.",
+          "Factor is a generic seed value pending curated EF mapping."
+        ],
+        "share_mass_pct": 35.0,
+        "source_ref_ids": [
+          "sample_mx622_profile",
+          "internal_estimation_profile"
+        ],
+        "status": "estimated"
+      },
+      {
+        "factor_value_kg_co2e_per_kg": 8.4,
+        "mass_kg": 1.536,
+        "material_key": "electronics_generic",
+        "notes": [
+          "Material share from the nearest structured Lexmark reference.",
+          "Factor is a generic seed value pending curated EF mapping."
+        ],
+        "share_mass_pct": 12.0,
+        "source_ref_ids": [
+          "sample_mx622_profile",
+          "internal_estimation_profile"
+        ],
+        "status": "estimated"
+      },
+      {
+        "factor_value_kg_co2e_per_kg": 3.2,
+        "mass_kg": 0.512,
+        "material_key": "elastomers_generic",
+        "notes": [
+          "Material share from the nearest structured Lexmark reference.",
+          "Factor is a generic seed value pending curated EF mapping."
+        ],
+        "share_mass_pct": 4.0,
+        "source_ref_ids": [
+          "sample_mx622_profile",
+          "internal_estimation_profile"
+        ],
+        "status": "estimated"
+      },
+      {
+        "factor_value_kg_co2e_per_kg": 1.8,
+        "mass_kg": 0.512,
+        "material_key": "other_generic",
+        "notes": [
+          "Represents unmodeled residual mass from the nearest structured Lexmark reference.",
+          "Factor is a generic seed value pending curated EF mapping."
+        ],
+        "share_mass_pct": 4.0,
+        "source_ref_ids": [
+          "sample_mx622_profile",
+          "internal_estimation_profile"
+        ],
+        "status": "estimated"
+      }
+    ],
+    "source_ref_ids": [
+      "official_product_page",
+      "official_brochure_pdf",
+      "energy_star_registry",
+      "raw_electricity_workbook",
+      "sample_mx622_profile",
+      "internal_estimation_profile"
+    ],
+    "status": "estimate_ready",
+    "transport_legs": [
+      {
+        "distance_km": 18000.0,
+        "factor_value_kg_co2e_per_ton_km": 0.009,
+        "leg_id": "factory_to_distribution_port",
+        "mass_kg": 14.7,
+        "mode": "ship",
+        "notes": [
+          "Generic intercontinental shipment default used until the real manufacturing route is known."
+        ],
+        "source_ref_ids": [
+          "internal_estimation_profile"
+        ],
+        "status": "estimated"
+      },
+      {
+        "distance_km": 1000.0,
+        "factor_value_kg_co2e_per_ton_km": 0.18,
+        "leg_id": "regional_distribution",
+        "mass_kg": 14.7,
+        "mode": "truck",
+        "notes": [
+          "Generic downstream regional distribution route used until the real market route is known."
+        ],
+        "source_ref_ids": [
+          "internal_estimation_profile"
+        ],
+        "status": "estimated"
+      }
+    ],
+    "uncertainty_defaults_pct": {
+      "end_of_life": 25.0,
+      "raw_materials": 35.0,
+      "total": 32.0,
+      "transportation": 30.0,
+      "use_phase": 20.0
+    },
+    "use_phase": {
+      "country_code": "DE",
+      "electricity_factor_value_kg_co2e_per_kwh": 0.438488,
+      "lifetime_energy_kwh": 119.6,
+      "lifetime_years": 5.0,
+      "notes": [
+        "TEC value is preferred from ENERGY STAR.",
+        "Lifetime years defaulted to 5 years for an office laser MFP estimate.",
+        "German 2021 electricity factor is used as the current in-repo default because a product-specific use-market was not declared."
+      ],
+      "report_year": 2021,
+      "source_ref_ids": [
+        "energy_star_registry",
+        "raw_electricity_workbook",
+        "internal_estimation_profile"
+      ],
+      "status": "hybrid_estimate",
+      "tec_kwh_per_week": 0.46
+    }
+  },
+  "identity": {
+    "declared_function": "Monochrome laser MFP (print/copy/scan/fax)",
+    "manufacturer": "Lexmark",
+    "official_spec_extracted": false,
+    "product_family": "MX"
+  },
+  "life_cycle_inputs": {
+    "end_of_life": {
+      "incineration_rate_pct": null,
+      "landfill_rate_pct": null,
+      "recycling_rate_pct": null,
+      "source_ref_ids": [
+        "raw_product_pdf",
+        "raw_lexmark_epd_note"
+      ],
+      "status": "pending_official_extraction"
+    },
+    "raw_materials": [
+      {
+        "mass_kg": null,
+        "material_key": "plastics_generic",
+        "share_mass_pct": null,
+        "source_ref_ids": [
+          "raw_product_pdf"
+        ],
+        "status": "pending_official_extraction"
+      },
+      {
+        "mass_kg": null,
+        "material_key": "steel_generic",
+        "share_mass_pct": null,
+        "source_ref_ids": [
+          "raw_product_pdf"
+        ],
+        "status": "pending_official_extraction"
+      },
+      {
+        "mass_kg": null,
+        "material_key": "electronics_generic",
+        "share_mass_pct": null,
+        "source_ref_ids": [
+          "raw_product_pdf"
+        ],
+        "status": "pending_official_extraction"
+      },
+      {
+        "mass_kg": null,
+        "material_key": "elastomers_generic",
+        "share_mass_pct": null,
+        "source_ref_ids": [
+          "raw_product_pdf"
+        ],
+        "status": "pending_official_extraction"
+      }
+    ],
+    "transport_legs": [
+      {
+        "distance_km": null,
+        "leg_id": "factory_to_market",
+        "mass_kg": null,
+        "mode": null,
+        "source_ref_ids": [
+          "raw_product_pdf"
+        ],
+        "status": "pending_official_extraction"
+      }
+    ],
+    "use_phase": {
+      "annual_energy_kwh": null,
+      "country_code": null,
+      "include_paper_default": false,
+      "lifetime_pages": null,
+      "lifetime_years": null,
+      "source_ref_ids": [
+        "raw_product_pdf",
+        "raw_lexmark_epd_note"
+      ],
+      "status": "pending_official_extraction"
+    }
+  },
+  "model": "MX431adn",
+  "observed_facts": {
+    "max_monthly_duty_cycle_pages": {
+      "source_ref_ids": [
+        "official_product_page"
+      ],
+      "status": "exact",
+      "unit": "pages/month",
+      "value": 80000
+    },
+    "packaged_mass_kg": {
+      "notes": [
+        "Packaged shipping weight from the official Lexmark product page."
+      ],
+      "source_ref_ids": [
+        "official_product_page"
+      ],
+      "status": "exact",
+      "unit": "kg",
+      "value": 14.7
+    },
+    "packaging_mass_kg": {
+      "notes": [
+        "Derived as packaged mass minus unpackaged product mass."
+      ],
+      "source_ref_ids": [
+        "official_product_page"
+      ],
+      "status": "derived",
+      "unit": "kg",
+      "value": 1.9
+    },
+    "product_mass_kg": {
+      "notes": [
+        "Unpackaged printer weight from the official Lexmark product page."
+      ],
+      "source_ref_ids": [
+        "official_product_page"
+      ],
+      "status": "exact",
+      "unit": "kg",
+      "value": 12.8
+    },
+    "recommended_monthly_pages_high": {
+      "source_ref_ids": [
+        "official_product_page"
+      ],
+      "status": "exact",
+      "unit": "pages/month",
+      "value": 8000
+    },
+    "recommended_monthly_pages_low": {
+      "source_ref_ids": [
+        "official_product_page"
+      ],
+      "status": "exact",
+      "unit": "pages/month",
+      "value": 800
+    },
+    "tec_kwh_per_week": {
+      "notes": [
+        "Keep the source conflict visible in user-facing provenance."
+      ],
+      "observations": [
+        {
+          "source_ref_id": "energy_star_registry",
+          "status": "exact",
+          "value": 0.46
+        },
+        {
+          "source_ref_id": "official_product_page",
+          "status": "exact",
+          "value": 0.47
+        },
+        {
+          "source_ref_id": "official_brochure_pdf",
+          "status": "exact",
+          "value": 0.44
+        }
+      ],
+      "preferred_value": 0.46,
+      "selection_reason": "Preferred the certified ENERGY STAR value when the official product page and brochure disagreed.",
+      "source_ref_ids": [
+        "energy_star_registry",
+        "official_product_page",
+        "official_brochure_pdf"
+      ],
+      "status": "exact_conflict_resolved",
+      "unit": "kWh/week"
+    }
+  },
+  "product_id": "lexmark_mx431adn",
+  "schema_version": "0.1",
+  "source_refs": [
+    {
+      "extract_status": "unreadable",
+      "id": "raw_product_pdf",
+      "kind": "official_product_pdf",
+      "path": "totalCarbonfootprintcalculation/Lexmark MX431adn.pdf"
+    },
+    {
+      "extract_status": "extracted",
+      "id": "raw_lexmark_epd_note",
+      "kind": "lexmark_epd_explainer",
+      "path": "totalCarbonfootprintcalculation/env-epd_21_1683665824.pdf"
+    },
+    {
+      "extract_status": "extracted",
+      "id": "raw_calc_process",
+      "kind": "calculation_process_note",
+      "path": "totalCarbonfootprintcalculation/Calculation process .pdf"
+    },
+    {
+      "extract_status": "extracted",
+      "id": "raw_ontology_pdf",
+      "kind": "carbon_ontology_note",
+      "path": "totalCarbonfootprintcalculation/Ontology.pdf"
+    },
+    {
+      "extract_status": "normalized_to_csv",
+      "id": "raw_electricity_workbook",
+      "kind": "electricity_factor_workbook",
+      "path": "totalCarbonfootprintcalculation/CoM-Emission-factors-for-national-electricity-2024.xlsx"
+    },
+    {
+      "extract_status": "sheet_structure_inspected",
+      "id": "raw_ef_workbook",
+      "kind": "generic_lcia_flow_workbook",
+      "path": "totalCarbonfootprintcalculation/EF-LCIAMethod_CF(EF-v3.1).xlsx"
+    },
+    {
+      "extract_status": "parsed_text",
+      "id": "sample_mx622_profile",
+      "kind": "nearest_structured_bootstrap_reference",
+      "path": "tests/lexmark/docs/lexmark_mx622adhe_dpp_full_02.txt"
+    },
+    {
+      "extract_status": "curated_web_observation",
+      "id": "official_product_page",
+      "kind": "official_product_page",
+      "path": "https://www.lexmark.com/en_us/printers/printer/15680/Lexmark-MX431adn"
+    },
+    {
+      "extract_status": "curated_pdf_observation",
+      "id": "official_brochure_pdf",
+      "kind": "official_brochure_pdf",
+      "path": "https://origin-www.lexmark.com/content/dam/lexmark/collateral/brochures/emea/en_rs/MX431adn-Brochure.pdf"
+    },
+    {
+      "extract_status": "curated_web_observation",
+      "id": "energy_star_registry",
+      "kind": "certified_registry_entry",
+      "path": "https://www.energystar.gov/productfinder/product/certified-imaging-equipment/details/2358864"
+    },
+    {
+      "extract_status": "manual_curation",
+      "id": "internal_estimation_profile",
+      "kind": "internal_estimation_profile",
+      "path": "internal://carbon/lexmark_mx431adn_estimation_profile_v1"
+    }
+  ]
+}

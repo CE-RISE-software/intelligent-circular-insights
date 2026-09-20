@@ -1,0 +1,6 @@
+{
+  "body": {
+    "detail": "Product profile not found: /sessions/rcw-01vdjelk212fopeh9vju8j7h/mnt/llmmain/CE-RISE-Demo/backend/data/carbon/products/no_such_product_at_all.json"
+  },
+  "status": 404
+}

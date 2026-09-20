@@ -1,0 +1,157 @@
+{
+  "brand": "Fairphone",
+  "calculation_scope": {
+    "compliance_standards": [
+      "ISO 14040",
+      "ISO 14044"
+    ],
+    "default_basis": "per_device_lifecycle",
+    "default_reporting_unit": "kg CO2e",
+    "notes": [
+      "LCA performed by Fraunhofer IZM (2022).",
+      "Modular design with replaceable parts (modularity overhead 0.744 kg CO2e = 2.3% of production)."
+    ],
+    "supported_basis": [
+      "per_device_lifecycle"
+    ]
+  },
+  "category": "smartphone",
+  "defaults": {
+    "annual_energy_kwh": 1.6,
+    "lifetime_years": 5.0,
+    "report_year": 2021,
+    "use_country_code": "DE"
+  },
+  "display_name": "Fairphone 4",
+  "estimation_profile": {
+    "status": "estimate_ready",
+    "uncertainty_defaults_pct": {
+      "end_of_life": 35.0,
+      "raw_materials": 18.0,
+      "total": 18.0,
+      "transportation": 30.0,
+      "use_phase": 25.0
+    }
+  },
+  "identity": {
+    "declared_function": "Modular repairable smartphone, 5G",
+    "manufacturer": "Fairphone B.V.",
+    "official_spec_extracted": true,
+    "product_family": "Fairphone 4"
+  },
+  "life_cycle_inputs": {
+    "end_of_life": {
+      "incineration_rate_pct": 20.0,
+      "landfill_rate_pct": 10.0,
+      "mass_kg": 0.225,
+      "notes": [
+        "Modular design improves end-of-life recoverability."
+      ],
+      "recycling_rate_pct": 70.0,
+      "route_factors": {
+        "incineration": {
+          "factor_value_kg_co2e_per_kg": 0.35,
+          "source_ref": "eol_incineration_mixed_electronics"
+        },
+        "landfill": {
+          "factor_value_kg_co2e_per_kg": 0.12,
+          "source_ref": "eol_landfill_mixed_electronics"
+        },
+        "recycling": {
+          "factor_value_kg_co2e_per_kg": 0.18,
+          "source_ref": "eol_recycling_mixed_electronics"
+        }
+      },
+      "status": "estimated"
+    },
+    "raw_materials": [
+      {
+        "factor_value_kg_co2e_per_kg": 168.0,
+        "mass_kg": 0.225,
+        "material_key": "smartphone_composite_production_repairable",
+        "notes": [
+          "Composite factor calibrated to ~37.8 kg CO2e production share (88% of 43 kg total).",
+          "Lower than Apple equivalent due to recycled content + simpler chipset."
+        ],
+        "source_ref_ids": [
+          "fairphone_4_lca_2022"
+        ],
+        "status": "grounded_via_lca_reverse_engineering"
+      }
+    ],
+    "transport_legs": [
+      {
+        "distance_km": 9000.0,
+        "factor_value_kg_co2e_per_ton_km": 0.87,
+        "leg_id": "factory_to_market_air",
+        "mass_kg": 0.4,
+        "mode": "air",
+        "notes": [
+          "Press-release notes increased air freight share during COVID chipset crisis."
+        ],
+        "source_ref_ids": [
+          "fairphone_4_lca_2022"
+        ],
+        "status": "estimated"
+      }
+    ],
+    "use_phase": {
+      "annual_energy_kwh": 1.6,
+      "country_code": "DE",
+      "lifetime_years": 5.0,
+      "notes": [
+        "Fairphone targets 5-year use; published 31% annual reduction at 5 yr vs 3 yr."
+      ],
+      "source_ref_ids": [
+        "fairphone_4_lca_2022"
+      ],
+      "status": "estimated"
+    }
+  },
+  "model": "Fairphone 4 (FP4)",
+  "observed_facts": {
+    "lifecycle_total_kg_co2e_declared": {
+      "source_ref_ids": [
+        "fairphone_4_lca_2022"
+      ],
+      "status": "exact",
+      "unit": "kg CO2e",
+      "value": 43.0
+    },
+    "product_mass_kg": {
+      "source_ref_ids": [
+        "fairphone_4_lca_2022"
+      ],
+      "status": "exact",
+      "unit": "kg",
+      "value": 0.225
+    },
+    "recycled_plastic_pct": {
+      "source_ref_ids": [
+        "fairphone_4_lca_2022"
+      ],
+      "status": "exact",
+      "unit": "%",
+      "value": 50.0
+    }
+  },
+  "ontology_class": "carb:Smartphone",
+  "product_class_key": "smartphone",
+  "product_id": "fairphone_4",
+  "schema_version": "0.2",
+  "source_refs": [
+    {
+      "extract_status": "extracted",
+      "id": "fairphone_4_lca_2022",
+      "kind": "official_product_pdf",
+      "path": "totalCarbonfootprintcalculation/fairphone_4_LCA_2022_extract.md",
+      "upstream_url": "https://www.fairphone.com/wp-content/uploads/2022/07/Fairphone-4-Life-Cycle-Assessment-22.pdf"
+    },
+    {
+      "extract_status": "curated_web_observation",
+      "id": "fraunhofer_izm",
+      "kind": "lca_practitioner",
+      "path": "https://www.izm.fraunhofer.de/"
+    }
+  ]
+}

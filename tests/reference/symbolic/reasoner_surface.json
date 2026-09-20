@@ -1,0 +1,298 @@
+{
+  "compliance_rich": {
+    "evidence": [
+      [
+        "ex:ProductA",
+        "requiresCompliance",
+        "capacity"
+      ],
+      [
+        "ex:ProductA",
+        "requiresCompliance",
+        "EN 62133-2"
+      ],
+      [
+        "ex:ProductA",
+        "requiresCompliance",
+        "Battery Safety Standard"
+      ],
+      [
+        "ex:ProductA",
+        "requiresCompliance",
+        "Wireless Compliance Standard"
+      ],
+      [
+        "ex:ProductA",
+        "requiresCompliance",
+        "RoHS"
+      ],
+      [
+        "ex:ProductA",
+        "requiresStep",
+        "ex:BatteryTestStep"
+      ],
+      [
+        "ex:ProductA",
+        "requiresStep",
+        "ex:WirelessTestStep"
+      ]
+    ],
+    "fire_flag": true,
+    "fired": true,
+    "text": "Symbolic: standards for ProductA: capacity, EN 62133-2, Battery Safety Standard, Wireless Compliance Standard, RoHS. Required steps: ex:BatteryTestStep, ex:WirelessTestStep.",
+    "trace": {
+      "asserted": [],
+      "inferred": [
+        [
+          "ex:ProductA",
+          "requiresCompliance",
+          "capacity"
+        ],
+        [
+          "ex:ProductA",
+          "requiresCompliance",
+          "EN 62133-2"
+        ],
+        [
+          "ex:ProductA",
+          "requiresCompliance",
+          "Battery Safety Standard"
+        ],
+        [
+          "ex:ProductA",
+          "requiresCompliance",
+          "Wireless Compliance Standard"
+        ],
+        [
+          "ex:ProductA",
+          "requiresCompliance",
+          "RoHS"
+        ],
+        [
+          "ex:ProductA",
+          "requiresStep",
+          "ex:BatteryTestStep"
+        ],
+        [
+          "ex:ProductA",
+          "requiresStep",
+          "ex:WirelessTestStep"
+        ]
+      ],
+      "product": "ProductA",
+      "rules_fired": [
+        "requiresCompliance",
+        "requiresStep"
+      ]
+    }
+  },
+  "compliance_single": {
+    "evidence": [
+      [
+        "ex:ProductB",
+        "requiresCompliance",
+        "RoHS"
+      ]
+    ],
+    "fire_flag": true,
+    "fired": true,
+    "text": "Symbolic: standards for ProductB: RoHS.",
+    "trace": {
+      "asserted": [],
+      "inferred": [
+        [
+          "ex:ProductB",
+          "requiresCompliance",
+          "RoHS"
+        ]
+      ],
+      "product": "ProductB",
+      "rules_fired": [
+        "requiresCompliance"
+      ]
+    }
+  },
+  "compliance_wireless": {
+    "evidence": [
+      [
+        "ex:ProductC",
+        "requiresCompliance",
+        "Wireless Compliance Standard"
+      ]
+    ],
+    "fire_flag": true,
+    "fired": true,
+    "text": "Symbolic: standards for ProductC: Wireless Compliance Standard.",
+    "trace": {
+      "asserted": [],
+      "inferred": [
+        [
+          "ex:ProductC",
+          "requiresCompliance",
+          "Wireless Compliance Standard"
+        ]
+      ],
+      "product": "ProductC",
+      "rules_fired": [
+        "requiresCompliance"
+      ]
+    }
+  },
+  "derived_by_rules": 7,
+  "edge_empty_query": {
+    "evidence": [
+      [
+        "ex:ProductA",
+        "requiresCompliance",
+        "capacity"
+      ],
+      [
+        "ex:ProductA",
+        "requiresCompliance",
+        "EN 62133-2"
+      ],
+      [
+        "ex:ProductA",
+        "requiresCompliance",
+        "Battery Safety Standard"
+      ],
+      [
+        "ex:ProductA",
+        "requiresCompliance",
+        "Wireless Compliance Standard"
+      ],
+      [
+        "ex:ProductA",
+        "requiresCompliance",
+        "RoHS"
+      ],
+      [
+        "ex:ProductA",
+        "requiresStep",
+        "ex:BatteryTestStep"
+      ],
+      [
+        "ex:ProductA",
+        "requiresStep",
+        "ex:WirelessTestStep"
+      ]
+    ],
+    "fire_flag": true,
+    "fired": true,
+    "text": "Symbolic: standards for ProductA: capacity, EN 62133-2, Battery Safety Standard, Wireless Compliance Standard, RoHS. Required steps: ex:BatteryTestStep, ex:WirelessTestStep.",
+    "trace": {
+      "asserted": [],
+      "inferred": [
+        [
+          "ex:ProductA",
+          "requiresCompliance",
+          "capacity"
+        ],
+        [
+          "ex:ProductA",
+          "requiresCompliance",
+          "EN 62133-2"
+        ],
+        [
+          "ex:ProductA",
+          "requiresCompliance",
+          "Battery Safety Standard"
+        ],
+        [
+          "ex:ProductA",
+          "requiresCompliance",
+          "Wireless Compliance Standard"
+        ],
+        [
+          "ex:ProductA",
+          "requiresCompliance",
+          "RoHS"
+        ],
+        [
+          "ex:ProductA",
+          "requiresStep",
+          "ex:BatteryTestStep"
+        ],
+        [
+          "ex:ProductA",
+          "requiresStep",
+          "ex:WirelessTestStep"
+        ]
+      ],
+      "product": "ProductA",
+      "rules_fired": [
+        "requiresCompliance",
+        "requiresStep"
+      ]
+    }
+  },
+  "edge_no_product": {
+    "answer": null,
+    "fire_flag": false
+  },
+  "edge_unknown_product": {
+    "answer": null,
+    "fire_flag": false
+  },
+  "obligations": {
+    "ProductA": {
+      "compliance": [
+        "BatteryLabelRequirement",
+        "BatterySafetyStandard",
+        "EN_62133_2",
+        "RoHSStandard",
+        "WirelessComplianceStandard"
+      ],
+      "steps": [
+        "BatteryTestStep",
+        "WirelessTestStep"
+      ]
+    },
+    "ProductB": {
+      "compliance": [
+        "RoHSStandard"
+      ],
+      "steps": []
+    },
+    "ProductC": {
+      "compliance": [
+        "WirelessComplianceStandard"
+      ],
+      "steps": []
+    }
+  },
+  "predicates": [
+    "closeMatch",
+    "comment",
+    "compatibleWith",
+    "conformsTo",
+    "domain",
+    "equivalentClass",
+    "equivalentProperty",
+    "hasCapacity",
+    "hasComponent",
+    "hasSpec",
+    "hasStep",
+    "hasVoltage",
+    "label",
+    "madeBy",
+    "range",
+    "references",
+    "requiresCompliance",
+    "requiresStep",
+    "sameAs",
+    "seeAlso",
+    "subClassOf",
+    "subPropertyOf",
+    "type",
+    "usesMaterial",
+    "versionInfo"
+  ],
+  "products": [
+    "ProductA",
+    "ProductB",
+    "ProductC"
+  ],
+  "reasoner_type": "SymbolicReasoner",
+  "triple_count": 4322
+}

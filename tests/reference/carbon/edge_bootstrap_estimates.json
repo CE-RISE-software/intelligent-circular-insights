@@ -1,0 +1,457 @@
+{
+  "body": {
+    "assumptions": [
+      "Derived lifetime use-phase electricity from annual energy and lifetime years."
+    ],
+    "estimated_fields": [
+      "factory_to_market_air"
+    ],
+    "missing_inputs": [],
+    "partial_total_kg_co2e": 44.486704,
+    "product_id": "fairphone_4",
+    "product_name": "Fairphone 4",
+    "product_profile": {
+      "brand": "Fairphone",
+      "calculation_scope": {
+        "compliance_standards": [
+          "ISO 14040",
+          "ISO 14044"
+        ],
+        "default_basis": "per_device_lifecycle",
+        "default_reporting_unit": "kg CO2e",
+        "notes": [
+          "LCA performed by Fraunhofer IZM (2022).",
+          "Modular design with replaceable parts (modularity overhead 0.744 kg CO2e = 2.3% of production)."
+        ],
+        "supported_basis": [
+          "per_device_lifecycle"
+        ]
+      },
+      "category": "smartphone",
+      "defaults": {
+        "annual_energy_kwh": 1.6,
+        "lifetime_years": 5.0,
+        "report_year": 2021,
+        "use_country_code": "DE"
+      },
+      "display_name": "Fairphone 4",
+      "estimation_profile": {
+        "status": "estimate_ready",
+        "uncertainty_defaults_pct": {
+          "end_of_life": 35.0,
+          "raw_materials": 18.0,
+          "total": 18.0,
+          "transportation": 30.0,
+          "use_phase": 25.0
+        }
+      },
+      "identity": {
+        "declared_function": "Modular repairable smartphone, 5G",
+        "manufacturer": "Fairphone B.V.",
+        "official_spec_extracted": true,
+        "product_family": "Fairphone 4"
+      },
+      "life_cycle_inputs": {
+        "end_of_life": {
+          "incineration_rate_pct": 20.0,
+          "landfill_rate_pct": 10.0,
+          "mass_kg": 0.225,
+          "notes": [
+            "Modular design improves end-of-life recoverability."
+          ],
+          "recycling_rate_pct": 70.0,
+          "route_factors": {
+            "incineration": {
+              "factor_value_kg_co2e_per_kg": 0.35,
+              "source_ref": "eol_incineration_mixed_electronics"
+            },
+            "landfill": {
+              "factor_value_kg_co2e_per_kg": 0.12,
+              "source_ref": "eol_landfill_mixed_electronics"
+            },
+            "recycling": {
+              "factor_value_kg_co2e_per_kg": 0.18,
+              "source_ref": "eol_recycling_mixed_electronics"
+            }
+          },
+          "status": "estimated"
+        },
+        "raw_materials": [
+          {
+            "factor_value_kg_co2e_per_kg": 168.0,
+            "mass_kg": 0.225,
+            "material_key": "smartphone_composite_production_repairable",
+            "notes": [
+              "Composite factor calibrated to ~37.8 kg CO2e production share (88% of 43 kg total).",
+              "Lower than Apple equivalent due to recycled content + simpler chipset."
+            ],
+            "source_ref_ids": [
+              "fairphone_4_lca_2022"
+            ],
+            "status": "grounded_via_lca_reverse_engineering"
+          }
+        ],
+        "transport_legs": [
+          {
+            "distance_km": 9000.0,
+            "factor_value_kg_co2e_per_ton_km": 0.87,
+            "leg_id": "factory_to_market_air",
+            "mass_kg": 0.4,
+            "mode": "air",
+            "notes": [
+              "Press-release notes increased air freight share during COVID chipset crisis."
+            ],
+            "source_ref_ids": [
+              "fairphone_4_lca_2022"
+            ],
+            "status": "estimated"
+          }
+        ],
+        "use_phase": {
+          "annual_energy_kwh": 1.6,
+          "country_code": "DE",
+          "lifetime_years": 5.0,
+          "notes": [
+            "Fairphone targets 5-year use; published 31% annual reduction at 5 yr vs 3 yr."
+          ],
+          "source_ref_ids": [
+            "fairphone_4_lca_2022"
+          ],
+          "status": "estimated"
+        }
+      },
+      "model": "Fairphone 4 (FP4)",
+      "observed_facts": {
+        "lifecycle_total_kg_co2e_declared": {
+          "source_ref_ids": [
+            "fairphone_4_lca_2022"
+          ],
+          "status": "exact",
+          "unit": "kg CO2e",
+          "value": 43.0
+        },
+        "product_mass_kg": {
+          "source_ref_ids": [
+            "fairphone_4_lca_2022"
+          ],
+          "status": "exact",
+          "unit": "kg",
+          "value": 0.225
+        },
+        "recycled_plastic_pct": {
+          "source_ref_ids": [
+            "fairphone_4_lca_2022"
+          ],
+          "status": "exact",
+          "unit": "%",
+          "value": 50.0
+        }
+      },
+      "ontology_class": "carb:Smartphone",
+      "product_class_key": "smartphone",
+      "product_id": "fairphone_4",
+      "schema_version": "0.2",
+      "source_refs": [
+        {
+          "extract_status": "extracted",
+          "id": "fairphone_4_lca_2022",
+          "kind": "official_product_pdf",
+          "path": "totalCarbonfootprintcalculation/fairphone_4_LCA_2022_extract.md",
+          "upstream_url": "https://www.fairphone.com/wp-content/uploads/2022/07/Fairphone-4-Life-Cycle-Assessment-22.pdf"
+        },
+        {
+          "extract_status": "curated_web_observation",
+          "id": "fraunhofer_izm",
+          "kind": "lca_practitioner",
+          "path": "https://www.izm.fraunhofer.de/"
+        }
+      ]
+    },
+    "product_profile_path": "/sessions/rcw-01vdjelk212fopeh9vju8j7h/mnt/llmmain/CE-RISE-Demo/backend/data/carbon/products/fairphone_4.json",
+    "provenance": [
+      {
+        "field_name": "total_product_mass_kg",
+        "label": "Product mass",
+        "method": "official_observation",
+        "notes": [],
+        "source_refs": [
+          "totalCarbonfootprintcalculation/fairphone_4_LCA_2022_extract.md"
+        ],
+        "status": "exact",
+        "uncertainty_pct": 8.0,
+        "unit": "kg",
+        "value": 0.225
+      },
+      {
+        "field_name": "transport_route",
+        "label": "Estimated transport route",
+        "method": "generic_distribution_defaults",
+        "notes": [
+          "Used generic ship plus truck distribution defaults because the real route is not declared."
+        ],
+        "source_refs": [
+          "internal_estimation_profile"
+        ],
+        "status": "estimated",
+        "uncertainty_pct": 30.0,
+        "unit": "route_profile",
+        "value": []
+      }
+    ],
+    "quality_status": "hybrid_estimate",
+    "recyclability": {
+      "incineration_mass_kg": 0.045,
+      "landfill_mass_kg": 0.0225,
+      "notes": [],
+      "recoverable_mass_kg": 0.1575,
+      "recyclability_pct": 70.0,
+      "status": "complete"
+    },
+    "requested_stages": [
+      "raw_materials",
+      "transportation",
+      "use_phase",
+      "end_of_life"
+    ],
+    "source_ref_details": [
+      {
+        "extract_status": "extracted",
+        "id": "fairphone_4_lca_2022",
+        "is_web": true,
+        "kind": "official_product_pdf",
+        "path": "totalCarbonfootprintcalculation/fairphone_4_LCA_2022_extract.md",
+        "resolved_from_profile": true,
+        "upstream_url": "https://www.fairphone.com/wp-content/uploads/2022/07/Fairphone-4-Life-Cycle-Assessment-22.pdf"
+      },
+      {
+        "extract_status": "curated_web_observation",
+        "id": "fraunhofer_izm",
+        "is_web": true,
+        "kind": "lca_practitioner",
+        "path": "https://www.izm.fraunhofer.de/",
+        "resolved_from_profile": true,
+        "upstream_url": ""
+      },
+      {
+        "extract_status": "resolved_by_calculator",
+        "id": "scenario_override",
+        "is_web": false,
+        "kind": "calculation_or_factor_reference",
+        "path": "scenario_override",
+        "resolved_from_profile": false
+      },
+      {
+        "extract_status": "resolved_by_calculator",
+        "id": "totalCarbonfootprintcalculation/CoM-Emission-factors-for-national-electricity-2024.xlsx",
+        "is_web": false,
+        "kind": "calculation_or_factor_reference",
+        "path": "totalCarbonfootprintcalculation/CoM-Emission-factors-for-national-electricity-2024.xlsx",
+        "resolved_from_profile": false
+      },
+      {
+        "extract_status": "resolved_by_calculator",
+        "id": "eol_recycling_mixed_electronics",
+        "is_web": false,
+        "kind": "calculation_or_factor_reference",
+        "path": "eol_recycling_mixed_electronics",
+        "resolved_from_profile": false
+      },
+      {
+        "extract_status": "resolved_by_calculator",
+        "id": "eol_incineration_mixed_electronics",
+        "is_web": false,
+        "kind": "calculation_or_factor_reference",
+        "path": "eol_incineration_mixed_electronics",
+        "resolved_from_profile": false
+      },
+      {
+        "extract_status": "resolved_by_calculator",
+        "id": "eol_landfill_mixed_electronics",
+        "is_web": false,
+        "kind": "calculation_or_factor_reference",
+        "path": "eol_landfill_mixed_electronics",
+        "resolved_from_profile": false
+      },
+      {
+        "extract_status": "resolved_by_calculator",
+        "id": "internal_estimation_profile",
+        "is_web": false,
+        "kind": "calculation_or_factor_reference",
+        "path": "internal_estimation_profile",
+        "resolved_from_profile": false
+      }
+    ],
+    "source_refs": [
+      "totalCarbonfootprintcalculation/fairphone_4_LCA_2022_extract.md",
+      "https://www.izm.fraunhofer.de/",
+      "scenario_override",
+      "totalCarbonfootprintcalculation/CoM-Emission-factors-for-national-electricity-2024.xlsx",
+      "eol_recycling_mixed_electronics",
+      "eol_incineration_mixed_electronics",
+      "eol_landfill_mixed_electronics",
+      "internal_estimation_profile"
+    ],
+    "stage_results": {
+      "end_of_life": {
+        "estimated_inputs": [],
+        "missing_inputs": [],
+        "notes": [],
+        "quality_status": "exact",
+        "stage": "end_of_life",
+        "status": "complete",
+        "total_kg_co2e": 0.0468,
+        "traces": [
+          {
+            "activity_unit": "kg",
+            "activity_value": 0.1575,
+            "emissions_kg_co2e": 0.02835,
+            "factor_unit": "kg CO2e/kg",
+            "factor_value": 0.18,
+            "formula": "route_mass_kg \u00d7 factor_kgCO2e_per_kg",
+            "item_id": "end_of_life_recycling",
+            "label": "End-of-life recycling",
+            "notes": [],
+            "source_refs": [
+              "eol_recycling_mixed_electronics"
+            ],
+            "stage": "end_of_life",
+            "status": "computed"
+          },
+          {
+            "activity_unit": "kg",
+            "activity_value": 0.045,
+            "emissions_kg_co2e": 0.01575,
+            "factor_unit": "kg CO2e/kg",
+            "factor_value": 0.35,
+            "formula": "route_mass_kg \u00d7 factor_kgCO2e_per_kg",
+            "item_id": "end_of_life_incineration",
+            "label": "End-of-life incineration",
+            "notes": [],
+            "source_refs": [
+              "eol_incineration_mixed_electronics"
+            ],
+            "stage": "end_of_life",
+            "status": "computed"
+          },
+          {
+            "activity_unit": "kg",
+            "activity_value": 0.0225,
+            "emissions_kg_co2e": 0.0027,
+            "factor_unit": "kg CO2e/kg",
+            "factor_value": 0.12,
+            "formula": "route_mass_kg \u00d7 factor_kgCO2e_per_kg",
+            "item_id": "end_of_life_landfill",
+            "label": "End-of-life landfill",
+            "notes": [],
+            "source_refs": [
+              "eol_landfill_mixed_electronics"
+            ],
+            "stage": "end_of_life",
+            "status": "computed"
+          }
+        ],
+        "uncertainty_pct": 8.0
+      },
+      "raw_materials": {
+        "estimated_inputs": [],
+        "missing_inputs": [],
+        "notes": [],
+        "quality_status": "exact",
+        "stage": "raw_materials",
+        "status": "complete",
+        "total_kg_co2e": 37.8,
+        "traces": [
+          {
+            "activity_unit": "kg",
+            "activity_value": 0.225,
+            "emissions_kg_co2e": 37.8,
+            "factor_unit": "kg CO2e/kg",
+            "factor_value": 168.0,
+            "formula": "mass_kg \u00d7 factor_kgCO2e_per_kg",
+            "item_id": "smartphone_composite_production_repairable",
+            "label": "smartphone_composite_production_repairable",
+            "notes": [],
+            "source_refs": [
+              "fairphone_4_lca_2022",
+              "scenario_override"
+            ],
+            "stage": "raw_materials",
+            "status": "computed"
+          }
+        ],
+        "uncertainty_pct": 8.0
+      },
+      "transportation": {
+        "estimated_inputs": [
+          "factory_to_market_air"
+        ],
+        "missing_inputs": [],
+        "notes": [],
+        "quality_status": "estimated",
+        "stage": "transportation",
+        "status": "complete",
+        "total_kg_co2e": 3.132,
+        "traces": [
+          {
+            "activity_unit": "ton-km",
+            "activity_value": 3.6,
+            "emissions_kg_co2e": 3.132,
+            "factor_unit": "kg CO2e/ton-km",
+            "factor_value": 0.87,
+            "formula": "(mass_kg / 1000) \u00d7 distance_km \u00d7 factor_kgCO2e_per_ton_km",
+            "item_id": "factory_to_market_air",
+            "label": "factory_to_market_air",
+            "notes": [],
+            "source_refs": [
+              "fairphone_4_lca_2022",
+              "scenario_override"
+            ],
+            "stage": "transportation",
+            "status": "computed"
+          }
+        ],
+        "uncertainty_pct": 30.0
+      },
+      "use_phase": {
+        "estimated_inputs": [],
+        "missing_inputs": [],
+        "notes": [],
+        "quality_status": "exact",
+        "stage": "use_phase",
+        "status": "complete",
+        "total_kg_co2e": 3.507904,
+        "traces": [
+          {
+            "activity_unit": "kWh",
+            "activity_value": 8.0,
+            "emissions_kg_co2e": 3.507904,
+            "factor_unit": "kg CO2e/kWh",
+            "factor_value": 0.438488,
+            "formula": "lifetime_energy_kwh \u00d7 electricity_factor_kgCO2e_per_kWh",
+            "item_id": "use_phase_electricity",
+            "label": "Use-phase electricity (DE, 2021)",
+            "notes": [],
+            "source_refs": [
+              "fairphone_4_lca_2022",
+              "totalCarbonfootprintcalculation/CoM-Emission-factors-for-national-electricity-2024.xlsx"
+            ],
+            "stage": "use_phase",
+            "status": "computed"
+          }
+        ],
+        "uncertainty_pct": 8.0
+      }
+    },
+    "status": "complete",
+    "total_kg_co2e": 44.486704,
+    "uncertainty_kg_co2e": 4.247976,
+    "uncertainty_pct": 9.548867,
+    "uncertainty_range_kg_co2e": {
+      "high": 48.73468,
+      "low": 40.238728
+    },
+    "used_bootstrap_estimates": true,
+    "warnings": []
+  },
+  "status": 200
+}

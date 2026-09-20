@@ -1,0 +1,25 @@
+{
+  "body": [
+    {
+      "label": "What is the lifecycle CO2 for the Lexmark MX431adn printer?",
+      "product": "lexmark_mx431adn"
+    },
+    {
+      "label": "Does PrinterL1 require a wireless test step?",
+      "product": "PrinterL1"
+    },
+    {
+      "label": "Which compliance standards apply to the Lexmark C4342 printer?",
+      "product": "Lexmark C4342"
+    },
+    {
+      "label": "What components does ProductV1 include?",
+      "product": "ProductV1"
+    },
+    {
+      "label": "Does PrinterL1 require a submarine pressure test?",
+      "product": "PrinterL1"
+    }
+  ],
+  "status": 200
+}

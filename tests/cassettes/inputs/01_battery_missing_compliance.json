@@ -1,0 +1,23 @@
+{
+  "schema_version": "ce-rise-demo-0.1",
+  "dpp_id": "dpp-broken-001",
+  "product": {
+    "id": "BMZ-EBIKE-001",
+    "brand": "BMZ Group",
+    "model": "LMT 36V-14Ah",
+    "category": "battery"
+  },
+  "materials": [
+    {"name": "Lithium iron phosphate", "share_pct": 58},
+    {"name": "Graphite",               "share_pct": 18},
+    {"name": "Aluminium casing",       "share_pct": 14},
+    {"name": "Copper",                 "share_pct": 6},
+    {"name": "Polymer separator",      "share_pct": 4}
+  ],
+  "lifecycle": {
+    "use_phase": {
+      "lifetime_years": 7
+    }
+  },
+  "notes": "Broken DPP example #1: compliance section is missing entirely; the EU Batteries Regulation 2023/1542 is implied but never listed."
+}

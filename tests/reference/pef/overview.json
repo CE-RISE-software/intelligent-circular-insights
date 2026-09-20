@@ -1,0 +1,571 @@
+{
+  "body": {
+    "activity_count": 15,
+    "datasets": [
+      {
+        "activities": [
+          "BrazingServiceAct",
+          "NocolokAct"
+        ],
+        "compliance_level": "EFCompliant",
+        "dataset_type": "DPP",
+        "dqr_criteria": [
+          {
+            "dimension": "GeographicalRepresentativeness",
+            "justification": "measured data on single process",
+            "value": 2
+          },
+          {
+            "dimension": "TechnologicalRepresentativeness",
+            "justification": "measured data on single process",
+            "value": 1
+          },
+          {
+            "dimension": "TimeRepresentativeness",
+            "justification": "measured data on single process",
+            "value": 1
+          }
+        ],
+        "dqr_overall": 1.333333,
+        "id": "BrazingDataset",
+        "licence": "",
+        "publisher": "",
+        "source_file": "case-study/lcidatasets/dpp/brazing.ttl",
+        "title": "BrazingDataset",
+        "uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/brazing#BrazingDataset"
+      },
+      {
+        "activities": [
+          "AnodeActiveMaterialManufacturingAct",
+          "AnodeManufacturingAct",
+          "CathodeActiveMaterialManufacturingAct",
+          "CathodeManufacturingAct",
+          "CellManufacturingAct",
+          "ElectrolyteManufacturingAct"
+        ],
+        "compliance_level": "EFCompliant",
+        "dataset_type": "DPP",
+        "dqr_criteria": [
+          {
+            "dimension": "GeographicalRepresentativeness",
+            "justification": "specific data",
+            "value": 1
+          },
+          {
+            "dimension": "TechnologicalRepresentativeness",
+            "justification": "company-specific processes",
+            "value": 1
+          },
+          {
+            "dimension": "TimeRepresentativeness",
+            "justification": "recent data",
+            "value": 1
+          }
+        ],
+        "dqr_overall": 1.0,
+        "id": "CellDataset",
+        "licence": "",
+        "publisher": "",
+        "source_file": "case-study/lcidatasets/dpp/battery-cell.ttl",
+        "title": "CellDataset",
+        "uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-cell#CellDataset"
+      },
+      {
+        "activities": [
+          "HousingCoolingManufacturingAct",
+          "ModuleAssemblyAct"
+        ],
+        "compliance_level": "EFCompliant",
+        "dataset_type": "DPP",
+        "dqr_criteria": [
+          {
+            "dimension": "GeographicalRepresentativeness",
+            "justification": "specific data",
+            "value": 1
+          },
+          {
+            "dimension": "TechnologicalRepresentativeness",
+            "justification": "company-specific processes",
+            "value": 1
+          },
+          {
+            "dimension": "TimeRepresentativeness",
+            "justification": "recent data",
+            "value": 1
+          }
+        ],
+        "dqr_overall": 1.0,
+        "id": "ModuleDataset",
+        "licence": "",
+        "publisher": "",
+        "source_file": "case-study/lcidatasets/dpp/battery-module.ttl",
+        "title": "ModuleDataset",
+        "uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-module#ModuleDataset"
+      },
+      {
+        "activities": [
+          "BatteryAssemblyAct",
+          "BatteryDistributionAct"
+        ],
+        "compliance_level": "EFCompliant",
+        "dataset_type": "DPP",
+        "dqr_criteria": [
+          {
+            "dimension": "GeographicalRepresentativeness",
+            "justification": "specific data",
+            "value": 1
+          },
+          {
+            "dimension": "TechnologicalRepresentativeness",
+            "justification": "company-specific processes",
+            "value": 1
+          },
+          {
+            "dimension": "TimeRepresentativeness",
+            "justification": "recent data",
+            "value": 1
+          }
+        ],
+        "dqr_overall": 1.0,
+        "id": "PackDataset",
+        "licence": "",
+        "publisher": "",
+        "source_file": "case-study/lcidatasets/dpp/battery-pack.ttl",
+        "title": "PackDataset",
+        "uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#PackDataset"
+      },
+      {
+        "activities": [
+          "AggregatedLCIAct"
+        ],
+        "compliance_level": "",
+        "dataset_type": "",
+        "dqr_criteria": [],
+        "dqr_overall": null,
+        "id": "AggregatedLCI",
+        "licence": "",
+        "publisher": "",
+        "source_file": "case-study/battery-pef.ttl",
+        "title": "Aggregated LCI \u2014 Battery Pack (abridged)",
+        "uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pef#AggregatedLCI"
+      },
+      {
+        "activities": [
+          "BatteryCellTreatmentAct",
+          "BatteryDisassemblyAct",
+          "MetalTreatmentAct"
+        ],
+        "compliance_level": "EFCompliant",
+        "dataset_type": "Secondary",
+        "dqr_criteria": [
+          {
+            "dimension": "GeographicalRepresentativeness",
+            "justification": "dataset on RER",
+            "value": 2
+          },
+          {
+            "dimension": "TechnologicalRepresentativeness",
+            "justification": "",
+            "value": 2
+          },
+          {
+            "dimension": "TimeRepresentativeness",
+            "justification": "2023 data",
+            "value": 4
+          }
+        ],
+        "dqr_overall": 3.0,
+        "id": "BatteryEoL",
+        "licence": "",
+        "publisher": "",
+        "source_file": "case-study/lcidatasets/secondary/battery-eol.ttl",
+        "title": "BatteryEoL",
+        "uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-eol#BatteryEoL"
+      },
+      {
+        "activities": [],
+        "compliance_level": "",
+        "dataset_type": "",
+        "dqr_criteria": [],
+        "dqr_overall": null,
+        "id": "biosphere",
+        "licence": "",
+        "publisher": "",
+        "source_file": "case-study/lcidatasets/secondary/biosphere.ttl",
+        "title": "EF 3.1 biosphere \u2014 ElementaryFlow stubs (reference dataset)",
+        "uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/biosphere#biosphere"
+      },
+      {
+        "activities": [],
+        "compliance_level": "NotEFCompliant",
+        "dataset_type": "",
+        "dqr_criteria": [
+          {
+            "dimension": "GeographicalRepresentativeness",
+            "justification": "global dataset",
+            "value": 3
+          },
+          {
+            "dimension": "TechnologicalRepresentativeness",
+            "justification": "partly included",
+            "value": 3
+          },
+          {
+            "dimension": "TimeRepresentativeness",
+            "justification": "different validities for different flows",
+            "value": 5
+          }
+        ],
+        "dqr_overall": 3.66667,
+        "id": "ecoinvent",
+        "licence": "https://ecoinvent.org/terms-of-use/",
+        "publisher": "ecoinvent Association",
+        "source_file": "case-study/lcidatasets/secondary/ecoinvent.ttl",
+        "title": "ecoinvent 3.12 \u2014 Allocation, cut-off by classification",
+        "uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/ecoinvent#ecoinvent"
+      }
+    ],
+    "flow_count": 131,
+    "graph": {
+      "activity_count": 15,
+      "data_root": "/sessions/rcw-01vdjelk212fopeh9vju8j7h/mnt/llmmain/CE-RISE-Demo/backend/data/pefdpp",
+      "dataset_count": 8,
+      "elementary_flow_scheme_loaded": false,
+      "files_loaded": [
+        "case-study/battery-pef.ttl",
+        "case-study/lcidatasets/dpp/battery-cell.ttl",
+        "case-study/lcidatasets/dpp/battery-module.ttl",
+        "case-study/lcidatasets/dpp/battery-pack.ttl",
+        "case-study/lcidatasets/dpp/brazing.ttl",
+        "case-study/lcidatasets/secondary/battery-eol.ttl",
+        "case-study/lcidatasets/secondary/biosphere.ttl",
+        "case-study/lcidatasets/secondary/ecoinvent.ttl",
+        "ontology/dataquality.ttl",
+        "ontology/ef/ef31-impactindicators.ttl",
+        "ontology/ef/ef31-lciamethods.ttl",
+        "ontology/ef/ef31-units.ttl",
+        "ontology/ilcdname.ttl",
+        "ontology/lci/activity.ttl",
+        "ontology/lci/dataset.ttl",
+        "ontology/lci/flow.ttl",
+        "ontology/pefdpp.ttl",
+        "ontology/pefstudy/lcia.ttl",
+        "ontology/pefstudy/pefstudy.ttl",
+        "ontology/pefstudy/product-system.ttl",
+        "ontology/skos/ef31-impactcategories.ttl",
+        "ontology/skos/pef-additional-information-topics.ttl",
+        "ontology/skos/pef-geographies.ttl"
+      ],
+      "lazy_files": [
+        "ef31-elementaryflows.ttl"
+      ],
+      "parse_errors": [],
+      "triples": 5387
+    },
+    "impact_categories": [
+      {
+        "id": "ClimateChange",
+        "label": "Climate change",
+        "method_uuid": "6209b35f-9447-40b5-b68c-a1099e3674a0",
+        "regulated": true,
+        "regulation_note": "The indicator required by Regulation (EU) 2023/1542 Article 7 for the battery carbon footprint declaration.",
+        "unit": "kg CO2 eq"
+      },
+      {
+        "id": "Acidification",
+        "label": "Acidification",
+        "method_uuid": "b5c611c6-def3-11e6-bf01-fe55135034f3",
+        "unit": "mol H+ eq"
+      },
+      {
+        "id": "ParticulateMatter",
+        "label": "Particulate matter",
+        "unit": "disease incidence"
+      },
+      {
+        "id": "PhotochemicalOzoneFormationHumanHealth",
+        "label": "Photochemical ozone formation",
+        "unit": "kg NMVOC eq"
+      },
+      {
+        "id": "EutrophicationTerrestrial",
+        "label": "Eutrophication, terrestrial",
+        "unit": "mol N eq"
+      },
+      {
+        "id": "EutrophicationMarine",
+        "label": "Eutrophication, marine",
+        "unit": "kg N eq"
+      },
+      {
+        "id": "EutrophicationFreshwater",
+        "label": "Eutrophication, freshwater",
+        "unit": "kg P eq"
+      },
+      {
+        "id": "EcoToxicityFreshwater",
+        "label": "Ecotoxicity, freshwater",
+        "unit": "CTUe"
+      },
+      {
+        "id": "HumanToxicityCancer",
+        "label": "Human toxicity, cancer",
+        "unit": "CTUh"
+      },
+      {
+        "id": "HumanToxicityNonCancer",
+        "label": "Human toxicity, non-cancer",
+        "unit": "CTUh"
+      },
+      {
+        "id": "IonisingRadiationHumanHealth",
+        "label": "Ionising radiation, human health",
+        "unit": "kBq U-235 eq"
+      },
+      {
+        "id": "LandUse",
+        "label": "Land use",
+        "unit": "dimensionless (soil quality index)"
+      },
+      {
+        "id": "OzoneDepletion",
+        "label": "Ozone depletion",
+        "unit": "kg CFC-11 eq"
+      },
+      {
+        "id": "ResourceUseFossils",
+        "label": "Resource use, fossils",
+        "unit": "MJ"
+      },
+      {
+        "id": "ResourceUseMineralsAndMetals",
+        "label": "Resource use, minerals and metals",
+        "unit": "kg Sb eq"
+      },
+      {
+        "id": "WaterUse",
+        "label": "Water use",
+        "unit": "m3 world eq deprived"
+      }
+    ],
+    "producer_count": 15,
+    "provenance": {
+      "case_study": "Hypothetical NMC111 Li-ion EV battery pack; primary LCI adapted from Crenna et al. (2021); methodology per JRC CFB-EV (2023).",
+      "namespace": "https://w3id.org/mintjesba/pefdpp/",
+      "ontology": "PEFDPP 0.1.0 \u2014 Mintjes, Barilli, Mondello, van Nielen, Hischier, Beloin-Saint-Pierre, Donati, Boero & Mogollon",
+      "paper": "Integrating Product Environmental Footprint and Digital Product Passports: an Ontology for Traceable and Reusable Environmental Performance Information"
+    },
+    "study": {
+      "conforms_to": {
+        "creator": "Joint Research Centre (JRC), European Commission",
+        "description": "Draft JRC technical report providing methodological guidelines for calculating and verifying the carbon footprint of electric vehicle batteries under Article 7 of Regulation (EU) 2023/1542 (EU Batteries Regulation), based on the PEF method and the PEFCR for batteries.",
+        "id": "CFB-EV",
+        "issued": "2023-06",
+        "source": "https://eplca.jrc.ec.europa.eu/permalink/battery/GRB-CBF_CarbonFootprintRules-EV_June_2023.pdf",
+        "title": "Rules for the Calculation of the Carbon Footprint of Electric Vehicle Batteries (CFB-EV)"
+      },
+      "data_quality": {
+        "criteria": [
+          {
+            "dimension": "GeographicalRepresentativeness",
+            "justification": "ecoinvent (global) used",
+            "value": 3
+          },
+          {
+            "dimension": "TechnologicalRepresentativeness",
+            "justification": "background uses technological proxies",
+            "value": 4
+          },
+          {
+            "dimension": "TimeRepresentativeness",
+            "justification": "2023 reference year for EoL",
+            "value": 3
+          }
+        ],
+        "overall_dqr": 3.333333
+      },
+      "declared_lcia_results": [
+        "LCIA_Acidification",
+        "LCIA_ClimateChange",
+        "LCIA_EcotoxicityFreshwater",
+        "LCIA_EutrophicationFreshwater",
+        "LCIA_EutrophicationMarine",
+        "LCIA_EutrophicationTerrestrial",
+        "LCIA_HumanToxicityCancer",
+        "LCIA_HumanToxicityNonCancer",
+        "LCIA_IonisingRadiation",
+        "LCIA_LandUse",
+        "LCIA_OzoneDepletion",
+        "LCIA_ParticulateMatter",
+        "LCIA_PhotochemicalOzoneFormation",
+        "LCIA_ResourceUseFossils",
+        "LCIA_ResourceUseMineralsAndMetals",
+        "LCIA_WaterUse"
+      ],
+      "functional_unit": {
+        "conforms_to": "CFB-EV",
+        "how_long_provided": {
+          "unit": "year",
+          "unit_iri": "http://www.ontology-of-units-of-measure.org/resource/om-2/year",
+          "value": 8.0
+        },
+        "how_much_provided": {
+          "unit": "kilowattHour",
+          "unit_iri": "http://www.ontology-of-units-of-measure.org/resource/om-2/kilowattHour",
+          "value": 1.0
+        },
+        "how_well_provided": "of total energy over battery's service life",
+        "reference_flow": "BatteryDistributionAct_flow0_BatteryPackAtCustomer",
+        "reference_flow_type": "BatteryLiIonNMC111AtCustomer",
+        "reference_flow_uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pack#BatteryDistributionAct_flow0_BatteryPackAtCustomer",
+        "rf_to_fu_conversion": 0.006876,
+        "uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pef#FUBattery",
+        "what_provided": "propulsion energy for electric vehicle"
+      },
+      "goal": {
+        "commissioner": {
+          "iri": "https://ror.org/027bh9e22",
+          "name": "Leiden University"
+        },
+        "decision_context": "PEF following CFB-EV, uses CFF, cut-off for background (ecoinvent3.12)",
+        "intended_application": "PEF following CFB-EV of NMC111 Li-ion vehicle battery, proof-of-concept for PEFDPP",
+        "verifier": {
+          "iri": "https://ror.org/02x681a42",
+          "name": "Empa"
+        }
+      },
+      "id": "BatteryPackPEFStudy",
+      "product_system": {
+        "activity_links": [
+          {
+            "activity": "BatteryDistributionAct",
+            "life_cycle_stage": "Distribution",
+            "link": "AL_BatteryDistribution"
+          },
+          {
+            "activity": "BatteryCellTreatmentAct",
+            "life_cycle_stage": "EndOfLife",
+            "link": "AL_BatteryCellTreatment"
+          },
+          {
+            "activity": "BatteryDisassemblyAct",
+            "life_cycle_stage": "EndOfLife",
+            "link": "AL_BatteryDisassembly"
+          },
+          {
+            "activity": "MetalTreatmentAct",
+            "life_cycle_stage": "EndOfLife",
+            "link": "AL_MetalTreatment"
+          },
+          {
+            "activity": "AnodeActiveMaterialManufacturingAct",
+            "life_cycle_stage": "Manufacturing",
+            "link": "AL_AnodeActiveMaterialManufacturing"
+          },
+          {
+            "activity": "AnodeManufacturingAct",
+            "life_cycle_stage": "Manufacturing",
+            "link": "AL_AnodeManufacturing"
+          },
+          {
+            "activity": "BatteryAssemblyAct",
+            "life_cycle_stage": "Manufacturing",
+            "link": "AL_BatteryAssembly"
+          },
+          {
+            "activity": "BrazingServiceAct",
+            "life_cycle_stage": "Manufacturing",
+            "link": "AL_BrazingService"
+          },
+          {
+            "activity": "CathodeActiveMaterialManufacturingAct",
+            "life_cycle_stage": "Manufacturing",
+            "link": "AL_CathodeActiveMaterialManufacturing"
+          },
+          {
+            "activity": "CathodeManufacturingAct",
+            "life_cycle_stage": "Manufacturing",
+            "link": "AL_CathodeManufacturing"
+          },
+          {
+            "activity": "CellManufacturingAct",
+            "life_cycle_stage": "Manufacturing",
+            "link": "AL_CellManufacturing"
+          },
+          {
+            "activity": "ElectrolyteManufacturingAct",
+            "life_cycle_stage": "Manufacturing",
+            "link": "AL_ElectrolyteManufacturing"
+          },
+          {
+            "activity": "HousingCoolingManufacturingAct",
+            "life_cycle_stage": "Manufacturing",
+            "link": "AL_HousingCoolingManufacturing"
+          },
+          {
+            "activity": "ModuleAssemblyAct",
+            "life_cycle_stage": "Manufacturing",
+            "link": "AL_ModuleAssembly"
+          },
+          {
+            "activity": "NocolokAct",
+            "life_cycle_stage": "Manufacturing",
+            "link": "AL_NocolokProduction"
+          }
+        ],
+        "id": "ProductSystem",
+        "stage_map": {
+          "AnodeActiveMaterialManufacturingAct": "Manufacturing",
+          "AnodeManufacturingAct": "Manufacturing",
+          "BatteryAssemblyAct": "Manufacturing",
+          "BatteryCellTreatmentAct": "EndOfLife",
+          "BatteryDisassemblyAct": "EndOfLife",
+          "BatteryDistributionAct": "Distribution",
+          "BrazingServiceAct": "Manufacturing",
+          "CathodeActiveMaterialManufacturingAct": "Manufacturing",
+          "CathodeManufacturingAct": "Manufacturing",
+          "CellManufacturingAct": "Manufacturing",
+          "ElectrolyteManufacturingAct": "Manufacturing",
+          "HousingCoolingManufacturingAct": "Manufacturing",
+          "MetalTreatmentAct": "EndOfLife",
+          "ModuleAssemblyAct": "Manufacturing",
+          "NocolokAct": "Manufacturing"
+        }
+      },
+      "scope": {
+        "assumption": "end-of-life stage modelled using CFB-EV default values",
+        "biodiversity_relevance": "biodiversity out-of-scope per CFB-EV rules",
+        "impact_categories": [
+          "Acidification",
+          "ClimateChange",
+          "EcoToxicityFreshwater",
+          "EutrophicationFreshwater",
+          "EutrophicationMarine",
+          "EutrophicationTerrestrial",
+          "HumanToxicityCancer",
+          "HumanToxicityNonCancer",
+          "IonisingRadiationHumanHealth",
+          "LandUse",
+          "OzoneDepletion",
+          "ParticulateMatter",
+          "PhotochemicalOzoneFormationHumanHealth",
+          "ResourceUseFossils",
+          "ResourceUseMineralsAndMetals",
+          "WaterUse"
+        ],
+        "limitation": "ecoinvent3.12 (not EF compliant) used as background dataset"
+      },
+      "source_file": "case-study/battery-pef.ttl",
+      "system_boundary": {
+        "boundary_type": "CradleToGrave",
+        "cut_off_criteria": "mass cut-off of <1% allowed",
+        "excludes_activity": "Excludes capital goods, final installation, packaging material production, cooling system parts not contained in or attached to housing, auxiliary inputs to manufacturing plant, storage during distribution, waste collection, dismantling, and EoL transport.",
+        "exclusion_justification": "CFB-EV provided",
+        "justification": "system boundary based on CFB-EV rules, NB use phase out-of-scope"
+      },
+      "title": "Battery Pack PEF Study \u2014 Li-ion NMC111",
+      "uri": "https://w3id.org/mintjesba/pefdpp/cases/battery-pack/battery-pef#BatteryPackPEFStudy"
+    }
+  },
+  "status": 200
+}

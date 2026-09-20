@@ -1,0 +1,31 @@
+{
+  "body": {
+    "matches": [
+      {
+        "layer": "Architecture",
+        "matched_terms": [],
+        "model_id": "dp-architecture",
+        "recommended_feature": "Search & Answer",
+        "route_steps": [
+          "Neural parser normalizes the user's wording and product references.",
+          "Retriever collects candidate DPP fields, source passages, and session facts.",
+          "Symbolic model checks required fields, value ranges, source references, and provenance.",
+          "LLM produces a concise user-facing answer with citations and caveats."
+        ],
+        "score": 0.25,
+        "title": "DP Architecture",
+        "url": "https://codeberg.org/CE-RISE-models/dp-architecture",
+        "what_this_model_checks": "which CE-RISE model modules should be used together",
+        "why_this_model_matters": "keeps the DPP modular instead of forcing every feature into one flat schema"
+      }
+    ],
+    "next_action": "Use Search & Answer as the user-facing feature, but require evidence from the listed CE-RISE models before producing the final answer.",
+    "plain_answer": "This question should mainly be handled through Search & Answer, using DP Architecture.",
+    "question": "",
+    "what_it_is_showing": "This is not the final product answer. It is the routing decision: which CE-RISE model areas the system should consult and validate before answering.",
+    "why_it_is_useful": [
+      "DP Architecture: keeps the DPP modular instead of forcing every feature into one flat schema."
+    ]
+  },
+  "status": 200
+}
