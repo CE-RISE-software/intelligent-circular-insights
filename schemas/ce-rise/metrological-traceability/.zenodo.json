@@ -1,0 +1,47 @@
+{
+  "title": "CE-RISE Metrological Traceability Data Model",
+  "description": "Cross-cutting LinkML data model for documenting metrological traceability statements, traceability bases, calibration chains, reference materials, measurement procedures, boundary definitions, competence evidence, and comparability metadata in CE-RISE Digital Product Passport and Digital Material Passport records.",
+  "license": "CC-BY-NC-4.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Boero, Riccardo",
+      "affiliation": "NILU",
+      "orcid": "0000-0002-7468-9096"
+    },
+    {
+      "name": "Rösslein, Matthias",
+      "affiliation": "EMPA",
+      "orcid": "0000-0002-6858-4124"
+    }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Data Model",
+    "Ontology",
+    "Metrological Traceability",
+    "Calibration",
+    "Reference Material",
+    "Measurement Standard",
+    "Measurement Procedure",
+    "Comparability",
+    "Open Source",
+    "Open Science",
+    "Digital Product Passport",
+    "Digital Material Passport"
+  ],
+  "communities": [
+    { "identifier": "ce-rise" },
+    { "identifier": "impact" }
+  ],
+  "grants": [
+    { "id": "101092281" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE-models/metrological-traceability",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

@@ -1,0 +1,321 @@
+id: https://ce-rise-models.codeberg.page/product-system/
+name: product-system
+title: CE-RISE Product System Data Model
+description: >
+    A reusable, source-agnostic model for defining life cycle assessment product systems.
+    It represents calculation-specific assemblies through versioned references to life
+    cycle inventory datasets and selected activities, together with reference-flow
+    specifications, scope, provenance, and optional utility records. The model is
+    independent of life cycle assessment results and can be consumed by integrated-lca
+    and other tools.
+license: CC BY-NC 4.0
+version: 0.0.1
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    ps: https://ce-rise-models.codeberg.page/product-system/
+    xsd: http://www.w3.org/2001/XMLSchema#
+    bont: http://ontology.bonsai.uno/core#
+    om: http://www.ontology-of-units-of-measure.org/resource/om-2/
+    prov: http://www.w3.org/ns/prov#
+    dcterms: http://purl.org/dc/terms/
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+
+default_prefix: ps
+default_range: string
+
+imports:
+    - linkml:types
+    - https://codeberg.org/CE-RISE-models/uncertainty-quantification/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/metrological-traceability/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/data-quality-framework/raw/tag/pages-v0.0.3/generated/schema
+
+classes:
+    ProductSystem:
+        class_uri: ps:ProductSystem
+        tree_root: true
+        description: "A versioned, calculation-specific assembly of activity records from one or more life cycle inventory datasets"
+        annotations:
+            references: "ISO 14040:2006; ISO 14044:2006; BONSAI core ontology"
+        attributes:
+            product_system_identifier:
+                description: "Identifier for this product system"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: ps_system_identifier
+            product_system_name:
+                description: "Name or label for this product system"
+                range: string
+                annotations:
+                    owl.filler: dcterms:title
+                    sql_identifier: ps_system_name
+            product_system_description:
+                description: "Description of the product-system assembly and intended assessment use"
+                range: string
+                annotations:
+                    owl.filler: dcterms:description
+                    sql_identifier: ps_system_description
+            product_system_version:
+                description: "Version, release tag, or revision of this product system"
+                range: string
+                annotations:
+                    owl.filler: dcterms:hasVersion
+                    sql_identifier: ps_system_version
+            product_system_scope:
+                description: "Whether this product system assembles foreground, background, hybrid, or other inventory scope"
+                range: ProductSystemScopeEnum
+                annotations:
+                    sql_identifier: ps_system_scope
+            lci_dataset_references:
+                description: "Versioned life cycle inventory datasets available to this product-system assembly"
+                range: LCIDatasetReference
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: ps_system_lci_dataset_references
+            activity_references:
+                description: "Selected activities that compose this product system, each linked to a declared life cycle inventory dataset reference"
+                range: ActivityReference
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: bont:Activity
+                    sql_identifier: ps_system_activity_references
+            reference_flow_specification:
+                description: "Reference flow and quantity used to scale or consume this product system"
+                range: ReferenceFlowSpecification
+                annotations:
+                    owl.filler: bont:ReferenceUnit
+                    sql_identifier: ps_system_reference_flow_specification
+            assembly_specification_reference:
+                description: "URI or other reference to the query, selection, mapping, or configuration used to assemble this product system"
+                range: string
+                annotations:
+                    owl.filler: prov:hadPlan
+                    sql_identifier: ps_system_assembly_specification_reference
+            product_system_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for system scope, source selections, reference flows, units, or inventory calculation chains"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: ps_system_metrological_traceability
+            product_system_data_quality_assessments:
+                description: "Optional data quality assessments for product-system completeness, provenance, representativeness, interoperability, or fitness for purpose"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: ps_system_data_quality_assessments
+
+    LCIDatasetReference:
+        class_uri: prov:Entity
+        description: "A versioned reference to a reusable life cycle inventory dataset available to a product-system assembly"
+        attributes:
+            lci_dataset_reference_identifier:
+                description: "Identifier for this life cycle inventory dataset reference within the product system"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: ps_lci_dataset_reference_identifier
+            source_model_identifier:
+                description: "Identifier or name of the source data model, ontology, schema, or dataset family"
+                range: string
+                annotations:
+                    sql_identifier: ps_lci_dataset_source_model_identifier
+            source_model_uri:
+                description: "URI for the source data model, ontology, schema, or dataset family"
+                range: uri
+                annotations:
+                    sql_identifier: ps_lci_dataset_source_model_uri
+            source_model_version:
+                description: "Version, release tag, or revision of the source model or dataset family"
+                range: string
+                annotations:
+                    sql_identifier: ps_lci_dataset_source_model_version
+            lci_dataset_identifier:
+                description: "Identifier of the referenced life cycle inventory dataset"
+                range: string
+                annotations:
+                    sql_identifier: ps_lci_dataset_identifier
+            lci_dataset_uri:
+                description: "Resolvable URI for the referenced life cycle inventory dataset"
+                range: uri
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: ps_lci_dataset_uri
+            lci_dataset_version:
+                description: "Version, release tag, revision, or timestamp of the referenced life cycle inventory dataset"
+                range: string
+                annotations:
+                    sql_identifier: ps_lci_dataset_version
+            source_artifact_uri:
+                description: "URI for the concrete life cycle inventory dataset artifact, export, manifest, or API response used"
+                range: uri
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: ps_lci_dataset_artifact_uri
+            source_artifact_checksum:
+                description: "Checksum or content hash for the concrete source artifact when available"
+                range: string
+                annotations:
+                    sql_identifier: ps_lci_dataset_artifact_checksum
+            data_selection_reference:
+                description: "Reference to the query, selection rule, mapping, transformation, or extraction specification used"
+                range: string
+                annotations:
+                    owl.filler: prov:hadPlan
+                    sql_identifier: ps_lci_dataset_selection_reference
+            retrieved_at:
+                description: "Timestamp at which the referenced dataset or artifact was retrieved, extracted, or generated"
+                range: datetime
+                annotations:
+                    owl.filler: prov:atTime
+                    sql_identifier: ps_lci_dataset_retrieved_at
+
+    ActivityReference:
+        class_uri: prov:Entity
+        description: "A selected activity from a declared life cycle inventory dataset that composes a product system"
+        attributes:
+            activity_reference_identifier:
+                description: "Identifier for this selected activity reference within the product system"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: ps_activity_reference_identifier
+            lci_dataset_reference_identifier:
+                description: "Identifier of the declared life cycle inventory dataset reference containing this activity"
+                range: string
+                annotations:
+                    sql_identifier: ps_activity_reference_lci_dataset_identifier
+            activity_identifier:
+                description: "Identifier of the selected activity within its source life cycle inventory dataset"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: ps_activity_reference_activity_identifier
+            activity_uri:
+                description: "Resolvable URI for the selected activity when available"
+                range: uri
+                annotations:
+                    owl.filler: bont:Activity
+                    sql_identifier: ps_activity_reference_activity_uri
+            activity_version:
+                description: "Version, release tag, revision, or timestamp of the selected activity when maintained independently from its dataset"
+                range: string
+                annotations:
+                    sql_identifier: ps_activity_reference_activity_version
+            activity_selection_reference:
+                description: "Reference to the selection, mapping, scenario, or configuration rule that includes this activity"
+                range: string
+                annotations:
+                    owl.filler: prov:hadPlan
+                    sql_identifier: ps_activity_reference_selection_reference
+
+    ReferenceFlowSpecification:
+        class_uri: bont:ReferenceUnit
+        description: "Reference flow and quantity used to scale or consume a product system without defining a functional unit"
+        annotations:
+            references: "BONSAI core ontology; ISO 14040:2006; ISO 14044:2006"
+        attributes:
+            reference_flow_lci_dataset_reference_identifier:
+                description: "Identifier of the declared life cycle inventory dataset reference containing the reference flow"
+                range: string
+                annotations:
+                    sql_identifier: ps_reference_flow_lci_dataset_reference_identifier
+            reference_flow_identifier:
+                description: "Identifier or URI of the reference flow exchange"
+                range: string
+                annotations:
+                    sql_identifier: ps_reference_flow_identifier
+            reference_flow_object_reference:
+                description: "Identifier or URI of the reference flow object"
+                range: string
+                annotations:
+                    owl.filler: bont:hasReferenceFlowObject
+                    sql_identifier: ps_reference_flow_object_reference
+            reference_flow_numerical_value:
+                description: "Numeric value of this reference-unit measure"
+                range: float
+                annotations:
+                    owl.filler: om:hasNumericalValue
+                    sql_identifier: ps_reference_flow_numerical_value
+            reference_flow_unit_reference:
+                description: "Unit URI, code, or other unit reference for this reference-unit measure"
+                range: string
+                annotations:
+                    owl.filler: om:hasUnit
+                    sql_identifier: ps_reference_flow_unit_reference
+            reference_flow_quantity_kind_reference:
+                description: "Optional URI, code, or concept reference for the quantity kind or physical dimension of this reference-unit measure"
+                range: string
+                annotations:
+                    sql_identifier: ps_reference_flow_quantity_kind_reference
+            reference_flow_description:
+                description: "Description of how this reference flow scales the product system"
+                range: string
+                annotations:
+                    sql_identifier: ps_reference_flow_description
+            reference_flow_uncertainty_statements:
+                description: "Optional uncertainty statements for this reference-unit measure"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: ps_reference_flow_uncertainty_statements
+            reference_flow_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for this reference-unit measure, unit, measurement, or calculation"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: ps_reference_flow_metrological_traceability
+            reference_flow_data_quality_assessments:
+                description: "Optional data quality assessments for this reference-unit measure, source, measurement, or estimate"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: ps_reference_flow_data_quality_assessments
+
+enums:
+    ProductSystemScopeEnum:
+        description: "Declared scope of a product system"
+        permissible_values:
+            FOREGROUND:
+                description: "Product system assembled from foreground inventory data"
+                annotations:
+                    sql_identifier: ps_scope_foreground
+            BACKGROUND:
+                description: "Product system assembled from background inventory data"
+                annotations:
+                    sql_identifier: ps_scope_background
+            HYBRID:
+                description: "Product system assembled from combined foreground and background inventory data"
+                annotations:
+                    sql_identifier: ps_scope_hybrid
+            OTHER:
+                description: "Other declared product-system scope"
+                annotations:
+                    sql_identifier: ps_scope_other

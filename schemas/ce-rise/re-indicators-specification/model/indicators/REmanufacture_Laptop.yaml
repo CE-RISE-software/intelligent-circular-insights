@@ -1,0 +1,82 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REmanufacture_Laptop
+name: re_indicators_remanufacture_laptop
+title: REmanufacture Indicator Configuration for Laptops
+description: Product-specific configuration for REmanufacture indicator applied to laptops
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    - ../model # Import core classes
+    - ./REmanufacture_core # Import core parameter definitions
+
+classes:
+    # ============================================
+    # LAPTOP CONFIGURATION FOR REMANUFACTURE
+    # Uses all core parameters with their normalized weights
+    # ============================================
+
+    REmanufacture_Laptop_Config:
+        is_a: IndicatorProductConfiguration
+        description: REmanufacture indicator configuration for Laptop products
+        attributes:
+            id:
+                ifabsent: string(REmanufacture_Laptop)
+            indicator_type:
+                ifabsent: IndicatorType(REmanufacture)
+            product_category:
+                ifabsent: ProductCategoryType(Laptop)
+            name:
+                ifabsent: string(REmanufacture Indicator for Laptop)
+            description:
+                ifabsent: string(REmanufacture assessment configuration for laptops covering inspection/testing, disassembly/assembly, cleaning, and reprocessing capabilities)
+            parameter_applications:
+                range: REmanufacture_Laptop_ParameterApplication
+                multivalued: true
+                inlined: true
+
+    REmanufacture_Laptop_ParameterApplication:
+        is_a: ParameterApplication
+        union_of:
+            - REmanufacture_Laptop_P1_Application
+            - REmanufacture_Laptop_P2_Application
+            - REmanufacture_Laptop_P3_Application
+            - REmanufacture_Laptop_P4_Application
+
+    REmanufacture_Laptop_P1_Application:
+        is_a: ParameterApplication
+        description: Ability to be Inspected and Tested parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P1_diagnostic)
+            weight:
+                ifabsent: float(0.25)
+
+    REmanufacture_Laptop_P2_Application:
+        is_a: ParameterApplication
+        description: Ability to be Disassembled and Assembled parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P2_ease_of_disassembly)
+            weight:
+                ifabsent: float(0.25)
+
+    REmanufacture_Laptop_P3_Application:
+        is_a: ParameterApplication
+        description: Ability to be Cleaned parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P3_ease_of_cleaning)
+            weight:
+                ifabsent: float(0.25)
+
+    REmanufacture_Laptop_P4_Application:
+        is_a: ParameterApplication
+        description: Ability to be Reprocessed parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P4_wear_and_damage)
+            weight:
+                ifabsent: float(0.25)

@@ -1,0 +1,267 @@
+name: Build and Deploy to Pages
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+
+jobs:
+    build-and-deploy:
+        runs-on: codeberg-tiny
+        steps:
+            - name: Debug - Check environment
+              run: |
+                  echo "Repository: $GITHUB_REPOSITORY"
+                  echo "Ref: $GITHUB_REF"
+                  echo "Event: $GITHUB_EVENT_NAME"
+                  echo "Runner: $RUNNER_NAME"
+                  pwd
+                  ls -la
+
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.11"
+
+            - name: Install dependencies
+              run: |
+                  python -m pip install --upgrade pip
+                  python -m pip install linkml pyyaml
+
+            - name: Generate schema files
+              run: |
+                  echo "Generating schema files..."
+                  make all
+                  echo "Generated files:"
+                  ls -la generated/
+
+            - name: Include LinkML YAML schema
+              run: |
+                  echo "Copying LinkML YAML schema to generated/"
+                  mkdir -p generated
+                  cp model/model.yaml generated/schema.yaml
+                  echo "Files in generated/:"
+                  ls -la generated/
+
+            - name: Extract project metadata
+              run: |
+                  echo "Extracting metadata from repository..."
+                  python3 << 'EOF' > set_env.sh
+                  import yaml
+                  import json
+                  import os
+
+                  # Default values
+                  repo_name = os.environ.get('GITHUB_REPOSITORY', 'organization/repository')
+                  project_title = repo_name.split('/')[-1].replace('-', ' ').title() if repo_name else "Data Model"
+                  project_description = f"LinkML Data Model for {project_title}"
+                  repo_url = f"https://codeberg.org/{repo_name}"
+
+                  # Try to extract from CITATION.cff
+                  try:
+                      with open('CITATION.cff', 'r') as f:
+                          citation = yaml.safe_load(f)
+                          project_title = citation.get('title', project_title)
+                          project_description = citation.get('abstract', project_description)
+                          if 'repository-code' in citation:
+                              repo_url = citation['repository-code']
+                  except Exception:
+                      pass
+
+                  # Try to extract from model/model.yaml as fallback
+                  try:
+                      with open('model/model.yaml', 'r') as f:
+                          model = yaml.safe_load(f)
+                          if 'title' in model:
+                              project_title = model['title']
+                          if 'description' in model:
+                              project_description = model['description']
+                  except Exception:
+                      pass
+
+                  # Export as environment variables (for sourcing later)
+                  print(f"export PROJECT_TITLE='{project_title}'")
+                  print(f"export PROJECT_DESCRIPTION='{project_description}'")
+                  print(f"export REPO_URL='{repo_url}'")
+                  EOF
+
+                  # For this step, just show what would be set
+                  source set_env.sh
+                  echo "Project Title: $PROJECT_TITLE"
+                  echo "Project Description: $PROJECT_DESCRIPTION"
+                  echo "Repository URL: $REPO_URL"
+
+            - name: Create index.html
+              run: |
+                  # Load metadata into this step's environment
+                  source set_env.sh
+
+                  # Ensure generated directory exists
+                  mkdir -p generated
+
+                  cat > generated/index.html << EOF
+                  <!DOCTYPE html>
+                  <html lang="en">
+                  <head>
+                      <meta charset="UTF-8">
+                      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                      <title>${PROJECT_TITLE}</title>
+                      <style>
+                          body {
+                              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+                              line-height: 1.6;
+                              max-width: 900px;
+                              margin: 0 auto;
+                              padding: 2rem;
+                              color: #333;
+                          }
+                          h1 {
+                              color: #2c3e50;
+                              border-bottom: 3px solid #3498db;
+                              padding-bottom: 0.5rem;
+                          }
+                          h2 {
+                              color: #34495e;
+                              margin-top: 2rem;
+                          }
+                          .description {
+                              background: #f8f9fa;
+                              padding: 1rem;
+                              border-radius: 5px;
+                              margin: 1rem 0;
+                          }
+                          .files {
+                              list-style: none;
+                              padding: 0;
+                          }
+                          .files li {
+                              margin: 1rem 0;
+                              padding: 1rem;
+                              background: white;
+                              border: 1px solid #e1e4e8;
+                              border-radius: 5px;
+                              transition: transform 0.2s;
+                          }
+                          .files li:hover {
+                              transform: translateX(5px);
+                              box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                          }
+                          .files a {
+                              color: #0066cc;
+                              text-decoration: none;
+                              font-weight: bold;
+                              font-size: 1.1rem;
+                          }
+                          .files a:hover {
+                              text-decoration: underline;
+                          }
+                          .file-description {
+                              color: #666;
+                              margin-top: 0.3rem;
+                              font-size: 0.95rem;
+                          }
+                          .footer {
+                              margin-top: 3rem;
+                              padding-top: 2rem;
+                              border-top: 1px solid #e1e4e8;
+                              text-align: center;
+                              color: #666;
+                          }
+                          .footer a {
+                              color: #0066cc;
+                              text-decoration: none;
+                          }
+                          @media (max-width: 600px) {
+                              body {
+                                  padding: 1rem;
+                              }
+                          }
+                      </style>
+                  </head>
+                  <body>
+                      <h1>${PROJECT_TITLE}</h1>
+
+                      <div class="description">
+                          <p>${PROJECT_DESCRIPTION}</p>
+                      </div>
+
+                      <h2>Generated Schema Files</h2>
+                      <ul class="files">
+                          <li>
+                              <a href="schema.yaml">LinkML YAML Schema</a>
+                              <div class="file-description">
+                                  Canonical LinkML YAML source of the data model
+                              </div>
+                          </li>
+                          <li>
+                              <a href="schema.json">JSON Schema</a>
+                              <div class="file-description">
+                                  JSON Schema definition for validating data instances against this model
+                              </div>
+                          </li>
+                          <li>
+                              <a href="shacl.ttl">SHACL (Turtle)</a>
+                              <div class="file-description">
+                                  SHACL shapes for RDF validation in Turtle format
+                              </div>
+                          </li>
+                          <li>
+                              <a href="model.ttl">OWL Ontology (Turtle)</a>
+                              <div class="file-description">
+                                  OWL ontology representation of the data model in Turtle format
+                              </div>
+                          </li>
+                      </ul>
+
+                      <div class="footer">
+                          <p>
+                              Repository: <a href="${REPO_URL}">${REPO_URL}</a>
+                          </p>
+                          <p>
+                              Generated from LinkML model • Last updated: <script>document.write(new Date().toISOString().split('T')[0])</script>
+                          </p>
+                      </div>
+                  </body>
+                  </html>
+                  EOF
+
+            - name: Setup Git for Pages
+              run: |
+                  echo "Setting up Git configuration..."
+                  git config --global user.email "ci@codeberg.org"
+                  git config --global user.name "CI Bot"
+                  git config --global init.defaultBranch pages
+                  git remote -v
+
+            - name: Deploy to Pages branch
+              run: |
+                  echo "Starting deployment to pages branch..."
+
+                  # Create a new orphan branch for pages
+                  echo "Creating orphan pages branch..."
+                  git checkout --orphan pages
+
+                  # Remove all files from staging
+                  echo "Cleaning staging area..."
+                  git rm -rf . || true
+
+                  # Copy generated files
+                  echo "Copying generated files..."
+                  cp -r generated/* .
+                  echo "Files to deploy:"
+                  ls -la
+
+                  # Add all files
+                  git add -A
+                  git status
+
+                  # Commit
+                  echo "Committing files..."
+                  git commit -m "Deploy generated schema files"
+
+                  # Force push to pages branch
+                  echo "Pushing to pages branch..."
+                  git push origin pages --force
+                  echo "Deployment complete!"

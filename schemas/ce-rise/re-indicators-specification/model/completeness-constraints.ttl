@@ -1,0 +1,85 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix re_ind: <https://ce-rise-models.codeberg.page/re-indicators-specification/> .
+
+# ============================================================================
+# COMPLETENESS CONSTRAINTS FOR RE-INDICATORS
+# ============================================================================
+# These SHACL constraints enforce that if an Assessment references a specific
+# indicator-product configuration, ALL parameters and questions from that
+# configuration must be present with answers.
+#
+# Usage: Load this file alongside the generated shacl.ttl for validation
+# ============================================================================
+
+# Constraint 1: All parameters from the referenced indicator specification must be assessed
+re_ind:AssessmentCompletenessShape
+    a sh:NodeShape ;
+    sh:targetClass re_ind:Assessment ;
+    sh:sparql [
+        sh:message "Assessment must include all parameters from the referenced indicator specification. Missing parameter: {?missing_parameter}" ;
+        sh:select """
+            PREFIX re_ind: <https://ce-rise-models.codeberg.page/re-indicators-specification/>
+            SELECT $this ?missing_parameter
+            WHERE {
+                # Get the indicator specification ID from the assessment
+                $this re_ind:indicator_specification_id ?spec_id_value .
+
+                # Find the configuration with this ID
+                ?config a re_ind:IndicatorProductConfiguration ;
+                        re_ind:id ?spec_id_value ;
+                        re_ind:parameter_applications ?param_app .
+
+                # Get the parameter reference
+                ?param_app re_ind:parameter_ref ?missing_parameter .
+
+                # Check if this parameter has a corresponding ParameterAssessment
+                FILTER NOT EXISTS {
+                    $this re_ind:parameter_assessments ?param_assessment .
+                    ?param_assessment re_ind:parameter_id ?missing_parameter .
+                }
+            }
+        """ ;
+    ] .
+
+# Constraint 2: All questions from each parameter must be answered
+re_ind:ParameterAssessmentCompletenessShape
+    a sh:NodeShape ;
+    sh:targetClass re_ind:ParameterAssessment ;
+    sh:sparql [
+        sh:message "ParameterAssessment must include answers for all questions in the parameter. Missing question: {?missing_question}" ;
+        sh:select """
+            PREFIX re_ind: <https://ce-rise-models.codeberg.page/re-indicators-specification/>
+            SELECT $this ?missing_question
+            WHERE {
+                # Get the parameter ID being assessed
+                $this re_ind:parameter_id ?param_id .
+
+                # Find the parameter specification with this ID
+                ?param_spec a re_ind:ParameterSpecification ;
+                            re_ind:id ?param_id ;
+                            re_ind:questions ?question_spec .
+
+                # Get the question ID
+                ?question_spec re_ind:id ?missing_question .
+
+                # Check if this question has a corresponding QuestionAnswer
+                FILTER NOT EXISTS {
+                    $this re_ind:question_answers ?question_answer .
+                    ?question_answer re_ind:question_id ?missing_question .
+                }
+            }
+        """ ;
+    ] .
+
+# Constraint 3: All QuestionAnswers must have a selected answer
+re_ind:QuestionAnswerCompletenessShape
+    a sh:NodeShape ;
+    sh:targetClass re_ind:QuestionAnswer ;
+    sh:property [
+        sh:path re_ind:selected_answer_id ;
+        sh:minCount 1 ;
+        sh:message "QuestionAnswer must have a selected_answer_id (answer must be selected)" ;
+    ] .

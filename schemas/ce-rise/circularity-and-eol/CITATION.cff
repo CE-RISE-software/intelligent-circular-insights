@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+title: CE-RISE Circularity and End-of-Life
+type: software
+doi: 10.5281/zenodo.17912234
+authors:
+  - given-names: Riccardo
+    family-names: Boero
+    email: ribo@nilu.no
+    orcid: 'https://orcid.org/0000-0002-7468-9096'
+    affiliation: NILU
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.17912234
+    description: This DOI represents all software versions.
+repository-code: 'https://codeberg.org/CE-RISE_models/circularity-and-eol'
+url: 'https://ce-rise-models.codeberg.page/circularity-and-eol/'
+abstract: >-
+  Data model capturing circularity and end-of-life information for products, including material composition at beginning of life with DMP references, design-for-circularity attributes, performance factors and scores, and end-of-life pathways such as disassembly, recycling, treatment options, and CRM recovery-related information. The model creates a circular loop by linking materials used at product beginning of life to materials recovered at end of life.
+keywords:
+  - CE-RISE
+  - Circularity
+  - End-of-Life
+  - Circular Economy
+  - Design for Circularity
+  - Recycling
+  - Critical Raw Materials
+  - CRM Recovery
+  - Product Performance
+  - Sustainability Assessment
+  - Data Model
+  - Ontology
+  - Open Source
+  - Open Science
+  - Digital Product Passport
+license: CC-BY-NC-4.0

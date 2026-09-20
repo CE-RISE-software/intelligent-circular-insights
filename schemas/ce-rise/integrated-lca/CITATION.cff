@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+title: CE-RISE Integrated Life Cycle Analysis
+type: software
+doi: 10.5281/zenodo.17910373
+authors:
+  - given-names: Riccardo
+    family-names: Boero
+    email: ribo@nilu.no
+    orcid: 'https://orcid.org/0000-0002-7468-9096'
+    affiliation: NILU
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.17910373
+    description: This DOI represents all software versions.
+repository-code: 'https://codeberg.org/CE-RISE_models/integrated-lca'
+url: 'https://ce-rise-models.codeberg.page/integrated-lca/'
+abstract: >-
+  Flexible framework for capturing LCA results across environmental, social, and economic dimensions, including methodological metadata, impact assessment results, and data quality indicators. The model provides a reference-based system for indicators and methods, supporting multiple LCA analyses per assessed system. Applicable to both Digital Product Passports (DPP) and Digital Material Passports (DMP).
+keywords:
+  - CE-RISE
+  - Life Cycle Assessment
+  - LCA
+  - Triple Bottom Line
+  - Environmental Impact
+  - Social Impact
+  - Economic Impact
+  - Data Model
+  - Ontology
+  - Open Source
+  - Open Science
+  - Digital Product Passport
+  - DPP
+  - Digital Material Passport
+  - DMP
+  - Sustainability Assessment
+license: CC-BY-NC-4.0

@@ -1,0 +1,578 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REcycle_PV
+name: re_indicators_recycle_pv
+title: REcycle Indicator Configuration for PV Panels
+description: Product-specific configuration for REcycle indicator applied to photovoltaic panels
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    - ../model # Import core classes
+    - ./REcycle_core # Import core parameter definitions
+
+classes:
+    # ============================================
+    # PV-SPECIFIC PARAMETERS (P4, P5)
+    # These have product-specific questions for PV priority parts
+    # ============================================
+
+    # P4: DISMANTLING - PV specific with 4 priority parts
+    PV_Dismantling_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of dismantling parameter for PV panels - specific to PV priority parts
+        attributes:
+            id:
+                ifabsent: string(P4_dismantling)
+            name:
+                ifabsent: string(Dismantling)
+            questions:
+                range: PV_DismantlingQuestion
+                multivalued: true
+                inlined: true
+
+    PV_DismantlingQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - PV_Q4_1_1_AlFrame_Ease
+            - PV_Q4_1_2_AlFrame_Joints
+            - PV_Q4_1_3_AlFrame_Tools
+            - PV_Q4_2_1_SiWafer_Ease
+            - PV_Q4_2_2_SiWafer_Joints
+            - PV_Q4_2_3_SiWafer_Tools
+            - PV_Q4_3_1_JunctionBox_Ease
+            - PV_Q4_3_2_JunctionBox_Joints
+            - PV_Q4_3_3_JunctionBox_Tools
+            - PV_Q4_4_1_Cable_Ease
+            - PV_Q4_4_2_Cable_Joints
+            - PV_Q4_4_3_Cable_Tools
+
+    # Aluminum Frame questions
+    PV_Q4_1_1_AlFrame_Ease:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1.1)
+            text:
+                ifabsent: string(Ease of dismantling Aluminium frame)
+            weight:
+                ifabsent: float(0.1)
+            answer_options:
+                range: PV_DismantlingEaseAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q4_1_2_AlFrame_Joints:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1.2)
+            text:
+                ifabsent: string(Type of joints in between to dismantle Aluminum frame)
+            weight:
+                ifabsent: float(0.15)
+            answer_options:
+                range: PV_JointTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q4_1_3_AlFrame_Tools:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1.3)
+            text:
+                ifabsent: string(Type of tool required to dismantle aluminium frame)
+            weight:
+                ifabsent: float(0.1)
+            answer_options:
+                range: PV_DismantlingToolsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Silicon Wafer questions
+    PV_Q4_2_1_SiWafer_Ease:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.2.1)
+            text:
+                ifabsent: string(Ease of dismantling Silicon wafer)
+            weight:
+                ifabsent: float(0.1)
+            answer_options:
+                range: PV_DismantlingEaseAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q4_2_2_SiWafer_Joints:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.2.2)
+            text:
+                ifabsent: string(Type of joints in between Silicon wafer)
+            weight:
+                ifabsent: float(0.15)
+            answer_options:
+                range: PV_JointTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q4_2_3_SiWafer_Tools:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.2.3)
+            text:
+                ifabsent: string(Type of tool required to dismantle Silicon wafer)
+            weight:
+                ifabsent: float(0.1)
+            answer_options:
+                range: PV_DismantlingToolsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Junction Box questions
+    PV_Q4_3_1_JunctionBox_Ease:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.3.1)
+            text:
+                ifabsent: string(Ease of dismantling Junction box)
+            weight:
+                ifabsent: float(0.05)
+            answer_options:
+                range: PV_DismantlingEaseAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q4_3_2_JunctionBox_Joints:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.3.2)
+            text:
+                ifabsent: string(Type of joint in between to dismantle Junction box)
+            weight:
+                ifabsent: float(0.05)
+            answer_options:
+                range: PV_JointTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q4_3_3_JunctionBox_Tools:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.3.3)
+            text:
+                ifabsent: string(Type of tool required to dismantle Junction box)
+            weight:
+                ifabsent: float(0.05)
+            answer_options:
+                range: PV_DismantlingToolsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Cable questions
+    PV_Q4_4_1_Cable_Ease:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.4.1)
+            text:
+                ifabsent: string(Ease of dismantling Cable)
+            weight:
+                ifabsent: float(0.05)
+            answer_options:
+                range: PV_DismantlingEaseAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q4_4_2_Cable_Joints:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.4.2)
+            text:
+                ifabsent: string(Type of joint in between to dismantle cable)
+            weight:
+                ifabsent: float(0.05)
+            answer_options:
+                range: PV_JointTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q4_4_3_Cable_Tools:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.4.3)
+            text:
+                ifabsent: string(Type of tool required to dismantle cable)
+            weight:
+                ifabsent: float(0.05)
+            answer_options:
+                range: PV_DismantlingToolsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Answer options for PV Dismantling
+    PV_DismantlingEaseAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - PV_Dismantling_5StepsOrLess
+            - PV_Dismantling_5To10Steps
+            - PV_Dismantling_10To15Steps
+            - PV_Dismantling_15To30Steps
+            - PV_Dismantling_Over30Steps
+            - PV_Dismantling_CannotDismantle
+            - PV_Dismantling_DataNotAvailable
+
+    PV_Dismantling_5StepsOrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_5_or_less)
+            text:
+                ifabsent: string(5 ≥ x > 2 steps)
+            score:
+                ifabsent: float(5.0)
+
+    PV_Dismantling_5To10Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_5_to_10)
+            text:
+                ifabsent: string(10 ≥ x > 5 steps)
+            score:
+                ifabsent: float(4.0)
+
+    PV_Dismantling_10To15Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_10_to_15)
+            text:
+                ifabsent: string(15 ≥ x > 10 steps)
+            score:
+                ifabsent: float(3.0)
+
+    PV_Dismantling_15To30Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_15_to_30)
+            text:
+                ifabsent: string(30 ≥ x > 15 steps)
+            score:
+                ifabsent: float(2.0)
+
+    PV_Dismantling_Over30Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_over_30)
+            text:
+                ifabsent: string(x > 30)
+            score:
+                ifabsent: float(1.0)
+
+    PV_Dismantling_CannotDismantle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_cannot)
+            text:
+                ifabsent: string(Cannot be dismantled)
+            score:
+                ifabsent: float(0.0)
+
+    PV_Dismantling_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    PV_JointTypeAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - PV_Joint_Removable
+            - PV_Joint_NonRemovable
+
+    PV_Joint_Removable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_joint_removable)
+            text:
+                ifabsent: string(removable)
+            score:
+                ifabsent: float(5.0)
+
+    PV_Joint_NonRemovable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_joint_non_removable)
+            text:
+                ifabsent: string(non-removable)
+            score:
+                ifabsent: float(0.0)
+
+    PV_DismantlingToolsAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - PV_DismantlingTools_NoToolsOrBasic
+            - PV_DismantlingTools_ProductGroupSpecific
+            - PV_DismantlingTools_CommerciallyAvailable
+            - PV_DismantlingTools_Proprietary
+            - PV_DismantlingTools_CannotDismantle
+
+    PV_DismantlingTools_NoToolsOrBasic:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_tools_no_tools_basic)
+            text:
+                ifabsent: string(without tools/basic tools)
+            score:
+                ifabsent: float(5.0)
+
+    PV_DismantlingTools_ProductGroupSpecific:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_tools_product_group_specific)
+            text:
+                ifabsent: string(with product group specific tools)
+            score:
+                ifabsent: float(4.0)
+
+    PV_DismantlingTools_CommerciallyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_tools_commercially_available)
+            text:
+                ifabsent: string(with commercially available tools)
+            score:
+                ifabsent: float(3.0)
+
+    PV_DismantlingTools_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_tools_proprietary)
+            text:
+                ifabsent: string(with proprietary tools)
+            score:
+                ifabsent: float(2.0)
+
+    PV_DismantlingTools_CannotDismantle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_dismantling_tools_cannot)
+            text:
+                ifabsent: string(Cannot be dismantled)
+            score:
+                ifabsent: float(0.0)
+
+    # P5: RECYCLABILITY RATE - PV specific with 5 questions
+    PV_RecyclabilityRate_Parameter:
+        is_a: ParameterSpecification
+        description: Recyclability rate parameter for PV panels - specific to PV product and priority parts
+        attributes:
+            id:
+                ifabsent: string(P5_recyclability_rate)
+            name:
+                ifabsent: string(Recyclability rate)
+            questions:
+                range: PV_RecyclabilityRateQuestion
+                multivalued: true
+                inlined: true
+
+    PV_RecyclabilityRateQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - PV_Q5_1_ProductRecyclability
+            - PV_Q5_2_1_AlFrameRecyclability
+            - PV_Q5_2_2_SiWaferRecyclability
+            - PV_Q5_2_3_CablesRecyclability
+            - PV_Q5_2_4_JunctionBoxRecyclability
+
+    PV_Q5_1_ProductRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.1)
+            text:
+                ifabsent: string(Recyclability rate of product)
+            weight:
+                ifabsent: float(0.3)
+            answer_options:
+                range: PV_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q5_2_1_AlFrameRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.2.1)
+            text:
+                ifabsent: string(Recyclability rate of Al frame)
+            weight:
+                ifabsent: float(0.2)
+            answer_options:
+                range: PV_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q5_2_2_SiWaferRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.2.2)
+            text:
+                ifabsent: string(Recyclability rate of silicon wafer)
+            weight:
+                ifabsent: float(0.2)
+            answer_options:
+                range: PV_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q5_2_3_CablesRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.2.3)
+            text:
+                ifabsent: string(Recyclability rate of cables (Cu))
+            weight:
+                ifabsent: float(0.15)
+            answer_options:
+                range: PV_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_Q5_2_4_JunctionBoxRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.2.4)
+            text:
+                ifabsent: string(Recyclability rate of junction box (Cu))
+            weight:
+                ifabsent: float(0.15)
+            answer_options:
+                range: PV_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    PV_RecyclabilityRateAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - PV_RecRate_MoreThan60
+            - PV_RecRate_Between50And60
+            - PV_RecRate_Below50
+            - PV_RecRate_CannotRecycle
+            - PV_RecRate_DataNotAvailable
+
+    PV_RecRate_MoreThan60:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_rec_rate_more_than_60)
+            text:
+                ifabsent: string(More than 60%)
+            score:
+                ifabsent: float(5.0)
+
+    PV_RecRate_Between50And60:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_rec_rate_50_to_60)
+            text:
+                ifabsent: string(Between 60-50%)
+            score:
+                ifabsent: float(3.0)
+
+    PV_RecRate_Below50:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_rec_rate_below_50)
+            text:
+                ifabsent: string(Below 50%)
+            score:
+                ifabsent: float(1.0)
+
+    PV_RecRate_CannotRecycle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_rec_rate_cannot_recycle)
+            text:
+                ifabsent: string(Cannot be recycled)
+            score:
+                ifabsent: float(0.0)
+
+    PV_RecRate_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(pv_rec_rate_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # PV-SPECIFIC CONFIGURATION
+    # ============================================
+
+    REcycle_Configuration:
+        is_a: IndicatorProductConfiguration
+        description: Base configuration for REcycle indicator
+        abstract: true
+        attributes:
+            indicator_type:
+                ifabsent: IndicatorType(REcycle)
+
+    # PV-specific configuration referencing shared parameters
+    REcycle_PV_Config:
+        is_a: REcycle_Configuration
+        description: Configuration for REcycle indicator specifically for PV panels
+        attributes:
+            id:
+                ifabsent: string(REcycle_PV)
+            product_category:
+                ifabsent: ProductCategoryType(PV)
+            name:
+                ifabsent: string(Recyclability Index for PV Panels)
+            parameter_applications:
+                inlined_as_list: true
+                inlined: true
+                ifabsent:
+                    - parameter_ref: P1_documentation
+                      weight: 0.02
+                    - parameter_ref: P2_material_composition
+                      weight: 0.02
+                    - parameter_ref: P3_depollution
+                      weight: 0.04
+                    - parameter_ref: P4_dismantling
+                      weight: 0.04
+                    - parameter_ref: P5_recyclability_rate
+                      weight: 0.08

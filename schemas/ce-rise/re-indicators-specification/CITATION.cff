@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+title: CE-RISE RE-Indicators, Specification Data Model
+type: software
+doi: 10.5281/zenodo.17610026
+authors:
+  - given-names: Riccardo
+    family-names: Boero
+    email: ribo@nilu.no
+    orcid: 'https://orcid.org/0000-0002-7468-9096'
+    affiliation: NILU
+  - given-names: Joana F.
+    family-names: Morgado
+    orcid: 'https://orcid.org/0000-0002-2930-2534'
+    affiliation: EMPA
+  - given-names: Setenay
+    family-names: Saglam
+    orcid: 'https://orcid.org/0009-0001-8731-199X'
+    affiliation: EMPA
+  - given-names: Smriti Anand
+    family-names: Jha
+    orcid: 'https://orcid.org/0009-0004-2579-8204'
+    affiliation: EMPA
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.17610026
+    description: This DOI represents all software versions.
+repository-code: 'https://codeberg.org/CE-RISE-models/re-indicators-specification'
+url: 'https://ce-rise-models.codeberg.page/re-indicators-specification/'
+abstract: >-
+  This repository provides the data model specifying the RE-indicators in the CE-RISE project.
+keywords:
+  - CE-RISE
+  - Data Model
+  - Ontology
+  - Open Source
+  - Open Science
+  - Digital Product Passport
+license: CC-BY-NC-4.0

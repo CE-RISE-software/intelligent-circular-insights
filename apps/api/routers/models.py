@@ -37,6 +37,10 @@ def catalog(bundle: Annotated[ProviderBundle, Depends(get_bundle)]) -> dict[str,
                 "layer": m.layer,
                 "summary": m.summary,
                 "url": m.url,
+                "version": m.version,
+                "licence": m.licence,
+                "namespace": m.namespace,
+                "class_count": m.class_count,
                 "keywords": list(m.keywords),
             }
             for m in models

@@ -1,0 +1,50 @@
+{
+  "title": "CE-RISE Product System Data Model",
+  "description": "A reusable, source-agnostic data model for defining life cycle assessment product systems. It represents calculation-specific assemblies through versioned references to life cycle inventory datasets and selected activities, together with reference-flow specifications, scope, provenance, and optional utility records.",
+  "license": "CC-BY-NC-4.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Boero, Riccardo",
+      "affiliation": "NILU",
+      "orcid": "0000-0002-7468-9096"
+    },
+    {
+      "name": "Mintjes, Berend",
+      "affiliation": "Leiden University",
+      "orcid": "0009-0008-3997-4351"
+    },
+    {
+      "name": "Barilli, Francesco",
+      "affiliation": "Empa",
+      "orcid": "0009-0008-1189-0260"
+    },
+    {
+      "name": "Hischier, Roland",
+      "affiliation": "Empa",
+      "orcid": "0000-0002-1084-7665"
+    }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Data Model",
+    "Product System",
+    "Life Cycle Inventory",
+    "Digital Product Passport",
+    "Digital Material Passport"
+  ],
+  "communities": [
+    { "identifier": "ce-rise" },
+    { "identifier": "impact" }
+  ],
+  "grants": [
+    { "id": "101092281" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE-models/product-system",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

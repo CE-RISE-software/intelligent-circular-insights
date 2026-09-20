@@ -1,0 +1,25 @@
+name: Tag Pages Branch on Release
+
+on:
+    release:
+        types: [published]
+
+jobs:
+    tag-pages:
+        runs-on: codeberg-tiny
+        steps:
+            - name: Checkout pages branch
+              uses: actions/checkout@v4
+              with:
+                  ref: pages
+                  fetch-depth: 0
+
+            - name: Tag pages branch
+              run: |
+                  echo "Release event ref: $GITHUB_REF"
+                  ORIGINAL_TAG="${GITHUB_REF#refs/tags/}"
+                  PAGES_TAG="pages-${ORIGINAL_TAG}"
+
+                  echo "Creating pages-specific tag: ${PAGES_TAG}"
+                  git tag "${PAGES_TAG}"
+                  git push origin "${PAGES_TAG}"

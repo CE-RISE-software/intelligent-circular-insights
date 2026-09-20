@@ -1,0 +1,36 @@
+{
+  "title": "CE-RISE DP Record Custody",
+  "description": "Chain of custody and governance history model for DPP and DMP records, capturing custody events, custodian history, authorized transfers, and integrity evidence. Ensures forensic-level auditability and accountability.",
+  "license": "CC-BY-NC-4.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Boero, Riccardo",
+      "affiliation": "NILU",
+      "orcid": "0000-0002-7468-9096"
+    }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Data Model",
+    "Ontology",
+    "Open Source",
+    "Open Science",
+    "Digital Product Passport",
+    "Digital Material Passport"
+  ],
+  "communities": [
+    { "identifier": "ce-rise" },
+    { "identifier": "impact" }
+  ],
+  "grants": [
+    { "id": "101092281" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE-models/dp-record-custody",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

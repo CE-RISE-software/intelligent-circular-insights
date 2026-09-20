@@ -1,0 +1,1194 @@
+id: https://ce-rise-models.codeberg.page/product-profile/
+name: product-profile
+title: CE-RISE Product Profile Data Model
+description: >
+    Core data model defining the mandatory Product Profile for Digital Product Passports,
+    including product attributes, manufacturer details, and traceability information.
+license: CC BY-NC 4.0
+version: 0.2.0
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    prod_prof: https://ce-rise-models.codeberg.page/product-profile/
+    xsd: http://www.w3.org/2001/XMLSchema#
+    rdfs: http://www.w3.org/2000/01/rdf-schema#
+    gs1: https://ref.gs1.org/voc/
+    eu_country: http://publications.europa.eu/resource/authority/country/
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+    om: http://www.ontology-of-units-of-measure.org/resource/om-2/
+
+default_prefix: prod_prof
+default_range: string
+
+imports:
+    - linkml:types
+    - https://codeberg.org/CE-RISE-models/uncertainty-quantification/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/metrological-traceability/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/data-quality-framework/raw/tag/pages-v0.0.3/generated/schema
+
+slots:
+    # Core identification slots with domain relationships
+    lot_batch_number_value:
+        description: "Lot / batch number value"
+        range: string
+        annotations:
+            owl.filler: prod_prof:lot_batch_number_value
+
+    serial_number_value:
+        description: "Serial number value"
+        range: string
+        annotations:
+            owl.filler: prod_prof:serial_number_value
+            references: "Jensen et al.; CIRPASS; Battery Pass; CE-RISE Deliverable 1.1"
+
+    gtin_value:
+        description: "Global Trade Item Number value"
+        range: string
+        annotations:
+            owl.filler: gs1:gtin
+            references: "ESPR; CIRPASS; King et al."
+
+    images_value:
+        description: "Product images for branding/visual identification - comma-separated list of image URLs"
+        range: string
+        pattern: "^https?://.*\\.(jpg|jpeg|png|gif|bmp|webp)(,\\s*https?://.*\\.(jpg|jpeg|png|gif|bmp|webp))*$"
+        annotations:
+            owl.filler: prod_prof:imagesValue
+            references: "CIRPASS"
+
+    type_value:
+        description: "Product type/classification - 3-digit numeric code from GTIN-14 company prefix or alphanumeric classification code"
+        range: string
+        pattern: "^[0-9]{3}|[A-Z0-9]{2,10}$"
+        annotations:
+            owl.filler: prod_prof:typeValue
+
+    # Basic product characteristics for any product type
+
+    # Physical dimensions and weight - standardized units
+    weight_value:
+        description: "Product weight in grams (supports scientific notation, e.g., 150, 2500, 4.5e7)"
+        range: string
+        pattern: "^\\d+(\\.\\d+)?(e[+-]?\\d+)?$"
+        annotations:
+            owl.filler: prod_prof:weightValue
+            references: "ESPR; CE-RISE Deliverable 1.1"
+
+    volume_solid_value:
+        description: "Volume for solid products in cubic millimeters (supports scientific notation, e.g., 1000, 2.5e6)"
+        range: string
+        pattern: "^\\d+(\\.\\d+)?(e[+-]?\\d+)?$"
+        annotations:
+            owl.filler: prod_prof:volumeSolidValue
+            references: "King et al."
+
+    volume_liquid_value:
+        description: "Volume for liquid products in milliliters (supports scientific notation, e.g., 500, 1.2e3)"
+        range: string
+        pattern: "^\\d+(\\.\\d+)?(e[+-]?\\d+)?$"
+        annotations:
+            owl.filler: prod_prof:volumeLiquidValue
+            references: "King et al."
+
+    dimensions_value:
+        description: "Deprecated legacy compact product dimensions in millimeters as LxWxH. Use physical_dimensions for new data."
+        range: string
+        pattern: "^\\d+(\\.\\d+)?(e[+-]?\\d+)?x\\d+(\\.\\d+)?(e[+-]?\\d+)?x\\d+(\\.\\d+)?(e[+-]?\\d+)?$"
+        deprecated: "Use physical_dimensions for new data."
+        annotations:
+            owl.filler: prod_prof:dimensionsValue
+
+    # Material identification using structured JSON format
+    materials_composition_value:
+        description: "JSON array of materials with composition percentages and country codes (ISO 3166-1 alpha-2)"
+        range: string
+        pattern: "^\\[\\s*\\{\\s*[\"']material[\"']\\s*:\\s*[\"'][^\"']+[\"']\\s*,\\s*[\"']percentage[\"']\\s*:\\s*\\d+(\\.\\d+)?\\s*,\\s*[\"']country[\"']\\s*:\\s*[\"'][A-Z]{2}[\"']\\s*\\}(\\s*,\\s*\\{\\s*[\"']material[\"']\\s*:\\s*[\"'][^\"']+[\"']\\s*,\\s*[\"']percentage[\"']\\s*:\\s*\\d+(\\.\\d+)?\\s*,\\s*[\"']country[\"']\\s*:\\s*[\"'][A-Z]{2}[\"']\\s*\\})*\\s*\\]$"
+        annotations:
+            owl.filler: prod_prof:materialsCompositionValue
+
+    unspsc_code_value:
+        description: "Optional product-level UNSPSC (United Nations Standard Products and Services Code) 8-digit classification code, separate from material composition"
+        range: string
+        pattern: "^\\d{8}$"
+        multivalued: true
+        annotations:
+            owl.filler: prod_prof:unspscCodeValue
+            references: "UNSPSC"
+
+    cas_registry_number_value:
+        description: "Optional CAS Registry Number for chemical substances (format: XXXXX-XX-X)"
+        range: string
+        pattern: "^\\d{2,7}-\\d{2}-\\d$"
+        annotations:
+            owl.filler: prod_prof:casRegistryNumberValue
+
+    iso_standard_reference_value:
+        description: "Optional ISO standard reference for technical materials (e.g., ISO 21305 for plastics)"
+        range: string
+        annotations:
+            owl.filler: prod_prof:isoStandardReferenceValue
+
+    # Regulatory categories at product entry
+    product_category_value:
+        description: "Deprecated generic product category. Use unspsc_code_value or gpc_code_value for standardized product classification."
+        range: string
+        deprecated: "Use unspsc_code_value or gpc_code_value for standardized product classification."
+        annotations:
+            owl.filler: prod_prof:productCategoryValue
+
+    gpc_code_value:
+        description: "Optional GS1 Global Product Classification (GPC) Brick code for product classification"
+        range: string
+        pattern: "^\\d{8}$"
+        annotations:
+            owl.filler: prod_prof:gpcCodeValue
+            references: "GS1 Global Product Classification (GPC)"
+
+    safety_classification_value:
+        description: "Optional safety classification when no applicable domain-specific classification is available"
+        range: string
+        annotations:
+            owl.filler: prod_prof:safetyClassificationValue
+
+    ghs_classification_value:
+        description: "Optional UN GHS hazard class and category for chemical products"
+        range: string
+        multivalued: true
+        annotations:
+            owl.filler: prod_prof:ghsClassificationValue
+            references: "UN GHS; Regulation (EC) No 1272/2008 (CLP)"
+
+    ce_marking_category_value:
+        description: "Deprecated. Represent applicable EU harmonisation legislation, conformity statements, and supporting evidence in the compliance-and-standards model."
+        range: string
+        deprecated: "Use the compliance-and-standards model for CE marking compliance information."
+        annotations:
+            owl.filler: prod_prof:ceMarkingCategoryValue
+            references: "EU harmonisation legislation"
+
+    # Organization identification
+    organization_gln_value:
+        description: "Organization GLN (Global Location Number) - 13-digit GS1 identifier for the legal entity"
+        range: string
+        pattern: "^[0-9]{13}$"
+        annotations:
+            owl.filler: prod_prof:organizationGlnValue
+
+    lei_code_value:
+        description: "Legal Entity Identifier - 20-character ISO 17442 identifier"
+        range: string
+        pattern: "^[A-Z0-9]{18}[0-9]{2}$"
+        annotations:
+            owl.filler: prod_prof:leiCodeValue
+
+    legal_name_value:
+        description: "Legal name of the organization"
+        range: string
+        annotations:
+            owl.filler: prod_prof:legalNameValue
+            references: "ESPR; CIRPASS"
+
+    vat_number_value:
+        description: "VAT registration number of the manufacturer legal entity represented by this OrganizationEntity"
+        range: string
+        annotations:
+            owl.filler: prod_prof:vatNumberValue
+
+    company_registration_value:
+        description: "Local company registration number"
+        range: string
+        annotations:
+            owl.filler: prod_prof:companyRegistrationValue
+
+    country_of_incorporation_value:
+        description: "Country of incorporation using EU Publications Office 3-character country codes"
+        range: string
+        pattern: "^[A-Z]{3}$"
+        annotations:
+            owl.filler: eu_country:countryOfIncorporationValue
+
+    # Facility identification
+    facility_gln_value:
+        description: "Facility GLN (Global Location Number) - 13-digit GS1 identifier for the physical facility"
+        range: string
+        pattern: "^[0-9]{13}$"
+        annotations:
+            owl.filler: prod_prof:facilityGlnValue
+            references: "ESPR; CIRPASS; King et al."
+
+    parent_gln_value:
+        description: "Parent organization GLN - links facility to parent organization"
+        range: string
+        pattern: "^[0-9]{13}$"
+        annotations:
+            owl.filler: prod_prof:parentGlnValue
+
+    osid_value:
+        description: "Open Supply Hub ID for facility verification"
+        range: string
+        annotations:
+            owl.filler: prod_prof:osidValue
+
+    facility_name_value:
+        description: "Name of the manufacturing facility"
+        range: string
+        annotations:
+            owl.filler: prod_prof:facilityNameValue
+
+    facility_type_value:
+        description: "Type of facility - MANUFACTURING, ASSEMBLY, PACKAGING, TESTING, etc."
+        range: string
+        annotations:
+            owl.filler: prod_prof:facilityTypeValue
+
+    coordinates_value:
+        description: "GPS coordinates of the facility (latitude,longitude)"
+        range: string
+        pattern: "^-?[0-9]{1,2}\\.[0-9]+,-?[0-9]{1,3}\\.[0-9]+$"
+        annotations:
+            owl.filler: prod_prof:coordinatesValue
+
+    eori_number_value:
+        description: "EORI number value - 2-letter country code followed by up to 15 alphanumeric characters (e.g., GB123456789000, DE987654321)"
+        range: string
+        pattern: "^[A-Z]{2}[A-Z0-9]{1,15}$"
+        annotations:
+            owl.filler: prod_prof:eoriNumberValue
+            references: "ESPR; CIRPASS; Article Reference: Annex III g)"
+
+    # Customs documentation fields
+    customs_document_type_value:
+        description: "Type of customs document (e.g., MRN, declaration ID, customs certificate)"
+        range: string
+        annotations:
+            owl.filler: prod_prof:customsDocumentTypeValue
+
+    customs_document_id_value:
+        description: "Unique identifier of the customs document"
+        range: string
+        annotations:
+            owl.filler: prod_prof:customsDocumentIdValue
+
+    customs_issuing_authority_value:
+        description: "Authority that issued the customs document"
+        range: string
+        annotations:
+            owl.filler: prod_prof:customsIssuingAuthorityValue
+
+    customs_document_urls_value:
+        description: "URLs or references to digital copies of customs documents (comma-separated)"
+        range: string
+        pattern: "^https://.*\\.(pdf|doc|docx|jpg|jpeg|png|gif|bmp|webp)(,\\s*https://.*\\.(pdf|doc|docx|jpg|jpeg|png|gif|bmp|webp))*$"
+        annotations:
+            owl.filler: prod_prof:customsDocumentUrlsValue
+
+    # Operation fields
+    operation_type_value:
+        description: "Type of import/export operation (IMPORT, EXPORT, TRANSIT, RE_EXPORT)"
+        range: string
+        pattern: "^(IMPORT|EXPORT|TRANSIT|RE_EXPORT)$"
+        annotations:
+            owl.filler: prod_prof:operationTypeValue
+
+    operation_date_value:
+        description: "Date of the import/export operation (ISO 8601 format)"
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}:\\d{2}(Z|[+-]\\d{2}:\\d{2}))?$"
+        annotations:
+            owl.filler: prod_prof:operationDateValue
+            references: "CIRPASS"
+
+    shipment_transaction_id_value:
+        description: "Unique identifier for the shipment or transaction"
+        range: string
+        annotations:
+            owl.filler: prod_prof:shipmentTransactionIdValue
+
+    operation_quantities_value:
+        description: "Quantities involved in the operation with units (e.g., 1000 kg, 500 pieces)"
+        range: string
+        annotations:
+            owl.filler: prod_prof:operationQuantitiesValue
+
+    incoterms_value:
+        description: "International commercial terms (e.g., FOB, CIF, EXW, DDP)"
+        range: string
+        pattern: "^(EXW|FCA|FAS|FOB|CFR|CIF|CPT|CIP|DAT|DAP|DDP)$"
+        annotations:
+            owl.filler: prod_prof:incotermsValue
+
+    operation_value_amount_value:
+        description: "Monetary value of the operation with currency code (e.g., 15000.00 EUR)"
+        range: string
+        pattern: "^\\d+(\\.\\d{2})?\\s+[A-Z]{3}$"
+        annotations:
+            owl.filler: prod_prof:operationValueAmountValue
+
+    # Jurisdiction field
+    jurisdiction_country_value:
+        description: "Country of importer's legal establishment using EU Publications Office 3-character country codes"
+        range: string
+        pattern: "^[A-Z]{3}$"
+        annotations:
+            owl.filler: eu_country:jurisdictionCountryValue
+
+    # Tariff classification fields
+    hs_code_value:
+        description: "6-digit Harmonized System code for international trade classification"
+        range: string
+        pattern: "^[0-9]{6}$"
+        annotations:
+            owl.filler: prod_prof:hsCodeValue
+
+    cn_code_value:
+        description: "8-digit Combined Nomenclature code used in EU customs"
+        range: string
+        pattern: "^[0-9]{8}$"
+        annotations:
+            owl.filler: prod_prof:cnCodeValue
+
+    taric_code_value:
+        description: "10-digit TARIC (Integrated Tariff of European Communities) code"
+        range: string
+        pattern: "^[0-9]{10}$"
+        annotations:
+            owl.filler: prod_prof:taricCodeValue
+
+    tariff_description_value:
+        description: "Human-readable description of the tariff classification"
+        range: string
+        annotations:
+            owl.filler: prod_prof:tariffDescriptionValue
+
+    duty_rate_value:
+        description: "Applied customs duty rate as percentage (e.g., 12.5)"
+        range: float
+        annotations:
+            owl.filler: prod_prof:dutyRateValue
+
+    # Border crossing fields
+    entry_port_code_value:
+        description: "UN/LOCODE port/airport code where goods entered (e.g., DEHAM, NLRTM)"
+        range: string
+        pattern: "^[A-Z]{2}[A-Z0-9]{3}$"
+        annotations:
+            owl.filler: prod_prof:entryPortCodeValue
+
+    exit_port_code_value:
+        description: "UN/LOCODE port/airport code where goods exited (e.g., GBFXT, FRMRS)"
+        range: string
+        pattern: "^[A-Z]{2}[A-Z0-9]{3}$"
+        annotations:
+            owl.filler: prod_prof:exitPortCodeValue
+
+    border_crossing_date_value:
+        description: "Actual border crossing timestamp in ISO 8601 format"
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|[+-]\\d{2}:\\d{2})$"
+        annotations:
+            owl.filler: prod_prof:borderCrossingDateValue
+            references: "CIRPASS"
+
+    customs_office_code_value:
+        description: "Responsible customs office code (e.g., DE005300 for Hamburg)"
+        range: string
+        pattern: "^[A-Z]{2}[0-9]{6}$"
+        annotations:
+            owl.filler: prod_prof:customsOfficeCodeValue
+
+    # AEO status fields
+    aeo_certificate_number_value:
+        description: "Authorized Economic Operator certificate number"
+        range: string
+        annotations:
+            owl.filler: prod_prof:aeoCertificateNumberValue
+
+    aeo_type_value:
+        description: "Type of AEO certification (AEOC, AEOS, AEOF)"
+        range: string
+        pattern: "^(AEOC|AEOS|AEOF)$"
+        annotations:
+            owl.filler: prod_prof:aeoTypeValue
+
+    aeo_validity_date_value:
+        description: "AEO certificate validity end date in ISO 8601 format"
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+        annotations:
+            owl.filler: prod_prof:aeoValidityDateValue
+
+    # Import authorization fields
+    import_license_number_value:
+        description: "Import license or permit number for restricted goods"
+        range: string
+        annotations:
+            owl.filler: prod_prof:importLicenseNumberValue
+
+    permit_type_value:
+        description: "Type of import permit or license required"
+        range: string
+        annotations:
+            owl.filler: prod_prof:permitTypeValue
+
+    permit_issuing_authority_value:
+        description: "Authority that issued the import permit or license"
+        range: string
+        annotations:
+            owl.filler: prod_prof:permitIssuingAuthorityValue
+
+    permit_validity_period_value:
+        description: "Permit validity period (start and end dates)"
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}/\\d{4}-\\d{2}-\\d{2}$"
+        annotations:
+            owl.filler: prod_prof:permitValidityPeriodValue
+
+    manufacturing_date_value:
+        description: "Manufacturing date (month and year)"
+        range: string
+        annotations:
+            owl.filler: prod_prof:manufacturingDateValue
+            references: "Jensen et al.; CIRPASS; Battery Pass; CE-RISE Deliverable 1.1"
+
+    name_value:
+        description: "Name of the manufacturer provided as a string"
+        range: string
+        annotations:
+            owl.filler: prod_prof:nameValue
+            references: "ESPR; CIRPASS; Article Reference: Art 21 6."
+
+    postal_address_value:
+        description: "Address of the manufacturer provided as a string"
+        range: string
+        annotations:
+            owl.filler: prod_prof:postalAddressValue
+            references: "ESPR; CIRPASS; Article Reference: Art 21 6."
+
+    registered_trade_name_or_trade_mark_value:
+        description: "Registered trade name or trademark - officially registered business name or trademark symbol"
+        range: string
+        annotations:
+            owl.filler: prod_prof:registeredTradeNameOrTradeMarkValue
+            references: "ESPR; CIRPASS; Article Reference: Art 21 6."
+
+    unique_facility_identifiers_value:
+        description: "Unique facility identifiers for locations or buildings in the value chain"
+        range: string
+        annotations:
+            owl.filler: prod_prof:uniqueFacilityIdentifiersValue
+            references: "ESPR; CIRPASS; King et al.; Article Reference: Art 11"
+
+    unique_operator_identifier_value:
+        description: "Unique operator identifier for value chain actors"
+        range: string
+        annotations:
+            owl.filler: prod_prof:uniqueOperatorIdentifierValue
+            references: "ESPR; Article Reference: Art 11"
+
+    unique_product_identifier_value:
+        description: "Unique product identifier - unambiguous identification enabling web link to product passport"
+        range: string
+        annotations:
+            owl.filler: prod_prof:uniqueProductIdentifierValue
+            references: "ESPR; CIRPASS; King et al.; Article Reference: Art 9 1."
+
+    website_value:
+        description: "Website of the manufacturer"
+        range: string
+        annotations:
+            owl.filler: prod_prof:websiteValue
+            references: "CIRPASS"
+
+    # Metadata slots
+    sql_identifier:
+        description: "Machine-friendly field name for databases"
+        range: string
+        annotations:
+            owl.filler: prod_prof:sqlIdentifier
+
+classes:
+    # Root class - Step 1: Base product identification
+    ProductIdentification:
+        class_uri: prod_prof:productIdentification
+        description: "Root class for product identification information"
+        annotations:
+            sql_identifier: "pro_prod_prof_root"
+
+    # Step 2: General product information (basic identifiers)
+    GeneralProductInformation:
+        is_a: ProductIdentification
+        class_uri: prod_prof:generalProductInformation
+        description: "General product information"
+        annotations:
+            sql_identifier: "pro_prod_prof_gen_info"
+
+    # Step 3: Manufacturing information
+    ManufacturersInformation:
+        is_a: ProductIdentification
+        class_uri: prod_prof:manufacturersInformation
+        description: "Information about the product manufacturer"
+        annotations:
+            sql_identifier: "pro_prod_prof_mfr_info"
+
+    # Step 4: Import/export information
+    InformationRelatedToTheImporter:
+        is_a: ProductIdentification
+        class_uri: prod_prof:informationRelatedToTheImporter
+        description: "Information related to the product importer"
+        annotations:
+            sql_identifier: "pro_prod_prof_imp_info"
+
+    # Step 5: Traceability through supply chain
+
+    # Step 6: Technical specifications
+    ProductSpecification:
+        is_a: ProductIdentification
+        class_uri: prod_prof:productSpecification
+        description: "Product specification details"
+        attributes:
+            uncertainty_statements:
+                description: "Optional uncertainty statements for measured, calculated, or reported product specification values"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: "pro_spec_info_uncertainty_statements"
+            traceability_statements:
+                description: "Optional metrological traceability statements for product specification values, measurements, methods, standards, calibrations, reference materials, or boundary definitions"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: "pro_spec_info_traceability_statements"
+            data_quality_assessments:
+                description: "Optional data quality assessments for product specification values, evidence, provenance, representativeness, completeness, or pedigree"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: "pro_spec_info_data_quality_assessments"
+        annotations:
+            sql_identifier: "pro_prod_prof_spec_info"
+
+    # Step 7: Additional specific information and DPP metadata
+    SpecificProductInformation:
+        is_a: ProductIdentification
+        class_uri: prod_prof:specificProductInformation
+        description: "Specific product information"
+        annotations:
+            sql_identifier: "pro_prod_prof_specific_info"
+
+    # Step 2 subclasses - General product information
+    LotBatchNumber:
+        is_a: GeneralProductInformation
+        class_uri: prod_prof:lot_batch_number
+        description: "Lot / batch number"
+        attributes:
+            lot_batch_number_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_gen_info_lot_batch"
+
+    GTIN14:
+        is_a: GeneralProductInformation
+        class_uri: prod_prof:GTIN-14
+        description: "Global Trade Item Number, 14-digit format"
+        comments:
+            - "There are 3 other GTIN formats (GTIN-8, -12, and -13). Leading zeros have to be added to be transformed into GTIN-14."
+        attributes:
+            gtin_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_gen_info_gtin14"
+
+    SerialNumber:
+        is_a: GeneralProductInformation
+        class_uri: prod_prof:Serial_number
+        description: "Serial number"
+        attributes:
+            serial_number_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_gen_info_serial_num"
+
+    ProductImages:
+        is_a: GeneralProductInformation
+        class_uri: prod_prof:productImages
+        description: "Product images for branding and visual identification"
+        comments:
+            - "Images stored as comma-separated list of image URLs (JPEG, PNG, GIF, BMP, WebP formats)"
+            - "Addresses product branding and visual identification requirement"
+        attributes:
+            images_value:
+                range: string
+                required: false
+                pattern: "^https?://.*\\.(jpg|jpeg|png|gif|bmp|webp)(,\\s*https?://.*\\.(jpg|jpeg|png|gif|bmp|webp))*$"
+        annotations:
+            sql_identifier: "pro_gen_info_images"
+
+    ProductType:
+        is_a: GeneralProductInformation
+        class_uri: prod_prof:productType
+        description: "Product type and classification"
+        comments:
+            - "3-digit numeric code from GTIN-14 company prefix (first 3 digits after country code) or alphanumeric classification code (2-10 characters)"
+            - "Addresses product classification system requirement"
+        attributes:
+            type_value:
+                range: string
+                required: false
+                pattern: "^[0-9]{3}|[A-Z0-9]{2,10}$"
+        annotations:
+            sql_identifier: "pro_gen_info_type"
+
+    UniqueProductIdentifier:
+        is_a: GeneralProductInformation
+        class_uri: prod_prof:uniqueProductIdentifier
+        description: "Unique product identifier enabling web link to product passport"
+        comments:
+            - "Article Reference: Art 9 1."
+            - "Individual trade items can be uniquely identified using a GTIN-14 plus serial number."
+            - "Mandatory: upcoming mandatory information based on ESPR and EU Battery Regulation"
+            - "Parameter Representation: Global Trade Identification Number; Relevant commodity codes; Serial and product number; ISO/IEC 15459-6"
+            - "Relevant Document: ESPR; CIRPASS; King et al."
+            - "Unambiguous identification of an individual product (Battery Pass). Unique string of characters for the identification of products that also enables a web link to the product passport (ESPR)."
+        attributes:
+            unique_product_identifier_value:
+                range: string
+                required: true
+        annotations:
+            sql_identifier: "pro_gen_info_unique_id"
+
+    # Step 3 subclasses - Manufacturer information (GS1-centric hierarchical model)
+    OrganizationEntity:
+        is_a: ManufacturersInformation
+        class_uri: prod_prof:organizationEntity
+        description: "Legal entity information with GS1 GLN as preferred identifier"
+        comments:
+            - "Hierarchical organization identification supporting GS1 GLN as primary standard"
+            - "Fallback support for LEI, VAT, and local registration numbers"
+            - "Addresses separation of legal entity from physical facilities"
+        attributes:
+            organization_gln_value:
+                range: string
+                required: false
+            lei_code_value:
+                range: string
+                required: false
+            legal_name_value:
+                range: string
+                required: false
+            vat_number_value:
+                range: string
+                required: false
+            company_registration_value:
+                range: string
+                required: false
+            country_of_incorporation_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_mfr_info_org_entity"
+
+    ManufacturingFacility:
+        is_a: ManufacturersInformation
+        class_uri: prod_prof:manufacturingFacility
+        description: "Physical manufacturing facility with GS1 GLN and hierarchical linking"
+        comments:
+            - "Physical facility identification separate from legal entity"
+            - "GS1 GLN preferred with parent organization linking"
+            - "Integration with Open Supply Hub for facility verification"
+            - "GPS coordinates for precise location tracking"
+        attributes:
+            facility_gln_value:
+                range: string
+                required: false
+            parent_gln_value:
+                range: string
+                required: false
+            osid_value:
+                range: string
+                required: false
+            facility_name_value:
+                range: string
+                required: false
+            facility_type_value:
+                range: string
+                required: false
+            coordinates_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_mfr_info_facility"
+
+    Name:
+        is_a: ManufacturersInformation
+        class_uri: prod_prof:name
+        description: "Name of the manufacturer"
+        comments:
+            - "Article Reference: Art 21 6."
+            - "Mandatory: current mandatory information"
+            - "Name of the manufacturer provided as a string."
+            - "Relevant Document: ESPR; CIRPASS"
+        attributes:
+            name_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_mfr_info_name"
+
+    ManufacturingDate:
+        is_a: ManufacturersInformation
+        class_uri: prod_prof:manufacturingDate
+        description: "Manufacturing date (month and year), suggested in form of manufacturing date codes"
+        comments:
+            - "Mandatory: upcoming mandatory information based on ESPR and EU Battery Regulation"
+            - "Manufacturing date (month and year), suggested in form of manufacturing date codes. (Battery Pass)"
+            - "Relevant Document: Jensen et al.; CIRPASS; Battery Pass; Deliverable 1.1"
+        attributes:
+            manufacturing_date_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_mfr_info_mfg_date"
+
+    PostalAddress:
+        is_a: ManufacturersInformation
+        class_uri: prod_prof:postalAddress
+        description: "Address of the manufacturer"
+        comments:
+            - "Address of the manufacturer provided as a string."
+            - "Article Reference: Art 21 6."
+            - "Mandatory: current mandatory information"
+            - "Relevant Document: ESPR; CIRPASS"
+        attributes:
+            postal_address_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_mfr_info_address"
+
+    RegisteredTradeNameOrTradeMark:
+        is_a: ManufacturersInformation
+        class_uri: prod_prof:registeredTradeNameOrTradeMark
+        description: "Registered trade name or trademark"
+        comments:
+            - "A name under which a business operates and conducts its commercial activities, officially registered with relevant government authorities.; A recognizable sign, phrase, or symbol that denotes a product or service and legally differentiates it from all others of its kind."
+            - "Article Reference: Art 21 6."
+            - "Mandatory: upcoming mandatory information based on ESPR and EU Battery Regulation"
+            - "Relevant Document: ESPR; CIRPASS"
+        attributes:
+            registered_trade_name_or_trade_mark_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_mfr_info_trade_name"
+
+    UniqueFacilityIdentifiers:
+        is_a: ManufacturersInformation
+        class_uri: prod_prof:uniqueFacilityIdentifiers
+        description: "Unique facility identifiers for locations or buildings in the value chain"
+        comments:
+            - "Article Reference: Art 11"
+            - "Mandatory: upcoming mandatory information based on ESPR and EU Battery Regulation"
+            - "Relevant Document: ESPR; CIRPASS; King et al."
+            - "Unique string of characters for the identification of locations or buildings involved in the value chain of a product or used by actors involved in the value chain of a product (ESPR)."
+        attributes:
+            unique_facility_identifiers_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_mfr_info_facility_ids"
+
+    UniqueOperatorIdentifier:
+        is_a: ManufacturersInformation
+        class_uri: prod_prof:uniqueOperatorIdentifier
+        description: "Unique operator identifier"
+        comments:
+            - "Article Reference: Art 11"
+            - "Mandatory: upcoming mandatory information based on ESPR and EU Battery Regulation"
+            - "Relevant Document: ESPR"
+        attributes:
+            unique_operator_identifier_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_mfr_info_operator_id"
+
+    Website:
+        is_a: ManufacturersInformation
+        class_uri: prod_prof:website
+        description: "Website of the manufacturer"
+        comments:
+            - "Mandatory: upcoming mandatory information based on ESPR and EU Battery Regulation"
+            - "Relevant Document: CIRPASS"
+            - "Website of the manufacturer."
+        attributes:
+            website_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_mfr_info_website"
+
+    # Step 4 subclasses - Importer information
+    EoriNumber:
+        is_a: InformationRelatedToTheImporter
+        class_uri: prod_prof:eoriNumber
+        description: "EORI number - European Union registration and identification number for import/export businesses"
+        comments:
+            - "Article Reference: Annex III g)"
+            - "Mandatory: upcoming mandatory information based on ESPR and EU Battery Regulation"
+            - "Relevant Document: ESPR; CIRPASS"
+            - "The European Union registration and identification number for businesses which undertake the import or export of goods into or out of the EU. (Wiki)"
+        attributes:
+            eori_number_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_imp_info_eori"
+
+    CustomsDocumentation:
+        is_a: InformationRelatedToTheImporter
+        class_uri: prod_prof:customsDocumentation
+        description: "Customs documents linked to import operations for verification and traceability"
+        comments:
+            - "Provides verifiable link between EORI and specific customs filings"
+            - "Supports audit trails and compliance verification"
+            - "Document types include MRN, declaration IDs, customs certificates"
+            - "URLs enable access to digital document copies"
+        attributes:
+            customs_document_type_value:
+                range: string
+                required: false
+            customs_document_id_value:
+                range: string
+                required: false
+            customs_issuing_authority_value:
+                range: string
+                required: false
+            customs_document_urls_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_imp_info_customs_docs"
+
+    ImportExportOperation:
+        is_a: InformationRelatedToTheImporter
+        class_uri: prod_prof:importExportOperation
+        description: "Individual import or export operation providing activity history for EORI holder"
+        comments:
+            - "Tracks specific trade operations with dates and transaction details"
+            - "Includes commercial terms (Incoterms) and monetary values"
+            - "Supports supply chain visibility and trade compliance"
+            - "Links to shipment tracking and customs processing"
+        attributes:
+            operation_type_value:
+                range: string
+                required: false
+            operation_date_value:
+                range: string
+                required: false
+            shipment_transaction_id_value:
+                range: string
+                required: false
+            operation_quantities_value:
+                range: string
+                required: false
+            incoterms_value:
+                range: string
+                required: false
+            operation_value_amount_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_imp_info_operation"
+
+    ImporterJurisdiction:
+        is_a: InformationRelatedToTheImporter
+        class_uri: prod_prof:importerJurisdiction
+        description: "Legal jurisdiction of importer's establishment for EORI validation"
+        comments:
+            - "Ensures EORI validation in correct national system"
+            - "Links to EU Publications Office country authority"
+            - "Required for cross-border trade compliance"
+            - "Supports multi-jurisdictional import operations"
+        attributes:
+            jurisdiction_country_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_imp_info_jurisdiction"
+
+    TariffClassification:
+        is_a: InformationRelatedToTheImporter
+        class_uri: prod_prof:tariffClassification
+        description: "Customs tariff classification codes for proper duty calculation and trade statistics"
+        comments:
+            - "HS codes are internationally standardized 6-digit classification system"
+            - "CN codes extend HS with 2 additional digits for EU-specific classification"
+            - "TARIC codes add 4 more digits for detailed EU tariff measures"
+            - "Essential for customs declarations and duty calculations"
+        attributes:
+            hs_code_value:
+                range: string
+                required: false
+            cn_code_value:
+                range: string
+                required: false
+            taric_code_value:
+                range: string
+                required: false
+            tariff_description_value:
+                range: string
+                required: false
+            duty_rate_value:
+                range: float
+                required: false
+        annotations:
+            sql_identifier: "pro_imp_info_tariff"
+
+    BorderCrossing:
+        is_a: InformationRelatedToTheImporter
+        class_uri: prod_prof:borderCrossing
+        description: "Border crossing and customs clearance location information"
+        comments:
+            - "UN/LOCODE standard port and airport codes for precise location tracking"
+            - "Customs office codes follow ISO format for responsible office identification"
+            - "Essential for supply chain traceability and customs audit trails"
+            - "Supports multi-modal transport tracking (sea, air, land, rail)"
+        attributes:
+            entry_port_code_value:
+                range: string
+                required: false
+            exit_port_code_value:
+                range: string
+                required: false
+            border_crossing_date_value:
+                range: string
+                required: false
+            customs_office_code_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_imp_info_border"
+
+    AEOStatus:
+        is_a: InformationRelatedToTheImporter
+        class_uri: prod_prof:aeoStatus
+        description: "Authorized Economic Operator certification for trusted trader status"
+        comments:
+            - "AEOC: Customs simplifications (reduced controls, priority treatment)"
+            - "AEOS: Security and safety benefits (reduced security checks)"
+            - "AEOF: Full AEO status combining both customs and security benefits"
+            - "Provides trade facilitation and reduced compliance burden"
+        attributes:
+            aeo_certificate_number_value:
+                range: string
+                required: false
+            aeo_type_value:
+                range: string
+                required: false
+            aeo_validity_date_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_imp_info_aeo"
+
+    ImportAuthorization:
+        is_a: InformationRelatedToTheImporter
+        class_uri: prod_prof:importAuthorization
+        description: "Import licenses and permits required for restricted or controlled goods"
+        comments:
+            - "Required for products subject to import restrictions or quotas"
+            - "Includes licenses for dual-use goods, pharmaceuticals, chemicals, etc."
+            - "Links to national and EU-level authorization systems"
+            - "Essential for compliance with trade control regulations"
+        attributes:
+            import_license_number_value:
+                range: string
+                required: false
+            permit_type_value:
+                range: string
+                required: false
+            permit_issuing_authority_value:
+                range: string
+                required: false
+            permit_validity_period_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_imp_info_auth"
+
+    # Step 4 subclasses - Product specifications
+
+    PhysicalAttributes:
+        is_a: ProductSpecification
+        class_uri: prod_prof:physicalAttributes
+        description: "Core physical characteristics of the product at system entry"
+        comments:
+            - "Universal physical attributes applicable to any product type"
+            - "Standardized units: weight in grams; legacy compact dimensions in millimeters"
+            - "Separate volume measures for solids (mm³) and liquids (ml)"
+            - "Scientific notation supported for very large/small values"
+        attributes:
+            weight_value:
+                range: string
+                required: false
+            volume_solid_value:
+                range: string
+                required: false
+            volume_liquid_value:
+                range: string
+                required: false
+            dimensions_value:
+                range: string
+                required: false
+            physical_dimensions:
+                description: "Optional structured physical dimensions with an explicit unit for each reported measure"
+                range: PhysicalDimensions
+                required: false
+                annotations:
+                    owl.filler: prod_prof:physicalDimensions
+                    sql_identifier: "pro_spec_info_physical_dimensions"
+        annotations:
+            sql_identifier: "pro_spec_info_physical"
+
+    PhysicalDimensions:
+        class_uri: prod_prof:physicalDimensions
+        description: "Structured linear dimensions of a product"
+        comments:
+            - "Each reported dimension is a length measurement with a numerical value and OM 2 unit reference"
+            - "SI units are preferred but other units can be represented through their OM 2 URI"
+        attributes:
+            length:
+                description: "Overall product length"
+                range: LengthMeasurement
+                required: false
+                annotations:
+                    sql_identifier: "pro_physical_dimensions_length"
+            width:
+                description: "Overall product width"
+                range: LengthMeasurement
+                required: false
+                annotations:
+                    sql_identifier: "pro_physical_dimensions_width"
+            height:
+                description: "Overall product height"
+                range: LengthMeasurement
+                required: false
+                annotations:
+                    sql_identifier: "pro_physical_dimensions_height"
+            depth:
+                description: "Overall product depth"
+                range: LengthMeasurement
+                required: false
+                annotations:
+                    sql_identifier: "pro_physical_dimensions_depth"
+            diameter:
+                description: "Overall product diameter"
+                range: LengthMeasurement
+                required: false
+                annotations:
+                    sql_identifier: "pro_physical_dimensions_diameter"
+            thickness:
+                description: "Overall product thickness"
+                range: LengthMeasurement
+                required: false
+                annotations:
+                    sql_identifier: "pro_physical_dimensions_thickness"
+        annotations:
+            references: "ISO 80000-1; BIPM SI Brochure; OM 2"
+            sql_identifier: "pro_physical_dimensions"
+
+    LengthMeasurement:
+        class_uri: om:Measure
+        description: "A linear measurement with a numerical value and unit reference"
+        attributes:
+            numerical_value:
+                description: "Numerical value of the length measurement"
+                range: float
+                required: true
+                annotations:
+                    owl.filler: om:hasNumericalValue
+                    sql_identifier: "pro_length_measurement_numerical_value"
+            unit_reference:
+                description: "OM 2 URI identifying the unit of the length measurement"
+                range: uri
+                required: true
+                annotations:
+                    owl.filler: om:hasUnit
+                    sql_identifier: "pro_length_measurement_unit_reference"
+        annotations:
+            references: "ISO 80000-1; BIPM SI Brochure; OM 2"
+            sql_identifier: "pro_length_measurement"
+
+    MaterialIdentification:
+        is_a: ProductSpecification
+        class_uri: prod_prof:materialIdentification
+        description: "Structured material composition with standardized nomenclature and origin tracking"
+        comments:
+            - "JSON array structure for precise material composition tracking"
+            - "Each material object contains: name, percentage, and ISO 3166-1 alpha-2 country code"
+            - "Uses standardized material nomenclature for universal applicability"
+            - "Enables detailed material sourcing and composition analysis"
+            - "Example: [{'material':'Cotton','percentage':80,'country':'TR'},{'material':'Polyester','percentage':20,'country':'CN'}]"
+            - "Optional classification standards: UNSPSC codes, CAS registry numbers, ISO standard references"
+        attributes:
+            materials_composition_value:
+                range: string
+                required: false
+            unspsc_code_value:
+                range: string
+                multivalued: true
+                required: false
+            cas_registry_number_value:
+                range: string
+                required: false
+            iso_standard_reference_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_spec_info_materials"
+
+    RegulatoryClassification:
+        is_a: ProductSpecification
+        class_uri: prod_prof:regulatoryClassification
+        description: "Regulatory categories and classifications at product entry"
+        comments:
+            - "Basic regulatory framework applicable when product enters system"
+            - "Supports external GPC and GHS classifications"
+            - "CE marking compliance is represented in the compliance-and-standards model"
+            - "Avoids duplication with Step 1 ProductType (general product classification)"
+        attributes:
+            product_category_value:
+                range: string
+                required: false
+            gpc_code_value:
+                range: string
+                required: false
+            safety_classification_value:
+                range: string
+                required: false
+            ghs_classification_value:
+                range: string
+                multivalued: true
+                required: false
+            ce_marking_category_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "pro_spec_info_regulatory"

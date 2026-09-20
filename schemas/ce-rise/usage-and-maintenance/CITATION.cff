@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: CE-RISE Usage and Maintenance
+type: software
+doi: 10.5281/zenodo.17816062
+authors:
+  - given-names: Riccardo
+    family-names: Boero
+    email: ribo@nilu.no
+    orcid: 'https://orcid.org/0000-0002-7468-9096'
+    affiliation: NILU
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.17816062
+    description: This DOI represents all software versions.
+repository-code: 'https://codeberg.org/CE-RISE_models/usage-and-maintenance'
+url: 'https://ce-rise-models.codeberg.page/usage-and-maintenance/'
+abstract: >-
+  Repository for the CE-RISE Usage and Maintenance data model that captures the operational lifecycle of products through a mixed temporal approach: static reference information (instructions, schedules), accumulating state-based metrics (usage hours, performance), and discrete event-based records (maintenance, repairs). It enables comprehensive tracking of how products are used, maintained, and serviced throughout their operational life.
+keywords:
+  - CE-RISE
+  - Data Model
+  - Ontology
+  - Open Source
+  - Open Science
+  - Digital Product Passport
+license: CC-BY-NC-4.0

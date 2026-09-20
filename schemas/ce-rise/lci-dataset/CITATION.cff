@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+title: CE-RISE Life Cycle Inventory Dataset Data Model
+type: software
+doi: 10.5281/zenodo.22710170
+authors:
+  - given-names: Riccardo
+    family-names: Boero
+    email: ribo@nilu.no
+    orcid: 'https://orcid.org/0000-0002-7468-9096'
+    affiliation: NILU
+  - given-names: Berend
+    family-names: Mintjes
+    email: b.a.mintjes@cml.leidenuniv.nl
+    orcid: 'https://orcid.org/0009-0008-3997-4351'
+    affiliation: Leiden University
+  - given-names: Francesco
+    family-names: Barilli
+    email: francesco.barilli@empa.ch
+    orcid: 'https://orcid.org/0009-0008-1189-0260'
+    affiliation: Empa
+  - given-names: Roland
+    family-names: Hischier
+    email: roland.hischier@empa.ch
+    orcid: 'https://orcid.org/0000-0002-1084-7665'
+    affiliation: Empa
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22710170
+    description: This DOI represents all versions of the CE-RISE Life Cycle Inventory Dataset Data Model.
+repository-code: 'https://codeberg.org/CE-RISE-models/lci-dataset'
+url: 'https://ce-rise-models.codeberg.page/lci-dataset/'
+abstract: >-
+  A reusable, source-agnostic data model for life cycle inventory datasets.
+  It represents activities, flows, flow objects, lifecycle stages, locations,
+  classifications, source records, and quantitative exchange data for products,
+  materials, components, and assemblies.
+keywords:
+  - CE-RISE
+  - Data Model
+  - Life Cycle Inventory
+  - LCI Dataset
+  - Digital Product Passport
+  - Digital Material Passport
+license: CC-BY-NC-4.0

@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+title: CE-RISE Compliance and Standards
+type: software
+doi: 10.5281/zenodo.17938293
+authors:
+  - given-names: Riccardo
+    family-names: Boero
+    email: ribo@nilu.no
+    orcid: 'https://orcid.org/0000-0002-7468-9096'
+    affiliation: NILU
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.17938293
+    description: This DOI represents all software versions.
+repository-code: 'https://codeberg.org/CE-RISE-models/compliance-and-standards'
+url: 'https://ce-rise-models.codeberg.page/compliance-and-standards/'
+abstract: >-
+  Data model for regulatory compliance, standards, and conformity-related information
+  for products and materials, including applicable regulations and standards, commitments,
+  documentary evidence, process evidence, and structured regulatory information sheets.
+  Supports both Digital Product Passports (DPP) and Digital Material Passports (DMP).
+keywords:
+  - CE-RISE
+  - Compliance
+  - Standards
+  - Regulatory
+  - Conformity
+  - Digital Product Passport
+  - DPP
+  - Digital Material Passport
+  - DMP
+  - LinkML
+  - Ontology
+license: CC-BY-NC-4.0

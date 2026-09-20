@@ -1,0 +1,45 @@
+{
+  "title": "CE-RISE Integrated Life Cycle Analysis",
+  "description": "Flexible framework for capturing LCA results across environmental, social, and economic dimensions, including methodological metadata, impact assessment results, and data quality indicators. The model provides a reference-based system for indicators and methods, supporting multiple LCA analyses per assessed system. Applicable to both Digital Product Passports (DPP) and Digital Material Passports (DMP).",
+  "license": "CC-BY-NC-4.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Boero, Riccardo",
+      "affiliation": "NILU",
+      "orcid": "0000-0002-7468-9096"
+    }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Life Cycle Assessment",
+    "LCA",
+    "Triple Bottom Line",
+    "Environmental Impact",
+    "Social Impact",
+    "Economic Impact",
+    "Data Model",
+    "Ontology",
+    "Open Source",
+    "Open Science",
+    "Digital Product Passport",
+    "DPP",
+    "Digital Material Passport",
+    "DMP",
+    "Sustainability Assessment"
+  ],
+  "communities": [
+    { "identifier": "ce-rise" },
+    { "identifier": "impact" }
+  ],
+  "grants": [
+    { "id": "101092281" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE_models/integrated-lca",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

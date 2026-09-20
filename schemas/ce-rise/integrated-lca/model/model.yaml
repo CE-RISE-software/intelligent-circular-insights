@@ -1,0 +1,1375 @@
+id: https://ce-rise-models.codeberg.page/integrated-lca/
+name: integrated-lca
+title: CE-RISE Integrated Life Cycle Analysis Data Model
+description: >
+    Flexible framework for reproducible life cycle assessment across environmental, social, and economic dimensions,
+    including study metadata, versioned assessment inputs, toolchains, methods, results, and data quality indicators.
+    Supports both Digital Product Passports (DPP) and Digital Material Passports (DMP).
+license: CC BY-NC 4.0
+version: 0.2.0
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    lca: https://ce-rise-models.codeberg.page/integrated-lca/
+    xsd: http://www.w3.org/2001/XMLSchema#
+    rdfs: http://www.w3.org/2000/01/rdf-schema#
+    dcterms: http://purl.org/dc/terms/
+    foaf: http://xmlns.com/foaf/0.1/
+    prov: http://www.w3.org/ns/prov#
+    qudt: http://qudt.org/schema/qudt/
+    iso: https://www.iso.org/standard/
+    ilcd: http://lca.jrc.ec.europa.eu/ILCD/
+    schema: http://schema.org/
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+
+default_prefix: lca
+default_range: string
+
+imports:
+    - linkml:types
+    - https://codeberg.org/CE-RISE-models/uncertainty-quantification/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/metrological-traceability/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/data-quality-framework/raw/tag/pages-v0.0.3/generated/schema
+
+slots:
+    # Step 1: LCAStudyMetadata slots
+    study_identifier_value:
+        description: "Unique UUID identifier for this LCA analysis instance"
+        range: string
+        required: true
+        annotations:
+            owl.filler: lca:study_identifier
+            sql_identifier: lca_study_identifier
+
+    study_name_value:
+        description: "Name or title of the LCA study"
+        range: string
+        annotations:
+            owl.filler: dcterms:title
+            sql_identifier: lca_study_name
+
+    study_date_value:
+        description: "Date when the LCA study was conducted"
+        range: date
+        annotations:
+            owl.filler: dcterms:date
+            sql_identifier: lca_study_date
+
+    study_scope_value:
+        description: "Scope, goal, and intended application of the LCA study"
+        range: string
+        annotations:
+            owl.filler: lca:study_scope
+            sql_identifier: lca_study_scope
+
+    functional_unit_value:
+        description: "Reference basis for all calculations (e.g., 1 kg of product)"
+        range: string
+        annotations:
+            owl.filler: ilcd:functionalUnit
+            sql_identifier: lca_study_functional_unit
+            references: "Berger et al.; CIRPASS"
+
+    system_boundaries_value:
+        description: "System boundaries definition (cradle-to-gate, cradle-to-grave, gate-to-gate)"
+        range: string
+        annotations:
+            owl.filler: ilcd:systemBoundaries
+            sql_identifier: lca_study_system_boundaries
+            references: "Berger et al.; King et al."
+
+    # Commissioner Information slots
+    commissioner_organization_name_value:
+        description: "Name of the organization that commissioned the LCA study"
+        range: string
+        annotations:
+            owl.filler: foaf:Organization
+            sql_identifier: lca_commissioner_org_name
+
+    commissioner_contact_value:
+        description: "Contact information for the commissioning organization"
+        range: string
+        annotations:
+            owl.filler: schema:ContactPoint
+            sql_identifier: lca_commissioner_contact
+
+    # Practitioner Information slots
+    practitioner_organization_name_value:
+        description: "Name of the organization conducting the LCA"
+        range: string
+        annotations:
+            owl.filler: prov:Agent
+            sql_identifier: lca_practitioner_org_name
+
+    practitioner_author_name_value:
+        description: "Name of the LCA study author(s)"
+        range: string
+        annotations:
+            owl.filler: dcterms:creator
+            sql_identifier: lca_practitioner_author
+
+    practitioner_contact_value:
+        description: "Contact information for the LCA practitioner"
+        range: string
+        annotations:
+            owl.filler: schema:ContactPoint
+            sql_identifier: lca_practitioner_contact
+
+    # Software Information slots
+    software_name_value:
+        description: "Name of the LCA software used (SimaPro, openLCA, GaBi, Brightway, etc.)"
+        range: string
+        annotations:
+            owl.filler: prov:SoftwareAgent
+            sql_identifier: lca_software_name
+
+    software_version_value:
+        description: "Version of the LCA software"
+        range: string
+        annotations:
+            owl.filler: schema:softwareVersion
+            sql_identifier: lca_software_version
+
+    calculation_timestamp_value:
+        description: "Timestamp when LCA calculations were performed"
+        range: datetime
+        annotations:
+            owl.filler: prov:generatedAtTime
+            sql_identifier: lca_calculation_timestamp
+
+    # Database Information slots
+    background_database_value:
+        description: "Name of background database used (ecoinvent, GaBi, Agri-footprint, etc.)"
+        range: string
+        annotations:
+            owl.filler: dcterms:source
+            sql_identifier: lca_background_database
+            references: "Berger et al.; CIRPASS"
+
+    database_version_value:
+        description: "Version of the background database"
+        range: string
+        annotations:
+            owl.filler: dcterms:hasVersion
+            sql_identifier: lca_database_version
+
+    data_quality_info_value:
+        description: "Information about data quality from the database"
+        range: string
+        annotations:
+            owl.filler: ilcd:dataQualityIndicator
+            sql_identifier: lca_data_quality_info
+            references: "Berger et al."
+
+    # Step 2: ImpactAssessmentResults slots
+    category_identifier_value:
+        description: "URI or code pointing to standard indicator definition (e.g., ILCD:climate-change, SHDB:child-labor)"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: lca_impact_category_id
+
+    category_name_value:
+        description: "Human-readable name of the impact category"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: lca_impact_category_name
+            references: "Berger et al.; King et al."
+
+    lca_impact_method_value:
+        description: "Impact assessment method used (ReCiPe 2016, ILCD 2.0, UNEP/SETAC, etc.)"
+        range: string
+        annotations:
+            owl.filler: prov:hadPlan
+            sql_identifier: lca_impact_method
+            references: "Berger et al.; King et al.; Battery Pass"
+
+    impact_method_version_value:
+        description: "Version of the impact assessment method"
+        range: string
+        annotations:
+            owl.filler: dcterms:hasVersion
+            sql_identifier: lca_impact_method_version
+            references: "Berger et al."
+
+    # Indicator Result slots
+    lca_numeric_value_value:
+        description: "Numeric result of the impact assessment"
+        range: float
+        annotations:
+            owl.filler: qudt:numericValue
+            sql_identifier: lca_impact_result_value
+            references: "Battery Pass; King et al.; CE-RISE Deliverable 1.1"
+            comment: "For carbon footprint and material footprint calculations"
+
+    result_unit_value:
+        description: "Unit of the impact assessment result"
+        range: string
+        annotations:
+            owl.filler: qudt:unit
+            sql_identifier: lca_impact_result_unit
+            references: "Battery Pass; King et al."
+
+    uncertainty_lower_value:
+        description: "Lower bound of uncertainty range"
+        range: float
+        annotations:
+            owl.filler: lca:uncertaintyLower
+            sql_identifier: lca_impact_uncertainty_lower
+
+    uncertainty_upper_value:
+        description: "Upper bound of uncertainty range"
+        range: float
+        annotations:
+            owl.filler: lca:uncertaintyUpper
+            sql_identifier: lca_impact_uncertainty_upper
+
+    uncertainty_distribution_value:
+        description: "Type of uncertainty distribution (normal, lognormal, triangular, etc.)"
+        range: string
+        annotations:
+            owl.filler: lca:uncertaintyDistribution
+            sql_identifier: lca_impact_uncertainty_dist
+
+    # Characterization and Aggregation slots
+    characterization_factors_value:
+        description: "Reference to characterization factors used"
+        range: string
+        annotations:
+            owl.filler: lca:characterizationFactors
+            sql_identifier: lca_characterization_factors
+            references: "Berger et al."
+
+    single_score_value:
+        description: "Aggregated single score result"
+        range: float
+        annotations:
+            owl.filler: lca:singleScore
+            sql_identifier: lca_single_score
+
+    single_score_unit_value:
+        description: "Unit of the single score"
+        range: string
+        annotations:
+            owl.filler: qudt:unit
+            sql_identifier: lca_single_score_unit
+
+    normalized_value_value:
+        description: "Normalized impact assessment result"
+        range: float
+        annotations:
+            owl.filler: lca:normalizedValue
+            sql_identifier: lca_normalized_value
+
+    weighted_result_value:
+        description: "Weighted impact assessment result"
+        range: float
+        annotations:
+            owl.filler: lca:weightedResult
+            sql_identifier: lca_weighted_result
+
+    weighting_set_value:
+        description: "Reference to weighting set used"
+        range: string
+        annotations:
+            owl.filler: lca:weightingSet
+            sql_identifier: lca_weighting_set
+
+    # Step 3: InventoryResults slots (reference-only approach)
+    assessed_system_reference_value:
+        description: "URI or ID pointing to the assessed system model used"
+        range: string
+        annotations:
+            owl.filler: prov:used
+            sql_identifier: lca_assessed_system_ref
+            references: "Berger et al.; CIRPASS"
+
+    assessed_system_version_value:
+        description: "Version of the assessed system used for calculation"
+        range: string
+        annotations:
+            owl.filler: dcterms:hasVersion
+            sql_identifier: lca_assessed_system_version
+            references: "Berger et al."
+
+    calculation_date_value:
+        description: "Date when inventory was accessed for this analysis"
+        range: datetime
+        annotations:
+            owl.filler: prov:atTime
+            sql_identifier: lca_inventory_calc_date
+
+    inventory_checksum_value:
+        description: "Checksum to detect if source data has changed"
+        range: string
+        annotations:
+            owl.filler: lca:dataChecksum
+            sql_identifier: lca_inventory_checksum
+            references: "Berger et al."
+
+    # Step 4: InterpretationResults slots
+    completeness_check_value:
+        description: "Results of completeness assessment"
+        range: string
+        annotations:
+            owl.filler: lca:completenessCheck
+            sql_identifier: lca_completeness_check
+            references: "Berger et al."
+
+    sensitivity_analysis_value:
+        description: "Results of sensitivity analysis"
+        range: string
+        annotations:
+            owl.filler: lca:sensitivityAnalysis
+            sql_identifier: lca_sensitivity_analysis
+            references: "Berger et al."
+
+    consistency_check_value:
+        description: "Results of consistency assessment"
+        range: string
+        annotations:
+            owl.filler: lca:consistencyCheck
+            sql_identifier: lca_consistency_check
+            references: "Berger et al."
+
+    parameter_uncertainty_value:
+        description: "Assessment of parameter uncertainty"
+        range: string
+        annotations:
+            owl.filler: lca:parameterUncertainty
+            sql_identifier: lca_parameter_uncertainty
+            references: "Berger et al."
+
+    model_uncertainty_value:
+        description: "Assessment of model uncertainty"
+        range: string
+        annotations:
+            owl.filler: lca:modelUncertainty
+            sql_identifier: lca_model_uncertainty
+            references: "Berger et al."
+
+    scenario_uncertainty_value:
+        description: "Assessment of scenario uncertainty"
+        range: string
+        annotations:
+            owl.filler: lca:scenarioUncertainty
+            sql_identifier: lca_scenario_uncertainty
+
+    data_gaps_value:
+        description: "Identified data gaps and missing information"
+        range: string
+        annotations:
+            owl.filler: lca:dataGaps
+            sql_identifier: lca_data_gaps
+            references: "Berger et al."
+
+    methodological_choices_value:
+        description: "Key methodological choices and their implications"
+        range: string
+        annotations:
+            owl.filler: lca:methodologicalChoices
+            sql_identifier: lca_methodological_choices
+            references: "Berger et al.; King et al."
+
+    assumptions_value:
+        description: "Key assumptions made in the analysis"
+        range: string
+        annotations:
+            owl.filler: lca:assumptions
+            sql_identifier: lca_assumptions
+            references: "Berger et al."
+
+    # Step 5: StandardCompliance slots
+    applicable_standards_value:
+        description: "List of LCA standards followed (ISO 14040, PEF, EPD, etc.)"
+        range: string
+        multivalued: true
+        annotations:
+            owl.filler: dcterms:conformsTo
+            sql_identifier: lca_applicable_standards
+            references: "ISO 14040:2006; ISO 14044:2006; ISO 14025:2006; ISO 14067:2018; Product Environmental Footprint (PEF); ESPR; King et al.; Battery Pass; CIRPASS"
+
+    method_reference_value:
+        description: "Link to full method documentation"
+        range: string
+        annotations:
+            owl.filler: dcterms:references
+            sql_identifier: lca_method_reference
+            references: "ISO 14067:2018; Berger et al.; King et al.; Battery Pass"
+            comment: "Web link to public carbon footprint study per ISO 14067"
+
+    indicator_set_reference_value:
+        description: "Reference to indicator set used (ILCD, ReCiPe, etc.) with version"
+        range: string
+        annotations:
+            owl.filler: lca:indicatorSet
+            sql_identifier: lca_indicator_set_ref
+            references: "Berger et al.; CIRPASS"
+
+    validation_status_value:
+        description: "Third-party validation or verification status"
+        range: string
+        annotations:
+            owl.filler: prov:qualifiedAttribution
+            sql_identifier: lca_validation_status
+            references: "ESPR; Battery Pass"
+
+    validation_date_value:
+        description: "Date of validation or verification"
+        range: date
+        annotations:
+            owl.filler: dcterms:dateAccepted
+            sql_identifier: lca_validation_date
+
+    validator_info_value:
+        description: "Information about the validating organization or person"
+        range: string
+        annotations:
+            owl.filler: prov:agent
+            sql_identifier: lca_validator_info
+
+classes:
+    IntegratedLCAResults:
+        description: "Root container for life cycle assessment instances across environmental, social, and economic dimensions"
+        annotations:
+            references: "ESPR; Battery Pass; CIRPASS; King et al.; Berger et al."
+        attributes:
+            lca_analysis_instances:
+                description: "Collection of life cycle assessment instances for an assessed entity or system"
+                range: LCAAnalysisInstance
+                multivalued: true
+
+    LCAAnalysisInstance:
+        description: "A single reproducible life cycle assessment instance with complete metadata, inputs, toolchain, methods, and results"
+        annotations:
+            references: "Battery Pass; King et al.; CE-RISE Deliverable 1.1"
+        attributes:
+            study_metadata:
+                description: "Complete metadata for this LCA analysis"
+                range: LCAStudyMetadata
+            assessment_results:
+                description: "Assessment results across one or more sustainability dimensions"
+                range: AssessmentResults
+            assessment_inputs:
+                description: "Versioned product-system, CE-RISE model, and external data records used as assessment inputs"
+                range: AssessmentInputSet
+            interpretation_results:
+                description: "Interpretation and quality assessment"
+                range: InterpretationResults
+            standard_compliance:
+                description: "Standards and method references"
+                range: StandardCompliance
+
+    LCAStudyMetadata:
+        description: "Complete metadata for a life cycle assessment instance across one or more sustainability dimensions"
+        annotations:
+            references: "Berger et al.; CIRPASS"
+        attributes:
+            study_identifier:
+                description: "Unique identifier for this LCA study"
+                range: string
+            study_name:
+                description: "Name of the LCA study"
+                range: string
+            study_date:
+                description: "Date of the LCA study"
+                range: date
+            study_scope:
+                description: "Goal, scope, and intended application of the assessment"
+                range: string
+            assessment_dimensions:
+                description: "Sustainability dimensions assessed by this study"
+                range: LCAAssessmentDimensionEnum
+                multivalued: true
+            functional_unit:
+                description: "Human-readable functional unit for the assessment"
+                range: string
+            functional_unit_specification:
+                description: "Optional structured functional unit and reference-flow specification applicable across assessed dimensions"
+                range: FunctionalUnitSpecification
+            system_boundaries:
+                description: "Human-readable assessment boundary definition"
+                range: string
+            assessment_boundary_specification:
+                description: "Optional structured boundary, scope, allocation, and cut-off specification"
+                range: AssessmentBoundarySpecification
+            commissioner_info:
+                description: "Information about who commissioned the study"
+                range: CommissionerInfo
+            practitioner_info:
+                description: "Information about who conducted the study"
+                range: PractitionerInfo
+            software_info:
+                description: "Primary assessment software information for simple single-tool cases"
+                range: SoftwareInfo
+            assessment_toolchain:
+                description: "Optional multi-tool toolchain used to extract, transform, calculate, validate, or report assessment data"
+                range: AssessmentToolchain
+            database_info:
+                description: "Background database information"
+                range: DatabaseInfo
+            study_metadata_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for the functional unit, system boundaries, method definitions, software, database versions, or calculation environment"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: lca_study_metadata_metrological_traceability
+            study_metadata_data_quality_assessments:
+                description: "Optional data quality assessments for study metadata, source documentation, completeness, temporal representativeness, or fitness for purpose"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lca_study_metadata_data_quality_assessments
+
+    CommissionerInfo:
+        description: "Information about the organization that commissioned the LCA"
+        attributes:
+            organization_name:
+                description: "Commissioning organization name"
+                range: string
+            contact_info:
+                description: "Contact information"
+                range: string
+
+    PractitionerInfo:
+        description: "Information about the LCA practitioner"
+        attributes:
+            organization_name:
+                description: "Practitioner organization name"
+                range: string
+            author_name:
+                description: "Study author name(s)"
+                range: string
+            contact_info:
+                description: "Practitioner contact information"
+                range: string
+
+    SoftwareInfo:
+        description: "Information about the primary assessment software used in a simple single-tool case"
+        attributes:
+            software_name:
+                description: "Name of LCA software"
+                range: string
+            software_version:
+                description: "Software version"
+                range: string
+            calculation_timestamp:
+                description: "When calculations were performed"
+                range: datetime
+
+    AssessmentToolchain:
+        class_uri: prov:Plan
+        description: "Versioned sequence of tools and services used to prepare, calculate, validate, or report a life cycle assessment"
+        attributes:
+            toolchain_identifier:
+                description: "Identifier for this assessment toolchain"
+                range: string
+                annotations:
+                    sql_identifier: lca_toolchain_identifier
+            toolchain_name:
+                description: "Name or label for this assessment toolchain"
+                range: string
+                annotations:
+                    sql_identifier: lca_toolchain_name
+            toolchain_description:
+                description: "Description of the toolchain, its orchestration, or its execution context"
+                range: string
+                annotations:
+                    sql_identifier: lca_toolchain_description
+            tool_executions:
+                description: "Ordered tool executions within this assessment toolchain"
+                range: AssessmentToolExecution
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    sql_identifier: lca_toolchain_executions
+
+    AssessmentToolExecution:
+        class_uri: prov:Activity
+        description: "A specific tool or service execution contributing to assessment input preparation, calculation, validation, or reporting"
+        attributes:
+            tool_identifier:
+                description: "Identifier of the tool, service, script, or executable"
+                range: string
+                annotations:
+                    sql_identifier: lca_tool_identifier
+            tool_name:
+                description: "Name of the tool, service, script, or executable"
+                range: string
+                annotations:
+                    sql_identifier: lca_tool_name
+            tool_version:
+                description: "Version of the tool, service, script, or executable"
+                range: string
+                annotations:
+                    sql_identifier: lca_tool_version
+            tool_provider:
+                description: "Organization, developer, or provider of the tool"
+                range: string
+                annotations:
+                    owl.filler: prov:Agent
+                    sql_identifier: lca_tool_provider
+            tool_roles:
+                description: "Role or roles performed by the tool in this assessment"
+                range: LCAAssessmentToolRoleEnum
+                multivalued: true
+                annotations:
+                    sql_identifier: lca_tool_roles
+            tool_reference:
+                description: "URI or other reference to the tool, service, source code, container image, or executable"
+                range: string
+                annotations:
+                    owl.filler: prov:SoftwareAgent
+                    sql_identifier: lca_tool_reference
+            configuration_reference:
+                description: "Reference to the configuration, parameter set, or execution settings used"
+                range: string
+                annotations:
+                    owl.filler: prov:hadPlan
+                    sql_identifier: lca_tool_configuration_reference
+            execution_order:
+                description: "Order of this execution within the toolchain"
+                range: integer
+                annotations:
+                    sql_identifier: lca_tool_execution_order
+            execution_timestamp:
+                description: "Timestamp at which the tool execution completed"
+                range: datetime
+                annotations:
+                    owl.filler: prov:endedAtTime
+                    sql_identifier: lca_tool_execution_timestamp
+            execution_environment:
+                description: "Execution environment, such as local, cloud, container, or service endpoint"
+                range: string
+                annotations:
+                    sql_identifier: lca_tool_execution_environment
+            execution_notes:
+                description: "Additional notes about the execution, inputs, outputs, or known limitations"
+                range: string
+                annotations:
+                    sql_identifier: lca_tool_execution_notes
+
+    FunctionalUnitSpecification:
+        description: "Structured functional unit specification that can be used consistently across environmental, social, and economic assessment dimensions"
+        attributes:
+            functional_unit_identifier:
+                description: "Identifier for the functional unit specification"
+                range: string
+                annotations:
+                    sql_identifier: lca_functional_unit_identifier
+            functional_unit_description:
+                description: "Description of the function, service, or performance delivered by the assessed system"
+                range: string
+                annotations:
+                    sql_identifier: lca_functional_unit_description
+            functional_unit_quantity:
+                description: "Numeric quantity associated with the functional unit"
+                range: float
+                annotations:
+                    sql_identifier: lca_functional_unit_quantity
+                    owl.filler: qudt:numericValue
+            functional_unit_unit:
+                description: "Unit associated with the functional unit quantity"
+                range: string
+                annotations:
+                    sql_identifier: lca_functional_unit_unit
+                    owl.filler: qudt:unit
+            reference_flow_identifier:
+                description: "Identifier of the reference flow used to operationalize the functional unit"
+                range: string
+                annotations:
+                    sql_identifier: lca_functional_unit_reference_flow_identifier
+            reference_flow_reference:
+                description: "URI or other resolvable reference to the reference flow in an assessment input record"
+                range: string
+                annotations:
+                    sql_identifier: lca_functional_unit_reference_flow_reference
+            scaling_description:
+                description: "Description of how the reference flow is scaled to fulfil the functional unit"
+                range: string
+                annotations:
+                    sql_identifier: lca_functional_unit_scaling_description
+
+    AssessmentBoundarySpecification:
+        description: "Structured boundary and scope specification for a life cycle assessment study"
+        attributes:
+            boundary_identifier:
+                description: "Identifier for this assessment boundary specification"
+                range: string
+                annotations:
+                    sql_identifier: lca_boundary_identifier
+            boundary_description:
+                description: "Description of the included system boundary and its rationale"
+                range: string
+                annotations:
+                    sql_identifier: lca_boundary_description
+            temporal_scope:
+                description: "Temporal scope or period represented by the assessment"
+                range: string
+                annotations:
+                    sql_identifier: lca_boundary_temporal_scope
+            geographic_scope:
+                description: "Geographic scope represented by the assessment"
+                range: string
+                annotations:
+                    sql_identifier: lca_boundary_geographic_scope
+            technological_scope:
+                description: "Technological scope represented by the assessment"
+                range: string
+                annotations:
+                    sql_identifier: lca_boundary_technological_scope
+            included_life_cycle_stages:
+                description: "Life cycle stages included in this assessment boundary"
+                range: string
+                multivalued: true
+                annotations:
+                    sql_identifier: lca_boundary_included_life_cycle_stages
+            exclusion_criteria:
+                description: "Exclusion, cut-off, or materiality criteria applied to this assessment boundary"
+                range: string
+                annotations:
+                    sql_identifier: lca_boundary_exclusion_criteria
+            allocation_method_reference:
+                description: "Reference to the allocation, substitution, consequential, or attributional method applied"
+                range: string
+                annotations:
+                    sql_identifier: lca_boundary_allocation_method_reference
+
+    DatabaseInfo:
+        description: "Information about background databases used"
+        attributes:
+            background_database:
+                description: "Background database name"
+                range: string
+            database_version:
+                description: "Database version"
+                range: string
+            data_quality_info:
+                description: "Data quality information"
+                range: string
+            database_data_quality_assessments:
+                description: "Optional data quality assessments for background database selection, version, provenance, temporal coverage, geographic coverage, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lca_database_data_quality_assessments
+
+    AssessmentResults:
+        description: "Container for life cycle assessment indicators across environmental, social, economic, integrated, or other dimensions"
+        annotations:
+            references: "ISO 14040:2006; ISO 14044:2006; UNEP Guidelines for Social Life Cycle Assessment of Products and Organizations (2020); ISO 15686-5:2017"
+        attributes:
+            assessment_indicators:
+                description: "Collection of assessed indicators, each explicitly aligned to a sustainability dimension"
+                range: AssessmentIndicator
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    sql_identifier: lca_assessment_indicators
+
+    AssessmentIndicator:
+        description: "A result-bearing assessment indicator for an environmental, social, economic, integrated, or other sustainability dimension"
+        attributes:
+            assessment_dimension:
+                description: "Sustainability dimension to which this indicator belongs"
+                range: LCAAssessmentDimensionEnum
+                annotations:
+                    sql_identifier: lca_indicator_dimension
+            indicator_identifier:
+                description: "Identifier, URI, or code for the assessment indicator, impact category, social subcategory, or economic metric"
+                range: string
+                annotations:
+                    sql_identifier: lca_indicator_identifier
+            indicator_name:
+                description: "Human-readable name of the assessment indicator"
+                range: string
+                annotations:
+                    sql_identifier: lca_indicator_name
+            indicator_type:
+                description: "Type of indicator, such as impact category, social subcategory, cost metric, risk metric, or composite indicator"
+                range: string
+                annotations:
+                    sql_identifier: lca_indicator_type
+            assessment_method:
+                description: "Method, model, or calculation approach used to derive this indicator"
+                range: string
+                annotations:
+                    sql_identifier: lca_indicator_assessment_method
+            method_version:
+                description: "Version of the method, model, or calculation approach"
+                range: string
+                annotations:
+                    sql_identifier: lca_indicator_method_version
+            calculation_model_or_factor_set_reference:
+                description: "Reference to an applicable characterization model, factor set, valuation model, calculation model, or other indicator-specific basis"
+                range: string
+                annotations:
+                    sql_identifier: lca_indicator_calculation_model_or_factor_set
+            indicator_result:
+                description: "Primary result for this assessment indicator"
+                range: IndicatorResult
+            life_cycle_stage_results:
+                description: "Optional partitions of this indicator result by life cycle stage"
+                range: LifeCycleStageResult
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    sql_identifier: lca_indicator_life_cycle_stage_results
+            aggregated_results:
+                description: "Optional derived, normalized, weighted, or otherwise aggregated results"
+                range: AggregatedResults
+            assessment_indicator_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for the method, model, factor set, indicator definition, or calculation chain"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: lca_assessment_indicator_metrological_traceability
+            assessment_indicator_data_quality_assessments:
+                description: "Optional data quality assessments for indicator selection, method mapping, calculation basis, provenance, or comparability"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lca_assessment_indicator_data_quality_assessments
+
+    IndicatorResult:
+        description: "Numeric assessment result with unit and uncertainty information"
+        annotations:
+            references: "ISO 14040:2006; ISO 14044:2006; UNEP Guidelines for Social Life Cycle Assessment of Products and Organizations (2020); ISO 15686-5:2017"
+        attributes:
+            numeric_value:
+                description: "Calculated, measured, estimated, or reported value of the assessment indicator"
+                range: float
+            unit:
+                description: "Unit associated with the assessment result"
+                range: string
+            uncertainty_range:
+                description: "Uncertainty information for the result"
+                range: UncertaintyRange
+            indicator_uncertainty_statements:
+                description: "Optional uncertainty statements for numeric assessment results, calculation assumptions, distributions, confidence intervals, or propagation results"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: lca_indicator_uncertainty_statements
+            indicator_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for result calculation chains, input datasets, reference flows, functional units, methods, standards, or boundary definitions"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: lca_indicator_metrological_traceability
+            indicator_data_quality_assessments:
+                description: "Optional data quality assessments for indicator result data, provenance, completeness, representativeness, or fitness for comparison"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lca_indicator_data_quality_assessments
+
+    UncertaintyRange:
+        description: "Uncertainty bounds and distribution information"
+        attributes:
+            lower_bound:
+                description: "Lower uncertainty bound"
+                range: float
+            upper_bound:
+                description: "Upper uncertainty bound"
+                range: float
+            distribution_type:
+                description: "Type of uncertainty distribution"
+                range: string
+            uncertainty_range_statements:
+                description: "Optional structured uncertainty statements for the uncertainty range, distribution, coverage, or uncertainty budget"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: lca_uncertainty_range_statements
+
+    LifeCycleStageResult:
+        description: "A partition of one assessment indicator result attributed to a life cycle stage"
+        attributes:
+            life_cycle_stage_identifier:
+                description: "Identifier for the life cycle stage represented by this result partition"
+                range: string
+                annotations:
+                    sql_identifier: lca_stage_result_life_cycle_stage_identifier
+            life_cycle_stage_reference:
+                description: "URI or other reference to the life cycle stage definition or source product-system record"
+                range: string
+                annotations:
+                    sql_identifier: lca_stage_result_life_cycle_stage_reference
+            partitioning_method_reference:
+                description: "Reference to the allocation, attribution, or aggregation method used to partition this result by life cycle stage"
+                range: string
+                annotations:
+                    sql_identifier: lca_stage_result_partitioning_method_reference
+            indicator_result:
+                description: "Result attributed to the referenced life cycle stage"
+                range: IndicatorResult
+
+    AggregatedResults:
+        description: "Optional derived, normalized, weighted, single-score, or otherwise aggregated assessment results"
+        attributes:
+            single_score:
+                description: "Aggregated single score value"
+                range: float
+            single_score_unit:
+                description: "Unit of the single score"
+                range: string
+            normalized_value:
+                description: "Normalized result"
+                range: float
+            weighted_result:
+                description: "Weighted result"
+                range: float
+            weighting_set:
+                description: "Reference to weighting set, valuation basis, or other aggregation basis used"
+                range: string
+            aggregation_method_reference:
+                description: "Reference to the aggregation, normalization, weighting, valuation, or scoring method applied"
+                range: string
+                annotations:
+                    sql_identifier: lca_aggregated_result_method_reference
+            aggregated_score_uncertainty_statements:
+                description: "Optional uncertainty statements for single score, normalized value, weighted result, weighting-set assumptions, or aggregation sensitivity"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: lca_aggregated_score_uncertainty_statements
+            aggregated_score_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for normalization references, weighting sets, aggregation methods, or calculation chains"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: lca_aggregated_score_metrological_traceability
+            aggregated_score_data_quality_assessments:
+                description: "Optional data quality assessments for aggregated score inputs, weighting assumptions, provenance, completeness, or comparability"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lca_aggregated_score_data_quality_assessments
+
+    AssessmentInputSet:
+        class_uri: prov:Collection
+        description: "Versioned references to product-system, CE-RISE model, external-model, or dataset records used as assessment inputs without duplicating their source content"
+        annotations:
+            references: "ISO 14040:2006; ISO 14044:2006; UNEP Guidelines for Social Life Cycle Assessment of Products and Organizations (2020); ISO 15686-5:2017"
+        attributes:
+            input_set_identifier:
+                description: "Identifier for this set of assessment input references"
+                range: string
+                annotations:
+                    sql_identifier: lca_assessment_input_set_identifier
+            input_set_description:
+                description: "Description of the scope, selection, or preparation of assessment inputs"
+                range: string
+                annotations:
+                    sql_identifier: lca_assessment_input_set_description
+            input_references:
+                description: "Versioned source records, artifacts, or datasets used as inputs to the assessment"
+                range: AssessmentInputReference
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: lca_assessment_input_references
+            input_set_generated_at:
+                description: "Timestamp at which this input set was assembled or generated"
+                range: datetime
+                annotations:
+                    owl.filler: prov:generatedAtTime
+                    sql_identifier: lca_assessment_input_set_generated_at
+            input_set_checksum:
+                description: "Optional checksum for the assembled input set or source manifest"
+                range: string
+                annotations:
+                    sql_identifier: lca_assessment_input_set_checksum
+            assessment_input_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for input selection, source versions, data extraction, transformations, checksums, or calculation chains"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: lca_assessment_input_metrological_traceability
+            assessment_input_data_quality_assessments:
+                description: "Optional data quality assessments for input sources, versions, provenance, completeness, representativeness, interoperability, or fitness for purpose"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lca_assessment_input_data_quality_assessments
+
+    AssessmentInputReference:
+        class_uri: prov:Entity
+        description: "A versioned reference to a source model record, generated artifact, or external dataset used as an assessment input"
+        attributes:
+            input_role:
+                description: "Role fulfilled by this input in the assessment"
+                range: LCAAssessmentInputRoleEnum
+                annotations:
+                    sql_identifier: lca_assessment_input_role
+            source_model_identifier:
+                description: "Identifier or name of the source data model, ontology, schema, or dataset family"
+                range: string
+                annotations:
+                    sql_identifier: lca_assessment_input_source_model_identifier
+            source_model_uri:
+                description: "URI for the source model, ontology, schema, or dataset family"
+                range: string
+                annotations:
+                    sql_identifier: lca_assessment_input_source_model_uri
+            source_model_version:
+                description: "Version, release tag, or revision of the source model or dataset family"
+                range: string
+                annotations:
+                    sql_identifier: lca_assessment_input_source_model_version
+            source_record_identifier:
+                description: "Identifier of the specific source record, product system, dataset, or data package used"
+                range: string
+                annotations:
+                    sql_identifier: lca_assessment_input_source_record_identifier
+            source_record_uri:
+                description: "Resolvable URI for the specific source record, product system, dataset, or data package used"
+                range: string
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: lca_assessment_input_source_record_uri
+            source_record_version:
+                description: "Version, release tag, revision, or timestamp of the specific source record"
+                range: string
+                annotations:
+                    sql_identifier: lca_assessment_input_source_record_version
+            source_artifact_uri:
+                description: "URI for the concrete source artifact, export, manifest, or API response used by the assessment"
+                range: string
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: lca_assessment_input_source_artifact_uri
+            source_artifact_checksum:
+                description: "Checksum or content hash for the concrete source artifact when available"
+                range: string
+                annotations:
+                    sql_identifier: lca_assessment_input_source_artifact_checksum
+            data_selection_reference:
+                description: "Reference to the query, selection rule, mapping, transformation, or extraction specification used"
+                range: string
+                annotations:
+                    owl.filler: prov:hadPlan
+                    sql_identifier: lca_assessment_input_data_selection_reference
+            retrieved_at:
+                description: "Timestamp at which the source input was retrieved, extracted, or generated"
+                range: datetime
+                annotations:
+                    owl.filler: prov:atTime
+                    sql_identifier: lca_assessment_input_retrieved_at
+
+    InterpretationResults:
+        description: "Quality assessment and interpretation of LCA results"
+        annotations:
+            references: "Berger et al.; King et al."
+        attributes:
+            data_quality_assessment:
+                description: "Assessment of data quality aspects"
+                range: LCADataQualityAssessment
+            uncertainty_analysis:
+                description: "Analysis of various uncertainty sources"
+                range: UncertaintyAnalysis
+            limitations:
+                description: "Documented limitations and caveats"
+                range: Limitations
+
+    LCADataQualityAssessment:
+        description: "Data quality evaluation results"
+        annotations:
+            references: "Berger et al."
+        attributes:
+            completeness_check:
+                description: "Assessment of data completeness"
+                range: string
+            sensitivity_analysis:
+                description: "Sensitivity analysis results"
+                range: string
+            consistency_check:
+                description: "Assessment of data consistency"
+                range: string
+            lca_data_quality_assessments:
+                description: "Optional structured data quality assessments for LCA completeness, sensitivity, consistency, pedigree, or fitness for purpose"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lca_interpretation_data_quality_assessments
+
+    UncertaintyAnalysis:
+        description: "Analysis of different uncertainty sources"
+        annotations:
+            references: "Berger et al."
+        attributes:
+            parameter_uncertainty:
+                description: "Uncertainty from parameters"
+                range: string
+            model_uncertainty:
+                description: "Uncertainty from modeling choices"
+                range: string
+            scenario_uncertainty:
+                description: "Uncertainty from scenarios"
+                range: string
+            uncertainty_analysis_statements:
+                description: "Optional structured uncertainty statements for parameter, model, scenario, sensitivity, or propagation uncertainty"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: lca_interpretation_uncertainty_statements
+
+    Limitations:
+        description: "Documented study limitations"
+        annotations:
+            references: "Berger et al."
+        attributes:
+            data_gaps:
+                description: "Identified data gaps"
+                range: string
+            methodological_choices:
+                description: "Key methodological decisions"
+                range: string
+            assumptions:
+                description: "Key assumptions made"
+                range: string
+            limitations_data_quality_assessments:
+                description: "Optional data quality assessments for data gaps, assumptions, methodological choices, limitations, or intended-use constraints"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lca_limitations_data_quality_assessments
+
+    StandardCompliance:
+        description: "Information about applicable standards, methods, conformance, and validation across assessment dimensions"
+        annotations:
+            references: "ISO 14040:2006; ISO 14044:2006; ISO 14025:2006; UNEP Guidelines for Social Life Cycle Assessment of Products and Organizations (2020); ISO 15686-5:2017; EU Taxonomy Regulation (EU) 2020/852; ESPR; Battery Pass; CIRPASS; King et al."
+        attributes:
+            applicable_dimensions:
+                description: "Sustainability dimensions to which these standards, methods, or validation statements apply"
+                range: LCAAssessmentDimensionEnum
+                multivalued: true
+            applicable_standards:
+                description: "Standards, specifications, guidance, or normative references followed"
+                range: string
+                multivalued: true
+            method_reference:
+                description: "Reference to assessment method, model, calculation procedure, or methodological guidance"
+                range: string
+            indicator_set_reference:
+                description: "Reference to the indicator, subcategory, metric, or accounting framework used"
+                range: string
+            validation_status:
+                description: "Validation/verification status"
+                range: string
+            validation_date:
+                description: "Date of validation"
+                range: date
+            validator_info:
+                description: "Validator information"
+                range: string
+            standard_compliance_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for standards, method references, indicator sets, validation procedures, or verifier evidence"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: lca_standard_compliance_metrological_traceability
+            standard_compliance_data_quality_assessments:
+                description: "Optional data quality assessments for standard compliance evidence, validation status, method references, indicator-set references, or verifier provenance"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lca_standard_compliance_data_quality_assessments
+
+enums:
+    LCAAssessmentDimensionEnum:
+        description: "Sustainability dimensions represented by an assessment study or indicator"
+        permissible_values:
+            ENVIRONMENTAL:
+                description: "Environmental life cycle assessment dimension"
+                annotations:
+                    sql_identifier: lca_dimension_environmental
+            SOCIAL:
+                description: "Social life cycle assessment dimension"
+                annotations:
+                    sql_identifier: lca_dimension_social
+            ECONOMIC:
+                description: "Economic life cycle assessment dimension"
+                annotations:
+                    sql_identifier: lca_dimension_economic
+            INTEGRATED:
+                description: "Cross-dimensional, composite, or otherwise integrated assessment dimension"
+                annotations:
+                    sql_identifier: lca_dimension_integrated
+            OTHER:
+                description: "Other declared assessment dimension"
+                annotations:
+                    sql_identifier: lca_dimension_other
+
+    LCAAssessmentInputRoleEnum:
+        description: "Roles that a versioned source record, artifact, or dataset can fulfil in a life cycle assessment"
+        permissible_values:
+            PRODUCT_SYSTEM:
+                description: "Product-system graph or inventory input"
+                annotations:
+                    sql_identifier: lca_input_role_product_system
+            FOREGROUND_INVENTORY:
+                description: "Foreground inventory data input"
+                annotations:
+                    sql_identifier: lca_input_role_foreground_inventory
+            BACKGROUND_INVENTORY:
+                description: "Background inventory database or dataset input"
+                annotations:
+                    sql_identifier: lca_input_role_background_inventory
+            PRODUCT_OR_MATERIAL_DATA:
+                description: "Product, material, component, or composition data input"
+                annotations:
+                    sql_identifier: lca_input_role_product_or_material_data
+            ACTIVITY_OR_EVENT_DATA:
+                description: "Activity, process, event, measurement, or operational data input"
+                annotations:
+                    sql_identifier: lca_input_role_activity_or_event_data
+            USAGE_OR_MAINTENANCE_SCENARIO:
+                description: "Use-phase, maintenance, repair, or service-life scenario input"
+                annotations:
+                    sql_identifier: lca_input_role_usage_or_maintenance_scenario
+            END_OF_LIFE_SCENARIO:
+                description: "End-of-life, circularity, recovery, reuse, or disposal scenario input"
+                annotations:
+                    sql_identifier: lca_input_role_end_of_life_scenario
+            PARAMETER_OR_ASSUMPTION_SET:
+                description: "Parameter, assumption, allocation, or scenario definition input"
+                annotations:
+                    sql_identifier: lca_input_role_parameter_or_assumption_set
+            EVIDENCE_OR_REFERENCE_DATA:
+                description: "Evidence, reference, regulatory, or methodological data input"
+                annotations:
+                    sql_identifier: lca_input_role_evidence_or_reference_data
+            EXTERNAL_DATASET:
+                description: "External model, dataset, database, or service output input"
+                annotations:
+                    sql_identifier: lca_input_role_external_dataset
+            OTHER:
+                description: "Other declared assessment input role"
+                annotations:
+                    sql_identifier: lca_input_role_other
+
+    LCAAssessmentToolRoleEnum:
+        description: "Roles performed by a tool or service in an assessment toolchain"
+        permissible_values:
+            DATA_EXTRACTION:
+                description: "Extracts, retrieves, or ingests source data"
+                annotations:
+                    sql_identifier: lca_tool_role_data_extraction
+            DATA_MAPPING:
+                description: "Maps, transforms, validates, or harmonizes source data"
+                annotations:
+                    sql_identifier: lca_tool_role_data_mapping
+            PRODUCT_SYSTEM_GENERATION:
+                description: "Generates or composes a product system from source data"
+                annotations:
+                    sql_identifier: lca_tool_role_product_system_generation
+            INVENTORY_CALCULATION:
+                description: "Calculates, aggregates, or solves inventory flows"
+                annotations:
+                    sql_identifier: lca_tool_role_inventory_calculation
+            IMPACT_ASSESSMENT:
+                description: "Calculates impact, social, economic, or other assessment indicators"
+                annotations:
+                    sql_identifier: lca_tool_role_impact_assessment
+            AGGREGATION:
+                description: "Aggregates, normalizes, weights, valuates, or scores results"
+                annotations:
+                    sql_identifier: lca_tool_role_aggregation
+            VALIDATION:
+                description: "Validates, verifies, checks, or assures assessment data and results"
+                annotations:
+                    sql_identifier: lca_tool_role_validation
+            REPORTING:
+                description: "Formats, exports, publishes, or reports assessment outputs"
+                annotations:
+                    sql_identifier: lca_tool_role_reporting
+            OTHER:
+                description: "Other declared toolchain role"
+                annotations:
+                    sql_identifier: lca_tool_role_other

@@ -1,0 +1,142 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REpair_Laptop
+name: re_indicators_repair_laptop
+title: REpair Indicator Configuration for Laptops
+description: Product-specific configuration for REpair indicator applied to laptops
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    - ../model # Import core classes
+    - ./REpair_core # Import core parameter definitions
+
+classes:
+    # ============================================
+    # LAPTOP CONFIGURATION FOR REPAIR
+    # Uses all core parameters with their normalized weights
+    # ============================================
+
+    REpair_Laptop_Config:
+        is_a: IndicatorProductConfiguration
+        description: REpair indicator configuration for Laptop products
+        attributes:
+            id:
+                ifabsent: string(REpair_Laptop)
+            indicator_type:
+                ifabsent: IndicatorType(REpair)
+            product_category:
+                ifabsent: ProductCategoryType(Laptop)
+            name:
+                ifabsent: string(REpair Indicator for Laptop)
+            description:
+                ifabsent: string(REpair assessment configuration for laptops covering return model, general repair conditions, disassembly, fasteners, tools, documentation, spare parts diagnostics/availability/delivery, and product-specific features)
+            parameter_applications:
+                range: REpair_Laptop_ParameterApplication
+                multivalued: true
+                inlined: true
+
+    REpair_Laptop_ParameterApplication:
+        is_a: ParameterApplication
+        union_of:
+            - REpair_Laptop_P1_Application
+            - REpair_Laptop_P2_Application
+            - REpair_Laptop_P3_Application
+            - REpair_Laptop_P4_Application
+            - REpair_Laptop_P5_Application
+            - REpair_Laptop_P6_Application
+            - REpair_Laptop_P7_Application
+            - REpair_Laptop_P8_Application
+            - REpair_Laptop_P9_Application
+            - REpair_Laptop_P10_Application
+
+    REpair_Laptop_P1_Application:
+        is_a: ParameterApplication
+        description: Return Model parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P1_return_model)
+            weight:
+                ifabsent: float(0.047619048)
+
+    REpair_Laptop_P2_Application:
+        is_a: ParameterApplication
+        description: General Questions parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P2_general_questions)
+            weight:
+                ifabsent: float(0.047619048)
+
+    REpair_Laptop_P3_Application:
+        is_a: ParameterApplication
+        description: Disassembly parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P3_disassembly)
+            weight:
+                ifabsent: float(0.142857143)
+
+    REpair_Laptop_P4_Application:
+        is_a: ParameterApplication
+        description: Fasteners parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P4_fasteners)
+            weight:
+                ifabsent: float(0.142857143)
+
+    REpair_Laptop_P5_Application:
+        is_a: ParameterApplication
+        description: Tools parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P5_tools)
+            weight:
+                ifabsent: float(0.142857143)
+
+    REpair_Laptop_P6_Application:
+        is_a: ParameterApplication
+        description: Documentation Availability parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P6_documentation_availability)
+            weight:
+                ifabsent: float(0.095238095)
+
+    REpair_Laptop_P7_Application:
+        is_a: ParameterApplication
+        description: Spare Parts Diagnostics parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P7_spare_parts_diagnostics)
+            weight:
+                ifabsent: float(0.095238095)
+
+    REpair_Laptop_P8_Application:
+        is_a: ParameterApplication
+        description: Spare Parts Availability parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P8_spare_parts_availability)
+            weight:
+                ifabsent: float(0.095238095)
+
+    REpair_Laptop_P9_Application:
+        is_a: ParameterApplication
+        description: Spare Parts Delivery parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P9_spare_parts_delivery)
+            weight:
+                ifabsent: float(0.095238095)
+
+    REpair_Laptop_P10_Application:
+        is_a: ParameterApplication
+        description: Product Specific Questions parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P10_product_specific)
+            weight:
+                ifabsent: float(0.095238095)

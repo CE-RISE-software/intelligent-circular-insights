@@ -1,0 +1,158 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REfurbish_Laptop
+name: re_indicators_refurbish_laptop
+title: REfurbish Indicator Configuration for Laptops
+description: Product-specific configuration for REfurbish indicator applied to laptops
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    - ../model # Import core classes
+    - ./REfurbish_core # Import core parameter definitions
+
+classes:
+    # ============================================
+    # LAPTOP CONFIGURATION FOR REFURBISH
+    # Uses all core parameters with their normalized weights
+    # ============================================
+
+    REfurbish_Laptop_Config:
+        is_a: IndicatorProductConfiguration
+        description: REfurbish indicator configuration for Laptop products
+        attributes:
+            id:
+                ifabsent: string(REfurbish_Laptop)
+            indicator_type:
+                ifabsent: IndicatorType(REfurbish)
+            product_category:
+                ifabsent: ProductCategoryType(Laptop)
+            name:
+                ifabsent: string(REfurbish Indicator for Laptop)
+            description:
+                ifabsent: string(REfurbish assessment configuration for laptops covering product-design, support, refurbish-specific criteria, and cleaning/polishing)
+            parameter_applications:
+                range: REfurbish_Laptop_ParameterApplication
+                multivalued: true
+                inlined: true
+
+    REfurbish_Laptop_ParameterApplication:
+        is_a: ParameterApplication
+        union_of:
+            - REfurbish_Laptop_P1_Disassembly_Application
+            - REfurbish_Laptop_P1_Fasteners_Application
+            - REfurbish_Laptop_P1_Tools_Application
+            - REfurbish_Laptop_P2_Documentation_Application
+            - REfurbish_Laptop_P2_ProductDiagnostic_Application
+            - REfurbish_Laptop_P2_SparePartsInterfaces_Application
+            - REfurbish_Laptop_P2_SparePartsAvailability_Application
+            - REfurbish_Laptop_P2_SparePartsDelivery_Application
+            - REfurbish_Laptop_P3_RefurbishSpecific_Application
+            - REfurbish_Laptop_P4_CleaningPolishing_Application
+
+    # ============================================
+    # P1: PRODUCT-DESIGN RELATED QUESTIONS (0.3)
+    # ============================================
+
+    REfurbish_Laptop_P1_Disassembly_Application:
+        is_a: ParameterApplication
+        description: Disassembly parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P1_disassembly)
+            weight:
+                ifabsent: float(0.1)
+
+    REfurbish_Laptop_P1_Fasteners_Application:
+        is_a: ParameterApplication
+        description: Fasteners parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P1_fasteners)
+            weight:
+                ifabsent: float(0.1)
+
+    REfurbish_Laptop_P1_Tools_Application:
+        is_a: ParameterApplication
+        description: Tools parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P1_tools)
+            weight:
+                ifabsent: float(0.1)
+
+    # ============================================
+    # P2: SUPPORT RELATED QUESTIONS (0.65)
+    # ============================================
+
+    REfurbish_Laptop_P2_Documentation_Application:
+        is_a: ParameterApplication
+        description: Documentation Availability parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P2_documentation_availability)
+            weight:
+                ifabsent: float(0.1)
+
+    REfurbish_Laptop_P2_ProductDiagnostic_Application:
+        is_a: ParameterApplication
+        description: Product's Diagnostic parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P2_product_diagnostic)
+            weight:
+                ifabsent: float(0.15)
+
+    REfurbish_Laptop_P2_SparePartsInterfaces_Application:
+        is_a: ParameterApplication
+        description: Spare Parts Interfaces parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P2_spare_parts_interfaces)
+            weight:
+                ifabsent: float(0.1)
+
+    REfurbish_Laptop_P2_SparePartsAvailability_Application:
+        is_a: ParameterApplication
+        description: Spare Parts Availability parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P2_spare_parts_availability)
+            weight:
+                ifabsent: float(0.1)
+
+    REfurbish_Laptop_P2_SparePartsDelivery_Application:
+        is_a: ParameterApplication
+        description: Spare Parts Delivery parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P2_spare_parts_delivery)
+            weight:
+                ifabsent: float(0.05)
+
+    # ============================================
+    # P3: REFURBISH SPECIFIC CRITERIA (0.15)
+    # ============================================
+
+    REfurbish_Laptop_P3_RefurbishSpecific_Application:
+        is_a: ParameterApplication
+        description: Refurbish Specific Criteria parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P3_refurbish_specific_criteria)
+            weight:
+                ifabsent: float(0.15)
+
+    # ============================================
+    # P4: CLEANING POLISHING CRITERIA (0.05)
+    # ============================================
+
+    REfurbish_Laptop_P4_CleaningPolishing_Application:
+        is_a: ParameterApplication
+        description: Cleaning Polishing Criteria parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P4_cleaning_polishing_criteria)
+            weight:
+                ifabsent: float(0.05)

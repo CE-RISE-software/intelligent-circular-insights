@@ -1,0 +1,41 @@
+{
+  "title": "CE-RISE Material Profile Data Model",
+  "description": "Core data model for Digital Material Passports (DMPs) defining material identity via chemical identifiers (CAS, InChI, InChIKey, SMILES), specification codes, commodity codes, and batch traceability. Includes supplier information, import/export compliance, and material specifications (composition, purity, physical/mechanical/thermal/ chemical properties, fingerprinting, and test conditions). Integrates standard ontologies (ChEBI, ChemInf, CAS, UNSPSC, QUDT, EMMO, PATO, CHMO, OBI, Schema.org, GS1).",
+  "license": "CC-BY-NC-4.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Boero, Riccardo",
+      "affiliation": "NILU",
+      "orcid": "0000-0002-7468-9096"
+    }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Material Profile",
+    "Digital Material Passport",
+    "Data Model",
+    "Ontology",
+    "Open Source",
+    "LinkML",
+    "Circular Economy",
+    "Material Identification",
+    "Chemical Identifier",
+    "Batch Traceability",
+    "Open Science"
+  ],
+  "communities": [
+    { "identifier": "ce-rise" },
+    { "identifier": "impact" }
+  ],
+  "grants": [
+    { "id": "101092281" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE_models/material-profile",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

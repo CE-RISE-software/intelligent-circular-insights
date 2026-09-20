@@ -1,0 +1,796 @@
+id: https://ce-rise-models.codeberg.page/lci-dataset/
+name: lci-dataset
+title: CE-RISE Life Cycle Inventory Dataset Data Model
+description: >
+    A reusable, source-agnostic model for life cycle inventory datasets.
+    It represents activities, flows, flow objects, lifecycle stages, locations,
+    classifications, source records, and quantitative exchange data for products,
+    materials, components, and assemblies. The model is independent of product-system
+    assembly and life cycle assessment results and can be consumed by product-system,
+    integrated-lca, and other tools.
+license: CC BY-NC 4.0
+version: 0.0.1
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    lci: https://ce-rise-models.codeberg.page/lci-dataset/
+    xsd: http://www.w3.org/2001/XMLSchema#
+    bont: http://ontology.bonsai.uno/core#
+    om: http://www.ontology-of-units-of-measure.org/resource/om-2/
+    schema: http://schema.org/
+    skos: http://www.w3.org/2004/02/skos/core#
+    prov: http://www.w3.org/ns/prov#
+    dcterms: http://purl.org/dc/terms/
+    time: http://www.w3.org/2006/time#
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+
+default_prefix: lci
+default_range: string
+
+imports:
+    - linkml:types
+    - https://codeberg.org/CE-RISE-models/uncertainty-quantification/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/metrological-traceability/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/data-quality-framework/raw/tag/pages-v0.0.3/generated/schema
+
+types:
+    GregorianYear:
+        description: "An XML Schema Gregorian calendar year, optionally including a timezone"
+        typeof: string
+        uri: xsd:gYear
+
+classes:
+    LCIDataset:
+        class_uri: lci:LCIDataset
+        tree_root: true
+        description: "A versioned foreground, background, or hybrid dataset containing reusable life cycle inventory records"
+        annotations:
+            references: "ISO 14040:2006; ISO 14044:2006; BONSAI core ontology"
+        attributes:
+            lci_dataset_identifier:
+                description: "Identifier for this life cycle inventory dataset"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: lci_dataset_identifier
+            lci_dataset_name:
+                description: "Name or label for this life cycle inventory dataset"
+                range: string
+                annotations:
+                    owl.filler: dcterms:title
+                    sql_identifier: lci_dataset_name
+            lci_dataset_description:
+                description: "Description of the represented inventory records, coverage, and intended reuse"
+                range: string
+                annotations:
+                    owl.filler: dcterms:description
+                    sql_identifier: lci_dataset_description
+            lci_dataset_version:
+                description: "Version, release tag, or revision of this life cycle inventory dataset"
+                range: string
+                annotations:
+                    owl.filler: dcterms:hasVersion
+                    sql_identifier: lci_dataset_version
+            lci_dataset_scope:
+                description: "Whether this dataset represents foreground, background, hybrid, or other inventory scope"
+                range: LCIDatasetScopeEnum
+                annotations:
+                    sql_identifier: lci_dataset_scope
+            activities:
+                description: "Activities contained in this life cycle inventory dataset"
+                range: Activity
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: bont:Activity
+                    sql_identifier: lci_dataset_activities
+            flows:
+                description: "Input and output flows contained in this life cycle inventory dataset"
+                range: Flow
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: bont:Flow
+                    sql_identifier: lci_dataset_flows
+            flow_objects:
+                description: "Product, material, waste, elementary, service, or other flow objects used by flows"
+                range: FlowObject
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: bont:FlowObject
+                    sql_identifier: lci_dataset_flow_objects
+            activity_types:
+                description: "Activity types used to classify activities in this life cycle inventory dataset"
+                range: ActivityType
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: bont:ActivityType
+                    sql_identifier: lci_dataset_activity_types
+            locations:
+                description: "Locations used by this dataset and its activity or flow records"
+                range: LCIDatasetLocation
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: schema:Place
+                    sql_identifier: lci_dataset_locations
+            lifecycle_stages:
+                description: "Lifecycle-stage concepts used to partition activities or flows"
+                range: LifecycleStage
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: skos:Concept
+                    sql_identifier: lci_dataset_lifecycle_stages
+            source_record_references:
+                description: "Versioned CE-RISE, external-model, dataset, or generated-artifact records used to build or support this inventory dataset"
+                range: SourceRecordReference
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: lci_dataset_source_records
+            lci_dataset_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for dataset scope, source data, units, or inventory quantification chains"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: lci_dataset_metrological_traceability
+            lci_dataset_data_quality_assessments:
+                description: "Optional data quality assessments for dataset completeness, provenance, representativeness, interoperability, or fitness for purpose"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lci_dataset_data_quality_assessments
+
+    Activity:
+        class_uri: bont:Activity
+        description: "A foreground or background transformation, transport, market, treatment, service, or other activity in a life cycle inventory dataset"
+        annotations:
+            references: "BONSAI core ontology"
+        attributes:
+            activity_identifier:
+                description: "Identifier for this activity within the life cycle inventory dataset or its source dataset"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: lci_activity_identifier
+            activity_name:
+                description: "Name or label of the activity"
+                range: string
+                annotations:
+                    owl.filler: dcterms:title
+                    sql_identifier: lci_activity_name
+            activity_description:
+                description: "Description of the activity, process, service, or transformation represented"
+                range: string
+                annotations:
+                    owl.filler: dcterms:description
+                    sql_identifier: lci_activity_description
+            activity_type_reference:
+                description: "Identifier or URI of the associated activity type"
+                range: string
+                annotations:
+                    owl.filler: bont:hasActivityType
+                    sql_identifier: lci_activity_type_reference
+            location_reference:
+                description: "Identifier or URI of the location associated with this activity"
+                range: string
+                annotations:
+                    owl.filler: bont:hasLocation
+                    sql_identifier: lci_activity_location_reference
+            temporal_scope:
+                description: "Optional temporal scope represented by this activity"
+                range: TemporalScope
+                annotations:
+                    owl.filler: bont:hasTemporalExtent
+                    sql_identifier: lci_activity_temporal_scope
+            determining_flow_reference:
+                description: "Identifier or URI of the flow that determines the activity level"
+                range: string
+                annotations:
+                    owl.filler: bont:hasDeterminingFlow
+                    sql_identifier: lci_activity_determining_flow_reference
+            lifecycle_stage_reference:
+                description: "Identifier or URI of the lifecycle stage to which this activity is assigned"
+                range: string
+                annotations:
+                    sql_identifier: lci_activity_lifecycle_stage_reference
+            activity_origin:
+                description: "Whether the activity is foreground, background, mixed, or otherwise declared"
+                range: LCIDatasetScopeEnum
+                annotations:
+                    sql_identifier: lci_activity_origin
+            source_record_references:
+                description: "Versioned source records, datasets, or artifacts from which this activity was derived"
+                range: SourceRecordReference
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: lci_activity_source_records
+            activity_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for activity scope, reference data, time, location, or calculation basis"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: lci_activity_metrological_traceability
+            activity_data_quality_assessments:
+                description: "Optional data quality assessments for activity source data, temporal coverage, geographic coverage, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lci_activity_data_quality_assessments
+
+    Flow:
+        class_uri: bont:Flow
+        description: "A quantified product, waste, elementary, or other exchange that is input to or output from an activity"
+        annotations:
+            references: "BONSAI core ontology; openLCA flow types"
+        attributes:
+            flow_identifier:
+                description: "Identifier for this flow exchange within the life cycle inventory dataset or its source dataset"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: lci_flow_identifier
+            flow_name:
+                description: "Name or label of the flow exchange"
+                range: string
+                annotations:
+                    owl.filler: dcterms:title
+                    sql_identifier: lci_flow_name
+            flow_kind:
+                description: "Kind of flow exchange"
+                range: FlowKindEnum
+                annotations:
+                    sql_identifier: lci_flow_kind
+            flow_direction:
+                description: "Optional direction of this flow exchange as an input to or output from an activity"
+                range: FlowDirectionEnum
+                annotations:
+                    references: "ORIENTING LCSA ontology (ORIONT)"
+                    sql_identifier: lci_flow_direction
+            flow_object_reference:
+                description: "Identifier or URI of the flow object consumed or produced by this flow"
+                range: string
+                annotations:
+                    owl.filler: bont:hasObjectType
+                    sql_identifier: lci_flow_object_reference
+            input_to_activity_reference:
+                description: "Identifier or URI of the activity for which this flow is an input"
+                range: string
+                annotations:
+                    owl.filler: bont:isInputOf
+                    sql_identifier: lci_flow_input_to_activity_reference
+            output_of_activity_reference:
+                description: "Identifier or URI of the activity for which this flow is an output"
+                range: string
+                annotations:
+                    owl.filler: bont:isOutputOf
+                    sql_identifier: lci_flow_output_of_activity_reference
+            flow_location_reference:
+                description: "Optional identifier or URI of the location that applies specifically to this flow, when it differs from the activity location"
+                range: string
+                annotations:
+                    references: "ORIENTING LCSA ontology (ORIONT)"
+                    sql_identifier: lci_flow_location_reference
+            counterpart_activity_reference:
+                description: "Optional identifier or URI of the activity on the other side of this exchange, including an external background activity"
+                range: string
+                annotations:
+                    sql_identifier: lci_flow_counterpart_activity_reference
+            flow_numerical_value:
+                description: "Numeric value of this flow measure"
+                range: float
+                annotations:
+                    owl.filler: om:hasNumericalValue
+                    sql_identifier: lci_flow_numerical_value
+            flow_unit_reference:
+                description: "Unit URI, code, or other unit reference for this flow measure"
+                range: string
+                annotations:
+                    owl.filler: om:hasUnit
+                    sql_identifier: lci_flow_unit_reference
+            flow_quantity_kind_reference:
+                description: "Optional URI, code, or concept reference for the quantity kind or physical dimension of this flow measure"
+                range: string
+                annotations:
+                    sql_identifier: lci_flow_quantity_kind_reference
+            lifecycle_stage_reference:
+                description: "Identifier or URI of the lifecycle stage to which this flow is assigned"
+                range: string
+                annotations:
+                    sql_identifier: lci_flow_lifecycle_stage_reference
+            flow_classifications:
+                description: "Classifications for this flow, including elementary-flow context or compartment when applicable"
+                range: ClassificationReference
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: skos:Concept
+                    sql_identifier: lci_flow_classifications
+            source_record_references:
+                description: "Versioned source records, datasets, or artifacts from which this flow was derived"
+                range: SourceRecordReference
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: lci_flow_source_records
+            flow_uncertainty_statements:
+                description: "Optional uncertainty statements for flow quantities, estimates, distributions, or propagation inputs"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: lci_flow_uncertainty_statements
+            flow_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for flow quantities, units, measurements, source data, or calculation chains"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: lci_flow_metrological_traceability
+            flow_data_quality_assessments:
+                description: "Optional data quality assessments for flow quantities, source data, completeness, representativeness, or comparability"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: lci_flow_data_quality_assessments
+
+    FlowObject:
+        class_uri: bont:FlowObject
+        description: "The product, material, waste, elementary, service, or other object represented by one or more flows"
+        annotations:
+            references: "BONSAI core ontology"
+        attributes:
+            flow_object_identifier:
+                description: "Identifier for this flow object"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: lci_flow_object_identifier
+            flow_object_name:
+                description: "Name or label of this flow object"
+                range: string
+                annotations:
+                    owl.filler: skos:prefLabel
+                    sql_identifier: lci_flow_object_name
+            flow_object_description:
+                description: "Description of the object represented by associated flows"
+                range: string
+                annotations:
+                    owl.filler: dcterms:description
+                    sql_identifier: lci_flow_object_description
+            flow_object_kind:
+                description: "Declared kind of flow object"
+                range: FlowObjectKindEnum
+                annotations:
+                    sql_identifier: lci_flow_object_kind
+            flow_object_classifications:
+                description: "External classifications, codes, or concepts assigned to this flow object"
+                range: ClassificationReference
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: skos:Concept
+                    sql_identifier: lci_flow_object_classifications
+            source_record_references:
+                description: "Versioned source records, model records, or datasets defining this flow object"
+                range: SourceRecordReference
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: lci_flow_object_source_records
+
+    ActivityType:
+        class_uri: bont:ActivityType
+        description: "A type or classification of activity, such as production, transport, market, treatment, or service"
+        annotations:
+            references: "BONSAI core ontology"
+        attributes:
+            activity_type_identifier:
+                description: "Identifier for this activity type"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: lci_activity_type_identifier
+            activity_type_name:
+                description: "Name or label of this activity type"
+                range: string
+                annotations:
+                    owl.filler: skos:prefLabel
+                    sql_identifier: lci_activity_type_name
+            activity_type_uri:
+                description: "Resolvable URI for an external activity-type concept, including a BONSAI classification URI"
+                range: uri
+                annotations:
+                    sql_identifier: lci_activity_type_uri
+            activity_type_classifications:
+                description: "External classifications, codes, or concepts assigned to this activity type"
+                range: ClassificationReference
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    owl.filler: skos:Concept
+                    sql_identifier: lci_activity_type_classifications
+
+    LifecycleStage:
+        class_uri: skos:Concept
+        description: "A lifecycle-stage concept used to group or partition activities and flows"
+        attributes:
+            lifecycle_stage_identifier:
+                description: "Identifier for this lifecycle-stage concept"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: lci_lifecycle_stage_identifier
+            lifecycle_stage_code:
+                description: "Code for this lifecycle stage within its declared scheme"
+                range: string
+                annotations:
+                    owl.filler: skos:notation
+                    sql_identifier: lci_lifecycle_stage_code
+            lifecycle_stage_name:
+                description: "Preferred label for this lifecycle stage"
+                range: string
+                annotations:
+                    owl.filler: skos:prefLabel
+                    sql_identifier: lci_lifecycle_stage_name
+            lifecycle_stage_scheme_reference:
+                description: "URI or other reference for the lifecycle-stage scheme or standard used"
+                range: string
+                annotations:
+                    owl.filler: skos:inScheme
+                    sql_identifier: lci_lifecycle_stage_scheme_reference
+            lifecycle_stage_sequence:
+                description: "Optional ordering value for this lifecycle stage within the declared scheme"
+                range: integer
+                annotations:
+                    sql_identifier: lci_lifecycle_stage_sequence
+            lifecycle_stage_definition_reference:
+                description: "URI or other reference for the definition of this lifecycle-stage concept"
+                range: string
+                annotations:
+                    sql_identifier: lci_lifecycle_stage_definition_reference
+
+    LCIDatasetLocation:
+        class_uri: schema:Place
+        description: "A location associated with an activity, flow, or other life cycle inventory dataset record"
+        attributes:
+            location_identifier:
+                description: "Identifier for this location"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: lci_location_identifier
+            location_name:
+                description: "Name or label of this location"
+                range: string
+                annotations:
+                    owl.filler: schema:name
+                    sql_identifier: lci_location_name
+            location_uri:
+                description: "Resolvable URI for this location, including a BONSAI or geographic reference URI when available"
+                range: uri
+                annotations:
+                    sql_identifier: lci_location_uri
+            location_code:
+                description: "Code for this location within its declared location scheme"
+                range: string
+                annotations:
+                    owl.filler: schema:identifier
+                    sql_identifier: lci_location_code
+            location_scheme_reference:
+                description: "URI or other reference for the geographic or location scheme used"
+                range: string
+                annotations:
+                    sql_identifier: lci_location_scheme_reference
+
+    TemporalScope:
+        class_uri: time:TemporalEntity
+        description: "A temporal scope or period represented by an activity, flow, or other life cycle inventory dataset record"
+        attributes:
+            temporal_scope_identifier:
+                description: "Identifier for this temporal scope"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: lci_temporal_scope_identifier
+            reference_year:
+                description: "Calendar year represented by the data when a single reference year is applicable"
+                range: GregorianYear
+                annotations:
+                    references: "ORIENTING LCSA ontology (ORIONT)"
+                    sql_identifier: lci_temporal_scope_reference_year
+            validity_year:
+                description: "Calendar year until which the data are declared valid when a single validity year is applicable"
+                range: GregorianYear
+                annotations:
+                    references: "ORIENTING LCSA ontology (ORIONT)"
+                    sql_identifier: lci_temporal_scope_validity_year
+            valid_from:
+                description: "Start date of the represented period"
+                range: date
+                annotations:
+                    sql_identifier: lci_temporal_scope_valid_from
+            valid_until:
+                description: "End date of the represented period"
+                range: date
+                annotations:
+                    sql_identifier: lci_temporal_scope_valid_until
+            temporal_scope_description:
+                description: "Description of the time period, representativeness, or temporal assumptions"
+                range: string
+                annotations:
+                    sql_identifier: lci_temporal_scope_description
+
+    ClassificationReference:
+        class_uri: skos:Concept
+        description: "A reference to an external classification, controlled vocabulary, compartment, code list, or concept"
+        attributes:
+            classification_identifier:
+                description: "Identifier for this classification reference"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: lci_classification_identifier
+            classification_scheme_reference:
+                description: "URI or other reference for the classification scheme, vocabulary, or code list"
+                range: string
+                annotations:
+                    owl.filler: skos:inScheme
+                    sql_identifier: lci_classification_scheme_reference
+            classification_code:
+                description: "Code or notation for the classified concept"
+                range: string
+                annotations:
+                    owl.filler: skos:notation
+                    sql_identifier: lci_classification_code
+            classification_label:
+                description: "Preferred label for the classified concept"
+                range: string
+                annotations:
+                    owl.filler: skos:prefLabel
+                    sql_identifier: lci_classification_label
+            classification_uri:
+                description: "Resolvable URI for the classified concept"
+                range: uri
+                annotations:
+                    sql_identifier: lci_classification_uri
+            broader_classification_reference:
+                description: "Identifier or URI of a broader classification concept when applicable"
+                range: string
+                annotations:
+                    owl.filler: skos:broader
+                    sql_identifier: lci_classification_broader_reference
+
+    SourceRecordReference:
+        class_uri: prov:Entity
+        description: "A versioned reference to a CE-RISE record, external model record, dataset, or generated artifact used to create or support life cycle inventory data"
+        attributes:
+            source_record_identifier:
+                description: "Identifier for this source-record reference"
+                range: string
+                annotations:
+                    owl.filler: dcterms:identifier
+                    sql_identifier: lci_source_record_identifier
+            source_record_role:
+                description: "Role fulfilled by this source record in the life cycle inventory dataset"
+                range: SourceRecordRoleEnum
+                annotations:
+                    sql_identifier: lci_source_record_role
+            source_model_identifier:
+                description: "Identifier or name of the source data model, ontology, schema, or dataset family"
+                range: string
+                annotations:
+                    sql_identifier: lci_source_record_model_identifier
+            source_model_uri:
+                description: "URI for the source data model, ontology, schema, or dataset family"
+                range: string
+                annotations:
+                    sql_identifier: lci_source_record_model_uri
+            source_model_version:
+                description: "Version, release tag, or revision of the source model or dataset family"
+                range: string
+                annotations:
+                    sql_identifier: lci_source_record_model_version
+            referenced_record_identifier:
+                description: "Identifier of the specific source record, dataset, data package, or background activity used"
+                range: string
+                annotations:
+                    sql_identifier: lci_source_record_referenced_identifier
+            referenced_record_uri:
+                description: "Resolvable URI for the specific source record, dataset, data package, or background activity used"
+                range: string
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: lci_source_record_referenced_uri
+            referenced_record_version:
+                description: "Version, release tag, revision, or timestamp of the specific referenced record"
+                range: string
+                annotations:
+                    sql_identifier: lci_source_record_referenced_version
+            source_artifact_uri:
+                description: "URI for the concrete source artifact, export, manifest, or API response used"
+                range: string
+                annotations:
+                    owl.filler: prov:Entity
+                    sql_identifier: lci_source_record_artifact_uri
+            source_artifact_checksum:
+                description: "Checksum or content hash for the concrete source artifact when available"
+                range: string
+                annotations:
+                    sql_identifier: lci_source_record_artifact_checksum
+            data_selection_reference:
+                description: "Reference to the query, selection rule, mapping, transformation, or extraction specification used"
+                range: string
+                annotations:
+                    owl.filler: prov:hadPlan
+                    sql_identifier: lci_source_record_data_selection_reference
+            retrieved_at:
+                description: "Timestamp at which the source record or artifact was retrieved, extracted, or generated"
+                range: datetime
+                annotations:
+                    owl.filler: prov:atTime
+                    sql_identifier: lci_source_record_retrieved_at
+
+enums:
+    LCIDatasetScopeEnum:
+        description: "Declared scope of a life cycle inventory dataset or activity"
+        permissible_values:
+            FOREGROUND:
+                description: "Foreground data directly represented or controlled by the assessment context"
+                annotations:
+                    sql_identifier: lci_scope_foreground
+            BACKGROUND:
+                description: "Background data referenced from an external database or model"
+                annotations:
+                    sql_identifier: lci_scope_background
+            HYBRID:
+                description: "Combined foreground and background data"
+                annotations:
+                    sql_identifier: lci_scope_hybrid
+            OTHER:
+                description: "Other declared life cycle inventory dataset or activity scope"
+                annotations:
+                    sql_identifier: lci_scope_other
+
+    FlowKindEnum:
+        description: "Kinds of flow exchanges used in life cycle inventory modeling"
+        permissible_values:
+            PRODUCT_FLOW:
+                description: "Product or service flow exchanged between activities or across the inventory boundary"
+                annotations:
+                    sql_identifier: lci_flow_kind_product
+            ELEMENTARY_FLOW:
+                description: "Elementary flow exchanged between the technosphere and the environment"
+                annotations:
+                    sql_identifier: lci_flow_kind_elementary
+            WASTE_FLOW:
+                description: "Waste flow requiring treatment, recovery, disposal, or other end-of-life handling"
+                annotations:
+                    sql_identifier: lci_flow_kind_waste
+            OTHER:
+                description: "Other declared flow kind"
+                annotations:
+                    sql_identifier: lci_flow_kind_other
+
+    FlowDirectionEnum:
+        description: "Optional direction of a flow exchange relative to an activity"
+        annotations:
+            references: "ORIENTING LCSA ontology (ORIONT)"
+        permissible_values:
+            INPUT:
+                description: "Flow exchanged as an input to an activity"
+                annotations:
+                    sql_identifier: lci_flow_direction_input
+            OUTPUT:
+                description: "Flow exchanged as an output from an activity"
+                annotations:
+                    sql_identifier: lci_flow_direction_output
+
+    FlowObjectKindEnum:
+        description: "Declared kinds of objects represented by life cycle inventory flows"
+        permissible_values:
+            PRODUCT:
+                description: "Product or component flow object"
+                annotations:
+                    sql_identifier: lci_flow_object_kind_product
+            MATERIAL:
+                description: "Material or substance flow object"
+                annotations:
+                    sql_identifier: lci_flow_object_kind_material
+            WASTE:
+                description: "Waste flow object"
+                annotations:
+                    sql_identifier: lci_flow_object_kind_waste
+            ELEMENTARY:
+                description: "Elementary environmental flow object"
+                annotations:
+                    sql_identifier: lci_flow_object_kind_elementary
+            SERVICE:
+                description: "Service or function flow object"
+                annotations:
+                    sql_identifier: lci_flow_object_kind_service
+            OTHER:
+                description: "Other declared flow-object kind"
+                annotations:
+                    sql_identifier: lci_flow_object_kind_other
+
+    SourceRecordRoleEnum:
+        description: "Roles that source records, datasets, or artifacts can fulfil when creating or supporting a life cycle inventory dataset"
+        permissible_values:
+            ASSESSMENT_SUBJECT:
+                description: "Product, material, component, or assembly record represented by the life cycle inventory dataset"
+                annotations:
+                    sql_identifier: lci_source_role_assessment_subject
+            ACTIVITY_INPUT:
+                description: "Source record used to create or parameterize an activity"
+                annotations:
+                    sql_identifier: lci_source_role_activity_input
+            FLOW_INPUT:
+                description: "Source record used to create or parameterize a flow"
+                annotations:
+                    sql_identifier: lci_source_role_flow_input
+            BACKGROUND_DATASET:
+                description: "External background database, activity, or dataset reference"
+                annotations:
+                    sql_identifier: lci_source_role_background_dataset
+            CLASSIFICATION_SOURCE:
+                description: "Classification, vocabulary, code list, or compartment source"
+                annotations:
+                    sql_identifier: lci_source_role_classification_source
+            METHOD_OR_PARAMETER:
+                description: "Method, parameter, mapping, allocation, or scenario source"
+                annotations:
+                    sql_identifier: lci_source_role_method_or_parameter
+            OTHER:
+                description: "Other declared source-record role"
+                annotations:
+                    sql_identifier: lci_source_role_other

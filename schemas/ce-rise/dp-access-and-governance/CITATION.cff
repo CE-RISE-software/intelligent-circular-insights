@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+title: CE-RISE DP Access and Governance
+type: software
+doi: 10.5281/zenodo.17899269
+authors:
+  - given-names: Riccardo
+    family-names: Boero
+    email: ribo@nilu.no
+    orcid: 'https://orcid.org/0000-0002-7468-9096'
+    affiliation: NILU
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.17899269
+    description: This DOI represents all software versions.
+repository-code: 'https://codeberg.org/CE-RISE-models/dp-access-and-governance'
+url: 'https://ce-rise-models.codeberg.page/dp-access-and-governance/'
+abstract: >-
+  Operational and access-related metadata model that governs how DPP and DMP records are stored,
+  exposed, shared, and maintained across systems. Defines access levels, security settings,
+  data carrier characteristics, longevity policies, interoperability configurations, and
+  system integration parameters for the CE-RISE digital product passport and digital material
+  passport architecture.
+keywords:
+  - CE-RISE
+  - Data Model
+  - Ontology
+  - Open Source
+  - Open Science
+  - Digital Product Passport
+  - Digital Material Passport
+license: CC-BY-NC-4.0

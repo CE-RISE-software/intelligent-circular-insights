@@ -78,8 +78,28 @@ class TestCarbonBoundaries:
 
 
 class TestCeRiseCatalogue:
-    def test_all_seventeen_models_load(self) -> None:
-        assert len(CeRiseModelRegistry().models) == 17
+    def test_all_eighteen_models_load(self) -> None:
+        # Eighteen, not the seventeen the demo hard-coded. Its list named
+        # template-data-model, which no longer exists, and omitted lci-dataset
+        # and product-system, which do. The catalogue is now derived from the
+        # vendored schemas, so it cannot drift that way again.
+        registry = CeRiseModelRegistry()
+        assert len(registry.models) == 18
+        ids = {m.id for m in registry.models}
+        assert "template-data-model" not in ids
+        assert {"lci-dataset", "product-system"} <= ids
+
+    def test_models_carry_their_declared_version_and_licence(self) -> None:
+        for model in CeRiseModelRegistry().models:
+            if model.id == "dp-architecture":
+                continue  # documentation, not a LinkML schema
+            assert model.version, f"{model.id} has no version"
+            assert "NC" in model.licence, f"{model.id} licence not CC-BY-NC: {model.licence!r}"
+
+    def test_schema_classes_are_enumerable(self) -> None:
+        by_id = {m.id: m for m in CeRiseModelRegistry().models}
+        assert by_id["product-profile"].class_count > 0
+        assert by_id["integrated-lca"].class_count > 0
 
     def test_every_model_names_its_upstream_repository(self) -> None:
         # The vendored schemas are CC-BY-NC-4.0 while this code is EUPL-1.2, so

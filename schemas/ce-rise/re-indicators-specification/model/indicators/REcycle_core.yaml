@@ -1,0 +1,921 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REcycle_core
+name: re_indicators_recycle_core
+title: REcycle Core Parameters
+description: Core parameter definitions for REcycle indicators - reusable across all product types
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    - ../model # Import core classes
+
+classes:
+    # ============================================
+    # CORE PARAMETERS FOR RECYCLE INDICATOR
+    # These are referenced by all REcycle product configurations
+    # ============================================
+
+    Documentation_Parameter:
+        is_a: ParameterSpecification
+        description: Documentation availability parameter - core definition
+        attributes:
+            id:
+                ifabsent: string(P1_documentation)
+            name:
+                ifabsent: string(Documentation availability)
+            questions:
+                range: DocumentationQuestion
+                multivalued: true
+                inlined: true
+
+    DocumentationQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q1_1_UniqueIdentifier
+            - Q1_2_BOM
+            - Q1_3_SafetyManual
+            - Q1_4_DisassemblyManual
+
+    Q1_1_UniqueIdentifier:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.1)
+            text:
+                ifabsent: string(Unique Product identifier (product type, brand, commercial name, model, serie number))
+            weight:
+                ifabsent: float(0.05)
+            answer_options:
+                range: DocumentationAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_2_BOM:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.2)
+            text:
+                ifabsent: string(Bill of material (BOM))
+            weight:
+                ifabsent: float(0.45)
+            answer_options:
+                range: DocumentationAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_3_SafetyManual:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.3)
+            text:
+                ifabsent: string(Safety manual)
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: DocumentationAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_4_DisassemblyManual:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.4)
+            text:
+                ifabsent: string(Disassembly manual)
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: DocumentationAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Documentation Answer Options (shared)
+    DocumentationAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Doc_PubliclyAvailable
+            - Doc_IndependentRecyclers
+            - Doc_AuthorizedRecyclers
+            - Doc_ManufacturersOnly
+            - Doc_NotAvailable
+
+    Doc_PubliclyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_public)
+            text:
+                ifabsent: string(Publicly available)
+            score:
+                ifabsent: float(5.0)
+
+    Doc_IndependentRecyclers:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_independent)
+            text:
+                ifabsent: string(Available to independent recyclers)
+            score:
+                ifabsent: float(4.0)
+
+    Doc_AuthorizedRecyclers:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_authorized)
+            text:
+                ifabsent: string(Available to manufacturer-authorized recyclers providers)
+            score:
+                ifabsent: float(3.0)
+
+    Doc_ManufacturersOnly:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_manufacturers)
+            text:
+                ifabsent: string(Available to manufactures only)
+            score:
+                ifabsent: float(1.0)
+
+    Doc_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_not_available)
+            text:
+                ifabsent: string(Document is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # MATERIAL COMPOSITION PARAMETER
+    # ============================================
+
+    MaterialComposition_Parameter:
+        is_a: ParameterSpecification
+        description: Material composition parameter - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_material_composition)
+            name:
+                ifabsent: string(Material composition)
+            questions:
+                range: MaterialCompositionQuestion
+                multivalued: true
+                inlined: true
+
+    MaterialCompositionQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q2_1_BOMCompleteness
+            - Q2_2_CRMInfo
+            - Q2_3_HazardousInfo
+
+    Q2_1_BOMCompleteness:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.1)
+            text:
+                ifabsent: string(How complete is the Bill of material (BoM))
+            weight:
+                ifabsent: float(0.33)
+            answer_options:
+                range: BOMCompletenessAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q2_2_CRMInfo:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.2)
+            text:
+                ifabsent: string(Information present on the presence and location of critical raw material (CRM))
+            weight:
+                ifabsent: float(0.33)
+            answer_options:
+                range: CRMAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q2_3_HazardousInfo:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.3)
+            text:
+                ifabsent: string(Information present on the concentration and location of hazardous material in the product)
+            weight:
+                ifabsent: float(0.33)
+            answer_options:
+                range: HazardousAnswerOption
+                multivalued: true
+                inlined: true
+
+    # BOM Completeness Answer Options
+    BOMCompletenessAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - BOM_MoreThan90
+            - BOM_MoreThan80
+            - BOM_MoreThan70
+            - BOM_MoreThan60
+            - BOM_LessThan60
+            - BOM_NotAvailable
+
+    BOM_MoreThan90:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(bom_90plus)
+            text:
+                ifabsent: string(More than 90% of product mass)
+            score:
+                ifabsent: float(5.0)
+
+    BOM_MoreThan80:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(bom_80plus)
+            text:
+                ifabsent: string(More than 80% of product mass)
+            score:
+                ifabsent: float(4.0)
+
+    BOM_MoreThan70:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(bom_70plus)
+            text:
+                ifabsent: string(More than 70% of product mass)
+            score:
+                ifabsent: float(3.0)
+
+    BOM_MoreThan60:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(bom_60plus)
+            text:
+                ifabsent: string(More than 60% of product mass)
+            score:
+                ifabsent: float(2.0)
+
+    BOM_LessThan60:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(bom_less60)
+            text:
+                ifabsent: string(less than 60% of product mass)
+            score:
+                ifabsent: float(1.0)
+
+    BOM_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(bom_not_available)
+            text:
+                ifabsent: string(Data not available)
+            score:
+                ifabsent: float(0.0)
+
+    # CRM Answer Options
+    CRMAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - CRM_CompletelyDisclosed
+            - CRM_PartiallyDisclosed
+            - CRM_NotDisclosed
+
+    CRM_CompletelyDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(crm_complete)
+            text:
+                ifabsent: string(Completely disclosed to professional recycler)
+            score:
+                ifabsent: float(5.0)
+
+    CRM_PartiallyDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(crm_partial)
+            text:
+                ifabsent: string(Partially disclosed to professional recycler)
+            score:
+                ifabsent: float(3.0)
+
+    CRM_NotDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(crm_not_disclosed)
+            text:
+                ifabsent: string(Not disclosed to professional recycler)
+            score:
+                ifabsent: float(0.0)
+
+    # Hazardous Material Answer Options
+    HazardousAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Hazardous_CompletelyDisclosed
+            - Hazardous_PartiallyDisclosed
+            - Hazardous_NotDisclosed
+
+    Hazardous_CompletelyDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(hazardous_complete)
+            text:
+                ifabsent: string(Completely disclosed to professional recycler)
+            score:
+                ifabsent: float(5.0)
+
+    Hazardous_PartiallyDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(hazardous_partial)
+            text:
+                ifabsent: string(Partially disclosed to professional recycler)
+            score:
+                ifabsent: float(3.0)
+
+    Hazardous_NotDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(hazardous_not_disclosed)
+            text:
+                ifabsent: string(Not disclosed to professional recycler)
+            score:
+                ifabsent: float(1.0)
+
+    # ============================================
+    # DEPOLLUTION PARAMETER
+    # ============================================
+
+    Depollution_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of depollution parameter - core definition
+        attributes:
+            id:
+                ifabsent: string(P3_depollution)
+            name:
+                ifabsent: string(Depollution)
+            questions:
+                range: DepollutionQuestion
+                multivalued: true
+                inlined: true
+
+    DepollutionQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q3_1_ComponentList
+            - Q3_2_IdentifyPollutant
+            - Q3_3_EaseRemovability
+            - Q3_4_ToolsRequired
+            - Q3_5_FastenerType
+
+    Q3_1_ComponentList:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.1)
+            text:
+                ifabsent: string(List of components/material requires to be removed during depollution process)
+            weight:
+                ifabsent: float(0.20)
+            answer_options:
+                range: ComponentListAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q3_2_IdentifyPollutant:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.2)
+            text:
+                ifabsent: string(Ability to identify the pollutant component/material (e.g. marking / labelling))
+            weight:
+                ifabsent: float(0.20)
+            answer_options:
+                range: IdentifyPollutantAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q3_3_EaseRemovability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.3)
+            text:
+                ifabsent: string(Ease of removability of pollutant component/material (Disassembly depth))
+            weight:
+                ifabsent: float(0.20)
+            answer_options:
+                range: EaseRemovabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q3_4_ToolsRequired:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.4)
+            text:
+                ifabsent: string(Type of tools required to remove the pollutant component)
+            weight:
+                ifabsent: float(0.20)
+            answer_options:
+                range: ToolsRequiredAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q3_5_FastenerType:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.5)
+            text:
+                ifabsent: string(Type of fastener connecting the pollutant component)
+            weight:
+                ifabsent: float(0.20)
+            answer_options:
+                range: FastenerTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Component List Answer Options
+    ComponentListAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - CompList_DepollutionNotRequired
+            - CompList_PubliclyAvailable
+            - CompList_IndependentRecyclers
+            - CompList_AuthorizedRecyclers
+            - CompList_ManufacturersOnly
+            - CompList_NotAvailable
+
+    CompList_DepollutionNotRequired:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(complist_not_required)
+            text:
+                ifabsent: string(Depollution not required)
+            score:
+                ifabsent: float(5.0)
+
+    CompList_PubliclyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(complist_public)
+            text:
+                ifabsent: string(Publicly available)
+            score:
+                ifabsent: float(5.0)
+
+    CompList_IndependentRecyclers:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(complist_independent)
+            text:
+                ifabsent: string(Available to independent recyclers)
+            score:
+                ifabsent: float(4.0)
+
+    CompList_AuthorizedRecyclers:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(complist_authorized)
+            text:
+                ifabsent: string(Available to manufacturer-authorized recyclers providers)
+            score:
+                ifabsent: float(3.0)
+
+    CompList_ManufacturersOnly:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(complist_manufacturers)
+            text:
+                ifabsent: string(Available to manufactures only)
+            score:
+                ifabsent: float(1.0)
+
+    CompList_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(complist_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Identify Pollutant Answer Options
+    IdentifyPollutantAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Identify_DepollutionNotRequired
+            - Identify_WellMarked
+            - Identify_NotMarkedButIdentifiable
+            - Identify_NotMarkedNotIdentifiable
+
+    Identify_DepollutionNotRequired:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(identify_not_required)
+            text:
+                ifabsent: string(Depollution not required)
+            score:
+                ifabsent: float(5.0)
+
+    Identify_WellMarked:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(identify_well_marked)
+            text:
+                ifabsent: string(Well marked and identifiable)
+            score:
+                ifabsent: float(5.0)
+
+    Identify_NotMarkedButIdentifiable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(identify_not_marked_identifiable)
+            text:
+                ifabsent: string(not-marked but identifiable)
+            score:
+                ifabsent: float(3.0)
+
+    Identify_NotMarkedNotIdentifiable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(identify_not_marked_not_identifiable)
+            text:
+                ifabsent: string(not marked and not identifiable)
+            score:
+                ifabsent: float(1.0)
+
+    # Ease of Removability Answer Options
+    EaseRemovabilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Removability_DepollutionNotRequired
+            - Removability_5StepsOrLess
+            - Removability_5To10Steps
+            - Removability_10To15Steps
+            - Removability_15To30Steps
+            - Removability_Over30Steps
+            - Removability_CannotDisassemble
+            - Removability_DataNotAvailable
+
+    Removability_DepollutionNotRequired:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(removability_not_required)
+            text:
+                ifabsent: string(Depollution not required)
+            score:
+                ifabsent: float(5.0)
+
+    Removability_5StepsOrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(removability_5_or_less)
+            text:
+                ifabsent: string(5 ≥ x > 2 steps)
+            score:
+                ifabsent: float(5.0)
+
+    Removability_5To10Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(removability_5_to_10)
+            text:
+                ifabsent: string(10 ≥ x > 5 steps)
+            score:
+                ifabsent: float(4.0)
+
+    Removability_10To15Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(removability_10_to_15)
+            text:
+                ifabsent: string(15 ≥ x > 10 steps)
+            score:
+                ifabsent: float(3.0)
+
+    Removability_15To30Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(removability_15_to_30)
+            text:
+                ifabsent: string(30 ≥ x > 15 steps)
+            score:
+                ifabsent: float(2.0)
+
+    Removability_Over30Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(removability_over_30)
+            text:
+                ifabsent: string(x > 30)
+            score:
+                ifabsent: float(1.0)
+
+    Removability_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(removability_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    Removability_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(removability_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Tools Required Answer Options
+    ToolsRequiredAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Tools_DepollutionNotRequired
+            - Tools_NoToolsOrBasic
+            - Tools_ProductGroupSpecific
+            - Tools_CommerciallyAvailable
+            - Tools_Proprietary
+            - Tools_CannotDismantle
+
+    Tools_DepollutionNotRequired:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_not_required)
+            text:
+                ifabsent: string(Depollution not required)
+            score:
+                ifabsent: float(5.0)
+
+    Tools_NoToolsOrBasic:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_no_tools_basic)
+            text:
+                ifabsent: string(without tools/ basic tools)
+            score:
+                ifabsent: float(5.0)
+
+    Tools_ProductGroupSpecific:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_product_group_specific)
+            text:
+                ifabsent: string(with product group specific tools)
+            score:
+                ifabsent: float(4.0)
+
+    Tools_CommerciallyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_commercially_available)
+            text:
+                ifabsent: string(with commercially available tools)
+            score:
+                ifabsent: float(3.0)
+
+    Tools_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_proprietary)
+            text:
+                ifabsent: string(with proprietary tools)
+            score:
+                ifabsent: float(2.0)
+
+    Tools_CannotDismantle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_cannot_dismantle)
+            text:
+                ifabsent: string(Cannot be dismantle)
+            score:
+                ifabsent: float(0.0)
+
+    # Fastener Type Answer Options
+    FastenerTypeAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Fastener_DepollutionNotRequired
+            - Fastener_Removable
+            - Fastener_NonRemovable
+
+    Fastener_DepollutionNotRequired:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fastener_not_required)
+            text:
+                ifabsent: string(Depollution not required)
+            score:
+                ifabsent: float(5.0)
+
+    Fastener_Removable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fastener_removable)
+            text:
+                ifabsent: string(removable)
+            score:
+                ifabsent: float(5.0)
+
+    Fastener_NonRemovable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fastener_non_removable)
+            text:
+                ifabsent: string(non-removable)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # NOTE: P4 (Dismantling) and P5 (Recyclability Rate)
+    # are PRODUCT-SPECIFIC and defined in individual product files
+    # (REcycle_PV.yaml, REcycle_Printer.yaml, etc.)
+    # ============================================
+
+    # ============================================
+    # TAKEBACK SCHEME PARAMETER (BONUS)
+    # ============================================
+
+    TakebackScheme_Parameter:
+        is_a: ParameterSpecification
+        description: Take-back scheme bonus parameter - core definition
+        attributes:
+            id:
+                ifabsent: string(P6_takeback_scheme)
+            name:
+                ifabsent: string(Take back scheme_Bonus)
+            is_bonus:
+                ifabsent: boolean(true)
+            questions:
+                range: TakebackSchemeQuestion
+                multivalued: true
+                inlined: true
+
+    TakebackSchemeQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q6_1_TakebackAvailable
+            - Q6_2_CollectionSystem
+
+    Q6_1_TakebackAvailable:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.1.1)
+            text:
+                ifabsent: string(Is there any take back scheme available on the product)
+            weight:
+                ifabsent: float(0.50)
+            answer_options:
+                range: TakebackAvailableAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q6_2_CollectionSystem:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.1.2)
+            text:
+                ifabsent: string(Collection system for returning the product (if any))
+            weight:
+                ifabsent: float(0.50)
+            answer_options:
+                range: CollectionSystemAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Takeback Available Answer Options
+    TakebackAvailableAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Takeback_SystemApplicable
+            - Takeback_NotApplicable
+            - Takeback_DataNotAvailable
+
+    Takeback_SystemApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(takeback_system_applicable)
+            text:
+                ifabsent: string(Take back system applicable)
+            score:
+                ifabsent: float(5.0)
+
+    Takeback_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(takeback_not_applicable)
+            text:
+                ifabsent: string(Not applicable)
+            score:
+                ifabsent: float(0.0)
+
+    Takeback_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(takeback_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Collection System Answer Options
+    CollectionSystemAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Collection_FreePickup
+            - Collection_CustomerPays
+            - Collection_NotApplicable
+
+    Collection_FreePickup:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(collection_free_pickup)
+            text:
+                ifabsent: string(Free of Cost (pickup service provided))
+            score:
+                ifabsent: float(5.0)
+
+    Collection_CustomerPays:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(collection_customer_pays)
+            text:
+                ifabsent: string(Customer has to pay for the take back service)
+            score:
+                ifabsent: float(1.0)
+
+    Collection_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(collection_not_applicable)
+            text:
+                ifabsent: string(Not applicable)
+            score:
+                ifabsent: float(0.0)

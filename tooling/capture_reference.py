@@ -20,6 +20,7 @@ Deliberately small. Two representative cases and two edge cases per area, around
 catch almost nothing extra: a port that breaks behaviour breaks it on the first
 case, not the fortieth. Small enough that a legitimate change is a readable diff.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -33,9 +34,20 @@ from typing import Any
 
 # Fields that differ between two correct runs. Normalised away, and nothing else is.
 VOLATILE = {
-    "timestamp", "generated_at", "created_at", "issued_at_utc", "at",
-    "latency_ms", "duration_ms", "elapsed", "elapsed_ms",
-    "correlation_id", "request_id", "trace_id", "session_id", "run_id",
+    "timestamp",
+    "generated_at",
+    "created_at",
+    "issued_at_utc",
+    "at",
+    "latency_ms",
+    "duration_ms",
+    "elapsed",
+    "elapsed_ms",
+    "correlation_id",
+    "request_id",
+    "trace_id",
+    "session_id",
+    "run_id",
 }
 FLOAT_PLACES = 6
 
@@ -72,14 +84,15 @@ def record(out: pathlib.Path, area: str, case: str, fn: Any) -> tuple[str, str]:
     try:
         write(out, area, case, fn())
         return case, "ok"
-    except Exception as exc:  # noqa: BLE001 - the failure mode is the record
+    except Exception as exc:
         write(out, area, case, {"__raised__": type(exc).__name__, "message": str(exc)[:400]})
         return case, f"raised {type(exc).__name__}"
 
 
 # ----------------------------------------------------------------- service mode
-def capture_services(demo_root: pathlib.Path, llmmain_root: pathlib.Path,
-                     out: pathlib.Path) -> list[tuple[str, str, str]]:
+def capture_services(
+    demo_root: pathlib.Path, llmmain_root: pathlib.Path, out: pathlib.Path
+) -> list[tuple[str, str, str]]:
     results: list[tuple[str, str, str]] = []
 
     # -- carbon: the deterministic engine, self-contained in the demo ----------
@@ -92,14 +105,25 @@ def capture_services(demo_root: pathlib.Path, llmmain_root: pathlib.Path,
         ("representative_bev_pack", "generic_bev_pack_60kwh"),
         ("edge_unknown_product", "no_such_product_at_all"),
     ]:
-        results.append(("carbon", *record(out, "carbon", case,
-                                          lambda p=product: svc.calculate(p))))
-    results.append(("carbon", *record(out, "carbon", "edge_grid_scenario",
-        lambda: svc.calculate("generic_bev_pack_60kwh", scenario={"grid": "CN"}))))
-    for case, product in [("profile_lexmark", "lexmark_mx431adn"),
-                          ("profile_fairphone", "fairphone_4")]:
-        results.append(("carbon", *record(out, "carbon", case,
-                                          lambda p=product: svc.load_product_profile(p))))
+        results.append(("carbon", *record(out, "carbon", case, lambda p=product: svc.calculate(p))))
+    results.append(
+        (
+            "carbon",
+            *record(
+                out,
+                "carbon",
+                "edge_grid_scenario",
+                lambda: svc.calculate("generic_bev_pack_60kwh", scenario={"grid": "CN"}),
+            ),
+        )
+    )
+    for case, product in [
+        ("profile_lexmark", "lexmark_mx431adn"),
+        ("profile_fairphone", "fairphone_4"),
+    ]:
+        results.append(
+            ("carbon", *record(out, "carbon", case, lambda p=product: svc.load_product_profile(p)))
+        )
 
     # -- llmmain's originals, in a separate process -------------------------
     # CE-RISE-Demo and llmmain both ship a top-level package called ``backend``.
@@ -187,13 +211,14 @@ print("ok")
 """
 
 
-def _capture_llmmain(llmmain_root: pathlib.Path,
-                     out: pathlib.Path) -> list[tuple[str, str, str]]:
+def _capture_llmmain(llmmain_root: pathlib.Path, out: pathlib.Path) -> list[tuple[str, str, str]]:
     import subprocess
 
     proc = subprocess.run(
         [sys.executable, "-c", _LLMMAIN_PROBE, str(llmmain_root), str(out)],
-        capture_output=True, text=True, timeout=300,
+        capture_output=True,
+        text=True,
+        timeout=300,
     )
     if proc.returncode == 0:
         return [("symbolic", "reasoner_surface", "ok")]
@@ -207,66 +232,139 @@ def _capture_llmmain(llmmain_root: pathlib.Path,
 # the oracle is a one-off and the running cost of this repo is meant to be zero.
 APP_CASES: list[tuple[str, str, str, str, dict[str, Any] | None, bool]] = [
     # -- search: the reliability path, and the reason this oracle matters most
-    ("search", "representative_carbon", "POST", "/api/search",
-     {"q": "What is the carbon footprint of the Lexmark MX431adn?", "session": "ref"}, True),
-    ("search", "representative_compliance", "POST", "/api/search",
-     {"q": "Which compliance standards does ProductA require?", "product": "ProductA",
-      "session": "ref"}, True),
+    (
+        "search",
+        "representative_carbon",
+        "POST",
+        "/api/search",
+        {"q": "What is the carbon footprint of the Lexmark MX431adn?", "session": "ref"},
+        True,
+    ),
+    (
+        "search",
+        "representative_compliance",
+        "POST",
+        "/api/search",
+        {
+            "q": "Which compliance standards does ProductA require?",
+            "product": "ProductA",
+            "session": "ref",
+        },
+        True,
+    ),
     ("search", "edge_empty_query", "POST", "/api/search", {"q": "", "session": "ref"}, True),
-    ("search", "edge_unanswerable", "POST", "/api/search",
-     {"q": "What is the airspeed velocity of an unladen swallow?", "session": "ref"}, True),
+    (
+        "search",
+        "edge_unanswerable",
+        "POST",
+        "/api/search",
+        {"q": "What is the airspeed velocity of an unladen swallow?", "session": "ref"},
+        True,
+    ),
     ("search", "suggestions", "GET", "/api/search/suggestions", None, False),
-
     # -- carbon: deterministic, no model in the loop
     ("carbon", "products", "GET", "/api/carbon/products", None, False),
-    ("carbon", "representative_iphone15", "POST", "/api/carbon/calculate",
-     {"product_id": "apple_iphone15_pro_128gb", "include_trace": True}, False),
-    ("carbon", "representative_bev_pack", "POST", "/api/carbon/calculate",
-     {"product_id": "generic_bev_pack_60kwh", "include_trace": True}, False),
-    ("carbon", "edge_unknown_product", "POST", "/api/carbon/calculate",
-     {"product_id": "no_such_product_at_all", "include_trace": True}, False),
-    ("carbon", "edge_bootstrap_estimates", "POST", "/api/carbon/calculate",
-     {"product_id": "fairphone_4", "use_bootstrap_estimates": True, "include_trace": True},
-     False),
-
+    (
+        "carbon",
+        "representative_iphone15",
+        "POST",
+        "/api/carbon/calculate",
+        {"product_id": "apple_iphone15_pro_128gb", "include_trace": True},
+        False,
+    ),
+    (
+        "carbon",
+        "representative_bev_pack",
+        "POST",
+        "/api/carbon/calculate",
+        {"product_id": "generic_bev_pack_60kwh", "include_trace": True},
+        False,
+    ),
+    (
+        "carbon",
+        "edge_unknown_product",
+        "POST",
+        "/api/carbon/calculate",
+        {"product_id": "no_such_product_at_all", "include_trace": True},
+        False,
+    ),
+    (
+        "carbon",
+        "edge_bootstrap_estimates",
+        "POST",
+        "/api/carbon/calculate",
+        {"product_id": "fairphone_4", "use_bootstrap_estimates": True, "include_trace": True},
+        False,
+    ),
     # -- validate: suggest=False keeps the model out of it
-    ("validate", "representative_valid", "POST", "/api/validate",
-     {"dpp": {"schema_version": "1.0", "dpp_id": "ref-001",
-              "product": {"name": "Reference product", "category": "battery"}},
-      "suggest": False}, False),
-    ("validate", "edge_empty_dpp", "POST", "/api/validate", {"dpp": {}, "suggest": False},
-     False),
-    ("validate", "edge_wrong_types", "POST", "/api/validate",
-     {"dpp": {"schema_version": 1.0, "dpp_id": ["not", "a", "string"], "product": "a string"},
-      "suggest": False}, False),
-
+    (
+        "validate",
+        "representative_valid",
+        "POST",
+        "/api/validate",
+        {
+            "dpp": {
+                "schema_version": "1.0",
+                "dpp_id": "ref-001",
+                "product": {"name": "Reference product", "category": "battery"},
+            },
+            "suggest": False,
+        },
+        False,
+    ),
+    ("validate", "edge_empty_dpp", "POST", "/api/validate", {"dpp": {}, "suggest": False}, False),
+    (
+        "validate",
+        "edge_wrong_types",
+        "POST",
+        "/api/validate",
+        {
+            "dpp": {"schema_version": 1.0, "dpp_id": ["not", "a", "string"], "product": "a string"},
+            "suggest": False,
+        },
+        False,
+    ),
     # -- models: the 17-module catalogue and its routing
     ("models", "catalogue", "GET", "/api/ce-rise-models/catalog", None, False),
-    ("models", "route_carbon_question", "POST", "/api/ce-rise-models/route",
-     {"question": "What is the recycled content of this battery?"}, False),
-    ("models", "edge_empty_question", "POST", "/api/ce-rise-models/route",
-     {"question": ""}, False),
-
+    (
+        "models",
+        "route_carbon_question",
+        "POST",
+        "/api/ce-rise-models/route",
+        {"question": "What is the recycled content of this battery?"},
+        False,
+    ),
+    ("models", "edge_empty_question", "POST", "/api/ce-rise-models/route", {"question": ""}, False),
     # -- pef: the WP3 integration, all deterministic
     ("pef", "overview", "GET", "/api/pefdpp/overview", None, False),
     ("pef", "calculate", "POST", "/api/pefdpp/calculate", {}, False),
     ("pef", "value_chain", "GET", "/api/pefdpp/value-chain", None, False),
     ("pef", "competency_questions", "GET", "/api/pefdpp/competency-questions", None, False),
-    ("pef", "edge_sparql_injection", "POST", "/api/pefdpp/sparql",
-     {"query": "DELETE WHERE { ?s ?p ?o }", "limit": 5}, False),
-    ("pef", "edge_unknown_activity", "GET", "/api/pefdpp/activity/no_such_activity", None,
-     False),
-
+    (
+        "pef",
+        "edge_sparql_injection",
+        "POST",
+        "/api/pefdpp/sparql",
+        {"query": "DELETE WHERE { ?s ?p ?o }", "limit": 5},
+        False,
+    ),
+    ("pef", "edge_unknown_activity", "GET", "/api/pefdpp/activity/no_such_activity", None, False),
     # -- synthesize: model in the loop
-    ("synthesize", "representative_battery", "POST", "/api/synthesize",
-     {"category": "battery", "brand": "ReferenceCo", "model_name": "REF-1"}, True),
-
+    (
+        "synthesize",
+        "representative_battery",
+        "POST",
+        "/api/synthesize",
+        {"category": "battery", "brand": "ReferenceCo", "model_name": "REF-1"},
+        True,
+    ),
     ("service", "settings", "GET", "/api/settings", None, False),
 ]
 
 
-def capture_app(demo_root: pathlib.Path, out: pathlib.Path,
-                include_llm: bool) -> list[tuple[str, str, str]]:
+def capture_app(
+    demo_root: pathlib.Path, out: pathlib.Path, include_llm: bool
+) -> list[tuple[str, str, str]]:
     """Drive the demo in-process with TestClient.
 
     In-process rather than over a socket because it needs no server lifecycle, no
@@ -275,9 +373,8 @@ def capture_app(demo_root: pathlib.Path, out: pathlib.Path,
     """
     sys.path.insert(0, str(demo_root))
     os.chdir(demo_root)
-    from fastapi.testclient import TestClient
-
     from backend.main import app  # type: ignore
+    from fastapi.testclient import TestClient
 
     results: list[tuple[str, str, str]] = []
     with TestClient(app) as client:
@@ -285,13 +382,11 @@ def capture_app(demo_root: pathlib.Path, out: pathlib.Path,
             if needs_llm and not include_llm:
                 results.append((area, case, "skipped (needs OpenAI; pass --include-llm)"))
                 continue
-            results.append((area, *record(out, area, case,
-                                          _caller(client, method, path, body))))
+            results.append((area, *record(out, area, case, _caller(client, method, path, body))))
     return results
 
 
-def capture_http(base: str, out: pathlib.Path,
-                 include_llm: bool) -> list[tuple[str, str, str]]:
+def capture_http(base: str, out: pathlib.Path, include_llm: bool) -> list[tuple[str, str, str]]:
     import httpx
 
     results: list[tuple[str, str, str]] = []
@@ -300,18 +395,20 @@ def capture_http(base: str, out: pathlib.Path,
             if needs_llm and not include_llm:
                 results.append((area, case, "skipped (needs OpenAI; pass --include-llm)"))
                 continue
-            results.append((area, *record(out, area, case,
-                                          _caller(client, method, path, body))))
+            results.append((area, *record(out, area, case, _caller(client, method, path, body))))
     return results
 
 
 def _caller(client: Any, method: str, path: str, body: Any) -> Any:
     def call() -> dict[str, Any]:
-        resp = (client.request(method, path, json=body) if body is not None
-                else client.request(method, path))
+        resp = (
+            client.request(method, path, json=body)
+            if body is not None
+            else client.request(method, path)
+        )
         try:
             payload = resp.json()
-        except Exception:  # noqa: BLE001
+        except Exception:
             payload = {"__text__": resp.text[:4000]}
         # Status is part of the contract: a 422 that becomes a 500 is a regression
         # even if the body looks similar.
@@ -321,22 +418,37 @@ def _caller(client: Any, method: str, path: str, body: Any) -> Any:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__,
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--http", metavar="URL",
-                    help="drive a running demo over the wire instead of in-process")
-    ap.add_argument("--services-only", action="store_true",
-                    help="capture service objects only, skipping the HTTP layer")
-    ap.add_argument("--include-llm", action="store_true",
-                    help="also capture the endpoints that call OpenAI (about 6 calls "
-                         "on gpt-4o-mini). Off by default: this repo is meant to cost "
-                         "nothing to run.")
-    ap.add_argument("--demo-root", type=pathlib.Path,
-                    default=pathlib.Path(__file__).resolve().parents[2] / "CE-RISE-Demo")
-    ap.add_argument("--llmmain-root", type=pathlib.Path,
-                    default=pathlib.Path(__file__).resolve().parents[2])
-    ap.add_argument("--out", type=pathlib.Path,
-                    default=pathlib.Path(__file__).resolve().parents[1] / "tests" / "reference")
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    ap.add_argument(
+        "--http", metavar="URL", help="drive a running demo over the wire instead of in-process"
+    )
+    ap.add_argument(
+        "--services-only",
+        action="store_true",
+        help="capture service objects only, skipping the HTTP layer",
+    )
+    ap.add_argument(
+        "--include-llm",
+        action="store_true",
+        help="also capture the endpoints that call OpenAI (about 6 calls "
+        "on gpt-4o-mini). Off by default: this repo is meant to cost "
+        "nothing to run.",
+    )
+    ap.add_argument(
+        "--demo-root",
+        type=pathlib.Path,
+        default=pathlib.Path(__file__).resolve().parents[2] / "CE-RISE-Demo",
+    )
+    ap.add_argument(
+        "--llmmain-root", type=pathlib.Path, default=pathlib.Path(__file__).resolve().parents[2]
+    )
+    ap.add_argument(
+        "--out",
+        type=pathlib.Path,
+        default=pathlib.Path(__file__).resolve().parents[1] / "tests" / "reference",
+    )
     args = ap.parse_args()
 
     args.out = args.out.resolve()
@@ -351,7 +463,7 @@ def main() -> int:
         else:
             results = capture_services(args.demo_root, args.llmmain_root, args.out)
             results += capture_app(args.demo_root, args.out, args.include_llm)
-    except Exception:  # noqa: BLE001
+    except Exception:
         traceback.print_exc()
         return 1
 

@@ -1,0 +1,387 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REcycle_Heatpump
+name: re_indicators_recycle_heatpump
+title: REcycle Indicator Configuration for Heatpumps
+description: Product-specific configuration for REcycle indicator applied to heatpumps
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    - ../model # Import core classes
+    - ./REcycle_core # Import core parameter definitions
+
+classes:
+    # ============================================
+    # HEATPUMP-SPECIFIC PARAMETERS (P4, P5)
+    # P1, P2, P3 use core shared definitions
+    # ============================================
+
+    # P4: DISMANTLING - Heatpump specific with generic priority parts
+    Heatpump_Dismantling_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of dismantling parameter for Heatpumps - generic priority parts assessment
+        attributes:
+            id:
+                ifabsent: string(P4_dismantling)
+            name:
+                ifabsent: string(Dismantling)
+            questions:
+                range: Heatpump_DismantlingQuestion
+                multivalued: true
+                inlined: true
+
+    Heatpump_DismantlingQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Heatpump_Q4_1_1_EaseDismantling
+            - Heatpump_Q4_1_2_JointTypes
+            - Heatpump_Q4_1_3_ToolsRequired
+
+    Heatpump_Q4_1_1_EaseDismantling:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1.1)
+            text:
+                ifabsent: string(Ease of dismantling priority parts)
+            weight:
+                ifabsent: float(0.333333333)
+            answer_options:
+                range: Heatpump_DismantlingEaseAnswerOption
+                multivalued: true
+                inlined: true
+
+    Heatpump_Q4_1_2_JointTypes:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1.2)
+            text:
+                ifabsent: string(Type of joints in between to dismantle priority part)
+            weight:
+                ifabsent: float(0.333333333)
+            answer_options:
+                range: Heatpump_JointTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    Heatpump_Q4_1_3_ToolsRequired:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1.3)
+            text:
+                ifabsent: string(Type of tool required to dismantle priority part)
+            weight:
+                ifabsent: float(0.333333333)
+            answer_options:
+                range: Heatpump_DismantlingToolsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Answer options for Heatpump Dismantling - Ease
+    Heatpump_DismantlingEaseAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Heatpump_Dismantling_5StepsOrLess
+            - Heatpump_Dismantling_5To10Steps
+            - Heatpump_Dismantling_10To15Steps
+            - Heatpump_Dismantling_15To30Steps
+            - Heatpump_Dismantling_Over30Steps
+            - Heatpump_Dismantling_CannotDismantle
+            - Heatpump_Dismantling_DataNotAvailable
+
+    Heatpump_Dismantling_5StepsOrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_5_or_less)
+            text:
+                ifabsent: string(5 ≥ x > 2 steps)
+            score:
+                ifabsent: float(5.0)
+
+    Heatpump_Dismantling_5To10Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_5_to_10)
+            text:
+                ifabsent: string(10 ≥ x > 5 steps)
+            score:
+                ifabsent: float(4.0)
+
+    Heatpump_Dismantling_10To15Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_10_to_15)
+            text:
+                ifabsent: string(15 ≥ x > 10 steps)
+            score:
+                ifabsent: float(3.0)
+
+    Heatpump_Dismantling_15To30Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_15_to_30)
+            text:
+                ifabsent: string(30 ≥ x > 15 steps)
+            score:
+                ifabsent: float(2.0)
+
+    Heatpump_Dismantling_Over30Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_over_30)
+            text:
+                ifabsent: string(x > 30)
+            score:
+                ifabsent: float(1.0)
+
+    Heatpump_Dismantling_CannotDismantle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_cannot)
+            text:
+                ifabsent: string(Cannot be dismantled)
+            score:
+                ifabsent: float(0.0)
+
+    Heatpump_Dismantling_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Answer options for Heatpump Dismantling - Joints
+    Heatpump_JointTypeAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Heatpump_Joint_Removable
+            - Heatpump_Joint_NonRemovable
+
+    Heatpump_Joint_Removable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_joint_removable)
+            text:
+                ifabsent: string(removable)
+            score:
+                ifabsent: float(5.0)
+
+    Heatpump_Joint_NonRemovable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_joint_non_removable)
+            text:
+                ifabsent: string(non-removable)
+            score:
+                ifabsent: float(0.0)
+
+    # Answer options for Heatpump Dismantling - Tools
+    Heatpump_DismantlingToolsAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Heatpump_DismantlingTools_NoToolsOrBasic
+            - Heatpump_DismantlingTools_ProductGroupSpecific
+            - Heatpump_DismantlingTools_CommerciallyAvailable
+            - Heatpump_DismantlingTools_Proprietary
+            - Heatpump_DismantlingTools_CannotDismantle
+
+    Heatpump_DismantlingTools_NoToolsOrBasic:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_tools_no_tools_basic)
+            text:
+                ifabsent: string(without tools/basic tools)
+            score:
+                ifabsent: float(5.0)
+
+    Heatpump_DismantlingTools_ProductGroupSpecific:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_tools_product_group_specific)
+            text:
+                ifabsent: string(with product group specific tools)
+            score:
+                ifabsent: float(4.0)
+
+    Heatpump_DismantlingTools_CommerciallyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_tools_commercially_available)
+            text:
+                ifabsent: string(with commercially available tools)
+            score:
+                ifabsent: float(3.0)
+
+    Heatpump_DismantlingTools_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_tools_proprietary)
+            text:
+                ifabsent: string(with proprietary tools)
+            score:
+                ifabsent: float(2.0)
+
+    Heatpump_DismantlingTools_CannotDismantle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_dismantling_tools_cannot)
+            text:
+                ifabsent: string(Cannot be dismantled)
+            score:
+                ifabsent: float(0.0)
+
+    # P5: RECYCLABILITY RATE - Heatpump specific with 2 generic questions
+    Heatpump_RecyclabilityRate_Parameter:
+        is_a: ParameterSpecification
+        description: Recyclability rate parameter for Heatpumps - generic product and priority part assessment
+        attributes:
+            id:
+                ifabsent: string(P5_recyclability_rate)
+            name:
+                ifabsent: string(Recyclability rate)
+            questions:
+                range: Heatpump_RecyclabilityRateQuestion
+                multivalued: true
+                inlined: true
+
+    Heatpump_RecyclabilityRateQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Heatpump_Q5_1_ProductRecyclability
+            - Heatpump_Q5_2_1_PriorityPartRecyclability
+
+    Heatpump_Q5_1_ProductRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.1)
+            text:
+                ifabsent: string(Recyclability rate of product)
+            weight:
+                ifabsent: float(0.6)
+            answer_options:
+                range: Heatpump_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    Heatpump_Q5_2_1_PriorityPartRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.2.1)
+            text:
+                ifabsent: string(Recyclability rate of priority part)
+            weight:
+                ifabsent: float(0.4)
+            answer_options:
+                range: Heatpump_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    Heatpump_RecyclabilityRateAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Heatpump_RecRate_MoreThan60
+            - Heatpump_RecRate_Between50And60
+            - Heatpump_RecRate_Below50
+            - Heatpump_RecRate_CannotRecycle
+            - Heatpump_RecRate_DataNotAvailable
+
+    Heatpump_RecRate_MoreThan60:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_rec_rate_more_than_60)
+            text:
+                ifabsent: string(More than 60%)
+            score:
+                ifabsent: float(5.0)
+
+    Heatpump_RecRate_Between50And60:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_rec_rate_50_to_60)
+            text:
+                ifabsent: string(Between 60-50%)
+            score:
+                ifabsent: float(3.0)
+
+    Heatpump_RecRate_Below50:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_rec_rate_below_50)
+            text:
+                ifabsent: string(Below 50%)
+            score:
+                ifabsent: float(1.0)
+
+    Heatpump_RecRate_CannotRecycle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_rec_rate_cannot_recycle)
+            text:
+                ifabsent: string(Cannot be recycled)
+            score:
+                ifabsent: float(0.0)
+
+    Heatpump_RecRate_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(heatpump_rec_rate_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # HEATPUMP-SPECIFIC CONFIGURATION
+    # ============================================
+
+    REcycle_Heatpump_Config:
+        is_a: REcycle_Configuration
+        description: Configuration for REcycle indicator specifically for heatpumps
+        attributes:
+            id:
+                ifabsent: string(REcycle_Heatpump)
+            product_category:
+                ifabsent: ProductCategoryType(Heatpump)
+            name:
+                ifabsent: string(Recyclability Index for Heatpumps)
+            parameter_applications:
+                inlined_as_list: true
+                inlined: true
+                ifabsent:
+                    - parameter_ref: P1_documentation
+                      weight: 0.02
+                    - parameter_ref: P2_material_composition
+                      weight: 0.02
+                    - parameter_ref: P3_depollution
+                      weight: 0.04
+                    - parameter_ref: P4_dismantling
+                      weight: 0.04
+                    - parameter_ref: P5_recyclability_rate
+                      weight: 0.08

@@ -1,0 +1,2938 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REmanufacture_core
+name: re_indicators_remanufacture_core
+title: REmanufacture Core Parameters
+description: Core parameter definitions for REmanufacture indicators - reusable across Laptop and Printer
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+
+classes:
+    # ============================================
+    # P1: ABILITY TO BE INSPECTED AND TESTED
+    # Sub-parameter: Diagnostic (Functional Testing & Verification)
+    # ============================================
+
+    Diagnostic_Parameter:
+        is_a: ParameterSpecification
+        description: Diagnostic capability for functional testing and verification - core definition
+        attributes:
+            id:
+                ifabsent: string(P1_diagnostic)
+            name:
+                ifabsent: string(Diagnostic)
+            questions:
+                range: DiagnosticQuestion
+                multivalued: true
+                inlined: true
+
+    DiagnosticQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q1_1_DiagnosticTools
+            - Q1_2_FunctionalStatus
+
+    # Q1.1: Diagnostic Tools Availability
+    Q1_1_DiagnosticTools:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.1)
+            text:
+                ifabsent: string(Does the product or part include a way to check whether it is working (built-in or external diagnostic tool)? e.g., LED indicators, self-test modes, error codes, test jigs, external apps or tools.)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DiagnosticToolsAnswerOption
+                multivalued: true
+                inlined: true
+
+    DiagnosticToolsAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - DiagTools_Proprietary
+            - DiagTools_PublicHardwareSoftware
+            - DiagTools_CodedPublic
+            - DiagTools_Intuitive
+
+    DiagTools_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diag_tools_proprietary)
+            text:
+                ifabsent: string(Proprietary interface)
+            score:
+                ifabsent: float(0.0)
+
+    DiagTools_PublicHardwareSoftware:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diag_tools_public_hardware_software)
+            text:
+                ifabsent: string(Publicly available hardware/software interface)
+            score:
+                ifabsent: float(1.0)
+
+    DiagTools_CodedPublic:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diag_tools_coded_public)
+            text:
+                ifabsent: string(Coded interface with public reference table)
+            score:
+                ifabsent: float(2.0)
+
+    DiagTools_Intuitive:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diag_tools_intuitive)
+            text:
+                ifabsent: string(Intuitive interface)
+            score:
+                ifabsent: float(3.0)
+
+    # Q1.2: Functional Status Information
+    Q1_2_FunctionalStatus:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.2)
+            text:
+                ifabsent: string(Is there available information that indicate the current functional status of the product or part? e.g., Live test data, display messages, firmware logs, DPP data, etc.)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: FunctionalStatusAnswerOption
+                multivalued: true
+                inlined: true
+
+    FunctionalStatusAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - FuncStatus_NoInfo
+            - FuncStatus_LimitedInfo
+            - FuncStatus_PartialInfo
+            - FuncStatus_ComprehensiveInfo
+
+    FuncStatus_NoInfo:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(func_status_no_info)
+            text:
+                ifabsent: string(No information available)
+            score:
+                ifabsent: float(0.0)
+
+    FuncStatus_LimitedInfo:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(func_status_limited_info)
+            text:
+                ifabsent: string(Limited or unclear information is available)
+            score:
+                ifabsent: float(1.0)
+
+    FuncStatus_PartialInfo:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(func_status_partial_info)
+            text:
+                ifabsent: string(Yes, partial information is available)
+            score:
+                ifabsent: float(2.0)
+
+    FuncStatus_ComprehensiveInfo:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(func_status_comprehensive_info)
+            text:
+                ifabsent: string(Yes, comprehensive and reliable information is available)
+            score:
+                ifabsent: float(3.0)
+
+    # ============================================
+    # P1: ABILITY TO BE INSPECTED AND TESTED
+    # Sub-parameter: Safety & Risk
+    # ============================================
+
+    SafetyRiskInspection_Parameter:
+        is_a: ParameterSpecification
+        description: Safety risks during inspection and testing - core definition
+        attributes:
+            id:
+                ifabsent: string(P1_safety_risk_inspection)
+            name:
+                ifabsent: string(Safety & Risk - Inspection/Testing)
+            questions:
+                range: SafetyRiskInspectionQuestion
+                multivalued: true
+                inlined: true
+
+    SafetyRiskInspectionQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q1_3_SafetyRisks
+
+    # Q1.3: Safety Risks During Inspection/Testing
+    Q1_3_SafetyRisks:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.3)
+            text:
+                ifabsent: string(Are there safety risks during Inspection/Testing?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: SafetyRiskInspectionAnswerOption
+                multivalued: true
+                inlined: true
+
+    SafetyRiskInspectionAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SafetyRiskInsp_High
+            - SafetyRiskInsp_Moderate
+            - SafetyRiskInsp_Minor
+            - SafetyRiskInsp_None
+
+    SafetyRiskInsp_High:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_insp_high)
+            text:
+                ifabsent: string(High safety risks / Major remanufacturability limitations)
+            score:
+                ifabsent: float(0.0)
+
+    SafetyRiskInsp_Moderate:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_insp_moderate)
+            text:
+                ifabsent: string(Moderate safety risks / Noticeable remanufacturability limitations)
+            score:
+                ifabsent: float(1.0)
+
+    SafetyRiskInsp_Minor:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_insp_minor)
+            text:
+                ifabsent: string(Minor safety risks / Minimal remanufacturability limitations)
+            score:
+                ifabsent: float(2.0)
+
+    SafetyRiskInsp_None:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_insp_none)
+            text:
+                ifabsent: string(No safety risks / No remanufacturability limitations)
+            score:
+                ifabsent: float(3.0)
+
+    # ============================================
+    # P1: ABILITY TO BE INSPECTED AND TESTED
+    # Sub-parameter: Documentation Availability
+    # ============================================
+
+    DocumentationAvailabilityInspection_Parameter:
+        is_a: ParameterSpecification
+        description: Documentation availability for inspection and testing - core definition
+        attributes:
+            id:
+                ifabsent: string(P1_documentation_availability_inspection)
+            name:
+                ifabsent: string(Documentation Availability - Inspection/Testing)
+            questions:
+                range: DocumentationAvailabilityInspectionQuestion
+                multivalued: true
+                inlined: true
+
+    DocumentationAvailabilityInspectionQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q1_4_UsageHistoryManufacturer
+            - Q1_5_UsageHistoryIndependent
+            - Q1_6_TestingInfoManufacturer
+            - Q1_7_TestingInfoIndependent
+            - Q1_8_HazardousConcentrationManufacturer
+            - Q1_9_HazardousConcentrationIndependent
+            - Q1_10_HazardousLocationManufacturer
+            - Q1_11_HazardousLocationIndependent
+            - Q1_12_ServiceHistoryManufacturer
+            - Q1_13_ServiceHistoryIndependent
+            - Q1_14_WearSensitivePartsManufacturer
+            - Q1_15_WearSensitivePartsIndependent
+            - Q1_16_SafetyManualsManufacturer
+            - Q1_17_SafetyManualsIndependent
+            - Q1_18_RegulatoryComplianceManufacturer
+            - Q1_19_RegulatoryComplianceIndependent
+            - Q1_20_UniqueProductID
+            - Q1_21_WiringDiagramManufacturer
+            - Q1_22_WiringDiagramIndependent
+            - Q1_23_RepairMaterialsManufacturer
+            - Q1_24_RepairMaterialsIndependent
+            - Q1_25_TechnicalManualManufacturer
+            - Q1_26_TechnicalManualIndependent
+            - Q1_27_ErrorCodesManufacturer
+            - Q1_28_ErrorCodesIndependent
+            - Q1_29_SoftwareInstructionsManufacturer
+            - Q1_30_SoftwareInstructionsIndependent
+            - Q1_31_TechnicalBulletinManufacturer
+            - Q1_32_TechnicalBulletinIndependent
+            - Q1_33_ProfessionalRepairersManufacturer
+            - Q1_34_ProfessionalRepairersIndependent
+            - Q1_35_FaultDetectionManufacturer
+            - Q1_36_FaultDetectionIndependent
+            - Q1_37_MaintenanceAdviceManufacturer
+            - Q1_38_MaintenanceAdviceIndependent
+
+    # Usage History
+    Q1_4_UsageHistoryManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.4)
+            text:
+                ifabsent: string(Is there usage history available for the Manufacturer authorized EoL Operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_5_UsageHistoryIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.5)
+            text:
+                ifabsent: string(Is there usage history available for the Independent EoL Operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Testing Functionality Information
+    Q1_6_TestingInfoManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.6)
+            text:
+                ifabsent: string(Is there available information on how to test the functionality of the product for Manufacturer Authorized EoL operator? e.g., User manuals, service instructions, online guidance, etc.)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_7_TestingInfoIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.7)
+            text:
+                ifabsent: string(Is there available information on how to test the functionality of the product for Independent EoL Operator? e.g., User manuals, service instructions, online guidance, etc.)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Hazardous Materials Concentration
+    Q1_8_HazardousConcentrationManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.8)
+            text:
+                ifabsent: string(Is the concentration of hazardous materials available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_9_HazardousConcentrationIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.9)
+            text:
+                ifabsent: string(Is the concentration of hazardous materials available for Independent EoL Operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Hazardous Materials Location
+    Q1_10_HazardousLocationManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.10)
+            text:
+                ifabsent: string(Is the location of hazardous materials available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_11_HazardousLocationIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.11)
+            text:
+                ifabsent: string(Is the location of hazardous materials available for Independent EoL Operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Service History
+    Q1_12_ServiceHistoryManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.12)
+            text:
+                ifabsent: string(Is there service history available for the product for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_13_ServiceHistoryIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.13)
+            text:
+                ifabsent: string(Is there service history available for the product for Independent EoL Operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Wear-Sensitive Parts
+    Q1_14_WearSensitivePartsManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.14)
+            text:
+                ifabsent: string(Is there information on which parts are wear-sensitive or degrade over time under specific remanufacturing steps for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_15_WearSensitivePartsIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.15)
+            text:
+                ifabsent: string(Is there information on which parts are wear-sensitive or degrade over time under specific remanufacturing steps for Independent EoL Operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Safety Manuals
+    Q1_16_SafetyManualsManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.16)
+            text:
+                ifabsent: string(Are safety manuals available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_17_SafetyManualsIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.17)
+            text:
+                ifabsent: string(Are safety manuals available for Independent EoL Operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Regulatory Compliance
+    Q1_18_RegulatoryComplianceManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.18)
+            text:
+                ifabsent: string(Is the regulatory compliance information (e.g., CE marking, RoHS, REACH) available for Manufacturer Authorized EoL operator? This refers to data indicating when the product was placed on the market and what legislation applied at that time.)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_19_RegulatoryComplianceIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.19)
+            text:
+                ifabsent: string(Is the regulatory compliance information (e.g., CE marking, RoHS, REACH) available for Independent EoL Operator? This refers to data indicating when the product was placed on the market and what legislation applied at that time.)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Unique Product Identification
+    Q1_20_UniqueProductID:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.20)
+            text:
+                ifabsent: string(Is information on the Unique Product identification (product type, brand, commercial name, model, serial number, trademark, trade name) available?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Wiring Diagram
+    Q1_21_WiringDiagramManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.21)
+            text:
+                ifabsent: string(Is the Wiring Diagram available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_22_WiringDiagramIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.22)
+            text:
+                ifabsent: string(Is the Wiring Diagram available for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Repair Materials List
+    Q1_23_RepairMaterialsManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.23)
+            text:
+                ifabsent: string(Is the List of repair materials and tests required available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_24_RepairMaterialsIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.24)
+            text:
+                ifabsent: string(Is the List of repair materials and tests required available for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Technical Instruction Manual
+    Q1_25_TechnicalManualManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.25)
+            text:
+                ifabsent: string(Is the Technical Instruction Manual available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_26_TechnicalManualIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.26)
+            text:
+                ifabsent: string(Is the Technical Instruction Manual available for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Error Codes and Diagnostics
+    Q1_27_ErrorCodesManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.27)
+            text:
+                ifabsent: string(Is the Error codes and diagnostics available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_28_ErrorCodesIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.28)
+            text:
+                ifabsent: string(Is the Error codes and diagnostics available for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Software Instructions
+    Q1_29_SoftwareInstructionsManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.29)
+            text:
+                ifabsent: string(Is the Software instructions available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_30_SoftwareInstructionsIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.30)
+            text:
+                ifabsent: string(Is the Software instructions available for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Technical Bulletin
+    Q1_31_TechnicalBulletinManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.31)
+            text:
+                ifabsent: string(Is the Technical Bulletin available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_32_TechnicalBulletinIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.32)
+            text:
+                ifabsent: string(Is the Technical Bulletin available for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Professional Repairers Information
+    Q1_33_ProfessionalRepairersManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.33)
+            text:
+                ifabsent: string(Is the Information on access to professional repairers available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_34_ProfessionalRepairersIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.34)
+            text:
+                ifabsent: string(Is the Information on access to professional repairers available for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Fault Detection
+    Q1_35_FaultDetectionManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.35)
+            text:
+                ifabsent: string(Is the Fault detection and action required available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_36_FaultDetectionIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.36)
+            text:
+                ifabsent: string(Is the Fault detection and action required available for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Use and Maintenance Advice
+    Q1_37_MaintenanceAdviceManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.37)
+            text:
+                ifabsent: string(Is the Advice on use and maintenance available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Q1_38_MaintenanceAdviceIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.38)
+            text:
+                ifabsent: string(Is the Advice on use and maintenance available for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.008130081)
+            answer_options:
+                range: DocumentationAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all documentation availability questions
+    DocumentationAccessibilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - DocAccess_NotAccessible
+            - DocAccess_LimitedAccessibility
+            - DocAccess_MostlyAccessible
+            - DocAccess_FullyAccessible
+
+    DocAccess_NotAccessible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_access_not_accessible)
+            text:
+                ifabsent: string(Not accessible)
+            score:
+                ifabsent: float(0.0)
+
+    DocAccess_LimitedAccessibility:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_access_limited_accessibility)
+            text:
+                ifabsent: string(Limited accessibility)
+            score:
+                ifabsent: float(1.0)
+
+    DocAccess_MostlyAccessible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_access_mostly_accessible)
+            text:
+                ifabsent: string(Mostly accessible)
+            score:
+                ifabsent: float(2.0)
+
+    DocAccess_FullyAccessible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_access_fully_accessible)
+            text:
+                ifabsent: string(Fully accessible)
+            score:
+                ifabsent: float(3.0)
+
+    # ============================================
+    # P2: ABILITY TO BE DISASSEMBLED AND ASSEMBLED
+    # Sub-parameter: Ease of Disassembly
+    # ============================================
+
+    EaseOfDisassembly_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of disassembly for parts - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_ease_of_disassembly)
+            name:
+                ifabsent: string(Ease of Disassembly)
+            questions:
+                range: EaseOfDisassemblyQuestion
+                multivalued: true
+                inlined: true
+
+    EaseOfDisassemblyQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q2_1_DisassemblySteps
+            - Q2_2_FastenerType
+            - Q2_3_ToolsRequired
+
+    # Q2.1: Disassembly Steps
+    Q2_1_DisassemblySteps:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.1)
+            text:
+                ifabsent: string(On average, how many disassembly steps are required to reach the parts?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: RemanuDisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    RemanuDisassemblyStepsAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RemanuDisSteps_2OrLess
+            - RemanuDisSteps_2To5
+            - RemanuDisSteps_5To10
+            - RemanuDisSteps_10To15
+            - RemanuDisSteps_Over15
+            - RemanuDisSteps_CannotDisassemble
+
+    RemanuDisSteps_2OrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(dis_steps_2_or_less)
+            text:
+                ifabsent: string(x ≤ 2 steps)
+            score:
+                ifabsent: float(5.0)
+
+    RemanuDisSteps_2To5:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(dis_steps_2_to_5)
+            text:
+                ifabsent: string(5 ≥ x > 2 steps)
+            score:
+                ifabsent: float(4.0)
+
+    RemanuDisSteps_5To10:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(dis_steps_5_to_10)
+            text:
+                ifabsent: string(10 ≥ x > 5 steps)
+            score:
+                ifabsent: float(3.0)
+
+    RemanuDisSteps_10To15:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(dis_steps_10_to_15)
+            text:
+                ifabsent: string(15 ≥ x > 10 steps)
+            score:
+                ifabsent: float(2.0)
+
+    RemanuDisSteps_Over15:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(dis_steps_over_15)
+            text:
+                ifabsent: string(x > 15 steps)
+            score:
+                ifabsent: float(1.0)
+
+    RemanuDisSteps_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(dis_steps_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    # Q2.2: Fastener Type
+    Q2_2_FastenerType:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.2)
+            text:
+                ifabsent: string(On average, what is the most commonly used type of fastener to connect parts?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: FastenerTypeDisassemblyAnswerOption
+                multivalued: true
+                inlined: true
+
+    FastenerTypeDisassemblyAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - FastenerDis_ReusableRemovable
+            - FastenerDis_SuppliedWithPart
+            - FastenerDis_RemovableNotReusable
+            - FastenerDis_NeitherRemovableNorReusable
+            - FastenerDis_CannotDisassemble
+            - FastenerDis_DataNotAvailable
+
+    FastenerDis_ReusableRemovable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fastener_dis_reusable_removable)
+            text:
+                ifabsent: string(Reusable and removable)
+            score:
+                ifabsent: float(5.0)
+
+    FastenerDis_SuppliedWithPart:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fastener_dis_supplied_with_part)
+            text:
+                ifabsent: string(New fastener is supplied with the new part)
+            score:
+                ifabsent: float(4.0)
+
+    FastenerDis_RemovableNotReusable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fastener_dis_removable_not_reusable)
+            text:
+                ifabsent: string(Removable but not reusable)
+            score:
+                ifabsent: float(3.0)
+
+    FastenerDis_NeitherRemovableNorReusable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fastener_dis_neither_removable_nor_reusable)
+            text:
+                ifabsent: string(Neither removable nor reusable)
+            score:
+                ifabsent: float(2.0)
+
+    FastenerDis_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fastener_dis_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    FastenerDis_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fastener_dis_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Q2.3: Tools Required
+    Q2_3_ToolsRequired:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.3)
+            text:
+                ifabsent: string(On average, what are the types of tools required to disassemble parts?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: ToolsRequiredDisassemblyAnswerOption
+                multivalued: true
+                inlined: true
+
+    ToolsRequiredDisassemblyAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - ToolsDis_NoTools
+            - ToolsDis_BasicTools
+            - ToolsDis_SuppliedWithPart
+            - ToolsDis_SuppliedWithProduct
+            - ToolsDis_ProductGroupSpecific
+            - ToolsDis_Commercial
+            - ToolsDis_Proprietary
+            - ToolsDis_NotFeasible
+            - ToolsDis_CannotDisassemble
+            - ToolsDis_DataNotAvailable
+
+    ToolsDis_NoTools:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_dis_no_tools)
+            text:
+                ifabsent: string(No tools needed)
+            score:
+                ifabsent: float(5.0)
+
+    ToolsDis_BasicTools:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_dis_basic_tools)
+            text:
+                ifabsent: string(Basic tools needed)
+            score:
+                ifabsent: float(4.0)
+
+    ToolsDis_SuppliedWithPart:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_dis_supplied_with_part)
+            text:
+                ifabsent: string(Tools supplied with part)
+            score:
+                ifabsent: float(4.0)
+
+    ToolsDis_SuppliedWithProduct:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_dis_supplied_with_product)
+            text:
+                ifabsent: string(Tools supplied with product)
+            score:
+                ifabsent: float(4.0)
+
+    ToolsDis_ProductGroupSpecific:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_dis_product_group_specific)
+            text:
+                ifabsent: string(Product group specific tools which are defined with a finite list or can be distinguished verifiably)
+            score:
+                ifabsent: float(3.0)
+
+    ToolsDis_Commercial:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_dis_commercial)
+            text:
+                ifabsent: string(Commercial tools)
+            score:
+                ifabsent: float(2.0)
+
+    ToolsDis_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_dis_proprietary)
+            text:
+                ifabsent: string(Proprietary tools which are not available for purchase by the general public)
+            score:
+                ifabsent: float(1.0)
+
+    ToolsDis_NotFeasible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_dis_not_feasible)
+            text:
+                ifabsent: string(Not feasible with any existing tool)
+            score:
+                ifabsent: float(0.0)
+
+    ToolsDis_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_dis_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    ToolsDis_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_dis_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P2: ABILITY TO BE DISASSEMBLED AND ASSEMBLED
+    # Sub-parameter: Ease of Assembly
+    # ============================================
+
+    EaseOfAssembly_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of assembly for parts - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_ease_of_assembly)
+            name:
+                ifabsent: string(Ease of Assembly)
+            questions:
+                range: EaseOfAssemblyQuestion
+                multivalued: true
+                inlined: true
+
+    EaseOfAssemblyQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q2_4_InsertionEffort
+            - Q2_5_OrientationFeatures
+            - Q2_6_LockingMechanism
+            - Q2_7_DamageRisk
+
+    # Q2.4: Insertion Effort
+    Q2_4_InsertionEffort:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.4)
+            text:
+                ifabsent: string(On average, what is the level of effort required to insert parts into their designated position during reassembly?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: InsertionEffortAnswerOption
+                multivalued: true
+                inlined: true
+
+    InsertionEffortAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - InsertEffort_MinimalResistance
+            - InsertEffort_SomeAlignment
+            - InsertEffort_Difficult
+            - InsertEffort_CannotAssemble
+            - InsertEffort_DataNotAvailable
+
+    InsertEffort_MinimalResistance:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(insert_effort_minimal_resistance)
+            text:
+                ifabsent: string(Slides in with minimal resistance)
+            score:
+                ifabsent: float(3.0)
+
+    InsertEffort_SomeAlignment:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(insert_effort_some_alignment)
+            text:
+                ifabsent: string(Requires some alignment or force)
+            score:
+                ifabsent: float(2.0)
+
+    InsertEffort_Difficult:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(insert_effort_difficult)
+            text:
+                ifabsent: string(Difficult to insert or requires forceful fitting)
+            score:
+                ifabsent: float(1.0)
+
+    InsertEffort_CannotAssemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(insert_effort_cannot_assemble)
+            text:
+                ifabsent: string(Cannot be assembled)
+            score:
+                ifabsent: float(0.0)
+
+    InsertEffort_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(insert_effort_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Q2.5: Orientation Features
+    Q2_5_OrientationFeatures:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.5)
+            text:
+                ifabsent: string(On average, do the parts have clear orientation features (e.g., asymmetry prevents wrong insertion)?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: OrientationFeaturesAnswerOption
+                multivalued: true
+                inlined: true
+
+    OrientationFeaturesAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - OrientFeatures_Obvious
+            - OrientFeatures_Somewhat
+            - OrientFeatures_No
+            - OrientFeatures_CannotAssemble
+            - OrientFeatures_DataNotAvailable
+
+    OrientFeatures_Obvious:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(orient_features_obvious)
+            text:
+                ifabsent: string(Yes – orientation is obvious and self-aligning (or clear visual / physical aids present))
+            score:
+                ifabsent: float(3.0)
+
+    OrientFeatures_Somewhat:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(orient_features_somewhat)
+            text:
+                ifabsent: string(Somewhat – guidance features exist but are subtle)
+            score:
+                ifabsent: float(2.0)
+
+    OrientFeatures_No:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(orient_features_no)
+            text:
+                ifabsent: string(No – part can be misaligned or inserted incorrectly)
+            score:
+                ifabsent: float(1.0)
+
+    OrientFeatures_CannotAssemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(orient_features_cannot_assemble)
+            text:
+                ifabsent: string(Cannot be assembled)
+            score:
+                ifabsent: float(0.0)
+
+    OrientFeatures_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(orient_features_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Q2.6: Locking Mechanism
+    Q2_6_LockingMechanism:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.6)
+            text:
+                ifabsent: string(On average, do the parts lock or secure into place upon insertion without requiring additional operations?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: LockingMechanismAnswerOption
+                multivalued: true
+                inlined: true
+
+    LockingMechanismAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - LockMech_Automatic
+            - LockMech_Partial
+            - LockMech_Multiple
+            - LockMech_CannotAssemble
+            - LockMech_DataNotAvailable
+
+    LockMech_Automatic:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(lock_mech_automatic)
+            text:
+                ifabsent: string(Yes – automatically locks/snaps into place)
+            score:
+                ifabsent: float(3.0)
+
+    LockMech_Partial:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(lock_mech_partial)
+            text:
+                ifabsent: string(Partially – needs one simple action (e.g., single screw))
+            score:
+                ifabsent: float(2.0)
+
+    LockMech_Multiple:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(lock_mech_multiple)
+            text:
+                ifabsent: string(No – requires multiple or complex securing steps)
+            score:
+                ifabsent: float(1.0)
+
+    LockMech_CannotAssemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(lock_mech_cannot_assemble)
+            text:
+                ifabsent: string(Cannot be assembled)
+            score:
+                ifabsent: float(0.0)
+
+    LockMech_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(lock_mech_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Q2.7: Damage Risk
+    Q2_7_DamageRisk:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.7)
+            text:
+                ifabsent: string(On average, is there a risk of damaging the parts during insertion due to tight tolerances or misalignment?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: DamageRiskAnswerOption
+                multivalued: true
+                inlined: true
+
+    DamageRiskAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - DamageRisk_NoRisk
+            - DamageRisk_SomeRisk
+            - DamageRisk_Yes
+            - DamageRisk_CannotAssemble
+            - DamageRisk_DataNotAvailable
+
+    DamageRisk_NoRisk:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(damage_risk_no_risk)
+            text:
+                ifabsent: string(No – safe and forgiving fit)
+            score:
+                ifabsent: float(3.0)
+
+    DamageRisk_SomeRisk:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(damage_risk_some_risk)
+            text:
+                ifabsent: string(Some risk – requires care)
+            score:
+                ifabsent: float(2.0)
+
+    DamageRisk_Yes:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(damage_risk_yes)
+            text:
+                ifabsent: string(Yes – frequent or likely damage if not aligned precisely)
+            score:
+                ifabsent: float(1.0)
+
+    DamageRisk_CannotAssemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(damage_risk_cannot_assemble)
+            text:
+                ifabsent: string(Cannot be assembled)
+            score:
+                ifabsent: float(0.0)
+
+    DamageRisk_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(damage_risk_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P2: ABILITY TO BE DISASSEMBLED AND ASSEMBLED
+    # Sub-parameter: Documentation Availability
+    # ============================================
+
+    DocumentationAvailabilityDisassembly_Parameter:
+        is_a: ParameterSpecification
+        description: Documentation availability for disassembly and assembly - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_documentation_availability_disassembly)
+            name:
+                ifabsent: string(Documentation Availability - Disassembly/Assembly)
+            questions:
+                range: DocumentationAvailabilityDisassemblyQuestion
+                multivalued: true
+                inlined: true
+
+    DocumentationAvailabilityDisassemblyQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q2_8_FastenerLocationIndependent
+            - Q2_9_FastenerLocationManufacturer
+            - Q2_10_AssemblyDiagramManufacturer
+            - Q2_11_AssemblyDiagramIndependent
+
+    # Q2.8: Fastener Location - Independent
+    Q2_8_FastenerLocationIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.8)
+            text:
+                ifabsent: string(Is information about fastener location available for Independent EoL Operator?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: DiagramAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.9: Fastener Location - Manufacturer
+    Q2_9_FastenerLocationManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.9)
+            text:
+                ifabsent: string(Is information about fastener location available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: DiagramAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.10: Assembly Diagram - Manufacturer
+    Q2_10_AssemblyDiagramManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.10)
+            text:
+                ifabsent: string(Is the Assembly diagram available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: DiagramAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.11: Assembly Diagram - Independent
+    Q2_11_AssemblyDiagramIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.11)
+            text:
+                ifabsent: string(Is the Assembly diagram available for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: DiagramAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for diagram availability questions
+    DiagramAvailabilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - DiagramAvail_Detailed
+            - DiagramAvail_Partial
+            - DiagramAvail_NoDiagrams
+            - DiagramAvail_NotSure
+
+    DiagramAvail_Detailed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diagram_avail_detailed)
+            text:
+                ifabsent: string(Yes – detailed diagrams provided)
+            score:
+                ifabsent: float(3.0)
+
+    DiagramAvail_Partial:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diagram_avail_partial)
+            text:
+                ifabsent: string(Partial – some diagrams, not complete)
+            score:
+                ifabsent: float(1.0)
+
+    DiagramAvail_NoDiagrams:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diagram_avail_no_diagrams)
+            text:
+                ifabsent: string(No – no diagrams available)
+            score:
+                ifabsent: float(0.0)
+
+    DiagramAvail_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diagram_avail_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P2: ABILITY TO BE DISASSEMBLED AND ASSEMBLED
+    # Sub-parameter: Safety & Risk
+    # ============================================
+
+    SafetyRiskDisassembly_Parameter:
+        is_a: ParameterSpecification
+        description: Safety risks during disassembly and assembly - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_safety_risk_disassembly)
+            name:
+                ifabsent: string(Safety & Risk - Disassembly/Assembly)
+            questions:
+                range: SafetyRiskDisassemblyQuestion
+                multivalued: true
+                inlined: true
+
+    SafetyRiskDisassemblyQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q2_12_SafetyRisks
+
+    # Q2.12: Safety Risks During Disassembly/Assembly
+    Q2_12_SafetyRisks:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.12)
+            text:
+                ifabsent: string(Are there safety risks during Disassembly/Assembly?)
+            weight:
+                ifabsent: float(0.023809524)
+            answer_options:
+                range: SafetyRiskDisassemblyAnswerOption
+                multivalued: true
+                inlined: true
+
+    SafetyRiskDisassemblyAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SafetyRiskDis_Yes
+            - SafetyRiskDis_No
+            - SafetyRiskDis_NotSure
+
+    SafetyRiskDis_Yes:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_dis_yes)
+            text:
+                ifabsent: string(Yes)
+            score:
+                ifabsent: float(0.0)
+
+    SafetyRiskDis_No:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_dis_no)
+            text:
+                ifabsent: string(No)
+            score:
+                ifabsent: float(3.0)
+
+    SafetyRiskDis_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_dis_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P3: ABILITY TO BE CLEANED
+    # Sub-parameter: Ease of Cleaning
+    # ============================================
+
+    EaseOfCleaning_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of cleaning for product surfaces and internal areas - core definition
+        attributes:
+            id:
+                ifabsent: string(P3_ease_of_cleaning)
+            name:
+                ifabsent: string(Ease of Cleaning)
+            questions:
+                range: EaseOfCleaningQuestion
+                multivalued: true
+                inlined: true
+
+    EaseOfCleaningQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q3_1_CleaningAccessibility
+            - Q3_2_SurfaceGeometry
+            - Q3_3_CleaningMethods
+
+    # Q3.1: Cleaning Accessibility
+    Q3_1_CleaningAccessibility:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.1)
+            text:
+                ifabsent: string(Are the main surfaces and internal areas that require cleaning easily accessible without damaging the product?)
+            weight:
+                ifabsent: float(0.055555556)
+            answer_options:
+                range: CleaningAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    CleaningAccessibilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - CleanAccess_AllAccessible
+            - CleanAccess_Partially
+            - CleanAccess_Inaccessible
+            - CleanAccess_NotSure
+
+    CleanAccess_AllAccessible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_access_all_accessible)
+            text:
+                ifabsent: string(Yes – all key surfaces can be accessed and cleaned easily)
+            score:
+                ifabsent: float(3.0)
+
+    CleanAccess_Partially:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_access_partially)
+            text:
+                ifabsent: string(Partially – some areas are accessible, others are obstructed)
+            score:
+                ifabsent: float(2.0)
+
+    CleanAccess_Inaccessible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_access_inaccessible)
+            text:
+                ifabsent: string(No – major areas requiring cleaning are inaccessible)
+            score:
+                ifabsent: float(0.0)
+
+    CleanAccess_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_access_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.2: Surface Geometry
+    Q3_2_SurfaceGeometry:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.2)
+            text:
+                ifabsent: string(Are there complex or uneven surface geometries (e.g., deep grooves, tight gaps) that tend to trap dust, debris, or residue?)
+            weight:
+                ifabsent: float(0.055555556)
+            answer_options:
+                range: SurfaceGeometryAnswerOption
+                multivalued: true
+                inlined: true
+
+    SurfaceGeometryAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SurfGeom_Smooth
+            - SurfGeom_Limited
+            - SurfGeom_Multiple
+            - SurfGeom_NotSure
+
+    SurfGeom_Smooth:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(surf_geom_smooth)
+            text:
+                ifabsent: string(No – surfaces are smooth and easy to wipe/clean)
+            score:
+                ifabsent: float(3.0)
+
+    SurfGeom_Limited:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(surf_geom_limited)
+            text:
+                ifabsent: string(Some – limited areas with difficult geometries)
+            score:
+                ifabsent: float(2.0)
+
+    SurfGeom_Multiple:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(surf_geom_multiple)
+            text:
+                ifabsent: string(Yes – multiple areas are prone to trapping dirt)
+            score:
+                ifabsent: float(0.0)
+
+    SurfGeom_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(surf_geom_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.3: Cleaning Methods
+    Q3_3_CleaningMethods:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.3)
+            text:
+                ifabsent: string(Can standard or safe cleaning methods (e.g., wiping, compressed air, mild detergent) be used without damaging materials or electronics?)
+            weight:
+                ifabsent: float(0.055555556)
+            answer_options:
+                range: CleaningMethodsAnswerOption
+                multivalued: true
+                inlined: true
+
+    CleaningMethodsAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - CleanMethods_Tolerates
+            - CleanMethods_WithCaution
+            - CleanMethods_MayCauseDamage
+            - CleanMethods_NotSure
+
+    CleanMethods_Tolerates:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_methods_tolerates)
+            text:
+                ifabsent: string(Yes – product tolerates typical cleaning processes)
+            score:
+                ifabsent: float(3.0)
+
+    CleanMethods_WithCaution:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_methods_with_caution)
+            text:
+                ifabsent: string(With caution – cleaning possible but with specific care)
+            score:
+                ifabsent: float(2.0)
+
+    CleanMethods_MayCauseDamage:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_methods_may_cause_damage)
+            text:
+                ifabsent: string(No – cleaning may cause damage or is restricted)
+            score:
+                ifabsent: float(0.0)
+
+    CleanMethods_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_methods_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P3: ABILITY TO BE CLEANED
+    # Sub-parameter: Safety and Risk
+    # ============================================
+
+    SafetyRiskCleaning_Parameter:
+        is_a: ParameterSpecification
+        description: Safety risks during cleaning - core definition
+        attributes:
+            id:
+                ifabsent: string(P3_safety_risk_cleaning)
+            name:
+                ifabsent: string(Safety and Risk - Cleaning)
+            questions:
+                range: SafetyRiskCleaningQuestion
+                multivalued: true
+                inlined: true
+
+    SafetyRiskCleaningQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q3_4_SafetyRisks
+
+    # Q3.4: Safety Risks During Cleaning
+    Q3_4_SafetyRisks:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.4)
+            text:
+                ifabsent: string(Are there safety risks during cleaning?)
+            weight:
+                ifabsent: float(0.055555556)
+            answer_options:
+                range: SafetyRiskCleaningAnswerOption
+                multivalued: true
+                inlined: true
+
+    SafetyRiskCleaningAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SafetyRiskClean_Yes
+            - SafetyRiskClean_No
+            - SafetyRiskClean_NotSure
+
+    SafetyRiskClean_Yes:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_clean_yes)
+            text:
+                ifabsent: string(Yes)
+            score:
+                ifabsent: float(0.0)
+
+    SafetyRiskClean_No:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_clean_no)
+            text:
+                ifabsent: string(No)
+            score:
+                ifabsent: float(3.0)
+
+    SafetyRiskClean_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_clean_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P3: ABILITY TO BE CLEANED
+    # Sub-parameter: Documentation Availability
+    # ============================================
+
+    DocumentationAvailabilityCleaning_Parameter:
+        is_a: ParameterSpecification
+        description: Documentation availability for cleaning - core definition
+        attributes:
+            id:
+                ifabsent: string(P3_documentation_availability_cleaning)
+            name:
+                ifabsent: string(Documentation Availability - Cleaning)
+            questions:
+                range: DocumentationAvailabilityCleaningQuestion
+                multivalued: true
+                inlined: true
+
+    DocumentationAvailabilityCleaningQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q3_5_CleaningInstructionsManufacturer
+            - Q3_6_CleaningInstructionsIndependent
+
+    # Q3.5: Cleaning Instructions - Manufacturer
+    Q3_5_CleaningInstructionsManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.5)
+            text:
+                ifabsent: string(Are cleaning instructions or guidance available for Manufacturer Authorized EoL Operator?)
+            weight:
+                ifabsent: float(0.055555556)
+            answer_options:
+                range: CleaningInstructionsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q3.6: Cleaning Instructions - Independent
+    Q3_6_CleaningInstructionsIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.6)
+            text:
+                ifabsent: string(Are cleaning instructions or guidance available for Independent EoL Operator?)
+            weight:
+                ifabsent: float(0.055555556)
+            answer_options:
+                range: CleaningInstructionsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for cleaning instructions questions
+    CleaningInstructionsAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - CleanInst_Documented
+            - CleanInst_Partial
+            - CleanInst_NoInfo
+            - CleanInst_NotSure
+
+    CleanInst_Documented:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_inst_documented)
+            text:
+                ifabsent: string(Yes – clearly documented cleaning procedure available)
+            score:
+                ifabsent: float(3.0)
+
+    CleanInst_Partial:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_inst_partial)
+            text:
+                ifabsent: string(Partially – some guidance exists, but not complete)
+            score:
+                ifabsent: float(2.0)
+
+    CleanInst_NoInfo:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_inst_no_info)
+            text:
+                ifabsent: string(No – no information on how to clean the product)
+            score:
+                ifabsent: float(0.0)
+
+    CleanInst_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(clean_inst_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P4: ABILITY TO BE REPROCESSED
+    # Sub-parameter: Wear and Damage
+    # ============================================
+
+    WearAndDamage_Parameter:
+        is_a: ParameterSpecification
+        description: Wear and damage resistance through remanufacturing cycles - core definition
+        attributes:
+            id:
+                ifabsent: string(P4_wear_and_damage)
+            name:
+                ifabsent: string(Wear and Damage)
+            questions:
+                range: WearAndDamageQuestion
+                multivalued: true
+                inlined: true
+
+    WearAndDamageQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q4_1_FunctionalIntegrity
+
+    # Q4.1: Functional Integrity
+    Q4_1_FunctionalIntegrity:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1)
+            text:
+                ifabsent: string(On average, are the parts likely to retain full functionality and structural integrity after one or more remanufacturing cycles?)
+            weight:
+                ifabsent: float(0.030303030)
+            answer_options:
+                range: FunctionalIntegrityAnswerOption
+                multivalued: true
+                inlined: true
+
+    FunctionalIntegrityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - FuncIntegrity_Designed
+            - FuncIntegrity_Possibly
+            - FuncIntegrity_Degrades
+            - FuncIntegrity_Unknown
+
+    FuncIntegrity_Designed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(func_integrity_designed)
+            text:
+                ifabsent: string(Yes – specifically rated or designed for reuse across cycles)
+            score:
+                ifabsent: float(3.0)
+
+    FuncIntegrity_Possibly:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(func_integrity_possibly)
+            text:
+                ifabsent: string(Possibly – if handled properly during remanufacturing)
+            score:
+                ifabsent: float(2.0)
+
+    FuncIntegrity_Degrades:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(func_integrity_degrades)
+            text:
+                ifabsent: string(No – degrades after single use or disassembly)
+            score:
+                ifabsent: float(0.0)
+
+    FuncIntegrity_Unknown:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(func_integrity_unknown)
+            text:
+                ifabsent: string(Unknown)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P4: ABILITY TO BE REPROCESSED
+    # Sub-parameter: Upgradability
+    # ============================================
+
+    Upgradability_Parameter:
+        is_a: ParameterSpecification
+        description: Software upgradability - core definition
+        attributes:
+            id:
+                ifabsent: string(P4_upgradability)
+            name:
+                ifabsent: string(Upgradability)
+            questions:
+                range: UpgradabilityQuestion
+                multivalued: true
+                inlined: true
+
+    UpgradabilityQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q4_2_SoftwareUpdates
+
+    # Q4.2: Software Updates
+    Q4_2_SoftwareUpdates:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.2)
+            text:
+                ifabsent: string(Is it possible to perform software updates?)
+            weight:
+                ifabsent: float(0.030303030)
+            answer_options:
+                range: SoftwareUpdatesAnswerOption
+                multivalued: true
+                inlined: true
+
+    SoftwareUpdatesAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SoftwareUpd_Yes
+            - SoftwareUpd_No
+            - SoftwareUpd_DataUnavailable
+            - SoftwareUpd_Irrelevant
+
+    SoftwareUpd_Yes:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(software_upd_yes)
+            text:
+                ifabsent: string(Yes)
+            score:
+                ifabsent: float(1.0)
+
+    SoftwareUpd_No:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(software_upd_no)
+            text:
+                ifabsent: string(No)
+            score:
+                ifabsent: float(0.0)
+
+    SoftwareUpd_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(software_upd_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    SoftwareUpd_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(software_upd_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P4: ABILITY TO BE REPROCESSED
+    # Sub-parameter: Resetting
+    # ============================================
+
+    Resetting_Parameter:
+        is_a: ParameterSpecification
+        description: Factory reset capability - core definition
+        attributes:
+            id:
+                ifabsent: string(P4_resetting)
+            name:
+                ifabsent: string(Resetting)
+            questions:
+                range: ResettingQuestion
+                multivalued: true
+                inlined: true
+
+    ResettingQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q4_3_FactoryReset
+
+    # Q4.3: Factory Reset
+    Q4_3_FactoryReset:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.3)
+            text:
+                ifabsent: string(Can the product be reset to default factory settings?)
+            weight:
+                ifabsent: float(0.030303030)
+            answer_options:
+                range: FactoryResetAnswerOption
+                multivalued: true
+                inlined: true
+
+    FactoryResetAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - FactoryReset_OneClick
+            - FactoryReset_Irrelevant
+            - FactoryReset_Manual
+            - FactoryReset_SoftwareUpdate
+            - FactoryReset_ManufacturerSupport
+            - FactoryReset_DataUnavailable
+
+    FactoryReset_OneClick:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(factory_reset_one_click)
+            text:
+                ifabsent: string(One-click reset button available)
+            score:
+                ifabsent: float(4.0)
+
+    FactoryReset_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(factory_reset_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(4.0)
+
+    FactoryReset_Manual:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(factory_reset_manual)
+            text:
+                ifabsent: string(Requires following instructions from a manual (multi-step process but user-doable))
+            score:
+                ifabsent: float(3.0)
+
+    FactoryReset_SoftwareUpdate:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(factory_reset_software_update)
+            text:
+                ifabsent: string(Requires a software update or special process (may need external tools or codes))
+            score:
+                ifabsent: float(2.0)
+
+    FactoryReset_ManufacturerSupport:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(factory_reset_manufacturer_support)
+            text:
+                ifabsent: string(Not possible without manufacturer support)
+            score:
+                ifabsent: float(1.0)
+
+    FactoryReset_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(factory_reset_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P4: ABILITY TO BE REPROCESSED
+    # Sub-parameter: Data Security
+    # ============================================
+
+    DataSecurity_Parameter:
+        is_a: ParameterSpecification
+        description: Data security and erasure capability - core definition
+        attributes:
+            id:
+                ifabsent: string(P4_data_security)
+            name:
+                ifabsent: string(Data Security)
+            questions:
+                range: DataSecurityQuestion
+                multivalued: true
+                inlined: true
+
+    DataSecurityQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q4_4_DataStorage
+            - Q4_5_DataErasure
+
+    # Q4.4: Data Storage Security
+    Q4_4_DataStorage:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.4)
+            text:
+                ifabsent: string(Is data stored in a way that prevents unauthorized access or sharing?)
+            weight:
+                ifabsent: float(0.030303030)
+            answer_options:
+                range: DataStorageAnswerOption
+                multivalued: true
+                inlined: true
+
+    DataStorageAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - DataStorage_Encrypted
+            - DataStorage_Irrelevant
+            - DataStorage_Partial
+            - DataStorage_Accessible
+            - DataStorage_NotSpecified
+            - DataStorage_DataUnavailable
+
+    DataStorage_Encrypted:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_storage_encrypted)
+            text:
+                ifabsent: string(Yes, data is encrypted and cannot be accessed by unauthorized parties)
+            score:
+                ifabsent: float(2.0)
+
+    DataStorage_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_storage_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(2.0)
+
+    DataStorage_Partial:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_storage_partial)
+            text:
+                ifabsent: string(Partially, some data may be exposed if not manually deleted)
+            score:
+                ifabsent: float(1.0)
+
+    DataStorage_Accessible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_storage_accessible)
+            text:
+                ifabsent: string(No, data can still be accessed if components are removed and examined)
+            score:
+                ifabsent: float(0.0)
+
+    DataStorage_NotSpecified:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_storage_not_specified)
+            text:
+                ifabsent: string(Not specified by the manufacturer)
+            score:
+                ifabsent: float(0.0)
+
+    DataStorage_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_storage_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    # Q4.5: Data Erasure
+    Q4_5_DataErasure:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.5)
+            text:
+                ifabsent: string(Can user data be fully erased before switching users?)
+            weight:
+                ifabsent: float(0.030303030)
+            answer_options:
+                range: DataErasureAnswerOption
+                multivalued: true
+                inlined: true
+
+    DataErasureAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - DataErasure_SecureWipe
+            - DataErasure_Irrelevant
+            - DataErasure_Partial
+            - DataErasure_Remains
+            - DataErasure_DataUnavailable
+
+    DataErasure_SecureWipe:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_erasure_secure_wipe)
+            text:
+                ifabsent: string(Yes, a secure wipe is available)
+            score:
+                ifabsent: float(2.0)
+
+    DataErasure_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_erasure_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(2.0)
+
+    DataErasure_Partial:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_erasure_partial)
+            text:
+                ifabsent: string(Partial wipe (some residual data may remain))
+            score:
+                ifabsent: float(1.0)
+
+    DataErasure_Remains:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_erasure_remains)
+            text:
+                ifabsent: string(No, user data remains after reset)
+            score:
+                ifabsent: float(0.0)
+
+    DataErasure_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_erasure_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P4: ABILITY TO BE REPROCESSED
+    # Sub-parameter: Spare Parts
+    # ============================================
+
+    SpareParts_Parameter:
+        is_a: ParameterSpecification
+        description: Spare parts compatibility, availability, and delivery - core definition
+        attributes:
+            id:
+                ifabsent: string(P4_spare_parts)
+            name:
+                ifabsent: string(Spare Parts)
+            questions:
+                range: SparePartsQuestion
+                multivalued: true
+                inlined: true
+
+    SparePartsQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q4_6_SparePartsCompatibility
+            - Q4_7_SparePartsDeliveryManufacturer
+            - Q4_8_SparePartsDeliveryIndependent
+            - Q4_9_SparePartsAvailabilityManufacturer
+            - Q4_10_SparePartsAvailabilityIndependent
+
+    # Q4.6: Spare Parts Compatibility
+    Q4_6_SparePartsCompatibility:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.6)
+            text:
+                ifabsent: string(On average, what is the compatibility of spare parts with others in the market?)
+            weight:
+                ifabsent: float(0.030303030)
+            answer_options:
+                range: RemanufactureSparePartsCompatibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    RemanufactureSparePartsCompatibilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SpareCompat_RemanufactureFully
+            - SpareCompat_RemanufactureHalf
+            - SpareCompat_RemanufactureNo
+            - SpareCompat_RemanufactureNoAnswer
+
+    SpareCompat_RemanufactureFully:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_compat_fully)
+            text:
+                ifabsent: string(Fully compatible)
+            score:
+                ifabsent: float(2.0)
+
+    SpareCompat_RemanufactureHalf:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_compat_half)
+            text:
+                ifabsent: string(Half compatible)
+            score:
+                ifabsent: float(1.0)
+
+    SpareCompat_RemanufactureNo:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_compat_no)
+            text:
+                ifabsent: string(No compatibility)
+            score:
+                ifabsent: float(0.0)
+
+    SpareCompat_RemanufactureNoAnswer:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_compat_no_answer)
+            text:
+                ifabsent: string(No answer)
+            score:
+                ifabsent: float(0.0)
+
+    # Q4.7: Spare Parts Delivery - Manufacturer
+    Q4_7_SparePartsDeliveryManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.7)
+            text:
+                ifabsent: string(On average, how quick are the spare parts delivered for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.030303030)
+            answer_options:
+                range: RemanufactureSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q4.8: Spare Parts Delivery - Independent
+    Q4_8_SparePartsDeliveryIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.8)
+            text:
+                ifabsent: string(On average, how quick are the spare parts delivered for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.030303030)
+            answer_options:
+                range: RemanufactureSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    RemanufactureSparePartsDeliveryAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SpareDeliv_Remanufacture3DaysOrLess
+            - SpareDeliv_Remanufacture3To5Days
+            - SpareDeliv_Remanufacture5To10Days
+            - SpareDeliv_RemanufactureMoreThan10Days
+            - SpareDeliv_RemanufactureNotAvailable
+            - SpareDeliv_RemanufactureDataUnavailable
+
+    SpareDeliv_Remanufacture3DaysOrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_3_days_or_less)
+            text:
+                ifabsent: string(Delivered in 3 days or less)
+            score:
+                ifabsent: float(4.0)
+
+    SpareDeliv_Remanufacture3To5Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_3_to_5_days)
+            text:
+                ifabsent: string(Delivered in 3 to 5 days (5 included))
+            score:
+                ifabsent: float(3.0)
+
+    SpareDeliv_Remanufacture5To10Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_5_to_10_days)
+            text:
+                ifabsent: string(Delivered in 5 to 10 days (10 included))
+            score:
+                ifabsent: float(2.0)
+
+    SpareDeliv_RemanufactureMoreThan10Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_more_than_10_days)
+            text:
+                ifabsent: string(Delivered in more than 10 days)
+            score:
+                ifabsent: float(1.0)
+
+    SpareDeliv_RemanufactureNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_not_available)
+            text:
+                ifabsent: string(Component not available)
+            score:
+                ifabsent: float(0.0)
+
+    SpareDeliv_RemanufactureDataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_data_unavailable)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Q4.9: Spare Parts Availability - Manufacturer
+    Q4_9_SparePartsAvailabilityManufacturer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.9)
+            text:
+                ifabsent: string(On average, for how long are spare parts available for Manufacturer Authorized EoL operator?)
+            weight:
+                ifabsent: float(0.030303030)
+            answer_options:
+                range: RemanufactureSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q4.10: Spare Parts Availability - Independent
+    Q4_10_SparePartsAvailabilityIndependent:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.10)
+            text:
+                ifabsent: string(On average, for how long are spare parts available for Independent EoL operator?)
+            weight:
+                ifabsent: float(0.030303030)
+            answer_options:
+                range: RemanufactureSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    RemanufactureSparePartsAvailabilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SpareAvail_Remanufacture7YearsOrMore
+            - SpareAvail_Remanufacture6Years
+            - SpareAvail_Remanufacture5Years
+            - SpareAvail_Remanufacture4YearsOrLess
+            - SpareAvail_RemanufactureNotAvailable
+            - SpareAvail_RemanufactureDataUnavailable
+
+    SpareAvail_Remanufacture7YearsOrMore:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_7_years_or_more)
+            text:
+                ifabsent: string(Available for 7 years or more)
+            score:
+                ifabsent: float(4.0)
+
+    SpareAvail_Remanufacture6Years:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_6_years)
+            text:
+                ifabsent: string(Available for 6 years)
+            score:
+                ifabsent: float(3.0)
+
+    SpareAvail_Remanufacture5Years:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_5_years)
+            text:
+                ifabsent: string(Available for 5 years)
+            score:
+                ifabsent: float(2.0)
+
+    SpareAvail_Remanufacture4YearsOrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_4_years_or_less)
+            text:
+                ifabsent: string(Available for 4 years or less)
+            score:
+                ifabsent: float(1.0)
+
+    SpareAvail_RemanufactureNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_not_available)
+            text:
+                ifabsent: string(Not available at all)
+            score:
+                ifabsent: float(0.0)
+
+    SpareAvail_RemanufactureDataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_data_unavailable)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P4: ABILITY TO BE REPROCESSED
+    # Sub-parameter: Safety and Risk
+    # ============================================
+
+    SafetyRiskReprocessing_Parameter:
+        is_a: ParameterSpecification
+        description: Safety risks during reprocessing - core definition
+        attributes:
+            id:
+                ifabsent: string(P4_safety_risk_reprocessing)
+            name:
+                ifabsent: string(Safety and Risk - Reprocessing)
+            questions:
+                range: SafetyRiskReprocessingQuestion
+                multivalued: true
+                inlined: true
+
+    SafetyRiskReprocessingQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q4_11_SafetyRisks
+
+    # Q4.11: Safety Risks During Reprocessing
+    Q4_11_SafetyRisks:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.11)
+            text:
+                ifabsent: string(Are there safety risks during Reprocessing?)
+            weight:
+                ifabsent: float(0.030303030)
+            answer_options:
+                range: SafetyRiskReprocessingAnswerOption
+                multivalued: true
+                inlined: true
+
+    SafetyRiskReprocessingAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SafetyRiskReproc_Yes
+            - SafetyRiskReproc_No
+            - SafetyRiskReproc_NotSure
+
+    SafetyRiskReproc_Yes:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_reproc_yes)
+            text:
+                ifabsent: string(Yes)
+            score:
+                ifabsent: float(0.0)
+
+    SafetyRiskReproc_No:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_reproc_no)
+            text:
+                ifabsent: string(No)
+            score:
+                ifabsent: float(3.0)
+
+    SafetyRiskReproc_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(safety_risk_reproc_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)

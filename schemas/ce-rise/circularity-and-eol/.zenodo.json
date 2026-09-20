@@ -1,0 +1,44 @@
+{
+  "title": "CE-RISE Circularity and End-of-Life",
+  "description": "Data model capturing circularity and end-of-life information for products, including material composition at beginning of life with DMP references, design-for-circularity attributes, performance factors and scores, and end-of-life pathways such as disassembly, recycling, treatment options, and CRM recovery-related information. The model creates a circular loop by linking materials used at product beginning of life to materials recovered at end of life.",
+  "license": "CC-BY-NC-4.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Boero, Riccardo",
+      "affiliation": "NILU",
+      "orcid": "0000-0002-7468-9096"
+    }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Circularity",
+    "End-of-Life",
+    "Circular Economy",
+    "Design for Circularity",
+    "Recycling",
+    "Critical Raw Materials",
+    "CRM Recovery",
+    "Product Performance",
+    "Sustainability Assessment",
+    "Data Model",
+    "Ontology",
+    "Open Source",
+    "Open Science",
+    "Digital Product Passport"
+  ],
+  "communities": [
+    { "identifier": "ce-rise" },
+    { "identifier": "impact" }
+  ],
+  "grants": [
+    { "id": "101092281" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE_models/circularity-and-eol",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

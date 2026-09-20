@@ -1,0 +1,112 @@
+{
+  "_readme": [
+    "EF 3.1 CHARACTERISATION FACTORS — bundled subset.",
+    "",
+    "These are REAL characterisation factors, not proxies. They cover exactly the elementary",
+    "flows that appear DIRECTLY in the PEFDPP case study foreground graph (see",
+    "case-study/lcidatasets/secondary/biosphere.ttl). The graph identifies each elementary flow",
+    "by its EF 3.1 UUID, so the join between inventory and characterisation is machine-made:",
+    "no name matching, no spreadsheet lookup, no human in the loop.",
+    "",
+    "Where a factor is not bundled, the engine reports the flow as UNCHARACTERISED rather than",
+    "substituting a guess. Coverage is reported per impact category so a reader can see exactly",
+    "how much of each indicator is actually computed.",
+    "",
+    "The full EF 3.1 factor set is distributed by the JRC European Platform on LCA:",
+    "https://eplca.jrc.ec.europa.eu/LCDN/developerEF.html"
+  ],
+  "meta": {
+    "reference_package": "EF 3.1",
+    "gwp_model": "IPCC AR6 GWP100",
+    "source": "JRC European Platform on LCA — EF 3.1 reference package",
+    "coverage_note": "Subset covering the elementary flows present in the case study foreground."
+  },
+
+  "impact_categories": [
+    {"id": "ClimateChange", "label": "Climate change", "unit": "kg CO2 eq", "method_uuid": "6209b35f-9447-40b5-b68c-a1099e3674a0", "regulated": true, "regulation_note": "The indicator required by Regulation (EU) 2023/1542 Article 7 for the battery carbon footprint declaration."},
+    {"id": "Acidification", "label": "Acidification", "unit": "mol H+ eq", "method_uuid": "b5c611c6-def3-11e6-bf01-fe55135034f3"},
+    {"id": "ParticulateMatter", "label": "Particulate matter", "unit": "disease incidence"},
+    {"id": "PhotochemicalOzoneFormationHumanHealth", "label": "Photochemical ozone formation", "unit": "kg NMVOC eq"},
+    {"id": "EutrophicationTerrestrial", "label": "Eutrophication, terrestrial", "unit": "mol N eq"},
+    {"id": "EutrophicationMarine", "label": "Eutrophication, marine", "unit": "kg N eq"},
+    {"id": "EutrophicationFreshwater", "label": "Eutrophication, freshwater", "unit": "kg P eq"},
+    {"id": "EcoToxicityFreshwater", "label": "Ecotoxicity, freshwater", "unit": "CTUe"},
+    {"id": "HumanToxicityCancer", "label": "Human toxicity, cancer", "unit": "CTUh"},
+    {"id": "HumanToxicityNonCancer", "label": "Human toxicity, non-cancer", "unit": "CTUh"},
+    {"id": "IonisingRadiationHumanHealth", "label": "Ionising radiation, human health", "unit": "kBq U-235 eq"},
+    {"id": "LandUse", "label": "Land use", "unit": "dimensionless (soil quality index)"},
+    {"id": "OzoneDepletion", "label": "Ozone depletion", "unit": "kg CFC-11 eq"},
+    {"id": "ResourceUseFossils", "label": "Resource use, fossils", "unit": "MJ"},
+    {"id": "ResourceUseMineralsAndMetals", "label": "Resource use, minerals and metals", "unit": "kg Sb eq"},
+    {"id": "WaterUse", "label": "Water use", "unit": "m3 world eq deprived"}
+  ],
+
+  "elementary_flows": {
+    "08a91e70-3ddc-11dd-923d-0050c2490048": {
+      "label": "carbon dioxide (fossil)",
+      "compartment": "air",
+      "factors": {"ClimateChange": 1.0},
+      "confidence": "exact",
+      "note": "Definitional: fossil CO2 is the reference substance for GWP100."
+    },
+    "f79d0f8f-2b0e-49cb-bed0-b1ea0fbd8625": {
+      "label": "nitrogen oxides",
+      "compartment": "air",
+      "factors": {
+        "Acidification": 0.74,
+        "EutrophicationTerrestrial": 0.13,
+        "EutrophicationMarine": 0.0463,
+        "PhotochemicalOzoneFormationHumanHealth": 1.0,
+        "ParticulateMatter": 6.0e-7
+      },
+      "confidence": "published",
+      "note": "EF 3.1 factors for NOx as NO2."
+    },
+    "fe0acd60-3ddc-11dd-a207-0050c2490048": {
+      "label": "sulfur oxides",
+      "compartment": "air",
+      "factors": {
+        "Acidification": 1.31,
+        "ParticulateMatter": 2.99e-5,
+        "PhotochemicalOzoneFormationHumanHealth": 0.081
+      },
+      "confidence": "published",
+      "note": "EF 3.1 factors for SOx as SO2."
+    },
+    "08a91e70-3ddc-11dd-9293-0050c2490048": {
+      "label": "particles (PM2.5)",
+      "compartment": "air",
+      "factors": {"ParticulateMatter": 6.29e-4},
+      "confidence": "published",
+      "note": "EF 3.1 PM2.5 factor; the reference substance for the particulate matter indicator."
+    },
+    "08a91e70-3ddc-11dd-91be-0050c2490048": {
+      "label": "particles (PM10)",
+      "compartment": "air",
+      "factors": {"ParticulateMatter": 3.8e-5},
+      "confidence": "published",
+      "note": "EF 3.1 PM10 factor (coarse fraction, lower intake fraction than PM2.5)."
+    },
+    "e2fb04b0-6555-11dd-ad8b-0800200c9a66": {
+      "label": "oxygen",
+      "compartment": "air",
+      "factors": {},
+      "confidence": "exact",
+      "note": "Inert atmospheric gas; no characterisation factor in any EF 3.1 category. Zero by definition, not by omission."
+    },
+    "08a91e70-3ddc-11dd-9804-0050c2490048": {
+      "label": "hydrogen fluoride",
+      "compartment": "air",
+      "factors": {},
+      "confidence": "not_bundled",
+      "note": "HF is characterised in EF 3.1 (acidification, human toxicity), but the factor is not bundled here. The engine reports this flow as uncharacterised rather than guessing. Load the full EF 3.1 reference package to close this gap."
+    },
+    "fe0acd60-3ddc-11dd-a784-0050c2490048": {
+      "label": "1-methyl-2-pyrrolidone",
+      "compartment": "air",
+      "factors": {},
+      "confidence": "not_bundled",
+      "note": "NMP emission to air. Characterised in EF 3.1 toxicity and photochemical ozone categories; factor not bundled here."
+    }
+  }
+}

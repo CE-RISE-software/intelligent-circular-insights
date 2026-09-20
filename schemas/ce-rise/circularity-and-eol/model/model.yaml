@@ -1,0 +1,1644 @@
+id: https://ce-rise-models.codeberg.page/circularity-and-eol/
+name: circularity-and-eol
+title: CE-RISE Circularity and End-of-Life Data Model
+description: >
+    Data model capturing circularity and end-of-life information for products,
+    including design-for-circularity attributes, performance factors and scores,
+    and end-of-life pathways such as disassembly, recycling, treatment options,
+    and CRM recovery-related information.
+license: CC BY-NC 4.0
+version: 0.1.1
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    circ: https://ce-rise-models.codeberg.page/circularity-and-eol/
+    xsd: http://www.w3.org/2001/XMLSchema#
+    rdfs: http://www.w3.org/2000/01/rdf-schema#
+    dcterms: http://purl.org/dc/terms/
+    schema: http://schema.org/
+    qudt: http://qudt.org/schema/qudt/
+    unit: http://qudt.org/vocab/unit/
+    bfo: http://purl.obolibrary.org/obo/BFO_
+    chebi: http://purl.obolibrary.org/obo/CHEBI_
+    envo: http://purl.obolibrary.org/obo/ENVO_
+    dpv: https://w3id.org/dpv#
+    odp: http://www.ontologydesignpatterns.org/cp/owl/
+    bs: https://www.iso.org/standard/
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+
+default_prefix: circ
+default_range: string
+
+imports:
+    - linkml:types
+    - https://codeberg.org/CE-RISE-models/uncertainty-quantification/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/metrological-traceability/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/data-quality-framework/raw/tag/pages-v0.0.3/generated/schema
+
+slots:
+    # Stage 1: Design for Circularity slots
+
+    # Modular Design slots
+    modularity_level_value:
+        description: "Level of modularity in product design (e.g., fully modular, partially modular, integrated)"
+        range: string
+        annotations:
+            owl.filler: odp:hasModularityLevel
+            sql_identifier: circ_design_modularity_level
+
+    interchangeable_parts_value:
+        description: "List of parts that can be interchanged with standard components"
+        range: string
+        annotations:
+            owl.filler: circ:hasInterchangeableParts
+            sql_identifier: circ_design_interchangeable_parts
+
+    standardized_interfaces_value:
+        description: "Description of standardized interfaces used in the product"
+        range: string
+        annotations:
+            owl.filler: bs:74348 # ISO/IEC 2382-1:2015 interface standard reference
+            sql_identifier: circ_design_standard_interfaces
+
+    # Material Selection slots
+    recycled_content_value:
+        description: "Percentage of recycled materials in the product"
+        range: float
+        annotations:
+            owl.filler: circ:recycledContentPercentage
+            sql_identifier: circ_design_recycled_content
+            references: "ESPR Annex I; CIRPASS; Battery Pass; King et al.; Jensen et al.; CE-RISE Deliverable 1.1"
+
+    renewable_content_value:
+        description: "Percentage of renewable materials in the product"
+        range: float
+        annotations:
+            owl.filler: circ:renewableContentPercentage
+            sql_identifier: circ_design_renewable_content
+            references: "Battery Pass; CIRPASS; King et al."
+
+    hazardous_substances_value:
+        description: "List of hazardous substances present in the product"
+        range: string
+        annotations:
+            owl.filler: chebi:78298 # CHEBI hazardous substance reference
+            sql_identifier: circ_design_hazardous_substances
+            references: "ESPR Art 7 5. a); Battery Pass; CIRPASS; King et al.; CE-RISE Deliverable 1.1; CLP Regulation (EC) No 1272/2008"
+            comment: "Name of substances of concern as per REACH, RoHS regulations; concentration threshold 0.1% weight by weight (SCIP database requirement)"
+
+    material_passport_value:
+        description: "Reference or link to material passport documentation"
+        range: string
+        annotations:
+            owl.filler: circ:hasMaterialPassport
+            sql_identifier: circ_design_material_passport
+            references: "CIRPASS; Battery Pass"
+
+    # Disassembly Features slots
+    disassembly_time_value:
+        description: "Estimated time required for complete disassembly (in minutes)"
+        range: float
+        annotations:
+            owl.filler: circ:disassemblyTime
+            sql_identifier: circ_design_disassembly_time
+            references: "King et al.; ESPR Annex I"
+
+    required_tools_value:
+        description: "List of tools required for disassembly"
+        range: string
+        annotations:
+            owl.filler: circ:requiredDisassemblyTools
+            sql_identifier: circ_design_required_tools
+
+    disassembly_instructions_value:
+        description: "Reference to disassembly instructions or inline instructions"
+        range: string
+        annotations:
+            owl.filler: schema:instructions
+            sql_identifier: circ_design_disassembly_instructions
+            references: "ESPR Art 7 (2) b) iii); King et al.; Jensen et al.; CE-RISE Deliverable 1.1; Wan and Jiang"
+
+    fastener_types_value:
+        description: "Types of fasteners used in product assembly"
+        range: string
+        annotations:
+            owl.filler: circ:fastenerTypes
+            sql_identifier: circ_design_fastener_types
+
+    # Durability Features slots
+    expected_lifetime_value:
+        description: "Expected product lifetime under normal use conditions (in years)"
+        range: float
+        annotations:
+            owl.filler: schema:expectedLifetime
+            sql_identifier: circ_design_expected_lifetime
+            references: "ESPR; CE-RISE Deliverable 1.1"
+
+    repairability_index_value:
+        description: "Repairability index score or classification"
+        range: string
+        annotations:
+            owl.filler: circ:repairabilityIndex
+            sql_identifier: circ_design_repairability_index
+            references: "King et al.; CE-RISE Deliverable 1.1"
+
+    upgrade_capability_value:
+        description: "Description of upgrade possibilities and modular improvements"
+        range: string
+        annotations:
+            owl.filler: circ:upgradeCapability
+            sql_identifier: circ_design_upgrade_capability
+            references: "ESPR Art. 1 5.; ESPR Annex I; CE-RISE Deliverable 1.1"
+
+    maintenance_schedule_value:
+        description: "Recommended maintenance schedule and intervals"
+        range: string
+        annotations:
+            owl.filler: schema:maintenanceSchedule
+            sql_identifier: circ_design_maintenance_schedule
+            references: "ESPR; CIRPASS; King et al.; Jensen et al.; CE-RISE Deliverable 1.1; Wan and Jiang"
+
+    # Stage 2: Product Performance Factors slots
+
+    # Resource Efficiency slots
+    material_intensity_value:
+        description: "Material intensity per functional unit (kg/unit)"
+        range: float
+        annotations:
+            owl.filler: qudt:materialIntensity
+            sql_identifier: circ_perf_material_intensity
+            references: "Berger et al.; King et al."
+
+    energy_efficiency_value:
+        description: "Energy efficiency rating or consumption (kWh/unit)"
+        range: float
+        annotations:
+            owl.filler: qudt:energyEfficiency
+            sql_identifier: circ_perf_energy_efficiency
+            references: "King et al.; Energy Labelling Directive"
+
+    water_footprint_value:
+        description: "Water consumption per functional unit (liters/unit)"
+        range: float
+        annotations:
+            owl.filler: envo:01001026 # ENVO water footprint
+            sql_identifier: circ_perf_water_footprint
+            references: "King et al.; CE-RISE Deliverable 1.1"
+
+    waste_generation_value:
+        description: "Waste generated during product lifecycle (kg)"
+        range: float
+        annotations:
+            owl.filler: circ:wasteGeneration
+            sql_identifier: circ_perf_waste_generation
+            references: "King et al."
+
+    # Lifespan Factors slots
+    mean_time_between_failures_value:
+        description: "Mean time between failures (MTBF) in hours"
+        range: float
+        annotations:
+            owl.filler: bfo:0000038 # BFO temporal region for reliability
+            sql_identifier: circ_perf_mtbf
+
+    warranty_period_value:
+        description: "Warranty period offered (in years)"
+        range: float
+        annotations:
+            owl.filler: schema:warrantyPeriod
+            sql_identifier: circ_perf_warranty_period
+            references: "ESPR; CIRPASS"
+
+    service_life_value:
+        description: "Expected service life under normal conditions (in years)"
+        range: float
+        annotations:
+            owl.filler: schema:serviceLife
+            sql_identifier: circ_perf_service_life
+
+    obsolescence_factors_value:
+        description: "Factors contributing to product obsolescence"
+        range: string
+        annotations:
+            owl.filler: circ:obsolescenceFactors
+            sql_identifier: circ_perf_obsolescence_factors
+
+    # Circular Capability slots
+    reuse_potential_value:
+        description: "Potential for product or component reuse (qualitative or percentage)"
+        range: string
+        annotations:
+            owl.filler: circ:reusePotential
+            sql_identifier: circ_perf_reuse_potential
+            references: "King et al.; CE-RISE Deliverable 1.1"
+
+    refurbishment_potential_value:
+        description: "Potential for product refurbishment (qualitative or percentage)"
+        range: string
+        annotations:
+            owl.filler: circ:refurbishmentPotential
+            sql_identifier: circ_perf_refurbish_potential
+            references: "King et al.; CE-RISE Deliverable 1.1"
+
+    remanufacturing_potential_value:
+        description: "Potential for product remanufacturing (qualitative or percentage)"
+        range: string
+        annotations:
+            owl.filler: circ:remanufacturingPotential
+            sql_identifier: circ_perf_remanufacture_potential
+            references: "King et al.; CE-RISE Deliverable 1.1"
+
+    recycling_potential_value:
+        description: "Potential for material recycling (qualitative or percentage)"
+        range: string
+        annotations:
+            owl.filler: circ:recyclingPotential
+            sql_identifier: circ_perf_recycling_potential
+            references: "King et al.; CE-RISE Deliverable 1.1; Cruz et al."
+
+    # Stage 3: Circularity Assessments slots
+
+    assessment_type_value:
+        description: "Type or category of assessment performed"
+        range: string
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: circ_assessment_type
+
+    assessment_methodology_value:
+        description: "Methodology or framework used for assessment"
+        range: string
+        annotations:
+            owl.filler: dcterms:methodUsed
+            sql_identifier: circ_assessment_methodology
+
+    assessment_date_value:
+        description: "Date when assessment was performed"
+        range: date
+        annotations:
+            owl.filler: dcterms:date
+            sql_identifier: circ_assessment_date
+
+    assessment_version_value:
+        description: "Version of the assessment methodology used"
+        range: string
+        annotations:
+            owl.filler: dcterms:hasVersion
+            sql_identifier: circ_assessment_version
+
+    assessment_score_value:
+        description: "Overall assessment score or result"
+        range: float
+        annotations:
+            owl.filler: circ:assessmentScore
+            sql_identifier: circ_assessment_score
+
+    score_unit_value:
+        description: "Unit of measurement for the assessment score"
+        range: string
+        annotations:
+            owl.filler: qudt:unit
+            sql_identifier: circ_assessment_score_unit
+
+    score_range_value:
+        description: "Valid range for the assessment score (e.g., 0-100, A-F)"
+        range: string
+        annotations:
+            owl.filler: circ:scoreRange
+            sql_identifier: circ_assessment_score_range
+
+    data_sources_value:
+        description: "Sources of data used for the assessment"
+        range: string
+        annotations:
+            owl.filler: dcterms:source
+            sql_identifier: circ_assessment_data_sources
+
+    assessment_reference_value:
+        description: "External reference or URI to full assessment details"
+        range: string
+        annotations:
+            owl.filler: dcterms:references
+            sql_identifier: circ_assessment_reference
+
+    certification_status_value:
+        description: "Certification or verification status of the assessment"
+        range: string
+        annotations:
+            owl.filler: circ:certificationStatus
+            sql_identifier: circ_assessment_certification
+            references: "ESPR; Battery Pass; CIRPASS"
+
+    # SubScore slots
+    sub_score_name_value:
+        description: "Name or identifier of a sub-score component"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: circ_assessment_sub_score_name
+
+    sub_score_value_value:
+        description: "Value of the sub-score component"
+        range: float
+        annotations:
+            owl.filler: circ:subScoreValue
+            sql_identifier: circ_assessment_sub_score_value
+
+    sub_score_weight_value:
+        description: "Weight or importance of the sub-score in overall calculation"
+        range: float
+        annotations:
+            owl.filler: circ:subScoreWeight
+            sql_identifier: circ_assessment_sub_score_weight
+
+    # Stage 4: End of Life Information slots
+
+    # Collection and Sorting slots
+    collection_schemes_value:
+        description: "Available collection schemes and programs"
+        range: string
+        annotations:
+            owl.filler: circ:collectionSchemes
+            sql_identifier: circ_eol_collection_schemes
+            references: "ESPR Art 7 (2) b) ii); Battery Pass; Jensen et al."
+
+    sorting_instructions_value:
+        description: "Instructions for waste sorting and separation"
+        range: string
+        annotations:
+            owl.filler: schema:instructions
+            sql_identifier: circ_eol_sorting_instructions
+            references: "Jensen et al."
+
+    waste_classification_value:
+        description: "Waste classification codes and categories"
+        range: string
+        annotations:
+            owl.filler: envo:00002001 # ENVO waste material
+            sql_identifier: circ_eol_waste_classification
+            references: "ESPR; Battery Pass"
+
+    take_back_programs_value:
+        description: "Manufacturer or retailer take-back program details"
+        range: string
+        annotations:
+            owl.filler: circ:takeBackProgram
+            sql_identifier: circ_eol_take_back_programs
+            references: "ESPR Art 7 (2) b) ii); CIRPASS; King et al.; Battery Pass; CE-RISE Deliverable 1.1; Christensen et al."
+
+    # Recycling Pathways slots
+    material_type_recyclable_value:
+        description: "Type of recyclable material"
+        range: string
+        annotations:
+            owl.filler: chebi:24431 # CHEBI chemical entity
+            sql_identifier: circ_eol_recyclable_material_type
+
+    recycling_rate_value:
+        description: "Percentage of material that can be recycled"
+        range: float
+        annotations:
+            owl.filler: circ:recyclingRate
+            sql_identifier: circ_eol_recycling_rate
+
+    recycling_process_value:
+        description: "Description of recycling process required"
+        range: string
+        annotations:
+            owl.filler: circ:recyclingProcess
+            sql_identifier: circ_eol_recycling_process
+
+    material_type_non_recyclable_value:
+        description: "Type of non-recyclable material"
+        range: string
+        annotations:
+            owl.filler: chebi:24431
+            sql_identifier: circ_eol_non_recyclable_material_type
+            references: "King et al.; CE-RISE Deliverable 1.1"
+
+    non_recyclable_percentage_value:
+        description: "Percentage of non-recyclable materials"
+        range: float
+        annotations:
+            owl.filler: circ:nonRecyclablePercentage
+            sql_identifier: circ_eol_non_recyclable_percentage
+
+    disposal_method_value:
+        description: "Method for disposal of non-recyclable materials"
+        range: string
+        annotations:
+            owl.filler: circ:disposalMethod
+            sql_identifier: circ_eol_disposal_method
+            references: "ESPR Art 7 (2) b) iii); CE-RISE Deliverable 1.1; Christensen et al."
+
+    required_technology_value:
+        description: "Technology required for recycling"
+        range: string
+        annotations:
+            owl.filler: circ:requiredTechnology
+            sql_identifier: circ_eol_required_technology
+
+    geographic_availability_value:
+        description: "Geographic availability of recycling infrastructure"
+        range: string
+        annotations:
+            owl.filler: schema:areaServed
+            sql_identifier: circ_eol_geographic_availability
+
+    # CRM Recovery slots
+    critical_material_name_value:
+        description: "Name of critical raw material"
+        range: string
+        annotations:
+            owl.filler: circ:criticalMaterialName
+            sql_identifier: circ_eol_crm_material_name
+            references: "Koppelaar et al.; Berger et al.; Battery Pass"
+            comment: "Material type includes CRMs"
+
+    crm_quantity_value:
+        description: "Quantity of critical material (in grams or kilograms)"
+        range: float
+        annotations:
+            owl.filler: qudt:quantity
+            sql_identifier: circ_eol_crm_quantity
+            references: "Koppelaar et al."
+
+    crm_concentration_value:
+        description: "Concentration of critical material (percentage)"
+        range: float
+        annotations:
+            owl.filler: circ:concentration
+            sql_identifier: circ_eol_crm_concentration
+            references: "ESPR Art 7 5. c); Battery Pass; CIRPASS; CE-RISE Deliverable 1.1; CLP Regulation (EC) No 1272/2008"
+
+    extraction_process_value:
+        description: "Process for extracting critical materials"
+        range: string
+        annotations:
+            owl.filler: circ:extractionProcess
+            sql_identifier: circ_eol_extraction_process
+            references: "Koppelaar et al."
+
+    crm_recovery_rate_value:
+        description: "Recovery rate for critical materials (percentage)"
+        range: float
+        annotations:
+            owl.filler: circ:recoveryRate
+            sql_identifier: circ_eol_crm_recovery_rate
+            references: "Koppelaar et al."
+
+    economic_viability_value:
+        description: "Economic viability assessment of CRM recovery"
+        range: string
+        annotations:
+            owl.filler: circ:economicViability
+            sql_identifier: circ_eol_economic_viability
+            references: "Koppelaar et al."
+
+    quality_grade_value:
+        description: "Quality grade of secondary raw materials"
+        range: string
+        annotations:
+            owl.filler: circ:qualityGrade
+            sql_identifier: circ_eol_quality_grade
+            references: "Koppelaar et al."
+
+    market_demand_value:
+        description: "Market demand for secondary materials"
+        range: string
+        annotations:
+            owl.filler: circ:marketDemand
+            sql_identifier: circ_eol_market_demand
+            references: "Koppelaar et al.; CE-RISE Deliverable 1.1"
+
+    # Treatment Options slots
+    caloric_value_value:
+        description: "Caloric value for energy recovery (MJ/kg)"
+        range: float
+        annotations:
+            owl.filler: circ:caloricValue
+            sql_identifier: circ_eol_caloric_value
+
+    emission_factors_value:
+        description: "Emission factors from treatment processes"
+        range: string
+        annotations:
+            owl.filler: envo:01000970 # ENVO emission
+            sql_identifier: circ_eol_emission_factors
+
+    landfill_classification_value:
+        description: "Classification of landfill type"
+        range: string
+        annotations:
+            owl.filler: envo:00000533 # ENVO landfill
+            sql_identifier: circ_eol_landfill_classification
+
+    leaching_potential_value:
+        description: "Potential for leaching of hazardous substances"
+        range: string
+        annotations:
+            owl.filler: circ:leachingPotential
+            sql_identifier: circ_eol_leaching_potential
+            references: "ESPR Art 7 5. b); Battery Pass; CIRPASS; SCIP database"
+            comment: "Location of substances of concern within the product; reporting required for substances above 0.1% w/w"
+
+    hazardous_waste_treatment_value:
+        description: "Treatment methods for hazardous waste"
+        range: string
+        annotations:
+            owl.filler: circ:hazardousWasteTreatment
+            sql_identifier: circ_eol_hazardous_treatment
+            references: "ESPR Art 7 5. d); REACH Regulation (EC) No 1907/2006; RoHS Directive 2011/65/EU; King et al."
+
+    biological_treatment_value:
+        description: "Biological treatment options (composting, anaerobic digestion)"
+        range: string
+        annotations:
+            owl.filler: circ:biologicalTreatment
+            sql_identifier: circ_eol_biological_treatment
+            references: "King et al."
+            comment: "Compostability options"
+
+classes:
+    CircularityAndEOL:
+        description: "Root container for circularity and end-of-life information"
+        annotations:
+            references: "ESPR; CIRPASS; Battery Pass; King et al.; Jensen et al.; Berger et al.; Koppelaar et al.; Cruz et al.; Christensen et al."
+        attributes:
+            beginning_of_life_information:
+                description: "Material composition and origin information at product beginning of life"
+                range: BeginningOfLifeInformation
+            design_for_circularity:
+                description: "Design features that enable circular economy principles"
+                range: DesignForCircularity
+            product_performance_factors:
+                description: "Quantifiable factors influencing circular performance"
+                range: ProductPerformanceFactors
+            circularity_assessments:
+                description: "Generic container for circularity assessments"
+                range: CircularityAssessments
+            end_of_life_information:
+                description: "End-of-life pathways and recovery information"
+                range: EndOfLifeInformation
+
+    BeginningOfLifeInformation:
+        description: "Material composition and origin information at product beginning of life"
+        annotations:
+            sql_identifier: circ_bol_info
+            references: "CIRPASS; Battery Pass"
+        attributes:
+            material_composition_entries:
+                description: "Individual material composition entries with DMP references"
+                range: MaterialCompositionEntry
+                multivalued: true
+            product_level_summary:
+                description: "Aggregated product-level composition summary"
+                range: ProductLevelSummary
+
+    MaterialCompositionEntry:
+        description: "Information about a specific material used in the product"
+        annotations:
+            sql_identifier: circ_bol_material_entry
+        attributes:
+            dmp_reference:
+                description: "URI reference to the Digital Material Passport (DMP) for this material"
+                range: uri
+                annotations:
+                    sql_identifier: circ_bol_dmp_ref
+                    owl.filler: dcterms:references
+            material_mass:
+                description: "Mass of this material in the product"
+                range: float
+                annotations:
+                    sql_identifier: circ_bol_material_mass
+                    owl.filler: qudt:hasQuantityValue
+            material_type:
+                description: "Type of material (metal, polymer, ceramic, composite, etc.)"
+                range: string
+                annotations:
+                    sql_identifier: circ_bol_material_type
+                    owl.filler: chebi:CHEBI_59999
+            source_region:
+                description: "Geographic region where this material originated"
+                range: string
+                annotations:
+                    sql_identifier: circ_bol_source_region
+                    owl.filler: schema:location
+            virgin_content_percentage:
+                description: "Percentage of virgin content for this specific material"
+                range: float
+                annotations:
+                    sql_identifier: circ_bol_virgin_pct
+                    owl.filler: circ:virginContent
+            recycled_content_percentage:
+                description: "Percentage of recycled content for this specific material"
+                range: float
+                annotations:
+                    sql_identifier: circ_bol_recycled_pct
+                    owl.filler: circ:recycledContent
+                    references: "ESPR; Battery Pass"
+            renewable_content_percentage:
+                description: "Percentage of renewable content for this specific material"
+                range: float
+                annotations:
+                    sql_identifier: circ_bol_renewable_pct
+                    owl.filler: circ:renewableContent
+            supplier_reference:
+                description: "Reference to the supplier of this material (optional)"
+                range: string
+                annotations:
+                    sql_identifier: circ_bol_supplier_ref
+                    owl.filler: schema:supplier
+            material_composition_uncertainty_statements:
+                description: "Optional uncertainty statements for material mass, content percentages, source region, or supplier-reported material composition data"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_bol_material_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            material_composition_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for material composition measurements, methods, standards, calibrations, reference materials, or DMP-linked material evidence"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_bol_material_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            material_composition_data_quality_assessments:
+                description: "Optional data quality assessments for material composition data, DMP references, supplier evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_bol_material_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    ProductLevelSummary:
+        description: "Aggregated composition information at product level"
+        annotations:
+            sql_identifier: circ_bol_product_summary
+        attributes:
+            total_product_mass:
+                description: "Total mass of the product"
+                range: float
+                annotations:
+                    sql_identifier: circ_bol_total_mass
+                    owl.filler: qudt:hasQuantityValue
+                    references: "ESPR; Battery Pass"
+            overall_virgin_percentage:
+                description: "Overall percentage of virgin materials across all materials"
+                range: float
+                annotations:
+                    sql_identifier: circ_bol_overall_virgin_pct
+                    owl.filler: circ:overallVirginContent
+            overall_recycled_percentage:
+                description: "Overall percentage of recycled materials across all materials"
+                range: float
+                annotations:
+                    sql_identifier: circ_bol_overall_recycled_pct
+                    owl.filler: circ:overallRecycledContent
+                    references: "ESPR; Battery Pass; CIRPASS"
+            overall_renewable_percentage:
+                description: "Overall percentage of renewable materials across all materials"
+                range: float
+                annotations:
+                    sql_identifier: circ_bol_overall_renewable_pct
+                    owl.filler: circ:overallRenewableContent
+            number_of_materials_used:
+                description: "Total number of different materials used in the product"
+                range: integer
+                annotations:
+                    sql_identifier: circ_bol_num_materials
+                    owl.filler: circ:materialCount
+            product_summary_uncertainty_statements:
+                description: "Optional uncertainty statements for aggregated product mass and material composition percentages"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_bol_summary_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            product_summary_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for aggregated composition calculations, measurement methods, standards, calibrations, or reference materials"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_bol_summary_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            product_summary_data_quality_assessments:
+                description: "Optional data quality assessments for aggregated composition data, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_bol_summary_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    DesignForCircularity:
+        description: "Design decisions and features that enable circular economy principles"
+        annotations:
+            references: "ESPR Annex I; CIRPASS; Battery Pass"
+        attributes:
+            modular_design:
+                description: "Modularity aspects of the product design"
+                range: ModularDesign
+            material_selection:
+                description: "Material choices supporting circularity"
+                range: MaterialSelection
+            disassembly_features:
+                description: "Features facilitating product disassembly"
+                range: DisassemblyFeatures
+            durability_features:
+                description: "Features enhancing product durability and longevity"
+                range: DurabilityFeatures
+
+    ModularDesign:
+        description: "Product modularity characteristics"
+        annotations:
+            references: "Jensen et al."
+        attributes:
+            modularity_level:
+                description: "Degree of product modularity"
+                range: string
+            interchangeable_parts:
+                description: "Parts that can be interchanged"
+                range: string
+            standardized_interfaces:
+                description: "Standardized connection interfaces"
+                range: string
+
+    MaterialSelection:
+        description: "Material composition and selection for circularity"
+        annotations:
+            references: "Berger et al.; Battery Pass; CIRPASS"
+            comment: "Includes CRMs and hazardous substances"
+        attributes:
+            recycled_content:
+                description: "Percentage of recycled content"
+                range: float
+            renewable_content:
+                description: "Percentage of renewable content"
+                range: float
+            hazardous_substances:
+                description: "Hazardous substances present"
+                range: string
+            material_passport:
+                description: "Material passport reference"
+                range: string
+            material_selection_uncertainty_statements:
+                description: "Optional uncertainty statements for recycled content, renewable content, hazardous substance information, or material selection data"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_design_material_selection_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            material_selection_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for material selection measurements, substance quantification, methods, standards, calibrations, or reference materials"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_design_material_selection_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            material_selection_data_quality_assessments:
+                description: "Optional data quality assessments for material selection data, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_design_material_selection_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    DisassemblyFeatures:
+        description: "Product disassembly characteristics"
+        annotations:
+            references: "ESPR Art 7 5. e); King et al."
+            comment: "Information relevant for disassembly"
+        attributes:
+            disassembly_time:
+                description: "Time required for disassembly"
+                range: float
+            required_tools:
+                description: "Tools needed for disassembly"
+                range: string
+            disassembly_instructions:
+                description: "Disassembly guidance"
+                range: string
+            fastener_types:
+                description: "Types of fasteners used"
+                range: string
+            disassembly_features_uncertainty_statements:
+                description: "Optional uncertainty statements for disassembly time, required tools, procedural assumptions, or disassembly evidence"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_design_disassembly_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            disassembly_features_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for disassembly-time measurements, method definitions, test conditions, standards, or tooling assumptions"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_design_disassembly_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            disassembly_features_data_quality_assessments:
+                description: "Optional data quality assessments for disassembly data, instructions, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_design_disassembly_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    DurabilityFeatures:
+        description: "Product durability and maintenance characteristics"
+        annotations:
+            references: "ESPR Art. 1 5.; ESPR Annex I; King et al."
+        attributes:
+            expected_lifetime:
+                description: "Expected operational lifetime"
+                range: float
+            repairability_index:
+                description: "Repairability score or index"
+                range: string
+            upgrade_capability:
+                description: "Upgrade possibilities"
+                range: string
+            maintenance_schedule:
+                description: "Maintenance requirements"
+                range: string
+            durability_features_uncertainty_statements:
+                description: "Optional uncertainty statements for expected lifetime, repairability index, upgrade capability, or maintenance schedule assumptions"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_design_durability_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            durability_features_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for durability measurements, lifetime tests, repairability methods, standards, calibrations, or reference data"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_design_durability_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            durability_features_data_quality_assessments:
+                description: "Optional data quality assessments for durability data, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_design_durability_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    ProductPerformanceFactors:
+        description: "Quantifiable factors that influence circular performance"
+        annotations:
+            references: "ESPR Annex I; King et al.; CE-RISE Deliverable 1.1"
+        attributes:
+            resource_efficiency:
+                description: "Resource efficiency metrics"
+                range: ResourceEfficiency
+            lifespan_factors:
+                description: "Factors affecting product lifespan"
+                range: LifespanFactors
+            circular_capability:
+                description: "Potential for circular economy strategies"
+                range: CircularCapability
+
+    ResourceEfficiency:
+        description: "Metrics related to resource use efficiency"
+        annotations:
+            references: "Berger et al.; King et al."
+        attributes:
+            material_intensity:
+                description: "Material use per functional unit"
+                range: float
+            energy_efficiency:
+                description: "Energy consumption efficiency"
+                range: float
+            water_footprint:
+                description: "Water consumption footprint"
+                range: float
+            waste_generation:
+                description: "Waste generated during lifecycle"
+                range: float
+            resource_efficiency_uncertainty_statements:
+                description: "Optional uncertainty statements for resource-efficiency metrics such as material intensity, energy efficiency, water footprint, or waste generation"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_perf_resource_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            resource_efficiency_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for resource-efficiency measurements, methods, functional units, standards, calibrations, or reference data"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_perf_resource_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            resource_efficiency_data_quality_assessments:
+                description: "Optional data quality assessments for resource-efficiency data, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_perf_resource_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    LifespanFactors:
+        description: "Factors determining product lifespan and reliability"
+        annotations:
+            references: "ESPR; King et al."
+        attributes:
+            mean_time_between_failures:
+                description: "MTBF reliability metric"
+                range: float
+            warranty_period:
+                description: "Warranty duration offered"
+                range: float
+            service_life:
+                description: "Expected service lifetime"
+                range: float
+            obsolescence_factors:
+                description: "Factors leading to obsolescence"
+                range: string
+            lifespan_factors_uncertainty_statements:
+                description: "Optional uncertainty statements for MTBF, warranty period, service-life estimates, or obsolescence assumptions"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_perf_lifespan_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            lifespan_factors_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for reliability measurements, lifetime tests, methods, standards, calibrations, or reference datasets"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_perf_lifespan_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            lifespan_factors_data_quality_assessments:
+                description: "Optional data quality assessments for lifespan and reliability data, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_perf_lifespan_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    CircularCapability:
+        description: "Potential for circular economy strategies"
+        annotations:
+            references: "King et al.; CE-RISE Deliverable 1.1"
+        attributes:
+            reuse_potential:
+                description: "Potential for direct reuse"
+                range: string
+            refurbishment_potential:
+                description: "Potential for refurbishment"
+                range: string
+            remanufacturing_potential:
+                description: "Potential for remanufacturing"
+                range: string
+            recycling_potential:
+                description: "Potential for material recycling"
+                range: string
+            circular_capability_uncertainty_statements:
+                description: "Optional uncertainty statements for reuse, refurbishment, remanufacturing, or recycling-potential estimates"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_perf_capability_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            circular_capability_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for circular capability assessment methods, assumptions, standards, reference data, or boundary definitions"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_perf_capability_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            circular_capability_data_quality_assessments:
+                description: "Optional data quality assessments for circular capability data, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_perf_capability_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    CircularityAssessments:
+        description: "Container for circularity-related assessments of any type"
+        annotations:
+            references: "King et al.; Berger et al.; CIRPASS"
+        attributes:
+            assessments:
+                description: "Collection of assessments performed"
+                range: Assessment
+                multivalued: true
+
+    Assessment:
+        description: "A single assessment instance with methodology and results"
+        annotations:
+            references: "Berger et al.; King et al.; Battery Pass"
+        attributes:
+            assessment_type:
+                description: "Type of assessment"
+                range: string
+            assessment_methodology:
+                description: "Methodology used"
+                range: string
+            assessment_date:
+                description: "Date of assessment"
+                range: date
+            assessment_version:
+                description: "Version of methodology"
+                range: string
+            assessment_score:
+                description: "Overall score"
+                range: float
+            score_unit:
+                description: "Unit of score"
+                range: string
+            score_range:
+                description: "Valid score range"
+                range: string
+            sub_scores:
+                description: "Breakdown of score components"
+                range: SubScore
+                multivalued: true
+            data_sources:
+                description: "Data sources used"
+                range: string
+            assessment_reference:
+                description: "External reference"
+                range: string
+            certification_status:
+                description: "Certification status"
+                range: string
+            assessment_uncertainty_statements:
+                description: "Optional uncertainty statements for assessment scores, methodology assumptions, boundaries, sub-scores, or certification-relevant results"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_assessment_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            assessment_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for assessment methods, reference standards, boundary definitions, data sources, or calculation chains"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_assessment_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            assessment_data_quality_assessments:
+                description: "Optional data quality assessments for assessment inputs, outputs, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_assessment_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    SubScore:
+        description: "Component score within an assessment"
+        annotations:
+            references: "Berger et al."
+        attributes:
+            sub_score_name:
+                description: "Name of sub-score"
+                range: string
+            sub_score_value:
+                description: "Value of sub-score"
+                range: float
+            sub_score_unit:
+                description: "Unit of the sub-score value where it is dimensional (e.g. %, kg). Leave empty for dimensionless scores."
+                range: string
+            sub_score_weight:
+                description: "Weight in overall score"
+                range: float
+            sub_score_uncertainty_statements:
+                description: "Optional uncertainty statements for sub-score values, weights, or aggregation assumptions"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_assessment_sub_score_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            sub_score_data_quality_assessments:
+                description: "Optional data quality assessments for sub-score inputs, weights, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_assessment_sub_score_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    EndOfLifeInformation:
+        description: "Comprehensive end-of-life pathways and material recovery information"
+        annotations:
+            references: "ESPR Art 7 (2) b); Koppelaar et al.; Battery Pass; CE-RISE Deliverable 1.1"
+        attributes:
+            collection_and_sorting:
+                description: "Collection and sorting systems"
+                range: CollectionAndSorting
+            recycling_pathways:
+                description: "Recycling routes and infrastructure"
+                range: RecyclingPathways
+            crm_recovery:
+                description: "Critical raw materials recovery"
+                range: CRMRecovery
+            treatment_options:
+                description: "Final treatment and disposal options"
+                range: TreatmentOptions
+
+    CollectionAndSorting:
+        description: "Waste collection and sorting information"
+        annotations:
+            references: "Jensen et al.; ESPR Art 7 (2) b) ii)"
+        attributes:
+            collection_schemes:
+                description: "Available collection programs"
+                range: string
+            sorting_instructions:
+                description: "Sorting guidance"
+                range: string
+            waste_classification:
+                description: "Waste classification codes"
+                range: string
+            take_back_programs:
+                description: "Take-back program details"
+                range: string
+
+    RecyclingPathways:
+        description: "Material recycling pathways and infrastructure"
+        annotations:
+            references: "ESPR Art 7 (2) b) iii); King et al.; CE-RISE Deliverable 1.1"
+        attributes:
+            recyclable_materials:
+                description: "Materials that can be recycled"
+                range: RecyclableMaterials
+                multivalued: true
+            non_recyclable_materials:
+                description: "Materials that cannot be recycled"
+                range: NonRecyclableMaterials
+                multivalued: true
+            recycling_infrastructure:
+                description: "Required recycling infrastructure"
+                range: RecyclingInfrastructure
+            weee_recycling_streams:
+                description: "WEEE-specific recycling/recovery streams with stream-level rates and allocation of treatment outcome to product input, per Directive 2012/19/EU"
+                range: WEEERecyclingStream
+                multivalued: true
+
+    WEEERecyclingStream:
+        description: "WEEE-compliant recycling/recovery stream detail with stream-level rates and allocation of treatment outcome to product input, per Directive 2012/19/EU"
+        annotations:
+            references: "WEEE Directive 2012/19/EU; CE-RISE Deliverable 1.1"
+        attributes:
+            weee_category:
+                description: "WEEE category of the equipment (Directive 2012/19/EU Annex III)"
+                range: WEEECategoryEnum
+            stream_fraction:
+                description: "Treatment output fraction / stream (e.g. ferrous metals, non-ferrous metals, plastics, printed circuit boards, glass)"
+                range: string
+            recovery_rate:
+                description: "Recovery rate for this stream (percentage)"
+                range: float
+            recycling_rate:
+                description: "Recycling rate for this stream (percentage)"
+                range: float
+            preparation_for_reuse_rate:
+                description: "Preparation-for-re-use rate for this stream (percentage)"
+                range: float
+            input_allocation_percentage:
+                description: "Share of the product's material input allocated to this treatment outcome (percentage)"
+                range: float
+            treatment_process:
+                description: "Treatment process or facility reference for this stream"
+                range: string
+
+    RecyclableMaterials:
+        description: "Information about recyclable materials"
+        annotations:
+            references: "King et al.; CIRPASS"
+        attributes:
+            material_type:
+                description: "Type of recyclable material"
+                range: string
+            recycling_rate:
+                description: "Recycling rate as a percentage, per WFD Art. 3 (recycling only - reprocessing into products/materials/substances). Distinct from the broader recovery rate in traceability (RecyclingEvent.recovery_percentage)."
+                range: float
+            recycling_process:
+                description: "Required recycling process"
+                range: string
+            recyclable_materials_uncertainty_statements:
+                description: "Optional uncertainty statements for recyclable material classification, recycling rate, or process assumptions"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_recyclable_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            recyclable_materials_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for recycling-rate measurements, material classification methods, standards, or reference data"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_recyclable_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            recyclable_materials_data_quality_assessments:
+                description: "Optional data quality assessments for recyclable material and recycling-rate data, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_recyclable_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    NonRecyclableMaterials:
+        description: "Information about non-recyclable materials"
+        annotations:
+            references: "King et al.; CE-RISE Deliverable 1.1"
+        attributes:
+            material_type:
+                description: "Type of non-recyclable material"
+                range: string
+            percentage:
+                description: "Percentage of total"
+                range: float
+            disposal_method:
+                description: "Disposal method required"
+                range: string
+            non_recyclable_materials_uncertainty_statements:
+                description: "Optional uncertainty statements for non-recyclable material percentages, classification, or disposal assumptions"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_non_recyclable_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            non_recyclable_materials_data_quality_assessments:
+                description: "Optional data quality assessments for non-recyclable material data, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_non_recyclable_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    RecyclingInfrastructure:
+        description: "Infrastructure requirements for recycling"
+        annotations:
+            references: "Koppelaar et al."
+        attributes:
+            required_technology:
+                description: "Technology needed"
+                range: string
+            geographic_availability:
+                description: "Geographic coverage"
+                range: string
+
+    CRMRecovery:
+        description: "Critical raw materials recovery information"
+        annotations:
+            references: "Koppelaar et al.; Battery Pass"
+            comment: "Critical Raw Materials recovery and treatment"
+        attributes:
+            critical_materials_list:
+                description: "List of critical materials"
+                range: CriticalMaterial
+                multivalued: true
+            recovery_methods:
+                description: "Methods for recovery"
+                range: RecoveryMethods
+            secondary_raw_materials:
+                description: "Secondary materials produced"
+                range: SecondaryRawMaterials
+
+    CriticalMaterial:
+        description: "Information about a critical raw material"
+        annotations:
+            references: "Koppelaar et al.; Berger et al.; Battery Pass"
+        attributes:
+            material_name:
+                description: "Name of critical material"
+                range: string
+            quantity:
+                description: "Quantity present"
+                range: float
+            concentration:
+                description: "Concentration percentage"
+                range: float
+            critical_material_uncertainty_statements:
+                description: "Optional uncertainty statements for critical material quantity, concentration, or identification"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_crm_material_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            critical_material_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for CRM quantity or concentration measurements, methods, standards, calibrations, or reference materials"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_crm_material_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            critical_material_data_quality_assessments:
+                description: "Optional data quality assessments for CRM identification, quantity, concentration, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_crm_material_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    RecoveryMethods:
+        description: "Methods for recovering critical materials"
+        annotations:
+            references: "Koppelaar et al."
+        attributes:
+            extraction_process:
+                description: "Extraction process description"
+                range: string
+            recovery_rate:
+                description: "Recovery rate percentage"
+                range: float
+            economic_viability:
+                description: "Economic viability assessment"
+                range: string
+            recovery_methods_uncertainty_statements:
+                description: "Optional uncertainty statements for extraction process assumptions, recovery-rate estimates, or economic viability assessments"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_recovery_methods_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            recovery_methods_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for recovery-rate measurements, process methods, standards, or reference data"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_recovery_methods_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            recovery_methods_data_quality_assessments:
+                description: "Optional data quality assessments for recovery-method data, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_recovery_methods_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    SecondaryRawMaterials:
+        description: "Secondary materials from recovery"
+        attributes:
+            quality_grade:
+                description: "Quality grade of materials"
+                range: string
+            market_demand:
+                description: "Market demand assessment"
+                range: string
+            secondary_raw_materials_data_quality_assessments:
+                description: "Optional data quality assessments for secondary raw material quality grade, market demand, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_secondary_raw_materials_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    TreatmentOptions:
+        description: "Final treatment and disposal methods"
+        annotations:
+            references: "Koppelaar et al.; ESPR Art 7 (2) b) iii)"
+        attributes:
+            energy_recovery:
+                description: "Energy recovery potential"
+                range: EnergyRecovery
+            landfilling:
+                description: "Landfilling information"
+                range: Landfilling
+            special_treatment:
+                description: "Special treatment requirements"
+                range: SpecialTreatment
+
+    EnergyRecovery:
+        description: "Energy recovery from waste"
+        annotations:
+            references: "King et al."
+        attributes:
+            caloric_value:
+                description: "Caloric value (MJ/kg)"
+                range: float
+            emission_factors:
+                description: "Emission factors"
+                range: string
+            energy_recovery_uncertainty_statements:
+                description: "Optional uncertainty statements for caloric value, emission factors, or energy-recovery assumptions"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_energy_recovery_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            energy_recovery_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for caloric-value measurements, emission-factor methods, standards, calibrations, or reference data"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_energy_recovery_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            energy_recovery_data_quality_assessments:
+                description: "Optional data quality assessments for energy-recovery and emission-factor data, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_energy_recovery_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    Landfilling:
+        description: "Landfill disposal information"
+        attributes:
+            landfill_classification:
+                description: "Type of landfill"
+                range: string
+            leaching_potential:
+                description: "Leaching risk assessment"
+                range: string
+            landfilling_uncertainty_statements:
+                description: "Optional uncertainty statements for landfill classification, leaching potential, or disposal assumptions"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_landfilling_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            landfilling_metrological_traceability_statements:
+                description: "Optional metrological traceability statements for leaching tests, classification methods, standards, calibrations, or reference data"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_landfilling_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            landfilling_data_quality_assessments:
+                description: "Optional data quality assessments for landfill and leaching data, evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_landfilling_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    SpecialTreatment:
+        description: "Special treatment requirements"
+        attributes:
+            hazardous_waste_treatment:
+                description: "Hazardous waste treatment"
+                range: string
+            biological_treatment:
+                description: "Biological treatment options"
+                range: string
+            special_treatment_data_quality_assessments:
+                description: "Optional data quality assessments for hazardous waste, biological treatment, treatment-method evidence, provenance, completeness, or representativeness"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: circ_eol_special_treatment_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+enums:
+    WEEECategoryEnum:
+        description: "WEEE equipment categories per Directive 2012/19/EU Annex III"
+        permissible_values:
+            TEMPERATURE_EXCHANGE_EQUIPMENT:
+                description: "Temperature exchange equipment"
+            SCREENS_MONITORS:
+                description: "Screens, monitors, and equipment containing screens with a surface greater than 100 cm2"
+            LAMPS:
+                description: "Lamps"
+            LARGE_EQUIPMENT:
+                description: "Large equipment (any external dimension more than 50 cm)"
+            SMALL_EQUIPMENT:
+                description: "Small equipment (no external dimension more than 50 cm)"
+            SMALL_IT_TELECOMMUNICATION_EQUIPMENT:
+                description: "Small IT and telecommunication equipment (no external dimension more than 50 cm)"

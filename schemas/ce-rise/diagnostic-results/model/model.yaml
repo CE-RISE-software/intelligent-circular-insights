@@ -1,0 +1,3309 @@
+id: https://ce-rise-models.codeberg.page/diagnostic-results/
+name: diagnostic-results
+title: Diagnostic Results Data Model
+description: Structured outputs from diagnostic, repair, service, and condition-assessment operations
+license: https://creativecommons.org/licenses/by-nc/4.0/
+version: 0.2.0
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    diag: https://ce-rise-models.codeberg.page/diagnostic-results/
+    schema: http://schema.org/
+    iso: https://www.iso.org/
+    dcterms: http://purl.org/dc/terms/
+    qudt: http://qudt.org/schema/qudt/
+    sosa: http://www.w3.org/ns/sosa/
+    ssn: http://www.w3.org/ns/ssn/
+    prov: http://www.w3.org/ns/prov#
+    foaf: http://xmlns.com/foaf/0.1/
+    org: http://www.w3.org/ns/org#
+    vcard: http://www.w3.org/2006/vcard/ns#
+    geo: http://www.w3.org/2003/01/geo/wgs84_pos#
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+
+imports:
+    - linkml:types
+    - https://codeberg.org/CE-RISE-models/uncertainty-quantification/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/metrological-traceability/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/data-quality-framework/raw/tag/pages-v0.0.3/generated/schema
+
+default_range: string
+
+# Root class
+classes:
+    DiagnosticResults:
+        description: Root container for all diagnostic results and assessments
+        tree_root: true
+        attributes:
+            diagnostic_event:
+                range: DiagnosticEvent
+                description: Foundation diagnostic event with context
+                multivalued: true
+            component_inventory:
+                range: ComponentInventory
+                description: Components discovered during diagnostic
+                multivalued: true
+                annotations:
+                    references: "Jensen et al.; King et al.; CIRPASS"
+            component_test_results:
+                range: ComponentTestResults
+                description: Test results for components
+                multivalued: true
+                annotations:
+                    references: "CIRPASS; Battery Pass"
+            condition_metrics:
+                range: ConditionMetrics
+                description: Health and condition measurements
+                multivalued: true
+            data_sanitization:
+                range: DataSanitization
+                description: Data erasure and sanitization records
+                multivalued: true
+            quality_assessment:
+                range: QualityAssessment
+                description: Quality grading and assessment
+                multivalued: true
+            service_actions:
+                range: ServiceActions
+                description: Service and repair actions performed
+                multivalued: true
+            predictive_analytics:
+                range: PredictiveAnalytics
+                description: Predictive maintenance outputs
+                multivalued: true
+            software_versions:
+                range: SoftwareVersionRecord
+                description: Firmware, BIOS, OS, and driver version records of the product being diagnosed
+                multivalued: true
+                annotations:
+                    references: "CIRPASS"
+
+    DiagnosticEvent:
+        description: Foundation for all diagnostic activities with complete context
+        attributes:
+            event_identifier:
+                range: string
+                description: Unique identifier for diagnostic event UUID format
+                annotations:
+                    sql_identifier: diag_event_id
+                    owl.filler: dcterms:identifier
+                pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+
+            event_identifier_value:
+                range: string
+                description: Value holder for event identifier
+
+            event_timestamp:
+                range: datetime
+                description: When diagnostic occurred ISO 8601 with timezone
+                annotations:
+                    sql_identifier: diag_event_timestamp
+                    owl.filler: prov:generatedAtTime
+                    references: "CIRPASS"
+
+            event_timestamp_value:
+                range: string
+                description: Value holder for event timestamp
+
+            diagnostic_type:
+                range: string
+                description: Classification SERVICE SELF_TEST PREDICTIVE CALIBRATION INSPECTION
+                annotations:
+                    sql_identifier: diag_event_type
+                    owl.filler: dcterms:type
+
+            diagnostic_type_value:
+                range: string
+                description: Value holder for diagnostic type
+
+            performed_by:
+                range: string
+                description: Who or what performed diagnostic - technician ID system ID software
+                annotations:
+                    sql_identifier: diag_event_performed_by
+                    owl.filler: prov:wasAssociatedWith
+                    references: "Berger et al."
+
+            performed_by_value:
+                range: string
+                description: Value holder for performed by
+
+            product_reference:
+                range: string
+                description: Link to product-profile identifiers GTIN plus serial
+                annotations:
+                    sql_identifier: diag_event_product_ref
+                    owl.filler: dcterms:references
+                pattern: "^([0-9]{14}:[A-Za-z0-9-]+|urn:epc:id:).*"
+
+            product_reference_value:
+                range: string
+                description: Value holder for product reference
+
+            location_reference:
+                range: string
+                description: Where performed facility GLN service center field location
+                annotations:
+                    sql_identifier: diag_event_location
+                    owl.filler: geo:location
+                    references: "Jensen et al.; CIRPASS"
+                pattern: "^([0-9]{13}|[A-Z]{2}[A-Z0-9]{3}).*"
+
+            location_reference_value:
+                range: string
+                description: Value holder for location reference
+
+            event_trigger:
+                range: string
+                description: What initiated diagnostic SCHEDULED FAILURE REQUEST QUALITY_CHECK INTAKE
+                annotations:
+                    sql_identifier: diag_event_trigger
+                    owl.filler: prov:wasStartedBy
+
+            event_trigger_value:
+                range: string
+                description: Value holder for event trigger
+
+            unit_identifier:
+                range: string
+                description: Internal tracking ID for specific unit
+                annotations:
+                    sql_identifier: diag_event_unit_id
+                    owl.filler: dcterms:identifier
+
+            unit_identifier_value:
+                range: string
+                description: Value holder for unit identifier
+
+            batch_identifier:
+                range: string
+                description: Batch or lot reference for grouped processing
+                annotations:
+                    sql_identifier: diag_event_batch_id
+                    owl.filler: schema:productionDate
+
+            batch_identifier_value:
+                range: string
+                description: Value holder for batch identifier
+
+            asset_reference:
+                range: string
+                description: Asset management tag for enterprise tracking
+                annotations:
+                    sql_identifier: diag_event_asset_ref
+                    owl.filler: schema:identifier
+
+            asset_reference_value:
+                range: string
+                description: Value holder for asset reference
+
+            diagnostic_software:
+                range: DiagnosticSoftware
+                description: Software or tool used for diagnostic
+
+            environmental_conditions:
+                range: EnvironmentalConditions
+                description: Environmental parameters during testing
+
+            session_metadata:
+                range: SessionMetadata
+                description: Diagnostic session tracking information
+
+            quality_metadata:
+                range: QualityMetadata
+                description: Result quality and confidence indicators
+
+    DiagnosticSoftware:
+        description: Information about diagnostic software or tool used
+        attributes:
+            tool_name:
+                range: string
+                description: Name of diagnostic software or tool
+                annotations:
+                    sql_identifier: diag_software_name
+                    owl.filler: schema:name
+
+            tool_name_value:
+                range: string
+                description: Value holder for tool name
+
+            tool_version:
+                range: string
+                description: Version of diagnostic software critical for reproducibility
+                annotations:
+                    sql_identifier: diag_software_version
+                    owl.filler: schema:version
+
+            tool_version_value:
+                range: string
+                description: Value holder for tool version
+
+            tool_vendor:
+                range: string
+                description: Vendor or manufacturer of diagnostic tool
+                annotations:
+                    sql_identifier: diag_software_vendor
+                    owl.filler: schema:manufacturer
+
+            tool_vendor_value:
+                range: string
+                description: Value holder for tool vendor
+
+            tool_certification:
+                range: string
+                description: Certification status if validated or certified tool
+                annotations:
+                    sql_identifier: diag_software_cert
+                    owl.filler: schema:certification
+                    references: "King et al."
+
+            tool_certification_value:
+                range: string
+                description: Value holder for tool certification
+
+            tool_configuration:
+                range: string
+                description: Configuration settings used during diagnostic
+                annotations:
+                    sql_identifier: diag_software_config
+                    owl.filler: schema:softwareRequirements
+
+            tool_configuration_value:
+                range: string
+                description: Value holder for tool configuration
+
+    EnvironmentalConditions:
+        description: Environmental parameters during diagnostic testing
+        attributes:
+            ambient_temperature:
+                range: float
+                description: Temperature during testing in Celsius
+                annotations:
+                    sql_identifier: diag_env_temperature
+                    owl.filler: qudt:temperature
+                    unit: degreeCelsius
+                    references: "Jensen et al."
+
+            ambient_temperature_value:
+                range: string
+                description: Value holder for ambient temperature
+
+            humidity:
+                range: float
+                description: Relative humidity percentage during testing
+                annotations:
+                    sql_identifier: diag_env_humidity
+                    owl.filler: qudt:relativeHumidity
+                    unit: percent
+                minimum_value: 0.0
+                maximum_value: 100.0
+
+            humidity_value:
+                range: string
+                description: Value holder for humidity
+
+            pressure:
+                range: float
+                description: Atmospheric pressure in kPa
+                annotations:
+                    sql_identifier: diag_env_pressure
+                    owl.filler: qudt:pressure
+                    unit: kilopascal
+
+            pressure_value:
+                range: string
+                description: Value holder for pressure
+
+            test_environment:
+                range: string
+                description: Test environment type LAB FIELD FACTORY CUSTOMER_SITE
+                annotations:
+                    sql_identifier: diag_env_location_type
+                    owl.filler: prov:atLocation
+                    references: "Jensen et al."
+
+            test_environment_value:
+                range: string
+                description: Value holder for test environment
+
+            other_conditions:
+                range: string
+                description: Other relevant environmental conditions
+                annotations:
+                    sql_identifier: diag_env_other
+                    owl.filler: dcterms:description
+
+            other_conditions_value:
+                range: string
+                description: Value holder for other conditions
+
+    SessionMetadata:
+        description: Diagnostic session tracking and completeness
+        attributes:
+            session_duration:
+                range: string
+                description: Total session duration ISO 8601 format
+                annotations:
+                    sql_identifier: diag_session_duration
+                    owl.filler: dcterms:extent
+                pattern: "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+
+            session_duration_value:
+                range: string
+                description: Value holder for session duration
+
+            test_sequence:
+                range: string
+                description: Order in which tests were performed
+                annotations:
+                    sql_identifier: diag_session_sequence
+                    owl.filler: prov:qualifiedAssociation
+
+            test_sequence_value:
+                range: string
+                description: Value holder for test sequence
+
+            tests_completed:
+                range: integer
+                description: Number of tests successfully completed
+                annotations:
+                    sql_identifier: diag_session_completed
+                    owl.filler: schema:numberOfItems
+
+            tests_completed_value:
+                range: string
+                description: Value holder for tests completed
+
+            tests_aborted:
+                range: integer
+                description: Number of tests aborted or failed to complete
+                annotations:
+                    sql_identifier: diag_session_aborted
+                    owl.filler: schema:numberOfItems
+
+            tests_aborted_value:
+                range: string
+                description: Value holder for tests aborted
+
+            abort_reasons:
+                range: string
+                description: Reasons for test abortions
+                annotations:
+                    sql_identifier: diag_session_abort_reasons
+                    owl.filler: dcterms:description
+
+            abort_reasons_value:
+                range: string
+                description: Value holder for abort reasons
+
+    QualityMetadata:
+        description: Result quality and confidence indicators
+        attributes:
+            data_completeness:
+                range: float
+                description: Percentage of tests completed 0 to 100
+                annotations:
+                    sql_identifier: diag_quality_completeness
+                    owl.filler: schema:ratingValue
+                    unit: percent
+                    references: "King et al."
+                minimum_value: 0.0
+                maximum_value: 100.0
+
+            data_completeness_value:
+                range: string
+                description: Value holder for data completeness
+
+            result_confidence:
+                range: string
+                description: Confidence level HIGH MEDIUM LOW
+                annotations:
+                    sql_identifier: diag_quality_confidence
+                    owl.filler: schema:confidenceScore
+
+            result_confidence_value:
+                range: string
+                description: Value holder for result confidence
+
+            anomalies_detected:
+                range: string
+                description: Description of any anomalies detected during diagnostic
+                annotations:
+                    sql_identifier: diag_quality_anomalies
+                    owl.filler: sosa:hasResult
+
+            anomalies_detected_value:
+                range: string
+                description: Value holder for anomalies detected
+
+    ComponentInventory:
+        description: Components, sub-components, and configuration items discovered or documented during a diagnostic event
+        class_uri: ssn:System
+        attributes:
+            component_identifier:
+                range: string
+                description: Unique identifier for the discovered component or configuration item
+                annotations:
+                    sql_identifier: diag_component_id
+                    owl.filler: dcterms:identifier
+                    references: "Jensen et al.; King et al.; CIRPASS"
+                pattern: "^[A-Za-z0-9._:-]+$"
+
+            component_identifier_value:
+                range: string
+                description: Value holder for component identifier
+
+            component_type:
+                range: DiagnosticComponentTypeEnum
+                description: Functional type of component
+                annotations:
+                    sql_identifier: diag_component_type
+                    owl.filler: dcterms:type
+
+            component_type_value:
+                range: string
+                description: Value holder for component type
+
+            component_category:
+                range: DiagnosticComponentCategoryEnum
+                description: Higher-level component category
+                annotations:
+                    sql_identifier: diag_component_category
+                    owl.filler: schema:category
+
+            component_category_value:
+                range: string
+                description: Value holder for component category
+
+            component_name:
+                range: string
+                description: Human-readable component name
+                annotations:
+                    sql_identifier: diag_component_name
+                    owl.filler: schema:name
+
+            component_name_value:
+                range: string
+                description: Value holder for component name
+
+            component_manufacturer:
+                range: string
+                description: Component manufacturer name or organization identifier
+                annotations:
+                    sql_identifier: diag_component_manufacturer
+                    owl.filler: schema:manufacturer
+
+            component_manufacturer_value:
+                range: string
+                description: Value holder for component manufacturer
+
+            component_model:
+                range: string
+                description: Component model designation
+                annotations:
+                    sql_identifier: diag_component_model
+                    owl.filler: schema:model
+
+            component_model_value:
+                range: string
+                description: Value holder for component model
+
+            component_part_number:
+                range: string
+                description: Manufacturer or operator part number
+                annotations:
+                    sql_identifier: diag_component_part_number
+                    owl.filler: schema:productID
+
+            component_part_number_value:
+                range: string
+                description: Value holder for component part number
+
+            component_serial_number:
+                range: string
+                description: Component serial number
+                annotations:
+                    sql_identifier: diag_component_serial_number
+                    owl.filler: schema:serialNumber
+
+            component_serial_number_value:
+                range: string
+                description: Value holder for component serial number
+
+            component_version_revision:
+                range: string
+                description: Hardware, software, firmware, or configuration revision
+                annotations:
+                    sql_identifier: diag_component_version_revision
+                    owl.filler: schema:version
+
+            component_version_revision_value:
+                range: string
+                description: Value holder for component version or revision
+
+            component_firmware_version:
+                range: string
+                description: Firmware version when applicable
+                annotations:
+                    sql_identifier: diag_component_firmware_version
+                    owl.filler: schema:softwareVersion
+
+            component_firmware_version_value:
+                range: string
+                description: Value holder for component firmware version
+
+            component_status:
+                range: DiagnosticComponentStatusEnum
+                description: Presence and operational status detected during diagnostics
+                annotations:
+                    sql_identifier: diag_component_status
+                    owl.filler: sosa:hasResult
+
+            component_status_value:
+                range: string
+                description: Value holder for component status
+
+            component_specifications:
+                range: ComponentSpecification
+                description: Flexible key-value specifications associated with this component
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            component_hierarchy:
+                range: ComponentHierarchy
+                description: Parent-child placement of this component in the product or assembly hierarchy
+                inlined: true
+
+            sub_components:
+                range: ComponentInventory
+                description: Nested sub-components discovered below this component
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            component_discovery_method:
+                range: string
+                description: Method, interface, or procedure used to discover the component
+                annotations:
+                    sql_identifier: diag_component_discovery_method
+                    owl.filler: sosa:usedProcedure
+
+            component_discovery_method_value:
+                range: string
+                description: Value holder for component discovery method
+
+            component_discovery_timestamp:
+                range: datetime
+                description: Timestamp when the component was discovered or recorded
+                annotations:
+                    sql_identifier: diag_component_discovery_timestamp
+                    owl.filler: prov:generatedAtTime
+
+            component_discovery_timestamp_value:
+                range: string
+                description: Value holder for component discovery timestamp
+
+    ComponentSpecification:
+        description: Name-value component specification with optional unit and source reference
+        class_uri: schema:PropertyValue
+        attributes:
+            component_specification_name:
+                range: string
+                description: Name of the specification parameter
+                annotations:
+                    sql_identifier: diag_component_spec_name
+                    owl.filler: schema:name
+
+            component_specification_name_value:
+                range: string
+                description: Value holder for component specification name
+
+            component_specification_value:
+                range: string
+                description: Specification value as reported by the diagnostic source
+                annotations:
+                    sql_identifier: diag_component_spec_value
+                    owl.filler: schema:value
+
+            component_specification_value_value:
+                range: string
+                description: Value holder for component specification value
+
+            component_specification_unit:
+                range: string
+                description: Unit of measurement for the specification value
+                annotations:
+                    sql_identifier: diag_component_spec_unit
+                    owl.filler: qudt:unit
+
+            component_specification_unit_value:
+                range: string
+                description: Value holder for component specification unit
+
+            component_specification_source:
+                range: uri
+                description: URI reference to the source specification, datasheet, standard, or diagnostic report
+                annotations:
+                    sql_identifier: diag_component_spec_source
+                    owl.filler: dcterms:source
+
+            component_specification_source_value:
+                range: string
+                description: Value holder for component specification source
+
+    ComponentHierarchy:
+        description: Parent-child relationship and assembly position for a component
+        attributes:
+            parent_component_identifier:
+                range: string
+                description: Identifier of the parent component or assembly
+                annotations:
+                    sql_identifier: diag_component_parent_id
+                    owl.filler: dcterms:references
+
+            parent_component_identifier_value:
+                range: string
+                description: Value holder for parent component identifier
+
+            hierarchy_level:
+                range: integer
+                description: Hierarchy level where 0 denotes the root product or top-level assembly
+                annotations:
+                    sql_identifier: diag_component_hierarchy_level
+                    owl.filler: schema:position
+                minimum_value: 0
+
+            hierarchy_level_value:
+                range: string
+                description: Value holder for hierarchy level
+
+            assembly_position:
+                range: string
+                description: Physical or logical position in the parent assembly
+                annotations:
+                    sql_identifier: diag_component_assembly_position
+                    owl.filler: schema:position
+
+            assembly_position_value:
+                range: string
+                description: Value holder for assembly position
+
+            component_relationship_type:
+                range: DiagnosticComponentRelationshipEnum
+                description: Type of parent-child relationship
+                annotations:
+                    sql_identifier: diag_component_relationship_type
+                    owl.filler: dcterms:type
+
+            component_relationship_type_value:
+                range: string
+                description: Value holder for component relationship type
+
+    ComponentTestResults:
+        description: Generic component testing outcomes, measurements, standards, comparisons, and calibration references
+        class_uri: sosa:Observation
+        attributes:
+            test_identifier:
+                range: string
+                description: Unique identifier for the component test or test batch
+                annotations:
+                    sql_identifier: diag_test_id
+                    owl.filler: dcterms:identifier
+                    references: "CIRPASS; Battery Pass"
+                pattern: "^[A-Za-z0-9._:-]+$"
+
+            test_identifier_value:
+                range: string
+                description: Value holder for test identifier
+
+            test_timestamp:
+                range: datetime
+                description: Timestamp when the test was executed or completed
+                annotations:
+                    sql_identifier: diag_test_timestamp
+                    owl.filler: prov:generatedAtTime
+
+            test_timestamp_value:
+                range: string
+                description: Value holder for test timestamp
+
+            test_component_reference:
+                range: string
+                description: Reference to the tested component identifier
+                annotations:
+                    sql_identifier: diag_test_component_ref
+                    owl.filler: sosa:hasFeatureOfInterest
+
+            test_component_reference_value:
+                range: string
+                description: Value holder for test component reference
+
+            test_type:
+                range: DiagnosticTestTypeEnum
+                description: Type of test performed
+                annotations:
+                    sql_identifier: diag_test_type
+                    owl.filler: dcterms:type
+
+            test_type_value:
+                range: string
+                description: Value holder for test type
+
+            test_name:
+                range: string
+                description: Specific test name
+                annotations:
+                    sql_identifier: diag_test_name
+                    owl.filler: schema:name
+
+            test_name_value:
+                range: string
+                description: Value holder for test name
+
+            test_result:
+                range: DiagnosticTestResultEnum
+                description: Test outcome classification
+                annotations:
+                    sql_identifier: diag_test_result
+                    owl.filler: sosa:hasResult
+
+            test_result_value:
+                range: string
+                description: Value holder for test result
+
+            measured_values:
+                range: MeasuredValue
+                description: Measured values produced by the test
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            reference_values:
+                range: ReferenceValue
+                description: Expected, nominal, threshold, or baseline values used for interpretation
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            test_standard:
+                range: uri
+                description: URI reference to the applicable test standard
+                multivalued: true
+                annotations:
+                    sql_identifier: diag_test_standard
+                    owl.filler: dcterms:conformsTo
+                    references: "ISO 13374; MIMOSA OSA-CBM; IEC 61508; IEEE standards"
+
+            test_standard_value:
+                range: string
+                description: Value holder for test standard
+
+            test_protocol_reference:
+                range: uri
+                description: URI reference to the test protocol or work instruction
+                annotations:
+                    sql_identifier: diag_test_protocol_ref
+                    owl.filler: sosa:usedProcedure
+
+            test_protocol_reference_value:
+                range: string
+                description: Value holder for test protocol reference
+
+            compliance_standard:
+                range: string
+                description: Compliance standard or requirement assessed by the test
+                annotations:
+                    sql_identifier: diag_test_compliance_standard
+                    owl.filler: dcterms:conformsTo
+
+            compliance_standard_value:
+                range: string
+                description: Value holder for compliance standard
+
+            test_parameters:
+                range: TestParameter
+                description: Parameter settings used during test execution
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            test_deviations:
+                range: TestDeviation
+                description: Deviations from the planned test protocol
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            observation_codes:
+                range: string
+                description: Standardized fault, defect, observation, or diagnostic codes
+                multivalued: true
+                annotations:
+                    sql_identifier: diag_test_observation_codes
+                    owl.filler: sosa:hasResult
+
+            observation_codes_value:
+                range: string
+                description: Value holder for observation codes
+
+            observation_notes:
+                range: string
+                description: Human-readable notes about observations made during the test
+                annotations:
+                    sql_identifier: diag_test_observation_notes
+                    owl.filler: dcterms:description
+
+            observation_notes_value:
+                range: string
+                description: Value holder for observation notes
+
+            test_comparison:
+                range: TestComparison
+                description: Comparison of the result against baselines, peers, or specifications
+                inlined: true
+
+            retest_required:
+                range: boolean
+                description: Whether the test result requires another test run
+                annotations:
+                    sql_identifier: diag_test_retest_required
+                    owl.filler: schema:actionStatus
+
+            retest_required_value:
+                range: string
+                description: Value holder for retest required flag
+
+            inconclusive_reason:
+                range: string
+                description: Reason why the test could not produce a conclusive result
+                annotations:
+                    sql_identifier: diag_test_inconclusive_reason
+                    owl.filler: dcterms:description
+
+            inconclusive_reason_value:
+                range: string
+                description: Value holder for inconclusive reason
+
+            calibration_traceability:
+                range: CalibrationTraceability
+                description: Calibration and equipment traceability supporting the test result
+                inlined: true
+
+            component_test_uncertainty_statements:
+                range: UncertaintyStatement
+                description: Optional uncertainty statements for component test results, measured values, thresholds, or test interpretations
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: diag_test_uncertainty_statements
+
+            component_test_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: Optional metrological traceability statements for component tests, methods, instruments, standards, calibrations, or reference materials
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: diag_test_metrological_traceability
+
+            component_test_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for component test data, evidence, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: diag_test_data_quality_assessments
+
+            testing_certificate:
+                range: TestingCertificate
+                description: Certificate(s) of Testing (CoT) attesting the test outcome - required evidence for ICT processes
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    references: "CIRPASS; Battery Pass"
+                    sql_identifier: diag_test_testing_certificate
+
+    TestingCertificate:
+        description: Certificate of Testing (CoT) - formal attestation of a test result linked to the diagnostic result
+        class_uri: schema:Certification
+        attributes:
+            certificate_identifier:
+                range: string
+                description: Unique identifier or report ID of the testing certificate
+                annotations:
+                    sql_identifier: diag_cot_id
+                    owl.filler: dcterms:identifier
+                    references: "CIRPASS"
+
+            certificate_identifier_value:
+                range: string
+                description: Value holder for certificate identifier
+
+            issuing_body:
+                range: string
+                description: Organisation or accredited body that issued the certificate
+                annotations:
+                    sql_identifier: diag_cot_issuing_body
+                    owl.filler: schema:issuedBy
+
+            issuing_body_value:
+                range: string
+                description: Value holder for issuing body
+
+            issue_date:
+                range: date
+                description: Date the certificate was issued
+                annotations:
+                    sql_identifier: diag_cot_issue_date
+                    owl.filler: dcterms:issued
+
+            issue_date_value:
+                range: string
+                description: Value holder for issue date
+
+            test_standard:
+                range: uri
+                description: URI reference to the test standard the certificate attests conformance to
+                annotations:
+                    sql_identifier: diag_cot_standard
+                    owl.filler: dcterms:conformsTo
+
+            test_standard_value:
+                range: string
+                description: Value holder for test standard
+
+            certificate_result:
+                range: DiagnosticTestResultEnum
+                description: Overall certified test result
+                annotations:
+                    sql_identifier: diag_cot_result
+                    owl.filler: sosa:hasResult
+
+            certificate_result_value:
+                range: string
+                description: Value holder for certificate result
+
+            document_reference:
+                range: uri
+                description: URI reference to the certificate document or supporting evidence
+                annotations:
+                    sql_identifier: diag_cot_document_ref
+                    owl.filler: dcterms:references
+
+            document_reference_value:
+                range: string
+                description: Value holder for document reference
+
+    SoftwareVersionRecord:
+        description: Firmware, BIOS, OS, or driver version record of the product being diagnosed, including before/after update state
+        class_uri: schema:SoftwareApplication
+        attributes:
+            software_type:
+                range: DiagnosticSoftwareTypeEnum
+                description: Type of software or firmware (BIOS, firmware, OS, driver, application)
+                annotations:
+                    sql_identifier: diag_swver_type
+                    owl.filler: dcterms:type
+
+            software_type_value:
+                range: string
+                description: Value holder for software type
+
+            component_reference:
+                range: string
+                description: Reference to the component or product the software/firmware belongs to
+                annotations:
+                    sql_identifier: diag_swver_component_ref
+                    owl.filler: dcterms:references
+
+            component_reference_value:
+                range: string
+                description: Value holder for component reference
+
+            software_name:
+                range: string
+                description: Name of the software, firmware, OS image, or driver
+                annotations:
+                    sql_identifier: diag_swver_name
+                    owl.filler: schema:name
+
+            software_name_value:
+                range: string
+                description: Value holder for software name
+
+            version_before:
+                range: string
+                description: Version present before any update (current/as-found version)
+                annotations:
+                    sql_identifier: diag_swver_version_before
+                    owl.filler: schema:softwareVersion
+
+            version_before_value:
+                range: string
+                description: Value holder for version before
+
+            version_after:
+                range: string
+                description: Version present after update, if an update was applied
+                annotations:
+                    sql_identifier: diag_swver_version_after
+                    owl.filler: schema:softwareVersion
+
+            version_after_value:
+                range: string
+                description: Value holder for version after
+
+            update_status:
+                range: string
+                description: Update status (e.g. up-to-date, updated, update available, not applicable)
+                annotations:
+                    sql_identifier: diag_swver_update_status
+                    owl.filler: schema:actionStatus
+
+            update_status_value:
+                range: string
+                description: Value holder for update status
+
+            update_source:
+                range: uri
+                description: URI reference to the source of the update (vendor update server, image repository, etc.)
+                annotations:
+                    sql_identifier: diag_swver_update_source
+                    owl.filler: dcterms:source
+
+            update_source_value:
+                range: string
+                description: Value holder for update source
+
+            verification_date:
+                range: date
+                description: Date the software/firmware version was verified
+                annotations:
+                    sql_identifier: diag_swver_verification_date
+                    owl.filler: dcterms:date
+
+            verification_date_value:
+                range: string
+                description: Value holder for verification date
+
+    MeasuredValue:
+        description: Measurement result from a diagnostic test or condition assessment
+        class_uri: sosa:Result
+        attributes:
+            measured_value_name:
+                range: string
+                description: Name of the measured quantity or diagnostic parameter
+                annotations:
+                    sql_identifier: diag_measured_value_name
+                    owl.filler: schema:name
+
+            measured_value_name_value:
+                range: string
+                description: Value holder for measured value name
+
+            measured_numeric_value:
+                range: float
+                description: Numeric measured value when available
+                annotations:
+                    sql_identifier: diag_measured_numeric_value
+                    owl.filler: sosa:hasSimpleResult
+
+            measured_numeric_value_value:
+                range: string
+                description: Value holder for measured numeric value
+
+            measured_text_value:
+                range: string
+                description: Textual measured value when the result is qualitative, coded, or non-numeric
+                annotations:
+                    sql_identifier: diag_measured_text_value
+                    owl.filler: sosa:hasSimpleResult
+
+            measured_text_value_value:
+                range: string
+                description: Value holder for measured text value
+
+            measured_value_unit:
+                range: string
+                description: Unit of measurement, preferably using QUDT unit identifiers
+                annotations:
+                    sql_identifier: diag_measured_value_unit
+                    owl.filler: qudt:unit
+
+            measured_value_unit_value:
+                range: string
+                description: Value holder for measured value unit
+
+            measured_value_timestamp:
+                range: datetime
+                description: Timestamp associated with the measured value
+                annotations:
+                    sql_identifier: diag_measured_value_timestamp
+                    owl.filler: sosa:resultTime
+
+            measured_value_timestamp_value:
+                range: string
+                description: Value holder for measured value timestamp
+
+            measurement_method:
+                range: string
+                description: Method, sensor, interface, or procedure used to obtain the measured value
+                annotations:
+                    sql_identifier: diag_measured_value_method
+                    owl.filler: sosa:usedProcedure
+
+            measurement_method_value:
+                range: string
+                description: Value holder for measurement method
+
+            measured_value_uncertainty_statements:
+                range: UncertaintyStatement
+                description: Optional uncertainty statements for the measured value
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: diag_measured_value_uncertainty
+
+            measured_value_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: Optional metrological traceability statements for the measured value, measurement method, instrument, calibration, or reference material
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: diag_measured_value_metrological_traceability
+
+    ConditionMetrics:
+        description: Health, degradation, performance, capacity, and remaining-life metrics for components or products
+        class_uri: sosa:Observation
+        attributes:
+            metric_identifier:
+                range: string
+                description: Unique identifier for the condition metric record
+                annotations:
+                    sql_identifier: diag_condition_metric_id
+                    owl.filler: dcterms:identifier
+                    references: "Berger et al.; King et al.; ISO 13374; MIMOSA OSA-CBM"
+                pattern: "^[A-Za-z0-9._:-]+$"
+
+            metric_identifier_value:
+                range: string
+                description: Value holder for metric identifier
+
+            metric_component_reference:
+                range: string
+                description: Reference to the component or product being assessed
+                annotations:
+                    sql_identifier: diag_condition_component_ref
+                    owl.filler: sosa:hasFeatureOfInterest
+
+            metric_component_reference_value:
+                range: string
+                description: Value holder for metric component reference
+
+            metric_type:
+                range: DiagnosticMetricTypeEnum
+                description: Type of condition metric
+                annotations:
+                    sql_identifier: diag_condition_metric_type
+                    owl.filler: dcterms:type
+
+            metric_type_value:
+                range: string
+                description: Value holder for metric type
+
+            metric_name:
+                range: string
+                description: Name of the condition, health, or degradation metric
+                annotations:
+                    sql_identifier: diag_condition_metric_name
+                    owl.filler: schema:name
+
+            metric_name_value:
+                range: string
+                description: Value holder for metric name
+
+            current_value:
+                range: float
+                description: Current numeric metric value
+                annotations:
+                    sql_identifier: diag_condition_current_value
+                    owl.filler: sosa:hasSimpleResult
+
+            current_value_value:
+                range: string
+                description: Value holder for current value
+
+            current_value_unit:
+                range: string
+                description: Unit of the current value, preferably using QUDT unit identifiers
+                annotations:
+                    sql_identifier: diag_condition_current_unit
+                    owl.filler: qudt:unit
+
+            current_value_unit_value:
+                range: string
+                description: Value holder for current value unit
+
+            nominal_value:
+                range: float
+                description: Nominal or expected metric value
+                annotations:
+                    sql_identifier: diag_condition_nominal_value
+                    owl.filler: schema:valueReference
+
+            nominal_value_value:
+                range: string
+                description: Value holder for nominal value
+
+            nominal_value_unit:
+                range: string
+                description: Unit of the nominal value, preferably using QUDT unit identifiers
+                annotations:
+                    sql_identifier: diag_condition_nominal_unit
+                    owl.filler: qudt:unit
+
+            nominal_value_unit_value:
+                range: string
+                description: Value holder for nominal value unit
+
+            health_score:
+                range: float
+                description: Overall health score from 0 to 100 percent
+                annotations:
+                    sql_identifier: diag_condition_health_score
+                    owl.filler: schema:ratingValue
+                    unit: percent
+                minimum_value: 0.0
+                maximum_value: 100.0
+
+            health_score_value:
+                range: string
+                description: Value holder for health score
+
+            degradation_indicators:
+                range: DegradationIndicators
+                description: Structured degradation indicators supporting the condition metric
+                inlined: true
+
+            estimated_remaining_life:
+                range: string
+                description: Estimated remaining useful life in ISO 8601 duration format
+                annotations:
+                    sql_identifier: diag_condition_remaining_life
+                    owl.filler: schema:temporalCoverage
+                pattern: "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+
+            estimated_remaining_life_value:
+                range: string
+                description: Value holder for estimated remaining life
+
+            condition_metric_timestamp:
+                range: datetime
+                description: Timestamp when the metric was generated
+                annotations:
+                    sql_identifier: diag_condition_metric_timestamp
+                    owl.filler: sosa:resultTime
+
+            condition_metric_timestamp_value:
+                range: string
+                description: Value holder for condition metric timestamp
+
+            condition_metric_method:
+                range: string
+                description: Method, model, algorithm, or sensor used to generate the metric
+                annotations:
+                    sql_identifier: diag_condition_metric_method
+                    owl.filler: sosa:usedProcedure
+
+            condition_metric_method_value:
+                range: string
+                description: Value holder for condition metric method
+
+            condition_metric_uncertainty_statements:
+                range: UncertaintyStatement
+                description: Optional uncertainty statements for condition metrics, health scores, degradation indicators, or remaining-life estimates
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: diag_condition_uncertainty_statements
+
+            condition_metric_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: Optional metrological traceability statements for condition measurements, methods, sensors, standards, calibrations, or reference materials
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: diag_condition_metrological_traceability
+
+            condition_metric_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for condition metric data, evidence, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: diag_condition_data_quality_assessments
+
+    DataSanitization:
+        description: Secure erasure, verification, and certification records for data-bearing components
+        class_uri: prov:Activity
+        attributes:
+            sanitization_identifier:
+                range: string
+                description: Unique identifier for the sanitization activity
+                annotations:
+                    sql_identifier: diag_sanitization_id
+                    owl.filler: dcterms:identifier
+                    references: "ESPR; CIRPASS; NIST SP 800-88; ISO/IEC 27001"
+                pattern: "^[A-Za-z0-9._:-]+$"
+
+            sanitization_identifier_value:
+                range: string
+                description: Value holder for sanitization identifier
+
+            data_bearing_components:
+                range: DataBearingComponent
+                description: Data-bearing components covered by the sanitization activity
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            sanitization_method:
+                range: DiagnosticSanitizationMethodEnum
+                description: Sanitization method applied
+                annotations:
+                    sql_identifier: diag_sanitization_method
+                    owl.filler: sosa:usedProcedure
+
+            sanitization_method_value:
+                range: string
+                description: Value holder for sanitization method
+
+            sanitization_standard:
+                range: DiagnosticSanitizationStandardEnum
+                description: Standard or policy followed for sanitization
+                annotations:
+                    sql_identifier: diag_sanitization_standard
+                    owl.filler: dcterms:conformsTo
+
+            sanitization_standard_value:
+                range: string
+                description: Value holder for sanitization standard
+
+            sanitization_result:
+                range: DiagnosticSanitizationResultEnum
+                description: Result of the sanitization activity
+                annotations:
+                    sql_identifier: diag_sanitization_result
+                    owl.filler: sosa:hasResult
+
+            sanitization_result_value:
+                range: string
+                description: Value holder for sanitization result
+
+            sanitization_timestamp:
+                range: datetime
+                description: Timestamp when sanitization was completed or recorded
+                annotations:
+                    sql_identifier: diag_sanitization_timestamp
+                    owl.filler: prov:endedAtTime
+
+            sanitization_timestamp_value:
+                range: string
+                description: Value holder for sanitization timestamp
+
+            sanitization_performed_by:
+                range: string
+                description: Technician, organization, or automated system that performed sanitization
+                annotations:
+                    sql_identifier: diag_sanitization_performed_by
+                    owl.filler: prov:wasAssociatedWith
+
+            sanitization_performed_by_value:
+                range: string
+                description: Value holder for sanitization performed by
+
+            verification_method:
+                range: string
+                description: Method used to verify the sanitization outcome
+                annotations:
+                    sql_identifier: diag_sanitization_verification_method
+                    owl.filler: sosa:usedProcedure
+
+            verification_method_value:
+                range: string
+                description: Value holder for verification method
+
+            certificate_issued:
+                range: boolean
+                description: Whether a sanitization certificate was issued
+                annotations:
+                    sql_identifier: diag_sanitization_certificate_issued
+                    owl.filler: schema:certification
+
+            certificate_issued_value:
+                range: string
+                description: Value holder for certificate issued flag
+
+            sanitization_certificate_reference:
+                range: uri
+                description: URI reference to sanitization certificate or evidence
+                annotations:
+                    sql_identifier: diag_sanitization_certificate_ref
+                    owl.filler: schema:certification
+
+            sanitization_certificate_reference_value:
+                range: string
+                description: Value holder for sanitization certificate reference
+
+            data_classification:
+                range: DiagnosticDataClassificationEnum
+                description: Classification of data handled before sanitization
+                annotations:
+                    sql_identifier: diag_sanitization_data_classification
+                    owl.filler: dcterms:type
+
+            data_classification_value:
+                range: string
+                description: Value holder for data classification
+
+            compliance_certification:
+                range: uri
+                description: URI reference to compliance certification or audit evidence
+                annotations:
+                    sql_identifier: diag_sanitization_compliance_cert
+                    owl.filler: dcterms:references
+
+            compliance_certification_value:
+                range: string
+                description: Value holder for compliance certification
+
+            sanitization_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for sanitization records, verification evidence, certificates, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: diag_sanitization_data_quality_assessments
+
+    QualityAssessment:
+        description: Quality grading, criteria, issues, and assessment results for product or component condition
+        class_uri: schema:Review
+        attributes:
+            assessment_identifier:
+                range: string
+                description: Unique identifier for the quality assessment
+                annotations:
+                    sql_identifier: diag_assessment_id
+                    owl.filler: dcterms:identifier
+                    references: "King et al.; CE-RISE Deliverable 1.1"
+                pattern: "^[A-Za-z0-9._:-]+$"
+
+            assessment_identifier_value:
+                range: string
+                description: Value holder for assessment identifier
+
+            assessment_timestamp:
+                range: datetime
+                description: Timestamp when the assessment was performed or recorded
+                annotations:
+                    sql_identifier: diag_assessment_timestamp
+                    owl.filler: prov:generatedAtTime
+
+            assessment_timestamp_value:
+                range: string
+                description: Value holder for assessment timestamp
+
+            overall_grade:
+                range: string
+                description: Overall grade assigned by the quality assessment
+                annotations:
+                    sql_identifier: diag_assessment_overall_grade
+                    owl.filler: schema:reviewRating
+
+            overall_grade_value:
+                range: string
+                description: Value holder for overall grade
+
+            grading_scale:
+                range: DiagnosticGradingScaleEnum
+                description: Scale used for quality grading
+                annotations:
+                    sql_identifier: diag_assessment_grading_scale
+                    owl.filler: schema:ratingValue
+
+            grading_scale_value:
+                range: string
+                description: Value holder for grading scale
+
+            cosmetic_score:
+                range: float
+                description: Cosmetic condition score from 0 to 100 percent
+                annotations:
+                    sql_identifier: diag_assessment_cosmetic_score
+                    owl.filler: schema:ratingValue
+                    unit: percent
+                minimum_value: 0.0
+                maximum_value: 100.0
+
+            cosmetic_score_value:
+                range: string
+                description: Value holder for cosmetic score
+
+            functional_score:
+                range: float
+                description: Functional condition score from 0 to 100 percent
+                annotations:
+                    sql_identifier: diag_assessment_functional_score
+                    owl.filler: schema:ratingValue
+                    unit: percent
+                minimum_value: 0.0
+                maximum_value: 100.0
+
+            functional_score_value:
+                range: string
+                description: Value holder for functional score
+
+            performance_score:
+                range: float
+                description: Performance score from 0 to 100 percent
+                annotations:
+                    sql_identifier: diag_assessment_performance_score
+                    owl.filler: schema:ratingValue
+                    unit: percent
+                minimum_value: 0.0
+                maximum_value: 100.0
+
+            performance_score_value:
+                range: string
+                description: Value holder for performance score
+
+            assessment_criteria:
+                range: AssessmentCriterion
+                description: Criteria and criterion-level scores used in the assessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            quality_issues:
+                range: DiagnosticQualityIssue
+                description: Quality issues identified during the assessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            quality_check_results:
+                range: string
+                description: Summary of quality checks performed and their outcomes
+                annotations:
+                    sql_identifier: diag_assessment_quality_results
+                    owl.filler: sosa:hasResult
+
+            quality_check_results_value:
+                range: string
+                description: Value holder for quality check results
+
+            quality_certification_status:
+                range: DiagnosticQualityCertificationStatusEnum
+                description: Certification, refurbishment, warranty, or other quality status
+                annotations:
+                    sql_identifier: diag_assessment_cert_status
+                    owl.filler: schema:certification
+
+            quality_certification_status_value:
+                range: string
+                description: Value holder for quality certification status
+
+            assessor_identifier:
+                range: string
+                description: Person, organization, or system that performed the assessment
+                annotations:
+                    sql_identifier: diag_assessment_assessor
+                    owl.filler: prov:wasAssociatedWith
+
+            assessor_identifier_value:
+                range: string
+                description: Value holder for assessor identifier
+
+            assessment_standard:
+                range: uri
+                description: URI reference to assessment standard, grading protocol, or work instruction
+                annotations:
+                    sql_identifier: diag_assessment_standard
+                    owl.filler: dcterms:conformsTo
+
+            assessment_standard_value:
+                range: string
+                description: Value holder for assessment standard
+
+            quality_assessment_uncertainty_statements:
+                range: UncertaintyStatement
+                description: Optional uncertainty statements for quality scores, grades, assessment criteria, or derived assessment results
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: diag_assessment_uncertainty_statements
+
+            quality_assessment_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for quality assessment data, evidence, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: diag_assessment_data_quality_assessments
+        rules:
+            - description: "A reported overall grade requires an assessment standard."
+              preconditions:
+                  slot_conditions:
+                      overall_grade:
+                          value_presence: PRESENT
+              postconditions:
+                  slot_conditions:
+                      assessment_standard:
+                          required: true
+
+    ServiceActions:
+        description: Service, repair, replacement, adjustment, calibration, cleaning, update, or configuration actions performed
+        class_uri: prov:Activity
+        attributes:
+            action_identifier:
+                range: string
+                description: Unique identifier for the service action
+                annotations:
+                    sql_identifier: diag_service_action_id
+                    owl.filler: dcterms:identifier
+                    references: "Jensen et al.; CE-RISE Deliverable 1.1"
+                pattern: "^[A-Za-z0-9._:-]+$"
+
+            action_identifier_value:
+                range: string
+                description: Value holder for action identifier
+
+            action_type:
+                range: DiagnosticServiceActionTypeEnum
+                description: Type of service action performed
+                annotations:
+                    sql_identifier: diag_service_action_type
+                    owl.filler: dcterms:type
+
+            action_type_value:
+                range: string
+                description: Value holder for action type
+
+            action_description:
+                range: string
+                description: Description of the service or repair action
+                annotations:
+                    sql_identifier: diag_service_action_description
+                    owl.filler: dcterms:description
+
+            action_description_value:
+                range: string
+                description: Value holder for action description
+
+            service_component_reference:
+                range: string
+                description: Reference to the component or product affected by the service action
+                annotations:
+                    sql_identifier: diag_service_component_ref
+                    owl.filler: dcterms:references
+
+            service_component_reference_value:
+                range: string
+                description: Value holder for service component reference
+
+            action_timestamp:
+                range: datetime
+                description: Timestamp when the service action was performed or completed
+                annotations:
+                    sql_identifier: diag_service_action_timestamp
+                    owl.filler: prov:endedAtTime
+
+            action_timestamp_value:
+                range: string
+                description: Value holder for action timestamp
+
+            action_duration:
+                range: string
+                description: Service action duration in ISO 8601 duration format
+                annotations:
+                    sql_identifier: diag_service_action_duration
+                    owl.filler: schema:duration
+                pattern: "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+
+            action_duration_value:
+                range: string
+                description: Value holder for action duration
+
+            service_performed_by:
+                range: string
+                description: Technician, organization, or system that performed the service action
+                annotations:
+                    sql_identifier: diag_service_performed_by
+                    owl.filler: prov:wasAssociatedWith
+
+            service_performed_by_value:
+                range: string
+                description: Value holder for service performed by
+
+            parts_replaced:
+                range: ReplacedPart
+                description: Parts replaced during the service action
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            action_result:
+                range: DiagnosticActionResultEnum
+                description: Outcome of the service action
+                annotations:
+                    sql_identifier: diag_service_action_result
+                    owl.filler: sosa:hasResult
+
+            action_result_value:
+                range: string
+                description: Value holder for action result
+
+            follow_up_required:
+                range: boolean
+                description: Whether follow-up service, inspection, or diagnostic work is required
+                annotations:
+                    sql_identifier: diag_service_follow_up_required
+                    owl.filler: schema:potentialAction
+
+            follow_up_required_value:
+                range: string
+                description: Value holder for follow-up required flag
+
+            follow_up_description:
+                range: string
+                description: Description of required follow-up actions
+                annotations:
+                    sql_identifier: diag_service_follow_up_description
+                    owl.filler: dcterms:description
+
+            follow_up_description_value:
+                range: string
+                description: Value holder for follow-up description
+
+            technician_notes:
+                range: string
+                description: Technician notes, observations, or service comments
+                annotations:
+                    sql_identifier: diag_service_technician_notes
+                    owl.filler: dcterms:description
+
+            technician_notes_value:
+                range: string
+                description: Value holder for technician notes
+
+            service_documentation:
+                range: uri
+                description: URI references to service reports, images, work orders, or supporting evidence
+                multivalued: true
+                annotations:
+                    sql_identifier: diag_service_documentation
+                    owl.filler: dcterms:references
+
+            service_documentation_value:
+                range: string
+                description: Value holder for service documentation
+
+            service_action_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for service action records, documentation, evidence, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: diag_service_data_quality_assessments
+
+    PredictiveAnalytics:
+        description: Predictive maintenance, failure risk, remaining-life, and recommended-action outputs
+        class_uri: prov:Activity
+        attributes:
+            prediction_identifier:
+                range: string
+                description: Unique identifier for the prediction record
+                annotations:
+                    sql_identifier: diag_predict_id
+                    owl.filler: dcterms:identifier
+                    references: "Berger et al."
+                pattern: "^[A-Za-z0-9._:-]+$"
+
+            prediction_identifier_value:
+                range: string
+                description: Value holder for prediction identifier
+
+            prediction_timestamp:
+                range: datetime
+                description: Timestamp when the prediction was generated
+                annotations:
+                    sql_identifier: diag_predict_timestamp
+                    owl.filler: prov:generatedAtTime
+
+            prediction_timestamp_value:
+                range: string
+                description: Value holder for prediction timestamp
+
+            prediction_component_reference:
+                range: string
+                description: Reference to the component or product being predicted
+                annotations:
+                    sql_identifier: diag_predict_component_ref
+                    owl.filler: sosa:hasFeatureOfInterest
+
+            prediction_component_reference_value:
+                range: string
+                description: Value holder for prediction component reference
+
+            prediction_type:
+                range: DiagnosticPredictionTypeEnum
+                description: Type of prediction generated
+                annotations:
+                    sql_identifier: diag_predict_type
+                    owl.filler: dcterms:type
+
+            prediction_type_value:
+                range: string
+                description: Value holder for prediction type
+
+            failure_probability:
+                range: float
+                description: Probability of failure from 0 to 100 percent
+                annotations:
+                    sql_identifier: diag_predict_failure_probability
+                    owl.filler: schema:probability
+                    unit: percent
+                minimum_value: 0.0
+                maximum_value: 100.0
+
+            failure_probability_value:
+                range: string
+                description: Value holder for failure probability
+
+            time_to_failure:
+                range: string
+                description: Estimated time to failure in ISO 8601 duration format
+                annotations:
+                    sql_identifier: diag_predict_time_to_failure
+                    owl.filler: schema:temporalCoverage
+                pattern: "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+
+            time_to_failure_value:
+                range: string
+                description: Value holder for time to failure
+
+            prediction_confidence_level:
+                range: float
+                description: Statistical confidence in the prediction from 0 to 100 percent
+                annotations:
+                    sql_identifier: diag_predict_confidence_level
+                    owl.filler: schema:confidenceScore
+                    unit: percent
+                minimum_value: 0.0
+                maximum_value: 100.0
+
+            prediction_confidence_level_value:
+                range: string
+                description: Value holder for prediction confidence level
+
+            prediction_confidence_class:
+                range: DiagnosticConfidenceLevelEnum
+                description: Qualitative confidence class for the prediction
+                annotations:
+                    sql_identifier: diag_predict_confidence_class
+                    owl.filler: schema:confidenceScore
+
+            prediction_confidence_class_value:
+                range: string
+                description: Value holder for prediction confidence class
+
+            prediction_model:
+                range: string
+                description: Model, algorithm, or analytical method used for prediction
+                annotations:
+                    sql_identifier: diag_predict_model
+                    owl.filler: prov:used
+
+            prediction_model_value:
+                range: string
+                description: Value holder for prediction model
+
+            prediction_model_version:
+                range: string
+                description: Version of the predictive model or algorithm
+                annotations:
+                    sql_identifier: diag_predict_model_version
+                    owl.filler: schema:version
+
+            prediction_model_version_value:
+                range: string
+                description: Value holder for prediction model version
+
+            recommended_maintenance:
+                range: string
+                description: Recommended maintenance or preventive action
+                annotations:
+                    sql_identifier: diag_predict_recommended_maintenance
+                    owl.filler: schema:potentialAction
+
+            recommended_maintenance_value:
+                range: string
+                description: Value holder for recommended maintenance
+
+            urgency_level:
+                range: DiagnosticMaintenanceUrgencyEnum
+                description: Urgency level for maintenance or intervention
+                annotations:
+                    sql_identifier: diag_predict_urgency_level
+                    owl.filler: schema:actionStatus
+
+            urgency_level_value:
+                range: string
+                description: Value holder for urgency level
+
+            cost_estimate:
+                range: string
+                description: Estimated cost or economic impact of recommended action or failure scenario
+                annotations:
+                    sql_identifier: diag_predict_cost_estimate
+                    owl.filler: schema:price
+
+            cost_estimate_value:
+                range: string
+                description: Value holder for cost estimate
+
+            prediction_horizon:
+                range: string
+                description: Time horizon over which the prediction applies in ISO 8601 duration format
+                annotations:
+                    sql_identifier: diag_predict_horizon
+                    owl.filler: schema:temporalCoverage
+                pattern: "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+
+            prediction_horizon_value:
+                range: string
+                description: Value holder for prediction horizon
+
+            usage_based_prediction:
+                range: UsageBasedPrediction
+                description: Optional usage-based forecast expressed relative to a condition-metric counter
+                inlined: true
+                required: false
+                annotations:
+                    sql_identifier: diag_predict_usage_based_prediction
+                    owl.filler: diag:usageBasedPrediction
+
+            risk_factors:
+                range: RiskFactor
+                description: Risk factors contributing to the prediction
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            model_input_reference:
+                range: uri
+                description: URI reference to model inputs, feature set, training metadata, or diagnostic evidence
+                annotations:
+                    sql_identifier: diag_predict_model_input_ref
+                    owl.filler: prov:used
+
+            model_input_reference_value:
+                range: string
+                description: Value holder for model input reference
+
+            predictive_analytics_uncertainty_statements:
+                range: UncertaintyStatement
+                description: Optional uncertainty statements for failure probabilities, confidence levels, time-to-failure estimates, prediction horizons, cost estimates, or other predictive outputs
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: diag_predict_uncertainty_statements
+
+            predictive_analytics_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for predictive model inputs, outputs, evidence, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: diag_predict_data_quality_assessments
+
+    UsageBasedPrediction:
+        description: Usage-based forecast linked to the condition-metric counter used as its input
+        class_uri: diag:usageBasedPrediction
+        attributes:
+            usage_counter_reference:
+                range: string
+                description: Identifier or URI of the ConditionMetrics counter record used as prediction input
+                required: false
+                annotations:
+                    sql_identifier: diag_usage_prediction_counter_ref
+                    owl.filler: prov:used
+
+            remaining_usage_to_failure:
+                range: UsageQuantity
+                description: Predicted remaining usage until failure
+                inlined: true
+                required: false
+                annotations:
+                    sql_identifier: diag_usage_prediction_remaining_to_failure
+                    owl.filler: diag:remainingUsageToFailure
+
+            usage_prediction_horizon:
+                range: UsageQuantity
+                description: Usage horizon over which the prediction applies
+                inlined: true
+                required: false
+                annotations:
+                    sql_identifier: diag_usage_prediction_horizon
+                    owl.filler: diag:usagePredictionHorizon
+        annotations:
+            sql_identifier: diag_usage_prediction
+
+    UsageQuantity:
+        description: Predicted usage quantity expressed with a numerical value and QUDT unit reference
+        class_uri: qudt:QuantityValue
+        attributes:
+            numerical_value:
+                range: float
+                description: Numerical value of the predicted usage quantity
+                required: true
+                annotations:
+                    sql_identifier: diag_usage_quantity_numerical_value
+                    owl.filler: qudt:numericValue
+
+            unit_reference:
+                range: uri
+                description: QUDT URI identifying the unit of the predicted usage quantity
+                required: true
+                annotations:
+                    sql_identifier: diag_usage_quantity_unit_ref
+                    owl.filler: qudt:unit
+        annotations:
+            sql_identifier: diag_usage_quantity
+
+    ReferenceValue:
+        description: Expected, nominal, threshold, or baseline value used to interpret a measured value
+        class_uri: schema:PropertyValue
+        attributes:
+            reference_value_name:
+                range: string
+                description: Name of the reference quantity or criterion
+                annotations:
+                    sql_identifier: diag_reference_value_name
+                    owl.filler: schema:name
+
+            reference_value_name_value:
+                range: string
+                description: Value holder for reference value name
+
+            reference_numeric_value:
+                range: float
+                description: Numeric reference value when available
+                annotations:
+                    sql_identifier: diag_reference_numeric_value
+                    owl.filler: schema:value
+
+            reference_numeric_value_value:
+                range: string
+                description: Value holder for reference numeric value
+
+            reference_text_value:
+                range: string
+                description: Textual reference value or expected state
+                annotations:
+                    sql_identifier: diag_reference_text_value
+                    owl.filler: schema:value
+
+            reference_text_value_value:
+                range: string
+                description: Value holder for reference text value
+
+            reference_value_unit:
+                range: string
+                description: Unit of the reference value, preferably using QUDT unit identifiers
+                annotations:
+                    sql_identifier: diag_reference_value_unit
+                    owl.filler: qudt:unit
+
+            reference_value_unit_value:
+                range: string
+                description: Value holder for reference value unit
+
+            tolerance_lower:
+                range: float
+                description: Lower tolerance or acceptance bound
+                annotations:
+                    sql_identifier: diag_reference_tolerance_lower
+                    owl.filler: qudt:lowerBound
+
+            tolerance_lower_value:
+                range: string
+                description: Value holder for lower tolerance
+
+            tolerance_upper:
+                range: float
+                description: Upper tolerance or acceptance bound
+                annotations:
+                    sql_identifier: diag_reference_tolerance_upper
+                    owl.filler: qudt:upperBound
+
+            tolerance_upper_value:
+                range: string
+                description: Value holder for upper tolerance
+
+            reference_value_source:
+                range: uri
+                description: URI reference to the specification, standard, baseline, or data source defining the reference value
+                annotations:
+                    sql_identifier: diag_reference_value_source
+                    owl.filler: dcterms:source
+
+            reference_value_source_value:
+                range: string
+                description: Value holder for reference value source
+
+            reference_value_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: Optional metrological traceability statements for reference values, thresholds, baselines, standards, specifications, or reference materials
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: diag_reference_value_metrological_traceability
+
+            reference_value_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for reference values, sources, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: diag_reference_value_data_quality
+
+    TestParameter:
+        description: Parameter setting used during a diagnostic or performance test
+        class_uri: schema:PropertyValue
+        attributes:
+            test_parameter_name:
+                range: string
+                description: Name of the test parameter
+                annotations:
+                    sql_identifier: diag_test_parameter_name
+                    owl.filler: schema:name
+
+            test_parameter_name_value:
+                range: string
+                description: Value holder for test parameter name
+
+            test_parameter_value:
+                range: string
+                description: Test parameter value
+                annotations:
+                    sql_identifier: diag_test_parameter_value
+                    owl.filler: schema:value
+
+            test_parameter_value_value:
+                range: string
+                description: Value holder for test parameter value
+
+            test_parameter_unit:
+                range: string
+                description: Unit of the test parameter value
+                annotations:
+                    sql_identifier: diag_test_parameter_unit
+                    owl.filler: qudt:unit
+
+            test_parameter_unit_value:
+                range: string
+                description: Value holder for test parameter unit
+
+    TestDeviation:
+        description: Documented deviation from a planned test method, condition, or acceptance criterion
+        attributes:
+            test_deviation_identifier:
+                range: string
+                description: Identifier for the deviation record
+                annotations:
+                    sql_identifier: diag_test_deviation_id
+                    owl.filler: dcterms:identifier
+
+            test_deviation_identifier_value:
+                range: string
+                description: Value holder for test deviation identifier
+
+            test_deviation_type:
+                range: string
+                description: Type or category of deviation
+                annotations:
+                    sql_identifier: diag_test_deviation_type
+                    owl.filler: dcterms:type
+
+            test_deviation_type_value:
+                range: string
+                description: Value holder for test deviation type
+
+            test_deviation_description:
+                range: string
+                description: Description of the deviation
+                annotations:
+                    sql_identifier: diag_test_deviation_description
+                    owl.filler: dcterms:description
+
+            test_deviation_description_value:
+                range: string
+                description: Value holder for test deviation description
+
+            test_deviation_severity:
+                range: DiagnosticSeverityLevelEnum
+                description: Severity or impact level of the deviation
+                annotations:
+                    sql_identifier: diag_test_deviation_severity
+                    owl.filler: schema:severity
+
+            test_deviation_severity_value:
+                range: string
+                description: Value holder for test deviation severity
+
+    TestComparison:
+        description: Structured comparison of diagnostic results against references, peers, or specification limits
+        attributes:
+            reference_baseline:
+                range: string
+                description: Baseline used for comparison
+                annotations:
+                    sql_identifier: diag_test_reference_baseline
+                    owl.filler: dcterms:references
+
+            reference_baseline_value:
+                range: string
+                description: Value holder for reference baseline
+
+            peer_comparison:
+                range: string
+                description: Comparison against peer population, batch, fleet, or historical records
+                annotations:
+                    sql_identifier: diag_test_peer_comparison
+                    owl.filler: schema:review
+
+            peer_comparison_value:
+                range: string
+                description: Value holder for peer comparison
+
+            specification_compliance:
+                range: DiagnosticComplianceStatusEnum
+                description: Compliance outcome against product, component, or standard specification
+                annotations:
+                    sql_identifier: diag_test_spec_compliance
+                    owl.filler: dcterms:conformsTo
+
+            specification_compliance_value:
+                range: string
+                description: Value holder for specification compliance
+
+            comparison_summary:
+                range: string
+                description: Summary of comparison interpretation
+                annotations:
+                    sql_identifier: diag_test_comparison_summary
+                    owl.filler: dcterms:description
+
+            comparison_summary_value:
+                range: string
+                description: Value holder for comparison summary
+
+    CalibrationTraceability:
+        description: Calibration and equipment traceability metadata associated with diagnostic tests
+        attributes:
+            calibration_equipment_identifier:
+                range: string
+                description: Identifier of the test equipment, instrument, sensor, or diagnostic tool
+                annotations:
+                    sql_identifier: diag_calib_equipment_id
+                    owl.filler: ssn:hasSystem
+
+            calibration_equipment_identifier_value:
+                range: string
+                description: Value holder for calibration equipment identifier
+
+            last_calibration_date:
+                range: date
+                description: Date of last calibration
+                annotations:
+                    sql_identifier: diag_calib_last_date
+                    owl.filler: prov:generatedAtTime
+
+            last_calibration_date_value:
+                range: string
+                description: Value holder for last calibration date
+
+            calibration_due_date:
+                range: date
+                description: Date when the next calibration is due
+                annotations:
+                    sql_identifier: diag_calib_due_date
+                    owl.filler: schema:expires
+
+            calibration_due_date_value:
+                range: string
+                description: Value holder for calibration due date
+
+            calibration_certificate:
+                range: uri
+                description: URI reference to calibration certificate or record
+                annotations:
+                    sql_identifier: diag_calib_certificate
+                    owl.filler: schema:certification
+
+            calibration_certificate_value:
+                range: string
+                description: Value holder for calibration certificate
+
+            calibration_status:
+                range: DiagnosticCalibrationStatusEnum
+                description: Calibration status at the time of test
+                annotations:
+                    sql_identifier: diag_calib_status
+                    owl.filler: schema:status
+
+            calibration_status_value:
+                range: string
+                description: Value holder for calibration status
+
+            calibration_standard:
+                range: uri
+                description: URI reference to calibration standard, reference method, or reference material
+                annotations:
+                    sql_identifier: diag_calib_standard
+                    owl.filler: dcterms:conformsTo
+
+            calibration_standard_value:
+                range: string
+                description: Value holder for calibration standard
+
+            calibration_accreditation_reference:
+                range: uri
+                description: URI reference to accreditation scope or competence evidence for calibration
+                annotations:
+                    sql_identifier: diag_calib_accreditation_ref
+                    owl.filler: dcterms:references
+
+            calibration_accreditation_reference_value:
+                range: string
+                description: Value holder for calibration accreditation reference
+
+            calibration_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: Optional metrological traceability statements for calibration equipment, calibration certificates, standards, reference materials, accreditation, or calibration chains
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: diag_calib_metrological_traceability
+
+            calibration_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for calibration records, certificates, accreditation evidence, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: diag_calib_data_quality_assessments
+
+    DegradationIndicators:
+        description: Degradation and usage indicators used in condition assessment
+        attributes:
+            wear_level:
+                range: float
+                description: Estimated wear level from 0 to 100 percent
+                annotations:
+                    sql_identifier: diag_degradation_wear_level
+                    owl.filler: schema:ratingValue
+                    unit: percent
+                minimum_value: 0.0
+                maximum_value: 100.0
+
+            wear_level_value:
+                range: string
+                description: Value holder for wear level
+
+            usage_cycles:
+                range: integer
+                description: Number of usage or duty cycles observed or estimated
+                annotations:
+                    sql_identifier: diag_degradation_usage_cycles
+                    owl.filler: schema:numberOfItems
+                minimum_value: 0
+
+            usage_cycles_value:
+                range: string
+                description: Value holder for usage cycles
+
+            operating_hours:
+                range: float
+                description: Total operating hours associated with the component or product
+                annotations:
+                    sql_identifier: diag_degradation_operating_hours
+                    owl.filler: schema:duration
+                    unit: hour
+                minimum_value: 0.0
+
+            operating_hours_value:
+                range: string
+                description: Value holder for operating hours
+
+            performance_degradation:
+                range: float
+                description: Performance degradation from 0 to 100 percent
+                annotations:
+                    sql_identifier: diag_degradation_performance
+                    owl.filler: schema:ratingValue
+                    unit: percent
+                minimum_value: 0.0
+                maximum_value: 100.0
+
+            performance_degradation_value:
+                range: string
+                description: Value holder for performance degradation
+
+            degradation_rate:
+                range: float
+                description: Rate of degradation in the reported unit or method-specific scale
+                annotations:
+                    sql_identifier: diag_degradation_rate
+                    owl.filler: qudt:QuantityValue
+
+            degradation_rate_value:
+                range: string
+                description: Value holder for degradation rate
+
+    DataBearingComponent:
+        description: Component containing storage, memory, or other data-bearing media covered by sanitization
+        attributes:
+            data_component_reference:
+                range: string
+                description: Reference to a component inventory identifier
+                annotations:
+                    sql_identifier: diag_data_component_ref
+                    owl.filler: dcterms:references
+
+            data_component_reference_value:
+                range: string
+                description: Value holder for data component reference
+
+            data_component_type:
+                range: string
+                description: Type of data-bearing component or storage medium
+                annotations:
+                    sql_identifier: diag_data_component_type
+                    owl.filler: dcterms:type
+
+            data_component_type_value:
+                range: string
+                description: Value holder for data component type
+
+            data_capacity:
+                range: float
+                description: Data storage capacity
+                annotations:
+                    sql_identifier: diag_data_capacity
+                    owl.filler: qudt:QuantityValue
+
+            data_capacity_value:
+                range: string
+                description: Value holder for data capacity
+
+            data_capacity_unit:
+                range: string
+                description: Unit of data storage capacity
+                annotations:
+                    sql_identifier: diag_data_capacity_unit
+                    owl.filler: qudt:unit
+
+            data_capacity_unit_value:
+                range: string
+                description: Value holder for data capacity unit
+
+            storage_medium:
+                range: string
+                description: Storage medium or technology
+                annotations:
+                    sql_identifier: diag_data_storage_medium
+                    owl.filler: schema:material
+
+            storage_medium_value:
+                range: string
+                description: Value holder for storage medium
+
+    AssessmentCriterion:
+        description: Criterion-level score or result used in a quality assessment
+        class_uri: schema:Review
+        attributes:
+            criterion_identifier:
+                range: string
+                description: Identifier for the assessment criterion
+                annotations:
+                    sql_identifier: diag_assessment_criterion_id
+                    owl.filler: dcterms:identifier
+
+            criterion_identifier_value:
+                range: string
+                description: Value holder for criterion identifier
+
+            criterion_name:
+                range: string
+                description: Criterion name
+                annotations:
+                    sql_identifier: diag_assessment_criterion_name
+                    owl.filler: schema:name
+
+            criterion_name_value:
+                range: string
+                description: Value holder for criterion name
+
+            criterion_score:
+                range: float
+                description: Numeric score assigned to the criterion
+                annotations:
+                    sql_identifier: diag_assessment_criterion_score
+                    owl.filler: schema:ratingValue
+
+            criterion_score_value:
+                range: string
+                description: Value holder for criterion score
+
+            criterion_weight:
+                range: float
+                description: Weight assigned to the criterion during aggregation
+                annotations:
+                    sql_identifier: diag_assessment_criterion_weight
+                    owl.filler: schema:weight
+
+            criterion_weight_value:
+                range: string
+                description: Value holder for criterion weight
+
+            criterion_result:
+                range: string
+                description: Qualitative or coded result for the criterion
+                annotations:
+                    sql_identifier: diag_assessment_criterion_result
+                    owl.filler: sosa:hasResult
+
+            criterion_result_value:
+                range: string
+                description: Value holder for criterion result
+
+            criterion_notes:
+                range: string
+                description: Notes supporting the criterion-level assessment
+                annotations:
+                    sql_identifier: diag_assessment_criterion_notes
+                    owl.filler: dcterms:description
+
+            criterion_notes_value:
+                range: string
+                description: Value holder for criterion notes
+
+    DiagnosticQualityIssue:
+        description: Quality issue, defect, fault, or nonconformity identified during assessment
+        attributes:
+            issue_identifier:
+                range: string
+                description: Identifier for the quality issue
+                annotations:
+                    sql_identifier: diag_quality_issue_id
+                    owl.filler: dcterms:identifier
+
+            issue_identifier_value:
+                range: string
+                description: Value holder for issue identifier
+
+            issue_type:
+                range: string
+                description: Issue type or defect category
+                annotations:
+                    sql_identifier: diag_quality_issue_type
+                    owl.filler: dcterms:type
+
+            issue_type_value:
+                range: string
+                description: Value holder for issue type
+
+            issue_severity:
+                range: DiagnosticSeverityLevelEnum
+                description: Severity of the quality issue
+                annotations:
+                    sql_identifier: diag_quality_issue_severity
+                    owl.filler: schema:severity
+
+            issue_severity_value:
+                range: string
+                description: Value holder for issue severity
+
+            issue_description:
+                range: string
+                description: Description of the issue
+                annotations:
+                    sql_identifier: diag_quality_issue_description
+                    owl.filler: dcterms:description
+
+            issue_description_value:
+                range: string
+                description: Value holder for issue description
+
+            affected_component_reference:
+                range: string
+                description: Reference to affected component, assembly, or product
+                annotations:
+                    sql_identifier: diag_quality_issue_component_ref
+                    owl.filler: dcterms:references
+
+            affected_component_reference_value:
+                range: string
+                description: Value holder for affected component reference
+
+            recommended_resolution:
+                range: string
+                description: Recommended resolution or mitigation for the issue
+                annotations:
+                    sql_identifier: diag_quality_issue_resolution
+                    owl.filler: schema:potentialAction
+
+            recommended_resolution_value:
+                range: string
+                description: Value holder for recommended resolution
+
+    ReplacedPart:
+        description: Old and new part information for a replacement performed during service
+        attributes:
+            old_part_number:
+                range: string
+                description: Part number of the removed part
+                annotations:
+                    sql_identifier: diag_replaced_old_part_number
+                    owl.filler: schema:productID
+
+            old_part_number_value:
+                range: string
+                description: Value holder for old part number
+
+            old_serial_number:
+                range: string
+                description: Serial number of the removed part
+                annotations:
+                    sql_identifier: diag_replaced_old_serial_number
+                    owl.filler: schema:serialNumber
+
+            old_serial_number_value:
+                range: string
+                description: Value holder for old serial number
+
+            new_part_number:
+                range: string
+                description: Part number of the installed replacement part
+                annotations:
+                    sql_identifier: diag_replaced_new_part_number
+                    owl.filler: schema:productID
+
+            new_part_number_value:
+                range: string
+                description: Value holder for new part number
+
+            new_serial_number:
+                range: string
+                description: Serial number of the installed replacement part
+                annotations:
+                    sql_identifier: diag_replaced_new_serial_number
+                    owl.filler: schema:serialNumber
+
+            new_serial_number_value:
+                range: string
+                description: Value holder for new serial number
+
+            replacement_quantity:
+                range: integer
+                description: Quantity of parts replaced
+                annotations:
+                    sql_identifier: diag_replaced_quantity
+                    owl.filler: schema:numberOfItems
+                minimum_value: 0
+
+            replacement_quantity_value:
+                range: string
+                description: Value holder for replacement quantity
+
+            replacement_reason:
+                range: string
+                description: Reason for replacement
+                annotations:
+                    sql_identifier: diag_replaced_reason
+                    owl.filler: dcterms:description
+
+            replacement_reason_value:
+                range: string
+                description: Value holder for replacement reason
+
+    RiskFactor:
+        description: Contributing factor used in a predictive diagnostic or maintenance assessment
+        attributes:
+            risk_factor_identifier:
+                range: string
+                description: Identifier for the risk factor
+                annotations:
+                    sql_identifier: diag_risk_factor_id
+                    owl.filler: dcterms:identifier
+
+            risk_factor_identifier_value:
+                range: string
+                description: Value holder for risk factor identifier
+
+            risk_factor_name:
+                range: string
+                description: Name of the risk factor
+                annotations:
+                    sql_identifier: diag_risk_factor_name
+                    owl.filler: schema:name
+
+            risk_factor_name_value:
+                range: string
+                description: Value holder for risk factor name
+
+            risk_factor_description:
+                range: string
+                description: Description of the risk factor
+                annotations:
+                    sql_identifier: diag_risk_factor_description
+                    owl.filler: dcterms:description
+
+            risk_factor_description_value:
+                range: string
+                description: Value holder for risk factor description
+
+            risk_factor_impact_level:
+                range: DiagnosticSeverityLevelEnum
+                description: Impact level of the risk factor
+                annotations:
+                    sql_identifier: diag_risk_factor_impact_level
+                    owl.filler: schema:severity
+
+            risk_factor_impact_level_value:
+                range: string
+                description: Value holder for risk factor impact level
+
+            risk_factor_weight:
+                range: float
+                description: Weight or contribution assigned to the risk factor
+                annotations:
+                    sql_identifier: diag_risk_factor_weight
+                    owl.filler: schema:weight
+
+            risk_factor_weight_value:
+                range: string
+                description: Value holder for risk factor weight
+
+            risk_factor_evidence_reference:
+                range: uri
+                description: URI reference to evidence supporting the risk factor
+                annotations:
+                    sql_identifier: diag_risk_factor_evidence_ref
+                    owl.filler: dcterms:references
+
+            risk_factor_evidence_reference_value:
+                range: string
+                description: Value holder for risk factor evidence reference
+
+# Enumerations
+enums:
+    DiagnosticEventTypeEnum:
+        description: Types of diagnostic activities
+        permissible_values:
+            SERVICE:
+                description: Service or maintenance diagnostic
+            SELF_TEST:
+                description: Automated self-diagnostic test
+            PREDICTIVE:
+                description: Predictive maintenance analysis
+            CALIBRATION:
+                description: Calibration verification
+            INSPECTION:
+                description: Quality inspection or audit
+            REFURBISHMENT:
+                description: Refurbishment assessment
+
+    DiagnosticEventTriggerEnum:
+        description: What triggered the diagnostic event
+        permissible_values:
+            SCHEDULED:
+                description: Regularly scheduled diagnostic
+            FAILURE:
+                description: Triggered by failure or malfunction
+            REQUEST:
+                description: Manual request for diagnostic
+            QUALITY_CHECK:
+                description: Quality control check
+            INTAKE:
+                description: Initial intake assessment
+            ALERT:
+                description: Triggered by alert or threshold
+
+    DiagnosticTestEnvironmentEnum:
+        description: Type of test environment
+        permissible_values:
+            LAB:
+                description: Laboratory environment
+            FIELD:
+                description: Field or on-site location
+            FACTORY:
+                description: Manufacturing facility
+            CUSTOMER_SITE:
+                description: Customer location
+            SERVICE_CENTER:
+                description: Service or repair center
+            REMOTE:
+                description: Remote diagnostic
+
+    DiagnosticConfidenceLevelEnum:
+        description: Confidence level in results
+        permissible_values:
+            HIGH:
+                description: High confidence in results
+            MEDIUM:
+                description: Medium confidence in results
+            LOW:
+                description: Low confidence in results
+            UNKNOWN:
+                description: Confidence level unknown
+
+    DiagnosticComponentTypeEnum:
+        description: Functional component types commonly discovered during diagnostics
+        permissible_values:
+            PROCESSOR:
+                description: Processor or computing unit
+            MEMORY:
+                description: Memory component
+            STORAGE:
+                description: Storage component
+            SENSOR:
+                description: Sensor or measurement element
+            ACTUATOR:
+                description: Actuator or motion/control element
+            MODULE:
+                description: Functional module
+            ASSEMBLY:
+                description: Assembly made of multiple components
+            POWER:
+                description: Power supply, battery, charger, or power-management component
+            COMMUNICATION:
+                description: Communication or connectivity component
+            DISPLAY:
+                description: Display or visual output component
+            CONNECTOR:
+                description: Connector, port, cable, or interface
+            OTHER:
+                description: Other component type
+
+    DiagnosticComponentCategoryEnum:
+        description: High-level component categories
+        permissible_values:
+            HARDWARE:
+                description: Hardware component
+            SOFTWARE:
+                description: Software component
+            FIRMWARE:
+                description: Firmware component
+            MECHANICAL:
+                description: Mechanical component
+            ELECTRICAL:
+                description: Electrical component
+            ELECTRONIC:
+                description: Electronic component
+            OPTICAL:
+                description: Optical component
+            HYDRAULIC:
+                description: Hydraulic component
+            PNEUMATIC:
+                description: Pneumatic component
+            OTHER:
+                description: Other component category
+
+    DiagnosticComponentStatusEnum:
+        description: Presence and operational status of a discovered component
+        permissible_values:
+            PRESENT:
+                description: Component is present
+            ABSENT:
+                description: Component is absent
+            OPERATIONAL:
+                description: Component is present and operational
+            DEGRADED:
+                description: Component is present but degraded
+            FAULTY:
+                description: Component is faulty
+            UNKNOWN:
+                description: Component status is unknown
+
+    DiagnosticComponentRelationshipEnum:
+        description: Parent-child relationship types in a component hierarchy
+        permissible_values:
+            CONTAINS:
+                description: Parent contains child
+            PART_OF:
+                description: Child is part of parent
+            CONNECTED_TO:
+                description: Component is connected to another component
+            CONTROLS:
+                description: Component controls another component
+            POWERED_BY:
+                description: Component is powered by another component
+            OTHER:
+                description: Other relationship type
+
+    DiagnosticSoftwareTypeEnum:
+        description: Types of product firmware or software whose version is recorded
+        permissible_values:
+            BIOS:
+                description: BIOS or UEFI firmware
+            FIRMWARE:
+                description: Device or component firmware
+            OS:
+                description: Operating system or OS image
+            DRIVER:
+                description: Device driver
+            APPLICATION:
+                description: Application or embedded software
+            OTHER:
+                description: Other software or firmware type
+
+    DiagnosticTestTypeEnum:
+        description: Types of diagnostic and component tests
+        permissible_values:
+            FUNCTIONAL:
+                description: Functional test
+            PERFORMANCE:
+                description: Performance test
+            SAFETY:
+                description: Safety test
+            COMPLIANCE:
+                description: Compliance test
+            STRESS:
+                description: Stress test
+            CALIBRATION:
+                description: Calibration or calibration verification test
+            DIAGNOSTIC:
+                description: Diagnostic test
+            SELF_TEST:
+                description: Automated or built-in self-test
+            INSPECTION:
+                description: Visual or manual inspection
+            OTHER:
+                description: Other test type
+
+    DiagnosticTestResultEnum:
+        description: Component test result states
+        permissible_values:
+            PASS:
+                description: Test passed
+            FAIL:
+                description: Test failed
+            WARNING:
+                description: Test produced a warning
+            NOT_TESTED:
+                description: Test was not performed
+            INCONCLUSIVE:
+                description: Test did not produce a conclusive result
+            SKIPPED:
+                description: Test was skipped
+            UNKNOWN:
+                description: Test result is unknown
+
+    DiagnosticComplianceStatusEnum:
+        description: Compliance state against a reference, standard, or specification
+        permissible_values:
+            COMPLIANT:
+                description: Requirement is met
+            NON_COMPLIANT:
+                description: Requirement is not met
+            PARTIALLY_COMPLIANT:
+                description: Requirement is partially met
+            NOT_APPLICABLE:
+                description: Requirement is not applicable
+            NOT_ASSESSED:
+                description: Requirement has not been assessed
+            UNKNOWN:
+                description: Compliance status is unknown
+
+    DiagnosticCalibrationStatusEnum:
+        description: Calibration status for diagnostic equipment or sensors
+        permissible_values:
+            VALID:
+                description: Calibration is valid
+            EXPIRED:
+                description: Calibration validity has expired
+            NOT_REQUIRED:
+                description: Calibration is not required
+            NOT_AVAILABLE:
+                description: Calibration evidence is not available
+            UNKNOWN:
+                description: Calibration status is unknown
+
+    DiagnosticMetricTypeEnum:
+        description: Types of condition and health metrics
+        permissible_values:
+            HEALTH:
+                description: Health metric
+            WEAR:
+                description: Wear metric
+            PERFORMANCE:
+                description: Performance metric
+            CAPACITY:
+                description: Capacity metric
+            EFFICIENCY:
+                description: Efficiency metric
+            RELIABILITY:
+                description: Reliability metric
+            DEGRADATION:
+                description: Degradation metric
+            OTHER:
+                description: Other metric type
+
+    DiagnosticSanitizationMethodEnum:
+        description: Secure data sanitization methods
+        permissible_values:
+            OVERWRITE:
+                description: Data overwrite
+            SECURE_ERASE:
+                description: Secure erase command or procedure
+            DEGAUSS:
+                description: Degaussing
+            PHYSICAL_DESTRUCTION:
+                description: Physical destruction of data-bearing media
+            CRYPTO_ERASE:
+                description: Cryptographic erasure
+            FACTORY_RESET:
+                description: Factory reset or equivalent procedure
+            OTHER:
+                description: Other sanitization method
+
+    DiagnosticSanitizationStandardEnum:
+        description: Standards or policy references used for data sanitization
+        permissible_values:
+            NIST_800_88:
+                description: NIST SP 800-88 media sanitization guidance
+            DOD_5220:
+                description: DoD 5220.22-M-style overwrite procedure
+            GDPR:
+                description: GDPR-related erasure requirement
+            ISO_27001:
+                description: ISO/IEC 27001 information security management
+            ISO_27040:
+                description: ISO/IEC 27040 storage security
+            ORGANIZATION_POLICY:
+                description: Organization-specific policy
+            OTHER:
+                description: Other standard or policy
+
+    DiagnosticSanitizationResultEnum:
+        description: Result of a sanitization operation
+        permissible_values:
+            SUCCESS:
+                description: Sanitization succeeded
+            FAILED:
+                description: Sanitization failed
+            PARTIAL:
+                description: Sanitization was partial
+            VERIFIED:
+                description: Sanitization succeeded and was verified
+            NOT_VERIFIED:
+                description: Sanitization was not verified
+            UNKNOWN:
+                description: Sanitization result is unknown
+
+    DiagnosticDataClassificationEnum:
+        description: Data classification levels for data-bearing components
+        permissible_values:
+            PUBLIC:
+                description: Public data
+            INTERNAL:
+                description: Internal data
+            CONFIDENTIAL:
+                description: Confidential data
+            SECRET:
+                description: Secret data
+            PERSONAL_DATA:
+                description: Personal data
+            UNKNOWN:
+                description: Data classification is unknown
+
+    DiagnosticGradingScaleEnum:
+        description: Quality assessment grading scales
+        permissible_values:
+            LETTER:
+                description: Letter-based scale
+            NUMERIC:
+                description: Numeric scale
+            PERCENTAGE:
+                description: Percentage scale
+            PASS_FAIL:
+                description: Pass/fail scale
+            CUSTOM:
+                description: Custom grading scale
+
+    DiagnosticQualityCertificationStatusEnum:
+        description: Certification or status assigned after quality assessment
+        permissible_values:
+            CERTIFIED:
+                description: Certified
+            REFURBISHED:
+                description: Refurbished status
+            WARRANTY:
+                description: Warranty status
+            REJECTED:
+                description: Rejected
+            CONDITIONAL:
+                description: Conditional acceptance
+            NONE:
+                description: No certification status
+            UNKNOWN:
+                description: Certification status unknown
+
+    DiagnosticServiceActionTypeEnum:
+        description: Types of service actions
+        permissible_values:
+            REPAIR:
+                description: Repair action
+            REPLACE:
+                description: Replacement action
+            ADJUST:
+                description: Adjustment action
+            CALIBRATE:
+                description: Calibration action
+            CLEAN:
+                description: Cleaning action
+            UPDATE:
+                description: Software, firmware, or configuration update
+            CONFIGURE:
+                description: Configuration action
+            INSPECT:
+                description: Inspection action
+            OTHER:
+                description: Other service action type
+
+    DiagnosticActionResultEnum:
+        description: Result states for service actions
+        permissible_values:
+            SUCCESS:
+                description: Action succeeded
+            FAILED:
+                description: Action failed
+            PARTIAL:
+                description: Action partially succeeded
+            PENDING:
+                description: Action pending
+            NOT_APPLICABLE:
+                description: Action not applicable
+            UNKNOWN:
+                description: Action result unknown
+
+    DiagnosticPredictionTypeEnum:
+        description: Types of predictive diagnostic analytics
+        permissible_values:
+            FAILURE_RISK:
+                description: Failure risk prediction
+            MAINTENANCE_DUE:
+                description: Maintenance due prediction
+            PERFORMANCE_DEGRADATION:
+                description: Performance degradation prediction
+            END_OF_LIFE:
+                description: End-of-life prediction
+            REMAINING_USEFUL_LIFE:
+                description: Remaining useful life prediction
+            OTHER:
+                description: Other prediction type
+
+    DiagnosticMaintenanceUrgencyEnum:
+        description: Urgency levels for recommended maintenance or intervention
+        permissible_values:
+            IMMEDIATE:
+                description: Immediate action required
+            HIGH:
+                description: High urgency
+            MEDIUM:
+                description: Medium urgency
+            LOW:
+                description: Low urgency
+            SCHEDULED:
+                description: Scheduled maintenance
+            NONE:
+                description: No maintenance urgency
+            UNKNOWN:
+                description: Urgency unknown
+
+    DiagnosticSeverityLevelEnum:
+        description: Severity or impact levels for issues, deviations, and risk factors
+        permissible_values:
+            CRITICAL:
+                description: Critical severity
+            HIGH:
+                description: High severity
+            MEDIUM:
+                description: Medium severity
+            LOW:
+                description: Low severity
+            INFORMATIONAL:
+                description: Informational
+            UNKNOWN:
+                description: Severity unknown

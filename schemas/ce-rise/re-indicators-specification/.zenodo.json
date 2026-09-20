@@ -1,0 +1,50 @@
+{
+  "title": "CE-RISE RE-Indicators, Specification Data Model",
+  "description": "This repository provides the data model specifying the RE-indicators in the CE-RISE project.",
+  "license": "CC-BY-NC-4.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Boero, Riccardo",
+      "affiliation": "NILU",
+      "orcid": "0000-0002-7468-9096"
+    },
+    {
+      "name": "Morgado, Joana F.",
+      "affiliation": "EMPA",
+      "orcid": "0000-0002-2930-2534"
+    },
+    {
+      "name": "Saglam, Setenay",
+      "affiliation": "EMPA",
+      "orcid": "0009-0001-8731-199X"
+    },
+    {
+      "name": "Jha, Smriti Anand",
+      "affiliation": "EMPA",
+      "orcid": "0009-0004-2579-8204"
+    }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Data Model",
+    "Ontology",
+    "Open Source",
+    "Open Science",
+    "Digital Product Passport"
+  ],
+  "communities": [
+    { "identifier": "ce-rise" },
+    { "identifier": "impact" }
+  ],
+  "grants": [
+    { "id": "101092281" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE-models/re-indicators-specification",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

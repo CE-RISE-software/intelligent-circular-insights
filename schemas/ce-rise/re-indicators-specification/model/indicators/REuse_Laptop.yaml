@@ -1,0 +1,92 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REuse_Laptop
+name: re_indicators_reuse_laptop
+title: REuse Indicator Configuration for Laptops
+description: Product-specific configuration for REuse indicator applied to laptops
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    - ../model # Import core classes
+    - ./REuse_core # Import core parameter definitions
+
+classes:
+    # ============================================
+    # LAPTOP CONFIGURATION FOR REUSE
+    # Uses all core parameters with standard weights
+    # ============================================
+
+    REuse_Laptop_Config:
+        is_a: IndicatorProductConfiguration
+        description: REuse indicator configuration for Laptop products
+        attributes:
+            id:
+                ifabsent: string(REuse_Laptop)
+            indicator_type:
+                ifabsent: IndicatorType(REuse)
+            product_category:
+                ifabsent: ProductCategoryType(Laptop)
+            name:
+                ifabsent: string(REuse Indicator for Laptop)
+            description:
+                ifabsent: string(REuse assessment configuration for laptop computers with parameters covering diagnosis, warranty, reset capability, data confidentiality, and ownership transfer)
+            parameter_applications:
+                range: REuse_Laptop_ParameterApplication
+                multivalued: true
+                inlined: true
+
+    REuse_Laptop_ParameterApplication:
+        is_a: ParameterApplication
+        union_of:
+            - REuse_Laptop_P1_Application
+            - REuse_Laptop_P2_Application
+            - REuse_Laptop_P3_Application
+            - REuse_Laptop_P4_Application
+            - REuse_Laptop_P5_Application
+
+    REuse_Laptop_P1_Application:
+        is_a: ParameterApplication
+        description: Product Diagnosis parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P1_product_diagnosis)
+            weight:
+                ifabsent: float(0.125)
+
+    REuse_Laptop_P2_Application:
+        is_a: ParameterApplication
+        description: Warranty Information parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P2_warranty_information)
+            weight:
+                ifabsent: float(0.041666667)
+
+    REuse_Laptop_P3_Application:
+        is_a: ParameterApplication
+        description: Resetting Product parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P3_resetting_product)
+            weight:
+                ifabsent: float(0.291666669)
+
+    REuse_Laptop_P4_Application:
+        is_a: ParameterApplication
+        description: Data Confidentiality parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P4_data_confidentiality)
+            weight:
+                ifabsent: float(0.208333332)
+
+    REuse_Laptop_P5_Application:
+        is_a: ParameterApplication
+        description: New Ownership parameter application for Laptop
+        attributes:
+            parameter_ref:
+                ifabsent: string(P5_new_ownership)
+            weight:
+                ifabsent: float(0.083333334)

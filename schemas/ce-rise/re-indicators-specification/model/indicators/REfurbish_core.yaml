@@ -1,0 +1,3778 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REfurbish_core
+name: re_indicators_refurbish_core
+title: REfurbish Core Parameters
+description: Core parameter definitions for REfurbish indicators - reusable across Laptop and Printer
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+
+classes:
+    # ============================================
+    # P1: PRODUCT-DESIGN RELATED QUESTIONS
+    # Sub-parameter: Disassembly
+    # ============================================
+
+    RefurbDisassembly_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of disassembly for priority components - core definition
+        attributes:
+            id:
+                ifabsent: string(P1_disassembly)
+            name:
+                ifabsent: string(Disassembly)
+            questions:
+                range: RefurbDisassemblyQuestion
+                multivalued: true
+                inlined: true
+
+    RefurbDisassemblyQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - RefurbQ1_1_DisplayAssembly
+            - RefurbQ1_2_Battery
+            - RefurbQ1_3_BackCover
+            - RefurbQ1_4_FrontCamera
+            - RefurbQ1_5_RearCamera
+            - RefurbQ1_6_ChargingPorts
+            - RefurbQ1_7_MechanicalButtons
+            - RefurbQ1_8_Microphone
+            - RefurbQ1_9_Speakers
+            - RefurbQ1_10_HingeAssembly
+
+    # Q1.1: Display Assembly Disassembly
+    RefurbQ1_1_DisplayAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.1)
+            text:
+                ifabsent: string(Disassembly steps for Display assembly (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.021052632)
+            answer_options:
+                range: RefurbDisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.2: Battery Disassembly
+    RefurbQ1_2_Battery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.2)
+            text:
+                ifabsent: string(Disassembly steps for Battery (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.021052632)
+            answer_options:
+                range: RefurbDisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.3: Back Cover Disassembly
+    RefurbQ1_3_BackCover:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.3)
+            text:
+                ifabsent: string(Disassembly steps for back cover or its assembly)
+            weight:
+                ifabsent: float(0.010526316)
+            answer_options:
+                range: RefurbDisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.4: Front Camera Disassembly
+    RefurbQ1_4_FrontCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.4)
+            text:
+                ifabsent: string(Disassembly steps for front-facing camera assembly)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbDisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.5: Rear Camera Disassembly
+    RefurbQ1_5_RearCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.5)
+            text:
+                ifabsent: string(Disassembly steps for rear-facing camera assembly)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbDisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.6: Charging Ports Disassembly
+    RefurbQ1_6_ChargingPorts:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.6)
+            text:
+                ifabsent: string(Disassembly steps for external charging ports)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbDisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.7: Mechanical Buttons Disassembly
+    RefurbQ1_7_MechanicalButtons:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.7)
+            text:
+                ifabsent: string(Disassembly steps for mechanical buttons)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbDisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.8: Microphone Disassembly
+    RefurbQ1_8_Microphone:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.8)
+            text:
+                ifabsent: string(Disassembly steps for microphone)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbDisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.9: Speakers Disassembly
+    RefurbQ1_9_Speakers:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.9)
+            text:
+                ifabsent: string(Disassembly steps for speaker(s))
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbDisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.10: Hinge Assembly Disassembly
+    RefurbQ1_10_HingeAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.10)
+            text:
+                ifabsent: string(Disassembly steps for hinge assembly or mechanical display folding mechanism)
+            weight:
+                ifabsent: float(0.005263158)
+            answer_options:
+                range: RefurbDisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all disassembly questions
+    RefurbDisassemblyStepsAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbDisSteps_2OrLess
+            - RefurbDisSteps_2To5
+            - RefurbDisSteps_5To10
+            - RefurbDisSteps_10To15
+            - RefurbDisSteps_Over15
+            - RefurbDisSteps_CannotDisassemble
+            - RefurbDisSteps_DataNotAvailable
+
+    RefurbDisSteps_2OrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_dis_steps_2_or_less)
+            text:
+                ifabsent: string(x ≤ 2 steps)
+            score:
+                ifabsent: float(5.0)
+
+    RefurbDisSteps_2To5:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_dis_steps_2_to_5)
+            text:
+                ifabsent: string(5 ≥ x > 2 steps)
+            score:
+                ifabsent: float(4.0)
+
+    RefurbDisSteps_5To10:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_dis_steps_5_to_10)
+            text:
+                ifabsent: string(10 ≥ x > 5 steps)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbDisSteps_10To15:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_dis_steps_10_to_15)
+            text:
+                ifabsent: string(15 ≥ x > 10 steps)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbDisSteps_Over15:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_dis_steps_over_15)
+            text:
+                ifabsent: string(x > 15 steps)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbDisSteps_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_dis_steps_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbDisSteps_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_dis_steps_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P1: PRODUCT-DESIGN RELATED QUESTIONS
+    # Sub-parameter: Fasteners
+    # ============================================
+
+    RefurbFasteners_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of fastener removal and reusability for priority components - core definition
+        attributes:
+            id:
+                ifabsent: string(P1_fasteners)
+            name:
+                ifabsent: string(Fasteners)
+            questions:
+                range: RefurbFastenersQuestion
+                multivalued: true
+                inlined: true
+
+    RefurbFastenersQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - RefurbQ1_11_DisplayAssembly
+            - RefurbQ1_12_Battery
+            - RefurbQ1_13_BackCover
+            - RefurbQ1_14_FrontCamera
+            - RefurbQ1_15_RearCamera
+            - RefurbQ1_16_ChargingPorts
+            - RefurbQ1_17_MechanicalButtons
+            - RefurbQ1_18_Microphone
+            - RefurbQ1_19_Speakers
+            - RefurbQ1_20_HingeAssembly
+
+    # Q1.11: Display Assembly Fasteners
+    RefurbQ1_11_DisplayAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.11)
+            text:
+                ifabsent: string(Fastener type for Display assembly (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.021052632)
+            answer_options:
+                range: RefurbFastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.12: Battery Fasteners
+    RefurbQ1_12_Battery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.12)
+            text:
+                ifabsent: string(Fastener type for Battery (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.021052632)
+            answer_options:
+                range: RefurbFastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.13: Back Cover Fasteners
+    RefurbQ1_13_BackCover:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.13)
+            text:
+                ifabsent: string(Fastener type for back cover or its assembly)
+            weight:
+                ifabsent: float(0.010526316)
+            answer_options:
+                range: RefurbFastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.14: Front Camera Fasteners
+    RefurbQ1_14_FrontCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.14)
+            text:
+                ifabsent: string(Fastener type for front-facing camera assembly)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbFastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.15: Rear Camera Fasteners
+    RefurbQ1_15_RearCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.15)
+            text:
+                ifabsent: string(Fastener type for rear-facing camera assembly)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbFastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.16: Charging Ports Fasteners
+    RefurbQ1_16_ChargingPorts:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.16)
+            text:
+                ifabsent: string(Fastener type for external charging ports)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbFastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.17: Mechanical Buttons Fasteners
+    RefurbQ1_17_MechanicalButtons:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.17)
+            text:
+                ifabsent: string(Fastener type for mechanical buttons)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbFastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.18: Microphone Fasteners
+    RefurbQ1_18_Microphone:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.18)
+            text:
+                ifabsent: string(Fastener type for microphone)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbFastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.19: Speakers Fasteners
+    RefurbQ1_19_Speakers:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.19)
+            text:
+                ifabsent: string(Fastener type for speaker(s))
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbFastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.20: Hinge Assembly Fasteners
+    RefurbQ1_20_HingeAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.20)
+            text:
+                ifabsent: string(Fastener type for hinge assembly or mechanical display folding mechanism)
+            weight:
+                ifabsent: float(0.005263158)
+            answer_options:
+                range: RefurbFastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all fastener questions
+    RefurbFastenersTypeAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbFastener_ReusableRemovable
+            - RefurbFastener_SuppliedWithPart
+            - RefurbFastener_RemovableNotReusable
+            - RefurbFastener_NeitherRemovableNorReusable
+            - RefurbFastener_CannotDisassemble
+            - RefurbFastener_DataNotAvailable
+
+    RefurbFastener_ReusableRemovable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_fastener_reusable_removable)
+            text:
+                ifabsent: string(Reusable and removable)
+            score:
+                ifabsent: float(5.0)
+
+    RefurbFastener_SuppliedWithPart:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_fastener_supplied_with_part)
+            text:
+                ifabsent: string(New fastener is supplied with the new part)
+            score:
+                ifabsent: float(4.0)
+
+    RefurbFastener_RemovableNotReusable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_fastener_removable_not_reusable)
+            text:
+                ifabsent: string(Removable but not reusable)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbFastener_NeitherRemovableNorReusable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_fastener_neither_removable_nor_reusable)
+            text:
+                ifabsent: string(Neither removable nor reusable)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbFastener_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_fastener_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbFastener_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_fastener_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P1: PRODUCT-DESIGN RELATED QUESTIONS
+    # Sub-parameter: Tools
+    # ============================================
+
+    RefurbTools_Parameter:
+        is_a: ParameterSpecification
+        description: Tool requirements for component repair - core definition
+        attributes:
+            id:
+                ifabsent: string(P1_tools)
+            name:
+                ifabsent: string(Tools)
+            questions:
+                range: RefurbToolsQuestion
+                multivalued: true
+                inlined: true
+
+    RefurbToolsQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - RefurbQ1_21_DisplayAssembly
+            - RefurbQ1_22_Battery
+            - RefurbQ1_23_BackCover
+            - RefurbQ1_24_FrontCamera
+            - RefurbQ1_25_RearCamera
+            - RefurbQ1_26_ChargingPorts
+            - RefurbQ1_27_MechanicalButtons
+            - RefurbQ1_28_Microphone
+            - RefurbQ1_29_Speakers
+            - RefurbQ1_30_HingeAssembly
+
+    # Q1.21: Display Assembly Tools
+    RefurbQ1_21_DisplayAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.21)
+            text:
+                ifabsent: string(Tool type required for Display assembly (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.021052632)
+            answer_options:
+                range: RefurbToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.22: Battery Tools
+    RefurbQ1_22_Battery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.22)
+            text:
+                ifabsent: string(Tool type required for Battery (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.021052632)
+            answer_options:
+                range: RefurbToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.23: Back Cover Tools
+    RefurbQ1_23_BackCover:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.23)
+            text:
+                ifabsent: string(Tool type required for back cover or its assembly)
+            weight:
+                ifabsent: float(0.010526316)
+            answer_options:
+                range: RefurbToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.24: Front Camera Tools
+    RefurbQ1_24_FrontCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.24)
+            text:
+                ifabsent: string(Tool type required for front-facing camera assembly)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.25: Rear Camera Tools
+    RefurbQ1_25_RearCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.25)
+            text:
+                ifabsent: string(Tool type required for rear-facing camera assembly)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.26: Charging Ports Tools
+    RefurbQ1_26_ChargingPorts:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.26)
+            text:
+                ifabsent: string(Tool type required for external charging ports)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.27: Mechanical Buttons Tools
+    RefurbQ1_27_MechanicalButtons:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.27)
+            text:
+                ifabsent: string(Tool type required for mechanical buttons)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.28: Microphone Tools
+    RefurbQ1_28_Microphone:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.28)
+            text:
+                ifabsent: string(Tool type required for microphone)
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.29: Speakers Tools
+    RefurbQ1_29_Speakers:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.29)
+            text:
+                ifabsent: string(Tool type required for speaker(s))
+            weight:
+                ifabsent: float(0.007017544)
+            answer_options:
+                range: RefurbToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q1.30: Hinge Assembly Tools
+    RefurbQ1_30_HingeAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.30)
+            text:
+                ifabsent: string(Tool type required for hinge assembly or mechanical display folding mechanism)
+            weight:
+                ifabsent: float(0.005263158)
+            answer_options:
+                range: RefurbToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all tools questions
+    RefurbToolsTypeAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbTools_NoTools
+            - RefurbTools_BasicTools
+            - RefurbTools_SuppliedWithPart
+            - RefurbTools_SuppliedWithProduct
+            - RefurbTools_ProductGroupSpecific
+            - RefurbTools_Commercial
+            - RefurbTools_Proprietary
+            - RefurbTools_NotFeasible
+            - RefurbTools_CannotDisassemble
+            - RefurbTools_DataNotAvailable
+
+    RefurbTools_NoTools:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_tools_no_tools)
+            text:
+                ifabsent: string(No tools needed)
+            score:
+                ifabsent: float(5.0)
+
+    RefurbTools_BasicTools:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_tools_basic_tools)
+            text:
+                ifabsent: string(Basic tools needed)
+            score:
+                ifabsent: float(4.0)
+
+    RefurbTools_SuppliedWithPart:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_tools_supplied_with_part)
+            text:
+                ifabsent: string(Tools supplied with part)
+            score:
+                ifabsent: float(4.0)
+
+    RefurbTools_SuppliedWithProduct:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_tools_supplied_with_product)
+            text:
+                ifabsent: string(Tools supplied with product)
+            score:
+                ifabsent: float(4.0)
+
+    RefurbTools_ProductGroupSpecific:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_tools_product_group_specific)
+            text:
+                ifabsent: string(Product group specific tools which are defined with a finite list or can be distinguished verifiably)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbTools_Commercial:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_tools_commercial)
+            text:
+                ifabsent: string(Commercial tools)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbTools_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_tools_proprietary)
+            text:
+                ifabsent: string(Proprietary tools which are not available for purchase by the general public)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbTools_NotFeasible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_tools_not_feasible)
+            text:
+                ifabsent: string(Not feasible with any existing tool)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbTools_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_tools_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbTools_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_tools_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P2: DOCUMENTATION AVAILABILITY
+    # ============================================
+
+    RefurbDocumentation_Parameter:
+        is_a: ParameterSpecification
+        description: Documentation availability for refurbishment - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_documentation_availability)
+            name:
+                ifabsent: string(Documentation Availability)
+            questions:
+                range: RefurbDocumentationQuestion
+                multivalued: true
+                inlined: true
+
+    RefurbDocumentationQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - RefurbQ2_1_UniqueProductID
+            - RefurbQ2_2_AssemblyDiagram
+            - RefurbQ2_3_WiringDiagram
+            - RefurbQ2_4_CircuitDiagram
+            - RefurbQ2_5_RepairMaterials
+            - RefurbQ2_6_TechnicalManual
+            - RefurbQ2_7_ErrorCodes
+            - RefurbQ2_8_ComponentDiagnostic
+            - RefurbQ2_9_SoftwareInstructions
+            - RefurbQ2_10_IncidentHistory
+            - RefurbQ2_11_TechnicalBulletins
+            - RefurbQ2_12_SelfRepairFramework
+            - RefurbQ2_13_ProfessionalRepairers
+            - RefurbQ2_14_FaultDetection
+            - RefurbQ2_15_MaintenanceAdvice
+
+    # Q2.1: Unique Product Identification
+    RefurbQ2_1_UniqueProductID:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.1)
+            text:
+                ifabsent: string(Is information on the Unique Product identification (product type, brand, commercial name, model, serial number, trademark, trade name) available?)
+            weight:
+                ifabsent: float(0.00375)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.2: Assembly Diagram
+    RefurbQ2_2_AssemblyDiagram:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.2)
+            text:
+                ifabsent: string(Is the Assembly diagram available?)
+            weight:
+                ifabsent: float(0.00375)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.3: Wiring Diagram
+    RefurbQ2_3_WiringDiagram:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.3)
+            text:
+                ifabsent: string(Is the Wiring Diagram available?)
+            weight:
+                ifabsent: float(0.001875)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.4: Circuit Diagram
+    RefurbQ2_4_CircuitDiagram:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.4)
+            text:
+                ifabsent: string(Is the Circuit Diagram available?)
+            weight:
+                ifabsent: float(0.001875)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.5: Repair Materials
+    RefurbQ2_5_RepairMaterials:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.5)
+            text:
+                ifabsent: string(Is the List of repair materials and tests required available?)
+            weight:
+                ifabsent: float(0.00125)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.6: Technical Manual
+    RefurbQ2_6_TechnicalManual:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.6)
+            text:
+                ifabsent: string(Is the Technical Instruction Manual available?)
+            weight:
+                ifabsent: float(0.00125)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.7: Error Codes
+    RefurbQ2_7_ErrorCodes:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.7)
+            text:
+                ifabsent: string(Is the Error codes and diagnostics available?)
+            weight:
+                ifabsent: float(0.00125)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.8: Component Diagnostic
+    RefurbQ2_8_ComponentDiagnostic:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.8)
+            text:
+                ifabsent: string(Is the Component and diagnostic information available?)
+            weight:
+                ifabsent: float(0.00125)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.9: Software Instructions
+    RefurbQ2_9_SoftwareInstructions:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.9)
+            text:
+                ifabsent: string(Is the Software instructions available?)
+            weight:
+                ifabsent: float(0.00125)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.10: Incident History
+    RefurbQ2_10_IncidentHistory:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.10)
+            text:
+                ifabsent: string(Is there Access to incident history available?)
+            weight:
+                ifabsent: float(0.00125)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.11: Technical Bulletins
+    RefurbQ2_11_TechnicalBulletins:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.11)
+            text:
+                ifabsent: string(Are the Technical bulletins available?)
+            weight:
+                ifabsent: float(0.00125)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.12: Self-Repair Framework
+    RefurbQ2_12_SelfRepairFramework:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.12)
+            text:
+                ifabsent: string(Is a Specific framework for self-repair available?)
+            weight:
+                ifabsent: float(0.00125)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.13: Professional Repairers
+    RefurbQ2_13_ProfessionalRepairers:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.13)
+            text:
+                ifabsent: string(Is the Information on access to professional repairers available?)
+            weight:
+                ifabsent: float(0.00125)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.14: Fault Detection
+    RefurbQ2_14_FaultDetection:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.14)
+            text:
+                ifabsent: string(Is the Fault detection and action required available?)
+            weight:
+                ifabsent: float(0.00125)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.15: Maintenance Advice
+    RefurbQ2_15_MaintenanceAdvice:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.15)
+            text:
+                ifabsent: string(Is the Advice on use and maintenance available?)
+            weight:
+                ifabsent: float(0.00125)
+            answer_options:
+                range: RefurbDocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all documentation questions
+    RefurbDocumentationAvailabilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbDoc_PubliclyAvailable
+            - RefurbDoc_IndependentRepairers
+            - RefurbDoc_AuthorizedRepairers
+            - RefurbDoc_ManufacturerOnly
+            - RefurbDoc_NotAvailable
+            - RefurbDoc_DataNotAvailable
+
+    RefurbDoc_PubliclyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_doc_publicly_available)
+            text:
+                ifabsent: string(Publicly available)
+            score:
+                ifabsent: float(4.0)
+
+    RefurbDoc_IndependentRepairers:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_doc_independent_repairers)
+            text:
+                ifabsent: string(Available to independent repair service providers)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbDoc_AuthorizedRepairers:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_doc_authorized_repairers)
+            text:
+                ifabsent: string(Available to manufacturer-authorized repair service providers)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbDoc_ManufacturerOnly:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_doc_manufacturer_only)
+            text:
+                ifabsent: string(Available to manufacturer only)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbDoc_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_doc_not_available)
+            text:
+                ifabsent: string(Not available at all)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbDoc_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_doc_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P2: PRODUCT'S DIAGNOSTIC
+    # ============================================
+
+    RefurbProductDiagnostic_Parameter:
+        is_a: ParameterSpecification
+        description: Product diagnostic interface accessibility - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_product_diagnostic)
+            name:
+                ifabsent: string(Product's Diagnostic)
+            questions:
+                range: RefurbProductDiagnosticQuestion
+                multivalued: true
+                inlined: true
+
+    RefurbProductDiagnosticQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - RefurbQ2_16_DiagnosticInterface
+
+    # Q2.16: Diagnostic Interface
+    RefurbQ2_16_DiagnosticInterface:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.16)
+            text:
+                ifabsent: string(What type of diagnostic interface does the product have for identifying faults and operational status?)
+            weight:
+                ifabsent: float(0.0375)
+            answer_options:
+                range: RefurbDiagnosticInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Answer options for diagnostic interface question
+    RefurbDiagnosticInterfaceAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbDiag_Intuitive
+            - RefurbDiag_CodedPublic
+            - RefurbDiag_PublicHardwareSoftware
+            - RefurbDiag_Proprietary
+            - RefurbDiag_NotPossible
+            - RefurbDiag_DataNotAvailable
+
+    RefurbDiag_Intuitive:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_diag_intuitive)
+            text:
+                ifabsent: string(Intuitive interface (easily understandable with the help of a diagnosis with a signal))
+            score:
+                ifabsent: float(4.0)
+
+    RefurbDiag_CodedPublic:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_diag_coded_public)
+            text:
+                ifabsent: string(Coded interface with public reference table (via support documentation, fault-finding tree, code etc supplied with the product))
+            score:
+                ifabsent: float(3.0)
+
+    RefurbDiag_PublicHardwareSoftware:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_diag_public_hardware_software)
+            text:
+                ifabsent: string(Publicly available hardware/software interface (it can be diagnosed via public hardware/software for which the interface is accessible without tools))
+            score:
+                ifabsent: float(2.0)
+
+    RefurbDiag_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_diag_proprietary)
+            text:
+                ifabsent: string(Proprietary interface (with using proprietary tools or by transfer of software not included with the product))
+            score:
+                ifabsent: float(1.0)
+
+    RefurbDiag_NotPossible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_diag_not_possible)
+            text:
+                ifabsent: string(Not possible with any type of interface)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbDiag_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_diag_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P2: SPARE PARTS INTERFACES
+    # ============================================
+
+    RefurbSparePartsInterfaces_Parameter:
+        is_a: ParameterSpecification
+        description: Spare parts interface accessibility for priority components - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_spare_parts_interfaces)
+            name:
+                ifabsent: string(Spare Parts Interfaces)
+            questions:
+                range: RefurbSparePartsInterfacesQuestion
+                multivalued: true
+                inlined: true
+
+    RefurbSparePartsInterfacesQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - RefurbQ2_17_DisplayInterface
+            - RefurbQ2_18_BatteryInterface
+            - RefurbQ2_19_BackCoverInterface
+            - RefurbQ2_20_FrontCameraInterface
+            - RefurbQ2_21_RearCameraInterface
+            - RefurbQ2_22_ChargingPortsInterface
+            - RefurbQ2_23_MechanicalButtonsInterface
+            - RefurbQ2_24_MicrophoneInterface
+            - RefurbQ2_25_SpeakersInterface
+            - RefurbQ2_26_HingeInterface
+
+    # Q2.17: Display Interface
+    RefurbQ2_17_DisplayInterface:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.17)
+            text:
+                ifabsent: string(What type of diagnostic interface does the Display assembly (if multiple, consider deepest) have for identifying faults and operational status?)
+            weight:
+                ifabsent: float(0.001063830)
+            answer_options:
+                range: RefurbSparePartsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.18: Battery Interface
+    RefurbQ2_18_BatteryInterface:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.18)
+            text:
+                ifabsent: string(What type of diagnostic interface does the Battery (if multiple, consider deepest) have for identifying faults and operational status?)
+            weight:
+                ifabsent: float(0.006382979)
+            answer_options:
+                range: RefurbSparePartsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.19: Back Cover Interface
+    RefurbQ2_19_BackCoverInterface:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.19)
+            text:
+                ifabsent: string(What type of diagnostic interface does the back cover or its assembly have for identifying faults and operational status?)
+            weight:
+                ifabsent: float(0.003191489)
+            answer_options:
+                range: RefurbSparePartsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.20: Front Camera Interface
+    RefurbQ2_20_FrontCameraInterface:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.20)
+            text:
+                ifabsent: string(What type of diagnostic interface does the front-facing camera assembly have for identifying faults and operational status?)
+            weight:
+                ifabsent: float(0.002127660)
+            answer_options:
+                range: RefurbSparePartsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.21: Rear Camera Interface
+    RefurbQ2_21_RearCameraInterface:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.21)
+            text:
+                ifabsent: string(What type of diagnostic interface does the rear-facing camera assembly have for identifying faults and operational status?)
+            weight:
+                ifabsent: float(0.002127660)
+            answer_options:
+                range: RefurbSparePartsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.22: Charging Ports Interface
+    RefurbQ2_22_ChargingPortsInterface:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.22)
+            text:
+                ifabsent: string(What type of diagnostic interface does the external charging ports have for identifying faults and operational status?)
+            weight:
+                ifabsent: float(0.002127660)
+            answer_options:
+                range: RefurbSparePartsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.23: Mechanical Buttons Interface
+    RefurbQ2_23_MechanicalButtonsInterface:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.23)
+            text:
+                ifabsent: string(What type of diagnostic interface does the mechanical buttons have for identifying faults and operational status?)
+            weight:
+                ifabsent: float(0.002127660)
+            answer_options:
+                range: RefurbSparePartsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.24: Microphone Interface
+    RefurbQ2_24_MicrophoneInterface:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.24)
+            text:
+                ifabsent: string(What type of diagnostic interface does the microphone have for identifying faults and operational status?)
+            weight:
+                ifabsent: float(0.002127660)
+            answer_options:
+                range: RefurbSparePartsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.25: Speakers Interface
+    RefurbQ2_25_SpeakersInterface:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.25)
+            text:
+                ifabsent: string(What type of diagnostic interface does the speaker(s) have for identifying faults and operational status?)
+            weight:
+                ifabsent: float(0.002127660)
+            answer_options:
+                range: RefurbSparePartsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.26: Hinge Interface
+    RefurbQ2_26_HingeInterface:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.26)
+            text:
+                ifabsent: string(What type of diagnostic interface does the hinge assembly or mechanical display folding mechanism have for identifying faults and operational status?)
+            weight:
+                ifabsent: float(0.001595745)
+            answer_options:
+                range: RefurbSparePartsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all spare parts interface questions
+    RefurbSparePartsInterfaceAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbSpareInterface_Intuitive
+            - RefurbSpareInterface_CodedPublic
+            - RefurbSpareInterface_PublicHardwareSoftware
+            - RefurbSpareInterface_Proprietary
+            - RefurbSpareInterface_NotPossible
+            - RefurbSpareInterface_DataNotAvailable
+
+    RefurbSpareInterface_Intuitive:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_interface_intuitive)
+            text:
+                ifabsent: string(Intuitive interface (easily understandable with the help of a diagnosis with a signal))
+            score:
+                ifabsent: float(4.0)
+
+    RefurbSpareInterface_CodedPublic:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_interface_coded_public)
+            text:
+                ifabsent: string(Coded interface with public reference table (via support documentation, fault-finding tree, code etc supplied with the product))
+            score:
+                ifabsent: float(3.0)
+
+    RefurbSpareInterface_PublicHardwareSoftware:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_interface_public_hardware_software)
+            text:
+                ifabsent: string(Publicly available hardware/software interface (it can be diagnosed via public hardware/software for which the interface is accessible without tools))
+            score:
+                ifabsent: float(2.0)
+
+    RefurbSpareInterface_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_interface_proprietary)
+            text:
+                ifabsent: string(Proprietary interface (with using proprietary tools or by transfer of software not included with the product))
+            score:
+                ifabsent: float(1.0)
+
+    RefurbSpareInterface_NotPossible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_interface_not_possible)
+            text:
+                ifabsent: string(Not possible with any type of interface)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbSpareInterface_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_interface_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P2: SPARE PARTS AVAILABILITY
+    # ============================================
+
+    RefurbSparePartsAvailability_Parameter:
+        is_a: ParameterSpecification
+        description: Spare parts availability duration for priority components - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_spare_parts_availability)
+            name:
+                ifabsent: string(Spare Parts Availability)
+            questions:
+                range: RefurbSparePartsAvailabilityQuestion
+                multivalued: true
+                inlined: true
+
+    RefurbSparePartsAvailabilityQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - RefurbQ2_27_DisplayAvailability
+            - RefurbQ2_28_BatteryAvailability
+            - RefurbQ2_29_BackCoverAvailability
+            - RefurbQ2_30_FrontCameraAvailability
+            - RefurbQ2_31_RearCameraAvailability
+            - RefurbQ2_32_ChargingPortsAvailability
+            - RefurbQ2_33_MechanicalButtonsAvailability
+            - RefurbQ2_34_MicrophoneAvailability
+            - RefurbQ2_35_SpeakersAvailability
+            - RefurbQ2_36_HingeAvailability
+
+    # Q2.27: Display Availability
+    RefurbQ2_27_DisplayAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.27)
+            text:
+                ifabsent: string(For how long are spare parts available for Display assembly (if multiple, consider deepest)?)
+            weight:
+                ifabsent: float(0.001418440)
+            answer_options:
+                range: RefurbSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.28: Battery Availability
+    RefurbQ2_28_BatteryAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.28)
+            text:
+                ifabsent: string(For how long are spare parts available for Battery (if multiple, consider deepest)?)
+            weight:
+                ifabsent: float(0.008510638)
+            answer_options:
+                range: RefurbSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.29: Back Cover Availability
+    RefurbQ2_29_BackCoverAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.29)
+            text:
+                ifabsent: string(For how long are spare parts available for back cover or its assembly?)
+            weight:
+                ifabsent: float(0.004255319)
+            answer_options:
+                range: RefurbSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.30: Front Camera Availability
+    RefurbQ2_30_FrontCameraAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.30)
+            text:
+                ifabsent: string(For how long are spare parts available for front-facing camera assembly?)
+            weight:
+                ifabsent: float(0.002836879)
+            answer_options:
+                range: RefurbSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.31: Rear Camera Availability
+    RefurbQ2_31_RearCameraAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.31)
+            text:
+                ifabsent: string(For how long are spare parts available for rear-facing camera assembly?)
+            weight:
+                ifabsent: float(0.002836879)
+            answer_options:
+                range: RefurbSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.32: Charging Ports Availability
+    RefurbQ2_32_ChargingPortsAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.32)
+            text:
+                ifabsent: string(For how long are spare parts available for external charging ports?)
+            weight:
+                ifabsent: float(0.002836879)
+            answer_options:
+                range: RefurbSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.33: Mechanical Buttons Availability
+    RefurbQ2_33_MechanicalButtonsAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.33)
+            text:
+                ifabsent: string(For how long are spare parts available for mechanical buttons?)
+            weight:
+                ifabsent: float(0.002836879)
+            answer_options:
+                range: RefurbSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.34: Microphone Availability
+    RefurbQ2_34_MicrophoneAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.34)
+            text:
+                ifabsent: string(For how long are spare parts available for microphone?)
+            weight:
+                ifabsent: float(0.002836879)
+            answer_options:
+                range: RefurbSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.35: Speakers Availability
+    RefurbQ2_35_SpeakersAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.35)
+            text:
+                ifabsent: string(For how long are spare parts available for speaker(s)?)
+            weight:
+                ifabsent: float(0.002836879)
+            answer_options:
+                range: RefurbSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.36: Hinge Availability
+    RefurbQ2_36_HingeAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.36)
+            text:
+                ifabsent: string(For how long are spare parts available for hinge assembly or mechanical display folding mechanism?)
+            weight:
+                ifabsent: float(0.002127659)
+            answer_options:
+                range: RefurbSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all spare parts availability questions
+    RefurbSparePartsAvailabilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbSpareAvail_7YearsOrMore
+            - RefurbSpareAvail_6Years
+            - RefurbSpareAvail_5Years
+            - RefurbSpareAvail_LessThan4Years
+            - RefurbSpareAvail_PleaseSelect
+            - RefurbSpareAvail_NotAvailable
+
+    RefurbSpareAvail_7YearsOrMore:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_avail_7_years_or_more)
+            text:
+                ifabsent: string(Available for 7 years or even longer)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbSpareAvail_6Years:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_avail_6_years)
+            text:
+                ifabsent: string(Available for 6 years)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbSpareAvail_5Years:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_avail_5_years)
+            text:
+                ifabsent: string(Available for 5 years)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbSpareAvail_LessThan4Years:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_avail_less_than_4_years)
+            text:
+                ifabsent: string(Available for less than 4 years)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbSpareAvail_PleaseSelect:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_avail_please_select)
+            text:
+                ifabsent: string(Please select the availability)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbSpareAvail_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_avail_not_available)
+            text:
+                ifabsent: string(Component not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P2: SPARE PARTS DELIVERY
+    # ============================================
+
+    RefurbSparePartsDelivery_Parameter:
+        is_a: ParameterSpecification
+        description: Spare parts delivery time for priority components - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_spare_parts_delivery)
+            name:
+                ifabsent: string(Spare Parts Delivery)
+            questions:
+                range: RefurbSparePartsDeliveryQuestion
+                multivalued: true
+                inlined: true
+
+    RefurbSparePartsDeliveryQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - RefurbQ2_37_DisplayDelivery
+            - RefurbQ2_38_BatteryDelivery
+            - RefurbQ2_39_BackCoverDelivery
+            - RefurbQ2_40_FrontCameraDelivery
+            - RefurbQ2_41_RearCameraDelivery
+            - RefurbQ2_42_ChargingPortsDelivery
+            - RefurbQ2_43_MechanicalButtonsDelivery
+            - RefurbQ2_44_MicrophoneDelivery
+            - RefurbQ2_45_SpeakersDelivery
+            - RefurbQ2_46_HingeDelivery
+
+    # Q2.37: Display Delivery
+    RefurbQ2_37_DisplayDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.37)
+            text:
+                ifabsent: string(How long does it take to have the spare part delivered on average for Display assembly (if multiple, consider deepest)?)
+            weight:
+                ifabsent: float(0.000709220)
+            answer_options:
+                range: RefurbSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.38: Battery Delivery
+    RefurbQ2_38_BatteryDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.38)
+            text:
+                ifabsent: string(How long does it take to have the spare part delivered on average for Battery (if multiple, consider deepest)?)
+            weight:
+                ifabsent: float(0.004255319)
+            answer_options:
+                range: RefurbSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.39: Back Cover Delivery
+    RefurbQ2_39_BackCoverDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.39)
+            text:
+                ifabsent: string(How long does it take to have the spare part delivered on average for back cover or its assembly?)
+            weight:
+                ifabsent: float(0.002127660)
+            answer_options:
+                range: RefurbSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.40: Front Camera Delivery
+    RefurbQ2_40_FrontCameraDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.40)
+            text:
+                ifabsent: string(How long does it take to have the spare part delivered on average for front-facing camera assembly?)
+            weight:
+                ifabsent: float(0.001418440)
+            answer_options:
+                range: RefurbSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.41: Rear Camera Delivery
+    RefurbQ2_41_RearCameraDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.41)
+            text:
+                ifabsent: string(How long does it take to have the spare part delivered on average for rear-facing camera assembly?)
+            weight:
+                ifabsent: float(0.001418440)
+            answer_options:
+                range: RefurbSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.42: Charging Ports Delivery
+    RefurbQ2_42_ChargingPortsDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.42)
+            text:
+                ifabsent: string(How long does it take to have the spare part delivered on average for external charging ports?)
+            weight:
+                ifabsent: float(0.001418440)
+            answer_options:
+                range: RefurbSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.43: Mechanical Buttons Delivery
+    RefurbQ2_43_MechanicalButtonsDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.43)
+            text:
+                ifabsent: string(How long does it take to have the spare part delivered on average for mechanical buttons?)
+            weight:
+                ifabsent: float(0.001418440)
+            answer_options:
+                range: RefurbSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.44: Microphone Delivery
+    RefurbQ2_44_MicrophoneDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.44)
+            text:
+                ifabsent: string(How long does it take to have the spare part delivered on average for microphone?)
+            weight:
+                ifabsent: float(0.001418440)
+            answer_options:
+                range: RefurbSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.45: Speakers Delivery
+    RefurbQ2_45_SpeakersDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.45)
+            text:
+                ifabsent: string(How long does it take to have the spare part delivered on average for speaker(s)?)
+            weight:
+                ifabsent: float(0.001418440)
+            answer_options:
+                range: RefurbSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q2.46: Hinge Delivery
+    RefurbQ2_46_HingeDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.46)
+            text:
+                ifabsent: string(How long does it take to have the spare part delivered on average for hinge assembly or mechanical display folding mechanism?)
+            weight:
+                ifabsent: float(0.001063830)
+            answer_options:
+                range: RefurbSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all spare parts delivery questions
+    RefurbSparePartsDeliveryAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbSpareDeliv_3DaysOrLess
+            - RefurbSpareDeliv_3To5Days
+            - RefurbSpareDeliv_5To10Days
+            - RefurbSpareDeliv_PleaseSelect
+            - RefurbSpareDeliv_MoreThan10Days
+            - RefurbSpareDeliv_NotAvailable
+
+    RefurbSpareDeliv_3DaysOrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_deliv_3_days_or_less)
+            text:
+                ifabsent: string(Delivered in 3 days or less)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbSpareDeliv_3To5Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_deliv_3_to_5_days)
+            text:
+                ifabsent: string(Delivered in 3 to 5 days (5 included))
+            score:
+                ifabsent: float(2.0)
+
+    RefurbSpareDeliv_5To10Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_deliv_5_to_10_days)
+            text:
+                ifabsent: string(Delivered in 5 to 10 days (10 included))
+            score:
+                ifabsent: float(1.0)
+
+    RefurbSpareDeliv_PleaseSelect:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_deliv_please_select)
+            text:
+                ifabsent: string(Please select the delivery time)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbSpareDeliv_MoreThan10Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_deliv_more_than_10_days)
+            text:
+                ifabsent: string(Delivered in more than 10 days)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbSpareDeliv_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_spare_deliv_not_available)
+            text:
+                ifabsent: string(Component not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P3: REFURBISH SPECIFIC CRITERIA
+    # ============================================
+
+    RefurbSpecificCriteria_Parameter:
+        is_a: ParameterSpecification
+        description: Refurbish-specific criteria covering upgradeability, data management, and consumables - core definition
+        attributes:
+            id:
+                ifabsent: string(P3_refurbish_specific_criteria)
+            name:
+                ifabsent: string(Refurbish Specific Criteria)
+            questions:
+                range: RefurbSpecificCriteriaQuestion
+                multivalued: true
+                inlined: true
+
+    RefurbSpecificCriteriaQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - RefurbQ3_1_SoftwareUpdates
+            - RefurbQ3_2_UsageHistory
+            - RefurbQ3_3_ResetConsumptionMeter
+            - RefurbQ3_4_RestorePhysicalFactory
+            - RefurbQ3_5_ResetSoftware
+            - RefurbQ3_6_DataStoredSecurely
+            - RefurbQ3_7_UserDataErasure
+            - RefurbQ3_8_RemoveReplaceStorage
+            - RefurbQ3_9_DataComponentsAvailability
+            - RefurbQ3_10_DataComponentsDelivery
+            - RefurbQ3_11_ThirdPartyDataComponents
+            - RefurbQ3_12_DataDisposal
+            - RefurbQ3_13_ReplenishConsumables
+            - RefurbQ3_14_ThirdPartyConsumables
+            - RefurbQ3_15_BuiltInConsumablesCheck
+            - RefurbQ3_16_ConsumablesAvailability
+            - RefurbQ3_17_ConsumablesDelivery
+            - RefurbQ3_18_EasyCleanMaintain
+
+    # Q3.1: Software Updates
+    RefurbQ3_1_SoftwareUpdates:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.1)
+            text:
+                ifabsent: string(Is it possible to perform software updates?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_1_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_1_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_1_Yes
+            - RefurbQ3_1_No
+            - RefurbQ3_1_DataUnavailable
+            - RefurbQ3_1_Irrelevant
+
+    RefurbQ3_1_Yes:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_1_yes)
+            text:
+                ifabsent: string(Yes)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_1_No:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_1_no)
+            text:
+                ifabsent: string(No)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_1_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_1_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_1_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_1_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.2: Usage History
+    RefurbQ3_2_UsageHistory:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.2)
+            text:
+                ifabsent: string(Is there usage history available for the product?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_2_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_2_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_2_Yes
+            - RefurbQ3_2_No
+            - RefurbQ3_2_DataUnavailable
+            - RefurbQ3_2_Irrelevant
+
+    RefurbQ3_2_Yes:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_2_yes)
+            text:
+                ifabsent: string(Yes)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_2_No:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_2_no)
+            text:
+                ifabsent: string(No)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_2_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_2_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_2_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_2_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.3: Reset Consumption Meter
+    RefurbQ3_3_ResetConsumptionMeter:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.3)
+            text:
+                ifabsent: string(How easy is it to reset the consumption meter?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_3_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_3_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_3_UserDirectly
+            - RefurbQ3_3_TechnicianTool
+            - RefurbQ3_3_NotPossible
+            - RefurbQ3_3_DataUnavailable
+            - RefurbQ3_3_Irrelevant
+
+    RefurbQ3_3_UserDirectly:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_3_user_directly)
+            text:
+                ifabsent: string(User can reset it directly before giving away the product)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_3_TechnicianTool:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_3_technician_tool)
+            text:
+                ifabsent: string(Requires a technician or special tool)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_3_NotPossible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_3_not_possible)
+            text:
+                ifabsent: string(Not possible)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_3_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_3_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_3_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_3_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.4: Restore Physical Factory Settings
+    RefurbQ3_4_RestorePhysicalFactory:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.4)
+            text:
+                ifabsent: string(How easy is it to restore the device to physical factory settings?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_4_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_4_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_4_OneClickReset
+            - RefurbQ3_4_ManualInstructions
+            - RefurbQ3_4_SoftwareUpdate
+            - RefurbQ3_4_ManufacturerSupport
+            - RefurbQ3_4_DataUnavailable
+            - RefurbQ3_4_Irrelevant
+
+    RefurbQ3_4_OneClickReset:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_4_one_click)
+            text:
+                ifabsent: string(One-click reset button available)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ3_4_ManualInstructions:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_4_manual)
+            text:
+                ifabsent: string(Requires following instructions from a manual (multi-step process but user-doable))
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_4_SoftwareUpdate:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_4_software_update)
+            text:
+                ifabsent: string(Requires a software update or special process (may need external tools or codes))
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_4_ManufacturerSupport:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_4_manufacturer)
+            text:
+                ifabsent: string(Not possible without manufacturer support)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_4_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_4_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_4_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_4_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.5: Reset Software
+    RefurbQ3_5_ResetSoftware:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.5)
+            text:
+                ifabsent: string(How easy is it to reset the software?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_5_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_5_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_5_VeryEasy
+            - RefurbQ3_5_Moderate
+            - RefurbQ3_5_Difficult
+            - RefurbQ3_5_NotPossible
+            - RefurbQ3_5_DataUnavailable
+            - RefurbQ3_5_Irrelevant
+
+    RefurbQ3_5_VeryEasy:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_5_very_easy)
+            text:
+                ifabsent: string(Very easy (One-step reset in settings))
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ3_5_Moderate:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_5_moderate)
+            text:
+                ifabsent: string(Moderate (Requires a specific sequence of actions))
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_5_Difficult:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_5_difficult)
+            text:
+                ifabsent: string(Difficult (Needs manufacturer intervention))
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_5_NotPossible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_5_not_possible)
+            text:
+                ifabsent: string(Not possible)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_5_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_5_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_5_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_5_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.6: Data Stored Securely
+    RefurbQ3_6_DataStoredSecurely:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.6)
+            text:
+                ifabsent: string(Is data stored in a way that prevents unauthorized access or sharing?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_6_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_6_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_6_OneClickReset
+            - RefurbQ3_6_ManualInstructions
+            - RefurbQ3_6_SoftwareUpdate
+            - RefurbQ3_6_ManufacturerSupport
+            - RefurbQ3_6_DataUnavailable
+            - RefurbQ3_6_Irrelevant
+
+    RefurbQ3_6_OneClickReset:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_6_one_click)
+            text:
+                ifabsent: string(One-click reset button available)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ3_6_ManualInstructions:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_6_manual)
+            text:
+                ifabsent: string(Requires following instructions from a manual (multi-step process but user-doable))
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_6_SoftwareUpdate:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_6_software_update)
+            text:
+                ifabsent: string(Requires a software update or special process (may need external tools or codes))
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_6_ManufacturerSupport:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_6_manufacturer)
+            text:
+                ifabsent: string(Not possible without manufacturer support)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_6_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_6_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_6_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_6_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.7: User Data Erasure
+    RefurbQ3_7_UserDataErasure:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.7)
+            text:
+                ifabsent: string(Can user data be fully erased before switching users?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_7_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_7_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_7_SecureWipe
+            - RefurbQ3_7_PartialWipe
+            - RefurbQ3_7_DataRemains
+            - RefurbQ3_7_DataUnavailable
+            - RefurbQ3_7_Irrelevant
+
+    RefurbQ3_7_SecureWipe:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_7_secure_wipe)
+            text:
+                ifabsent: string(Yes, a secure wipe is available)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_7_PartialWipe:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_7_partial_wipe)
+            text:
+                ifabsent: string(Partial wipe (some residual data may remain))
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_7_DataRemains:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_7_data_remains)
+            text:
+                ifabsent: string(No, user data remains after reset)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_7_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_7_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_7_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_7_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.8: Remove/Replace Storage
+    RefurbQ3_8_RemoveReplaceStorage:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.8)
+            text:
+                ifabsent: string(How easy is it to remove or replace storage components (e.g., firmware chips, hard disk, SSD)?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_8_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_8_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_8_EasilyRemovable
+            - RefurbQ3_8_RequiresTools
+            - RefurbQ3_8_NotReplaceable
+            - RefurbQ3_8_DataUnavailable
+            - RefurbQ3_8_Irrelevant
+
+    RefurbQ3_8_EasilyRemovable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_8_easily_removable)
+            text:
+                ifabsent: string(Easily removable by user)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_8_RequiresTools:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_8_requires_tools)
+            text:
+                ifabsent: string(Requires tools but possible)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_8_NotReplaceable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_8_not_replaceable)
+            text:
+                ifabsent: string(Not replaceable (integrated storage))
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_8_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_8_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_8_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_8_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.9: Data Components Availability
+    RefurbQ3_9_DataComponentsAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.9)
+            text:
+                ifabsent: string(How long are data-related components (e.g., firmware chips, hard disk, SSD) available after the product is put-on-market?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_9_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_9_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_9_7YearsOrMore
+            - RefurbQ3_9_6Years
+            - RefurbQ3_9_5Years
+            - RefurbQ3_9_LessThan4Years
+            - RefurbQ3_9_PleaseSelect
+            - RefurbQ3_9_NotAvailable
+            - RefurbQ3_9_DataNotAvailable
+
+    RefurbQ3_9_7YearsOrMore:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_9_7_years_or_more)
+            text:
+                ifabsent: string(Available for 7 years or even longer)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ3_9_6Years:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_9_6_years)
+            text:
+                ifabsent: string(Available for 6 years)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_9_5Years:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_9_5_years)
+            text:
+                ifabsent: string(Available for 5 years)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_9_LessThan4Years:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_9_less_than_4_years)
+            text:
+                ifabsent: string(Available for less than 4 years)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_9_PleaseSelect:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_9_please_select)
+            text:
+                ifabsent: string(Please select the availability)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_9_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_9_not_available)
+            text:
+                ifabsent: string(Component not available)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_9_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_9_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.10: Data Components Delivery
+    RefurbQ3_10_DataComponentsDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.10)
+            text:
+                ifabsent: string(How long does it take to obtain replacement for data-related components (e.g., firmware chips, hard disk, SSD)?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_10_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_10_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_10_3DaysOrLess
+            - RefurbQ3_10_3To5Days
+            - RefurbQ3_10_5To10Days
+            - RefurbQ3_10_PleaseSelect
+            - RefurbQ3_10_MoreThan10Days
+            - RefurbQ3_10_NotAvailable
+
+    RefurbQ3_10_3DaysOrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_10_3_days_or_less)
+            text:
+                ifabsent: string(Delivered in 3 days or less)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ3_10_3To5Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_10_3_to_5_days)
+            text:
+                ifabsent: string(Delivered in 3 to 5 days (5 included))
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_10_5To10Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_10_5_to_10_days)
+            text:
+                ifabsent: string(Delivered in 5 to 10 days (10 included))
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_10_PleaseSelect:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_10_please_select)
+            text:
+                ifabsent: string(Please select the delivery time)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_10_MoreThan10Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_10_more_than_10_days)
+            text:
+                ifabsent: string(Delivered in more than 10 days)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_10_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_10_not_available)
+            text:
+                ifabsent: string(Component not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.11: Third-Party Data Components
+    RefurbQ3_11_ThirdPartyDataComponents:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.11)
+            text:
+                ifabsent: string(Is the device compatible with third-party data-related components (e.g., firmware chips, hard disk, SSD)?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_11_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_11_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_11_FullyCompatible
+            - RefurbQ3_11_PartiallyCompatible
+            - RefurbQ3_11_LimitedCompatibility
+            - RefurbQ3_11_NotCompatible
+            - RefurbQ3_11_DataUnavailable
+            - RefurbQ3_11_Irrelevant
+
+    RefurbQ3_11_FullyCompatible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_11_fully_compatible)
+            text:
+                ifabsent: string(Fully compatible – The device supports third-party components without restrictions.)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ3_11_PartiallyCompatible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_11_partially_compatible)
+            text:
+                ifabsent: string(Partially compatible – Some third-party components work, but there are limitations (e.g., reduced performance, firmware restrictions).)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_11_LimitedCompatibility:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_11_limited_compatibility)
+            text:
+                ifabsent: string(Limited compatibility – Only certain brands or certified third-party components are supported.)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_11_NotCompatible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_11_not_compatible)
+            text:
+                ifabsent: string(Not compatible – The device only works with manufacturer-approved components.)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_11_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_11_data_unavailable)
+            text:
+                ifabsent: string(Data Unavailable– Compatibility is not officially documented.)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_11_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_11_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.12: Data Disposal
+    RefurbQ3_12_DataDisposal:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.12)
+            text:
+                ifabsent: string(How are data-storing components (e.g., hard drives, SSDs, firmware chips) disposed of or handled at the end of the product's life?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_12_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_12_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_12_SecurelyDestroyed
+            - RefurbQ3_12_CertifiedErasure
+            - RefurbQ3_12_RemovedNotErased
+            - RefurbQ3_12_NoSpecificProcess
+            - RefurbQ3_12_DataUnavailable
+            - RefurbQ3_12_Irrelevant
+
+    RefurbQ3_12_SecurelyDestroyed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_12_securely_destroyed)
+            text:
+                ifabsent: string(Securely shredded or physically destroyed to prevent data recovery)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ3_12_CertifiedErasure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_12_certified_erasure)
+            text:
+                ifabsent: string(Wiped using certified data-erasure methods before disposal or reuse)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_12_RemovedNotErased:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_12_removed_not_erased)
+            text:
+                ifabsent: string(Simply removed but not securely erased or destroyed)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_12_NoSpecificProcess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_12_no_specific_process)
+            text:
+                ifabsent: string(No specific process, handled like other electronic waste)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_12_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_12_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_12_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_12_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.13: Replenish Consumables
+    RefurbQ3_13_ReplenishConsumables:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.13)
+            text:
+                ifabsent: string(How easy is it to replenish consumables (e.g., batteries, cartridges, filters)?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_13_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_13_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_13_StandardReplaceable
+            - RefurbQ3_13_ServiceTechnician
+            - RefurbQ3_13_NotReplaceable
+            - RefurbQ3_13_DataUnavailable
+            - RefurbQ3_13_Irrelevant
+
+    RefurbQ3_13_StandardReplaceable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_13_standard_replaceable)
+            text:
+                ifabsent: string(Standard, easily replaceable)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_13_ServiceTechnician:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_13_service_technician)
+            text:
+                ifabsent: string(Requires a service technician)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_13_NotReplaceable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_13_not_replaceable)
+            text:
+                ifabsent: string(Not replaceable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_13_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_13_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_13_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_13_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.14: Third-Party Consumables
+    RefurbQ3_14_ThirdPartyConsumables:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.14)
+            text:
+                ifabsent: string(Are there restrictions on using third-party consumables, or is it proprietary?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_14_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_14_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_14_AnyBrand
+            - RefurbQ3_14_ManufacturerApproved
+            - RefurbQ3_14_BlockedOriginal
+            - RefurbQ3_14_DataUnavailable
+            - RefurbQ3_14_Irrelevant
+
+    RefurbQ3_14_AnyBrand:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_14_any_brand)
+            text:
+                ifabsent: string(Any brand can be used)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_14_ManufacturerApproved:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_14_manufacturer_approved)
+            text:
+                ifabsent: string(Only manufacturer-approved consumables)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_14_BlockedOriginal:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_14_blocked_original)
+            text:
+                ifabsent: string(Blocked unless original parts are used)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_14_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_14_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_14_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_14_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.15: Built-In Consumables Check
+    RefurbQ3_15_BuiltInConsumablesCheck:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.15)
+            text:
+                ifabsent: string(Is there a built-in method to check the availability of necessary consumables?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_15_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_15_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_15_YesDeviceInterface
+            - RefurbQ3_15_NoManualCheck
+            - RefurbQ3_15_DataUnavailable
+            - RefurbQ3_15_Irrelevant
+
+    RefurbQ3_15_YesDeviceInterface:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_15_yes_device_interface)
+            text:
+                ifabsent: string(Yes, via the device interface/app)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_15_NoManualCheck:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_15_no_manual_check)
+            text:
+                ifabsent: string(No, must check manually)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_15_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_15_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_15_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_15_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.16: Consumables Availability
+    RefurbQ3_16_ConsumablesAvailability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.16)
+            text:
+                ifabsent: string(Are consumables readily available on the market, and for how long is their supply expected? (e.g., cartridges, filters))
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_16_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_16_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_16_WidelyAvailable
+            - RefurbQ3_16_LimitedStock
+            - RefurbQ3_16_DifficultToSource
+            - RefurbQ3_16_NotApplicable
+            - RefurbQ3_16_DataNotAvailable
+
+    RefurbQ3_16_WidelyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_16_widely_available)
+            text:
+                ifabsent: string(Widely available with a stable supply for 3 or more years)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_16_LimitedStock:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_16_limited_stock)
+            text:
+                ifabsent: string(Available but with limited stock or uncertain future availability)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_16_DifficultToSource:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_16_difficult_to_source)
+            text:
+                ifabsent: string(Difficult to source or currently unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_16_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_16_not_applicable)
+            text:
+                ifabsent: string(Not applicable / Unknown.)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_16_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_16_data_not_available)
+            text:
+                ifabsent: string(Data not availble)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.17: Consumables Delivery
+    RefurbQ3_17_ConsumablesDelivery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.17)
+            text:
+                ifabsent: string(What is the typical delivery time for consumables?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_17_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_17_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_17_QuickDelivery
+            - RefurbQ3_17_ModerateDelivery
+            - RefurbQ3_17_SlowDelivery
+            - RefurbQ3_17_NotApplicable
+            - RefurbQ3_17_DataNotAvailable
+
+    RefurbQ3_17_QuickDelivery:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_17_quick_delivery)
+            text:
+                ifabsent: string(Quick delivery, usually within a few days)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ3_17_ModerateDelivery:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_17_moderate_delivery)
+            text:
+                ifabsent: string(Moderate delivery time, approximately 1 to 2 weeks)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_17_SlowDelivery:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_17_slow_delivery)
+            text:
+                ifabsent: string(Slow or inconsistent delivery times)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_17_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_17_not_applicable)
+            text:
+                ifabsent: string(Not applicable / Unknown.)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_17_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_17_data_not_available)
+            text:
+                ifabsent: string(Data not availble)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.18: Easy to Clean and Maintain
+    RefurbQ3_18_EasyCleanMaintain:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.18)
+            text:
+                ifabsent: string(Is the product easy to clean and maintain during and after refurbishment?)
+            weight:
+                ifabsent: float(0.003571429)
+            answer_options:
+                range: RefurbQ3_18_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ3_18_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ3_18_YesAccessible
+            - RefurbQ3_18_SomewhatHardToReach
+            - RefurbQ3_18_NoDifficult
+            - RefurbQ3_18_NotAssessed
+
+    RefurbQ3_18_YesAccessible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_18_yes_accessible)
+            text:
+                ifabsent: string(Yes – surfaces are accessible, materials are easy to clean)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ3_18_SomewhatHardToReach:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_18_somewhat_hard_to_reach)
+            text:
+                ifabsent: string(Somewhat – certain parts are hard to reach or clean thoroughly)
+            score:
+                ifabsent: float(1.0)
+
+    RefurbQ3_18_NoDifficult:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_18_no_difficult)
+            text:
+                ifabsent: string(No – design makes cleaning difficult or unsafe)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ3_18_NotAssessed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q3_18_not_assessed)
+            text:
+                ifabsent: string(Not assessed)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P4: CLEANING POLISHING CRITERIA
+    # ============================================
+
+    RefurbCleaningPolishing_Parameter:
+        is_a: ParameterSpecification
+        description: Cleaning and polishing criteria for product refurbishment - core definition
+        attributes:
+            id:
+                ifabsent: string(P4_cleaning_polishing_criteria)
+            name:
+                ifabsent: string(Cleaning Polishing Criteria)
+            questions:
+                range: RefurbCleaningPolishingQuestion
+                multivalued: true
+                inlined: true
+
+    RefurbCleaningPolishingQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - RefurbQ4_1_CleaningAccessibility
+            - RefurbQ4_2_SurfaceGeometries
+            - RefurbQ4_3_StandardCleaningMethods
+            - RefurbQ4_4_CleaningInstructions
+            - RefurbQ4_5_CosmeticPartsReplaceable
+
+    # Q4.1: Cleaning Accessibility
+    RefurbQ4_1_CleaningAccessibility:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1)
+            text:
+                ifabsent: string(Are the main surfaces and internal areas that require cleaning easily accessible without damaging the product?)
+            weight:
+                ifabsent: float(0.003333333)
+            answer_options:
+                range: RefurbQ4_1_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ4_1_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ4_1_YesAccessible
+            - RefurbQ4_1_Partially
+            - RefurbQ4_1_NoInaccessible
+            - RefurbQ4_1_NotSure
+
+    RefurbQ4_1_YesAccessible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_1_yes_accessible)
+            text:
+                ifabsent: string(Yes – all key surfaces can be accessed and cleaned easily)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ4_1_Partially:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_1_partially)
+            text:
+                ifabsent: string(Partially – some areas are accessible, others are obstructed)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ4_1_NoInaccessible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_1_no_inaccessible)
+            text:
+                ifabsent: string(No – major areas requiring cleaning are inaccessible)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ4_1_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_1_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)
+
+    # Q4.2: Surface Geometries
+    RefurbQ4_2_SurfaceGeometries:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.2)
+            text:
+                ifabsent: string(Are there complex or uneven surface geometries (e.g., deep grooves, tight gaps) that tend to trap dust, debris, or residue?)
+            weight:
+                ifabsent: float(0.003333333)
+            answer_options:
+                range: RefurbQ4_2_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ4_2_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ4_2_NoSmooth
+            - RefurbQ4_2_SomeLimited
+            - RefurbQ4_2_YesMultiple
+            - RefurbQ4_2_NotSure
+
+    RefurbQ4_2_NoSmooth:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_2_no_smooth)
+            text:
+                ifabsent: string(No – surfaces are smooth and easy to wipe/clean)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ4_2_SomeLimited:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_2_some_limited)
+            text:
+                ifabsent: string(Some – limited areas with difficult geometries)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ4_2_YesMultiple:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_2_yes_multiple)
+            text:
+                ifabsent: string(Yes – multiple areas are prone to trapping dirt)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ4_2_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_2_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)
+
+    # Q4.3: Standard Cleaning Methods
+    RefurbQ4_3_StandardCleaningMethods:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.3)
+            text:
+                ifabsent: string(Can standard or safe cleaning methods (e.g., wiping, compressed air, mild detergent) be used without damaging materials or electronics?)
+            weight:
+                ifabsent: float(0.003333333)
+            answer_options:
+                range: RefurbQ4_3_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ4_3_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ4_3_YesTolerates
+            - RefurbQ4_3_WithCaution
+            - RefurbQ4_3_NoDamage
+            - RefurbQ4_3_NotSure
+
+    RefurbQ4_3_YesTolerates:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_3_yes_tolerates)
+            text:
+                ifabsent: string(Yes – product tolerates typical cleaning processes)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ4_3_WithCaution:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_3_with_caution)
+            text:
+                ifabsent: string(With caution – cleaning possible but with specific care)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ4_3_NoDamage:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_3_no_damage)
+            text:
+                ifabsent: string(No – cleaning may cause damage or is restricted)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ4_3_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_3_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)
+
+    # Q4.4: Cleaning Instructions
+    RefurbQ4_4_CleaningInstructions:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.4)
+            text:
+                ifabsent: string(Are cleaning instructions or guidance provided by the OEM or accessible through documentation?)
+            weight:
+                ifabsent: float(0.003333333)
+            answer_options:
+                range: RefurbQ4_4_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ4_4_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ4_4_YesDocumented
+            - RefurbQ4_4_Partially
+            - RefurbQ4_4_NoInformation
+            - RefurbQ4_4_NotSure
+
+    RefurbQ4_4_YesDocumented:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_4_yes_documented)
+            text:
+                ifabsent: string(Yes – clearly documented cleaning procedure available)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ4_4_Partially:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_4_partially)
+            text:
+                ifabsent: string(Partially – some guidance exists, but not complete)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ4_4_NoInformation:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_4_no_information)
+            text:
+                ifabsent: string(No – no information on how to clean the product)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ4_4_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_4_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)
+
+    # Q4.5: Cosmetic Parts Replaceable
+    RefurbQ4_5_CosmeticPartsReplaceable:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.5)
+            text:
+                ifabsent: string(Are cosmetic parts (e.g., bezels, panels, covers) replaceable or refurbishable without complex disassembly?)
+            weight:
+                ifabsent: float(0.003333333)
+            answer_options:
+                range: RefurbQ4_5_AnswerOption
+                multivalued: true
+                inlined: true
+
+    RefurbQ4_5_AnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RefurbQ4_5_YesEasily
+            - RefurbQ4_5_WithEffort
+            - RefurbQ4_5_NoNotIntended
+            - RefurbQ4_5_NotSure
+
+    RefurbQ4_5_YesEasily:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_5_yes_easily)
+            text:
+                ifabsent: string(Yes – easily replaceable or restorable)
+            score:
+                ifabsent: float(3.0)
+
+    RefurbQ4_5_WithEffort:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_5_with_effort)
+            text:
+                ifabsent: string(With effort – some disassembly required)
+            score:
+                ifabsent: float(2.0)
+
+    RefurbQ4_5_NoNotIntended:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_5_no_not_intended)
+            text:
+                ifabsent: string(No – not intended to be restored or replaced)
+            score:
+                ifabsent: float(0.0)
+
+    RefurbQ4_5_NotSure:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(refurb_q4_5_not_sure)
+            text:
+                ifabsent: string(Not sure)
+            score:
+                ifabsent: float(0.0)

@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+title: CE-RISE Data Quality Framework Data Model
+type: software
+doi: 10.5281/zenodo.20117408
+authors:
+  - given-names: Riccardo
+    family-names: Boero
+    email: ribo@nilu.no
+    orcid: 'https://orcid.org/0000-0002-7468-9096'
+    affiliation: NILU
+  - given-names: Matthias
+    family-names: Rösslein
+    email: Matthias.Roesslein@empa.ch
+    orcid: 'https://orcid.org/0000-0002-6858-4124'
+    affiliation: EMPA
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20117408
+    description: This DOI represents all software versions.
+repository-code: 'https://codeberg.org/CE-RISE-models/data-quality-framework'
+url: 'https://ce-rise-models.codeberg.page/data-quality-framework/'
+abstract: >-
+  Cross-cutting LinkML data model for documenting data quality assessments,
+  pedigree scores, diagnostics, remediation actions, provenance, and
+  data-quality-derived uncertainty metadata in CE-RISE Digital Product Passport
+  and Digital Material Passport records.
+keywords:
+  - CE-RISE
+  - Data Model
+  - Ontology
+  - Data Quality
+  - Data Quality Assessment
+  - Pedigree Matrix
+  - Diagnostics
+  - Provenance
+  - Uncertainty Factor
+  - Open Source
+  - Open Science
+  - Digital Product Passport
+  - Digital Material Passport
+license: CC-BY-NC-4.0

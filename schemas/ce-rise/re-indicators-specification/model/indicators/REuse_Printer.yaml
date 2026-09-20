@@ -1,0 +1,92 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REuse_Printer
+name: re_indicators_reuse_printer
+title: REuse Indicator Configuration for Printers
+description: Product-specific configuration for REuse indicator applied to printers
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    - ../model # Import core classes
+    - ./REuse_core # Import core parameter definitions
+
+classes:
+    # ============================================
+    # PRINTER CONFIGURATION FOR REUSE
+    # Uses all core parameters with standard weights
+    # ============================================
+
+    REuse_Printer_Config:
+        is_a: IndicatorProductConfiguration
+        description: REuse indicator configuration for Printer products
+        attributes:
+            id:
+                ifabsent: string(REuse_Printer)
+            indicator_type:
+                ifabsent: IndicatorType(REuse)
+            product_category:
+                ifabsent: ProductCategoryType(Printer)
+            name:
+                ifabsent: string(REuse Indicator for Printer)
+            description:
+                ifabsent: string(REuse assessment configuration for printers with parameters covering diagnosis, warranty, reset capability, data confidentiality, and ownership transfer)
+            parameter_applications:
+                range: REuse_Printer_ParameterApplication
+                multivalued: true
+                inlined: true
+
+    REuse_Printer_ParameterApplication:
+        is_a: ParameterApplication
+        union_of:
+            - REuse_Printer_P1_Application
+            - REuse_Printer_P2_Application
+            - REuse_Printer_P3_Application
+            - REuse_Printer_P4_Application
+            - REuse_Printer_P5_Application
+
+    REuse_Printer_P1_Application:
+        is_a: ParameterApplication
+        description: Product Diagnosis parameter application for Printer
+        attributes:
+            parameter_ref:
+                ifabsent: string(P1_product_diagnosis)
+            weight:
+                ifabsent: float(0.125)
+
+    REuse_Printer_P2_Application:
+        is_a: ParameterApplication
+        description: Warranty Information parameter application for Printer
+        attributes:
+            parameter_ref:
+                ifabsent: string(P2_warranty_information)
+            weight:
+                ifabsent: float(0.041666667)
+
+    REuse_Printer_P3_Application:
+        is_a: ParameterApplication
+        description: Resetting Product parameter application for Printer
+        attributes:
+            parameter_ref:
+                ifabsent: string(P3_resetting_product)
+            weight:
+                ifabsent: float(0.291666669)
+
+    REuse_Printer_P4_Application:
+        is_a: ParameterApplication
+        description: Data Confidentiality parameter application for Printer
+        attributes:
+            parameter_ref:
+                ifabsent: string(P4_data_confidentiality)
+            weight:
+                ifabsent: float(0.208333332)
+
+    REuse_Printer_P5_Application:
+        is_a: ParameterApplication
+        description: New Ownership parameter application for Printer
+        attributes:
+            parameter_ref:
+                ifabsent: string(P5_new_ownership)
+            weight:
+                ifabsent: float(0.083333334)

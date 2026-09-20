@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: CE-RISE Digital Product and Material Passport (DPP & DMP) data-model architecture
+message: >-
+  2026.01 - DMP extension.
+type: software
+doi: 10.5281/zenodo.17776989
+authors:
+  - given-names: Riccardo
+    family-names: Boero
+    email: ribo@nilu.no
+    orcid: 'https://orcid.org/0000-0002-7468-9096'
+    affiliation: NILU
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.17776989
+    description: This DOI represents all software versions.
+repository-code: 'https://codeberg.org/CE-RISE_models/dp-architecture'
+url: 'https://ce-rise-models.codeberg.page/dp-architecture/'
+abstract: >-
+  Documentation of the overall CE-RISE DPP & DMP data-model architecture, including the structure of core and optional models, their relationships, profiles, and the conceptual approach used to organise and implement Digital Product and Material Passport information. Serves as the source for the project’s published documentation website.
+keywords:
+  - CE-RISE
+  - Data Model
+  - Ontology
+  - Open Source
+  - Open Science
+  - Digital Product Passport
+  - Digital Material Passport
+license: CC-BY-NC-4.0

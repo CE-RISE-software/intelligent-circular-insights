@@ -1,0 +1,23 @@
+/* Simple white background styling */
+[data-md-color-scheme="default"] {
+    --md-default-bg-color: #ffffff;
+    --md-default-fg-color: #333333;
+}
+
+.md-main__inner {
+    background-color: #ffffff;
+}
+
+.md-content {
+    background-color: #ffffff;
+}
+
+.md-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.md-footer {
+    background-color: #ffffff;
+    border-top: 1px solid #e0e0e0;
+}

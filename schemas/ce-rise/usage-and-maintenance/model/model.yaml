@@ -1,0 +1,981 @@
+id: https://ce-rise-models.codeberg.page/usage-and-maintenance/
+name: usage-and-maintenance
+title: CE-RISE Usage and Maintenance Data Model
+description: >
+    Data model for capturing product operation, usage patterns, maintenance activities,
+    and related instructions throughout the product lifecycle.
+license: CC BY-NC 4.0
+version: 0.1.1
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    uam: https://ce-rise-models.codeberg.page/usage-and-maintenance/
+    xsd: http://www.w3.org/2001/XMLSchema#
+    rdfs: http://www.w3.org/2000/01/rdf-schema#
+    schema: http://schema.org/
+    qudt: http://qudt.org/schema/qudt/
+    sosa: http://www.w3.org/ns/sosa/
+    ssn: http://www.w3.org/ns/ssn/
+    time: http://www.w3.org/2006/time#
+    prov: http://www.w3.org/ns/prov#
+    dcterms: http://purl.org/dc/terms/
+    foaf: http://xmlns.com/foaf/0.1/
+    gr: http://purl.org/goodrelations/v1#
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+
+default_prefix: uam
+default_range: string
+
+imports:
+    - linkml:types
+    - https://codeberg.org/CE-RISE-models/uncertainty-quantification/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/metrological-traceability/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/data-quality-framework/raw/tag/pages-v0.0.3/generated/schema
+
+classes:
+    UsageAndMaintenance:
+        description: "Root class for usage and maintenance data model"
+        tree_root: true
+        attributes:
+            use_instructions:
+                range: UseInstructions
+                description: "Instructions for proper product use and operation"
+                annotations:
+                    sql_identifier: uam_use_instructions
+            maintenance_instructions:
+                range: MaintenanceInstructions
+                description: "Instructions for product maintenance and servicing"
+                annotations:
+                    sql_identifier: uam_maintenance_instructions
+            maintenance_schedule:
+                range: MaintenanceSchedule
+                description: "Planned maintenance activities and intervals"
+                annotations:
+                    sql_identifier: uam_maintenance_schedule
+            spare_parts_information:
+                range: SparePartsInformation
+                description: "Information about spare parts and replacements"
+                annotations:
+                    sql_identifier: uam_spare_parts_info
+            service_provider_information:
+                range: ServiceProviderInformation
+                description: "Information about authorized service providers"
+                annotations:
+                    sql_identifier: uam_service_provider_info
+            usage_related_data:
+                range: UsageRelatedData
+                description: "Data about product usage patterns and metrics"
+                annotations:
+                    sql_identifier: uam_usage_related_data
+            maintenance_repair_related_data:
+                range: MaintenanceRepairRelatedData
+                description: "Data about maintenance activities and repair history"
+                annotations:
+                    sql_identifier: uam_maintenance_repair_data
+
+    # Stage 1: Reference Information (Static)
+
+    UseInstructions:
+        description: "Instructions for proper product use and operation"
+        class_uri: schema:HowTo
+        attributes:
+            operating_manual_url:
+                range: string
+                description: "URL to the operating manual"
+                slot_uri: schema:url
+                annotations:
+                    sql_identifier: uam_inst_operating_manual_url
+                    owl.filler: uam:operating_manual_url_value
+                    references: "Jensen et al."
+            quick_start_guide:
+                range: string
+                description: "Quick start instructions for basic operation"
+                slot_uri: schema:text
+                annotations:
+                    sql_identifier: uam_inst_quick_start
+                    owl.filler: uam:quick_start_guide_value
+            safety_precautions:
+                range: string
+                description: "Safety precautions for product use"
+                slot_uri: schema:warning
+                annotations:
+                    sql_identifier: uam_inst_safety_precautions
+                    owl.filler: uam:safety_precautions_value
+                    references: "CIRPASS; Jensen et al.; King et al."
+            optimal_operating_parameters:
+                range: string
+                description: "Recommended operating parameters for optimal performance"
+                annotations:
+                    sql_identifier: uam_inst_optimal_params
+                    owl.filler: uam:optimal_operating_parameters_value
+            prohibited_uses:
+                range: string
+                description: "Uses that are prohibited or not recommended"
+                annotations:
+                    sql_identifier: uam_inst_prohibited_uses
+                    owl.filler: uam:prohibited_uses_value
+            training_requirements:
+                range: string
+                description: "Training required for safe operation"
+                annotations:
+                    sql_identifier: uam_inst_training_req
+                    owl.filler: uam:training_requirements_value
+            troubleshooting_guide:
+                range: string
+                description: "Common issues and troubleshooting steps"
+                slot_uri: schema:potentialAction
+                annotations:
+                    sql_identifier: uam_inst_troubleshooting
+                    owl.filler: uam:troubleshooting_guide_value
+
+    MaintenanceInstructions:
+        description: "Instructions for product maintenance and servicing"
+        attributes:
+            maintenance_manual_url:
+                range: string
+                description: "URL to the maintenance manual"
+                slot_uri: schema:url
+                annotations:
+                    sql_identifier: uam_maint_inst_manual_url
+                    owl.filler: uam:maintenance_manual_url_value
+                    references: "ESPR; CIRPASS; King et al.; Jensen et al.; CE-RISE Deliverable 1.1"
+            routine_maintenance_procedures:
+                range: string
+                description: "Procedures for routine maintenance tasks"
+                annotations:
+                    sql_identifier: uam_maint_inst_routine_proc
+                    owl.filler: uam:routine_maintenance_procedures_value
+            cleaning_instructions:
+                range: string
+                description: "Instructions for cleaning the product"
+                annotations:
+                    sql_identifier: uam_maint_inst_cleaning
+                    owl.filler: uam:cleaning_instructions_value
+            lubrication_requirements:
+                range: string
+                description: "Lubrication points and requirements"
+                annotations:
+                    sql_identifier: uam_maint_inst_lubrication
+                    owl.filler: uam:lubrication_requirements_value
+            inspection_checklists:
+                range: string
+                description: "Checklists for maintenance inspections"
+                annotations:
+                    sql_identifier: uam_maint_inst_inspection_lists
+                    owl.filler: uam:inspection_checklists_value
+            calibration_procedures:
+                range: string
+                description: "Procedures for calibration"
+                annotations:
+                    sql_identifier: uam_maint_inst_calibration_proc
+                    owl.filler: uam:calibration_procedures_value
+            storage_instructions:
+                range: string
+                description: "Instructions for proper storage when not in use"
+                annotations:
+                    sql_identifier: uam_maint_inst_storage
+                    owl.filler: uam:storage_instructions_value
+            decommissioning_procedures:
+                range: string
+                description: "Procedures for safe decommissioning"
+                annotations:
+                    sql_identifier: uam_maint_inst_decommissioning
+                    owl.filler: uam:decommissioning_procedures_value
+            special_tools_required:
+                range: string
+                description: "Special tools required for maintenance"
+                annotations:
+                    sql_identifier: uam_maint_inst_special_tools
+                    owl.filler: uam:special_tools_required_value
+            maintenance_safety_requirements:
+                range: string
+                description: "Safety requirements for maintenance activities"
+                annotations:
+                    sql_identifier: uam_maint_inst_safety_req
+                    owl.filler: uam:maintenance_safety_requirements_value
+
+    MaintenanceSchedule:
+        description: "Planned maintenance activities and intervals"
+        class_uri: schema:MaintenanceSchedule
+        attributes:
+            preventive_maintenance_intervals:
+                range: string
+                description: "Schedule for preventive maintenance activities"
+                annotations:
+                    sql_identifier: uam_sched_preventive_intervals
+                    owl.filler: uam:preventive_maintenance_intervals_value
+            predictive_maintenance_triggers:
+                range: string
+                description: "Conditions that trigger predictive maintenance"
+                annotations:
+                    sql_identifier: uam_sched_predictive_triggers
+                    owl.filler: uam:predictive_maintenance_triggers_value
+                    references: "Berger et al.; CE-RISE Deliverable 1.1"
+            mandatory_inspections:
+                range: string
+                description: "Schedule for mandatory inspections"
+                annotations:
+                    sql_identifier: uam_sched_mandatory_inspections
+                    owl.filler: uam:mandatory_inspections_value
+            calibration_schedule:
+                range: string
+                description: "Schedule for calibration activities"
+                annotations:
+                    sql_identifier: uam_sched_calibration
+                    owl.filler: uam:calibration_schedule_value
+            component_replacement_schedule:
+                range: string
+                description: "Schedule for component replacements"
+                annotations:
+                    sql_identifier: uam_sched_component_replacement
+                    owl.filler: uam:component_replacement_schedule_value
+
+    SparePartsInformation:
+        description: "Information about spare parts and replacements"
+        attributes:
+            critical_spare_parts_list:
+                range: string
+                description: "List of critical spare parts required"
+                slot_uri: gr:includes
+                annotations:
+                    sql_identifier: uam_spare_critical_list
+                    owl.filler: uam:critical_spare_parts_list_value
+            spare_parts_availability:
+                range: string
+                description: "Information about spare parts availability"
+                slot_uri: gr:availability
+                annotations:
+                    sql_identifier: uam_spare_availability
+                    owl.filler: uam:spare_parts_availability_value
+                    references: "ESPR; King et al.; CE-RISE Deliverable 1.1"
+            parts_interchangeability:
+                range: string
+                description: "Information about interchangeable parts"
+                annotations:
+                    sql_identifier: uam_spare_interchangeable
+                    owl.filler: uam:parts_interchangeability_value
+            parts_suppliers:
+                range: string
+                description: "List of authorized parts suppliers"
+                slot_uri: gr:BusinessEntity
+                annotations:
+                    sql_identifier: uam_spare_suppliers
+                    owl.filler: uam:parts_suppliers_value
+            parts_ordering_information:
+                range: string
+                description: "Information on how to order spare parts"
+                annotations:
+                    sql_identifier: uam_spare_ordering_info
+                    owl.filler: uam:parts_ordering_information_value
+                    references: "CE-RISE Deliverable 1.1"
+
+    ServiceProviderInformation:
+        description: "Information about authorized service providers"
+        class_uri: schema:Service
+        attributes:
+            authorized_service_centers:
+                range: string
+                description: "List of authorized service centers"
+                slot_uri: schema:provider
+                annotations:
+                    sql_identifier: uam_service_centers
+                    owl.filler: uam:authorized_service_centers_value
+            service_hotline:
+                range: string
+                description: "Contact number for service support"
+                slot_uri: schema:telephone
+                annotations:
+                    sql_identifier: uam_service_hotline
+                    owl.filler: uam:service_hotline_value
+            remote_support_availability:
+                range: boolean
+                description: "Whether remote support is available"
+                annotations:
+                    sql_identifier: uam_service_remote_support
+                    owl.filler: uam:remote_support_availability_value
+            service_contract_options:
+                range: string
+                description: "Available service contract options"
+                slot_uri: schema:offers
+                annotations:
+                    sql_identifier: uam_service_contracts
+                    owl.filler: uam:service_contract_options_value
+            warranty_service_terms:
+                range: string
+                description: "Terms and conditions for warranty service"
+                slot_uri: schema:termsOfService
+                annotations:
+                    sql_identifier: uam_service_warranty_terms
+                    owl.filler: uam:warranty_service_terms_value
+
+    # Stage 2: Usage Data Collection (State-Based)
+
+    UsageRelatedData:
+        description: "Container for product usage data and metrics"
+        attributes:
+            usage_metrics:
+                range: UsageMetrics
+                description: "Quantitative measurements of product usage"
+                annotations:
+                    sql_identifier: uam_usage_metrics
+            operational_conditions:
+                range: OperationalConditions
+                description: "Environmental and operational parameters during use"
+                annotations:
+                    sql_identifier: uam_operational_conditions
+            usage_patterns:
+                range: UsagePatterns
+                description: "Patterns and behaviors in product usage"
+                annotations:
+                    sql_identifier: uam_usage_patterns
+            performance_tracking:
+                range: PerformanceTracking
+                description: "Product performance metrics over time"
+                annotations:
+                    sql_identifier: uam_performance_tracking
+
+    UsageMetrics:
+        description: "Quantitative measurements of product usage"
+        attributes:
+            total_operating_hours:
+                range: float
+                description: "Total hours the product has been in operation"
+                slot_uri: sosa:hasSimpleResult
+                annotations:
+                    sql_identifier: uam_usage_total_hours
+                    owl.filler: uam:total_operating_hours_value
+                    qudt:unit: qudt:Hour
+                    references: "Jensen et al.; CE-RISE Deliverable 1.1"
+            power_on_cycles:
+                range: integer
+                description: "Number of times the product has been powered on"
+                annotations:
+                    sql_identifier: uam_usage_power_cycles
+                    owl.filler: uam:power_on_cycles_value
+                    references: "Jensen et al.; CE-RISE Deliverable 1.1"
+            usage_intensity:
+                range: string
+                description: "Level of usage intensity (light, moderate, heavy, continuous)"
+                annotations:
+                    sql_identifier: uam_usage_intensity
+                    owl.filler: uam:usage_intensity_value
+            energy_consumption:
+                range: float
+                description: "Total energy consumed during operation"
+                slot_uri: sosa:hasSimpleResult
+                annotations:
+                    sql_identifier: uam_usage_energy_consumption
+                    owl.filler: uam:energy_consumption_value
+                    qudt:unit: qudt:KilowattHour
+            distance_traveled:
+                range: float
+                description: "Total distance traveled (for mobile products)"
+                annotations:
+                    sql_identifier: uam_usage_distance
+                    owl.filler: uam:distance_traveled_value
+                    qudt:unit: qudt:Kilometer
+            load_cycles:
+                range: integer
+                description: "Number of load/unload cycles (for applicable products)"
+                annotations:
+                    sql_identifier: uam_usage_load_cycles
+                    owl.filler: uam:load_cycles_value
+            average_daily_usage:
+                range: float
+                description: "Average hours of usage per day"
+                annotations:
+                    sql_identifier: uam_usage_avg_daily
+                    owl.filler: uam:average_daily_usage_value
+                    qudt:unit: qudt:Hour
+            usage_metrics_uncertainty_statements:
+                range: UncertaintyStatement
+                description: "Optional uncertainty statements for accumulated usage measurements such as operating hours, cycles, energy consumption, distance, and average usage"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_usage_metrics_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            usage_metrics_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: "Optional metrological traceability statements for usage measurements, counters, meters, sensors, methods, calibrations, or reference standards"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_usage_metrics_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            usage_metrics_data_quality_assessments:
+                range: DataQualityAssessment
+                description: "Optional data quality assessments for usage metrics, evidence, provenance, completeness, timeliness, or representativeness"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_usage_metrics_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    OperationalConditions:
+        description: "Environmental and operational parameters during product use"
+        class_uri: sosa:ObservationCollection
+        attributes:
+            typical_operating_temperature:
+                range: string
+                description: "Typical temperature range during operation"
+                slot_uri: ssn:hasProperty
+                annotations:
+                    sql_identifier: uam_op_temp_range
+                    owl.filler: uam:typical_operating_temperature_value
+                    qudt:unit: qudt:DegreeCelsius
+            typical_humidity_range:
+                range: string
+                description: "Typical humidity range during operation"
+                slot_uri: ssn:hasProperty
+                annotations:
+                    sql_identifier: uam_op_humidity_range
+                    owl.filler: uam:typical_humidity_range_value
+                    qudt:unit: qudt:Percent
+            vibration_exposure:
+                range: string
+                description: "Level of vibration exposure during operation"
+                annotations:
+                    sql_identifier: uam_op_vibration
+                    owl.filler: uam:vibration_exposure_value
+            environmental_conditions:
+                range: string
+                description: "Description of typical environmental conditions"
+                annotations:
+                    sql_identifier: uam_op_environment
+                    owl.filler: uam:environmental_conditions_value
+                    references: "Jensen et al.; CE-RISE Deliverable 1.1"
+            operating_location_type:
+                range: string
+                description: "Type of location where product is typically operated (indoor, outdoor, mixed, industrial, residential, commercial)"
+                annotations:
+                    sql_identifier: uam_op_location_type
+                    owl.filler: uam:operating_location_type_value
+                    references: "Jensen et al.; CE-RISE Deliverable 1.1"
+            operational_conditions_uncertainty_statements:
+                range: UncertaintyStatement
+                description: "Optional uncertainty statements for operating temperature, humidity, vibration, location, or environmental condition summaries"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_op_conditions_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            operational_conditions_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: "Optional metrological traceability statements for operational condition measurements, sensors, methods, calibrations, or reference standards"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_op_conditions_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            operational_conditions_data_quality_assessments:
+                range: DataQualityAssessment
+                description: "Optional data quality assessments for operational condition data, evidence, provenance, completeness, timeliness, or representativeness"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_op_conditions_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    UsagePatterns:
+        description: "Patterns and behaviors in product usage"
+        attributes:
+            primary_use_case:
+                range: string
+                description: "Primary application or use case for the product"
+                annotations:
+                    sql_identifier: uam_pattern_primary_use
+                    owl.filler: uam:primary_use_case_value
+            secondary_use_cases:
+                range: string
+                description: "Additional or alternative use cases"
+                annotations:
+                    sql_identifier: uam_pattern_secondary_uses
+                    owl.filler: uam:secondary_use_cases_value
+            peak_usage_periods:
+                range: string
+                description: "Time periods of peak usage"
+                annotations:
+                    sql_identifier: uam_pattern_peak_periods
+                    owl.filler: uam:peak_usage_periods_value
+            idle_time_percentage:
+                range: float
+                description: "Percentage of time product is idle"
+                annotations:
+                    sql_identifier: uam_pattern_idle_percent
+                    owl.filler: uam:idle_time_percentage_value
+                    qudt:unit: qudt:Percent
+            seasonal_variation:
+                range: string
+                description: "Description of seasonal usage variations"
+                annotations:
+                    sql_identifier: uam_pattern_seasonal
+                    owl.filler: uam:seasonal_variation_value
+
+    PerformanceTracking:
+        description: "Product performance metrics over time"
+        attributes:
+            current_efficiency:
+                range: float
+                description: "Current operational efficiency compared to baseline"
+                annotations:
+                    sql_identifier: uam_perf_current_efficiency
+                    owl.filler: uam:current_efficiency_value
+                    qudt:unit: qudt:Percent
+            performance_degradation_rate:
+                range: float
+                description: "Rate of performance degradation over time"
+                annotations:
+                    sql_identifier: uam_perf_degradation_rate
+                    owl.filler: uam:performance_degradation_rate_value
+                    qudt:unit: qudt:PercentPerYear
+            reliability_score:
+                range: float
+                description: "Current reliability score based on failure rates"
+                annotations:
+                    sql_identifier: uam_perf_reliability_score
+                    owl.filler: uam:reliability_score_value
+            mean_time_between_failures:
+                range: float
+                description: "Average time between failures (MTBF)"
+                annotations:
+                    sql_identifier: uam_perf_mtbf
+                    owl.filler: uam:mean_time_between_failures_value
+                    qudt:unit: qudt:Hour
+            availability_percentage:
+                range: float
+                description: "Percentage of time product is available for use"
+                annotations:
+                    sql_identifier: uam_perf_availability
+                    owl.filler: uam:availability_percentage_value
+                    qudt:unit: qudt:Percent
+            performance_tracking_uncertainty_statements:
+                range: UncertaintyStatement
+                description: "Optional uncertainty statements for performance, degradation, reliability, MTBF, or availability metrics"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_perf_tracking_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            performance_tracking_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: "Optional metrological traceability statements for performance measurements, methods, sensors, calibrations, baselines, or reference standards"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_perf_tracking_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            performance_tracking_data_quality_assessments:
+                range: DataQualityAssessment
+                description: "Optional data quality assessments for performance tracking data, evidence, provenance, completeness, timeliness, or representativeness"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_perf_tracking_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    # Stage 3: Maintenance/Repair Events (Event-Based)
+
+    MaintenanceRepairRelatedData:
+        description: "Container for maintenance and repair information"
+        attributes:
+            maintenance_history:
+                range: MaintenanceHistory
+                description: "Record of completed maintenance activities"
+                multivalued: true
+                annotations:
+                    sql_identifier: uam_maintenance_history
+            repair_history:
+                range: RepairHistory
+                description: "Record of repairs performed on the product"
+                multivalued: true
+                annotations:
+                    sql_identifier: uam_repair_history
+            software_preparation:
+                range: SoftwarePreparation
+                description: "Records of OS/software preparation performed during refurbishment or servicing"
+                multivalued: true
+                annotations:
+                    sql_identifier: uam_software_preparation
+
+    MaintenanceHistory:
+        description: "Record of completed maintenance activities (event-based)"
+        class_uri: prov:Activity
+        attributes:
+            maintenance_date:
+                range: date
+                description: "Date when maintenance was performed"
+                slot_uri: prov:atTime
+                annotations:
+                    sql_identifier: uam_maint_hist_date
+                    owl.filler: uam:maintenance_date_value
+                    references: "CIRPASS; CE-RISE Deliverable 1.1"
+            maintenance_type:
+                range: string
+                description: "Type of maintenance performed (preventive, predictive, corrective, inspection, calibration)"
+                annotations:
+                    sql_identifier: uam_maint_hist_type
+                    owl.filler: uam:maintenance_type_value
+            maintenance_description:
+                range: string
+                description: "Description of maintenance activities performed"
+                slot_uri: dcterms:description
+                annotations:
+                    sql_identifier: uam_maint_hist_description
+                    owl.filler: uam:maintenance_description_value
+                    references: "King et al.; CE-RISE Deliverable 1.1"
+            technician_id:
+                range: string
+                description: "Identifier of technician who performed maintenance"
+                slot_uri: prov:wasAssociatedWith
+                annotations:
+                    sql_identifier: uam_maint_hist_technician_id
+                    owl.filler: uam:technician_id_value
+            service_organization:
+                range: string
+                description: "Organization that performed the maintenance"
+                slot_uri: prov:wasAttributedTo
+                annotations:
+                    sql_identifier: uam_maint_hist_service_org
+                    owl.filler: uam:service_organization_value
+                    references: "King et al.; CE-RISE Deliverable 1.1"
+            parts_replaced:
+                range: ReplacedComponent
+                description: "Structured records of parts replaced during maintenance"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    sql_identifier: uam_maint_hist_parts_replaced
+                    owl.filler: uam:parts_replaced_value
+                    references: "CIRPASS; CE-RISE Deliverable 1.1"
+            maintenance_cost:
+                range: float
+                description: "Cost of the maintenance activity"
+                slot_uri: gr:hasCurrencyValue
+                annotations:
+                    sql_identifier: uam_maint_hist_cost
+                    owl.filler: uam:maintenance_cost_value
+                    references: "CIRPASS; CE-RISE Deliverable 1.1"
+            next_maintenance_due:
+                range: date
+                description: "Date when next maintenance is due"
+                annotations:
+                    sql_identifier: uam_maint_hist_next_due
+                    owl.filler: uam:next_maintenance_due_value
+            maintenance_duration:
+                range: float
+                description: "Time taken to complete the maintenance"
+                annotations:
+                    sql_identifier: uam_maint_hist_duration
+                    owl.filler: uam:maintenance_duration_value
+                    qudt:unit: qudt:Hour
+            maintenance_effectiveness:
+                range: string
+                description: "Assessment of maintenance effectiveness"
+                annotations:
+                    sql_identifier: uam_maint_hist_effectiveness
+                    owl.filler: uam:maintenance_effectiveness_value
+            maintenance_history_uncertainty_statements:
+                range: UncertaintyStatement
+                description: "Optional uncertainty statements for maintenance cost, duration, effectiveness, next-due dates, or other estimated maintenance-event values"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_maint_hist_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            maintenance_history_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: "Optional metrological traceability statements for maintenance events involving inspections, calibration, measurements, tools, methods, standards, or reference materials"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_maint_hist_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            maintenance_history_data_quality_assessments:
+                range: DataQualityAssessment
+                description: "Optional data quality assessments for maintenance event records, evidence, provenance, completeness, timeliness, or representativeness"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_maint_hist_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    RepairHistory:
+        description: "Record of repairs performed on the product (event-based)"
+        class_uri: prov:Activity
+        attributes:
+            repair_date:
+                range: date
+                description: "Date when repair was performed"
+                slot_uri: prov:atTime
+                annotations:
+                    sql_identifier: uam_repair_hist_date
+                    owl.filler: uam:repair_date_value
+            failure_description:
+                range: string
+                description: "Description of the failure or problem"
+                slot_uri: dcterms:description
+                annotations:
+                    sql_identifier: uam_repair_hist_failure_desc
+                    owl.filler: uam:failure_description_value
+            root_cause_analysis:
+                range: string
+                description: "Analysis of the root cause of failure"
+                annotations:
+                    sql_identifier: uam_repair_hist_root_cause
+                    owl.filler: uam:root_cause_analysis_value
+            repair_actions_taken:
+                range: string
+                description: "Description of repair actions performed"
+                annotations:
+                    sql_identifier: uam_repair_hist_actions
+                    owl.filler: uam:repair_actions_taken_value
+            components_replaced:
+                range: ReplacedComponent
+                description: "Structured records of components replaced during repair"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                annotations:
+                    sql_identifier: uam_repair_hist_components
+                    owl.filler: uam:components_replaced_value
+                    references: "CIRPASS; CE-RISE Deliverable 1.1"
+            repair_duration:
+                range: float
+                description: "Time taken to complete the repair"
+                annotations:
+                    sql_identifier: uam_repair_hist_duration
+                    owl.filler: uam:repair_duration_value
+                    qudt:unit: qudt:Hour
+            repair_cost:
+                range: float
+                description: "Cost of the repair"
+                slot_uri: gr:hasCurrencyValue
+                annotations:
+                    sql_identifier: uam_repair_hist_cost
+                    owl.filler: uam:repair_cost_value
+                    references: "CIRPASS"
+            warranty_coverage:
+                range: boolean
+                description: "Whether repair was covered under warranty"
+                annotations:
+                    sql_identifier: uam_repair_hist_warranty
+                    owl.filler: uam:warranty_coverage_value
+            repair_effectiveness:
+                range: string
+                description: "Assessment of repair effectiveness"
+                annotations:
+                    sql_identifier: uam_repair_hist_effectiveness
+                    owl.filler: uam:repair_effectiveness_value
+            downtime_caused:
+                range: float
+                description: "Product downtime caused by the failure"
+                annotations:
+                    sql_identifier: uam_repair_hist_downtime
+                    owl.filler: uam:downtime_caused_value
+                    qudt:unit: qudt:Hour
+            failure_category:
+                range: string
+                description: "Category of failure (mechanical, electrical, software, wear, misuse)"
+                annotations:
+                    sql_identifier: uam_repair_hist_failure_category
+                    owl.filler: uam:failure_category_value
+            repair_history_uncertainty_statements:
+                range: UncertaintyStatement
+                description: "Optional uncertainty statements for repair cost, duration, downtime, effectiveness, root-cause assessment, or other estimated repair-event values"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_repair_hist_uncertainty
+                    owl.filler: uq:uncertaintyStatement
+            repair_history_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: "Optional metrological traceability statements for repair events involving measurements, calibrated tools, inspection methods, standards, or reference materials"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_repair_hist_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            repair_history_data_quality_assessments:
+                range: DataQualityAssessment
+                description: "Optional data quality assessments for repair event records, evidence, provenance, completeness, timeliness, or representativeness"
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: uam_repair_hist_data_quality
+                    owl.filler: dqf:dataQualityAssessment
+
+    SoftwarePreparation:
+        description: "Record of OS and software preparation performed on a device during refurbishment or servicing. Version snapshots (BIOS/firmware/OS/driver before-after) are captured by diagnostic-results SoftwareVersionRecord; this class records the preparation outcome (image, licensing, configuration, reset, boot result)."
+        class_uri: prov:Activity
+        attributes:
+            preparation_date:
+                range: date
+                description: "Date the software preparation was performed"
+                slot_uri: dcterms:date
+                annotations:
+                    sql_identifier: uam_swprep_date
+                    owl.filler: uam:preparation_date_value
+            os_image:
+                range: string
+                description: "Operating system image installed (name / identifier)"
+                slot_uri: schema:name
+                annotations:
+                    sql_identifier: uam_swprep_os_image
+                    owl.filler: uam:os_image_value
+            license_status:
+                range: string
+                description: "Licensing basis or status of the installed software (e.g. OEM, volume, reused, none)"
+                slot_uri: schema:license
+                annotations:
+                    sql_identifier: uam_swprep_license_status
+                    owl.filler: uam:license_status_value
+            driver_pack:
+                range: string
+                description: "Driver pack installed (name / version)"
+                slot_uri: schema:softwareVersion
+                annotations:
+                    sql_identifier: uam_swprep_driver_pack
+                    owl.filler: uam:driver_pack_value
+            update_state:
+                range: string
+                description: "State of software updates after preparation (e.g. fully updated, pending updates)"
+                slot_uri: schema:actionStatus
+                annotations:
+                    sql_identifier: uam_swprep_update_state
+                    owl.filler: uam:update_state_value
+            bios_configuration:
+                range: string
+                description: "BIOS / firmware configuration settings applied"
+                slot_uri: dcterms:description
+                annotations:
+                    sql_identifier: uam_swprep_bios_config
+                    owl.filler: uam:bios_configuration_value
+            device_reset_state:
+                range: string
+                description: "Device reset / factory state after preparation (e.g. factory reset, OOBE-ready)"
+                slot_uri: schema:actionStatus
+                annotations:
+                    sql_identifier: uam_swprep_reset_state
+                    owl.filler: uam:device_reset_state_value
+            final_boot_result:
+                range: string
+                description: "Result of the final boot test after preparation"
+                slot_uri: schema:result
+                annotations:
+                    sql_identifier: uam_swprep_final_boot_result
+                    owl.filler: uam:final_boot_result_value
+            prepared_by:
+                range: string
+                description: "Technician, organisation, or system that performed the preparation"
+                slot_uri: prov:wasAssociatedWith
+                annotations:
+                    sql_identifier: uam_swprep_prepared_by
+                    owl.filler: uam:prepared_by_value
+            preparation_notes:
+                range: string
+                description: "Free-text notes about the software preparation"
+                slot_uri: dcterms:description
+                annotations:
+                    sql_identifier: uam_swprep_notes
+                    owl.filler: uam:preparation_notes_value
+
+    ReplacedComponent:
+        description: "Structured record of a single part or component replaced during maintenance or repair. Harmonised with diagnostic-results ReplacedPart and traceability RefurbishmentEvent."
+        attributes:
+            component_name:
+                range: string
+                description: "Name of the replaced part or component"
+                slot_uri: schema:name
+                annotations:
+                    sql_identifier: uam_replaced_component_name
+                    owl.filler: uam:component_name_value
+            old_part_number:
+                range: string
+                description: "Part number of the removed part"
+                slot_uri: schema:identifier
+                annotations:
+                    sql_identifier: uam_replaced_old_part_number
+                    owl.filler: uam:old_part_number_value
+            old_serial_number:
+                range: string
+                description: "Serial number of the removed part"
+                slot_uri: schema:serialNumber
+                annotations:
+                    sql_identifier: uam_replaced_old_serial_number
+                    owl.filler: uam:old_serial_number_value
+            new_part_number:
+                range: string
+                description: "Part number of the installed replacement part"
+                slot_uri: schema:identifier
+                annotations:
+                    sql_identifier: uam_replaced_new_part_number
+                    owl.filler: uam:new_part_number_value
+            new_serial_number:
+                range: string
+                description: "Serial number of the installed replacement part"
+                slot_uri: schema:serialNumber
+                annotations:
+                    sql_identifier: uam_replaced_new_serial_number
+                    owl.filler: uam:new_serial_number_value
+            manufacturer:
+                range: string
+                description: "Manufacturer of the replacement part"
+                slot_uri: schema:manufacturer
+                annotations:
+                    sql_identifier: uam_replaced_manufacturer
+                    owl.filler: uam:manufacturer_value
+            replacement_quantity:
+                range: integer
+                description: "Quantity of parts replaced"
+                slot_uri: schema:value
+                annotations:
+                    sql_identifier: uam_replaced_quantity
+                    owl.filler: uam:replacement_quantity_value
+            replacement_reason:
+                range: string
+                description: "Reason for the replacement"
+                slot_uri: dcterms:description
+                annotations:
+                    sql_identifier: uam_replaced_reason
+                    owl.filler: uam:replacement_reason_value
+            replacement_condition:
+                range: string
+                description: "Condition of the replacement part (e.g. new, refurbished, used)"
+                slot_uri: schema:itemCondition
+                annotations:
+                    sql_identifier: uam_replaced_condition
+                    owl.filler: uam:replacement_condition_value

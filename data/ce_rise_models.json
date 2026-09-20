@@ -1,6 +1,269 @@
 [
   {
-    "feature_use": "Use as the system-level map that decides which model modules should be consulted for a user task.",
+    "class_count": 31,
+    "classes": [
+      "Assessment",
+      "BeginningOfLifeInformation",
+      "CRMRecovery",
+      "CircularCapability",
+      "CircularityAndEOL",
+      "CircularityAssessments",
+      "CollectionAndSorting",
+      "CriticalMaterial",
+      "DesignForCircularity",
+      "DisassemblyFeatures",
+      "DurabilityFeatures",
+      "EndOfLifeInformation",
+      "EnergyRecovery",
+      "Landfilling",
+      "LifespanFactors",
+      "MaterialCompositionEntry",
+      "MaterialSelection",
+      "ModularDesign",
+      "NonRecyclableMaterials",
+      "ProductLevelSummary",
+      "ProductPerformanceFactors",
+      "RecoveryMethods",
+      "RecyclableMaterials",
+      "RecyclingInfrastructure",
+      "RecyclingPathways",
+      "ResourceEfficiency",
+      "SecondaryRawMaterials",
+      "SpecialTreatment",
+      "SubScore",
+      "TreatmentOptions",
+      "WEEERecyclingStream"
+    ],
+    "declared_name": "circularity-and-eol",
+    "id": "circularity-and-eol",
+    "keywords": [
+      "circularity",
+      "end of life",
+      "recycling",
+      "reuse",
+      "disposal",
+      "recovery"
+    ],
+    "layer": "Circularity",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/circularity-and-eol/",
+    "summary": "Data model capturing circularity and end-of-life information for products, including design-for-circularity attributes, performance factors and scores, and end-of-life pathways such as disassembly, recycling, treatment options, and CRM recovery-related information.",
+    "title": "CE-RISE Circularity and End-of-Life Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/circularity-and-eol",
+    "version": "0.1.1"
+  },
+  {
+    "class_count": 39,
+    "classes": [
+      "Amendment",
+      "ApplicabilityStatus",
+      "ApplicableRegulationStandards",
+      "AuditRecord",
+      "CertificationDetails",
+      "Commitment",
+      "CommitmentCategory",
+      "ComplianceAndStandards",
+      "ComplianceStatement",
+      "ComplianceStatements",
+      "ComplianceStatus",
+      "DigitalSignature",
+      "DocumentAccess",
+      "EntityCommitments",
+      "EntityEvidence",
+      "EvidenceDocument",
+      "EvidenceReferences",
+      "ImprovementTarget",
+      "IssuingAuthority",
+      "KeyPerformanceIndicator",
+      "ManagementSystem",
+      "PerformanceMetrics",
+      "ProcessEvidence",
+      "RegistrationNumber",
+      "RegulatoryIdentifier",
+      "RegulatoryIdentifiers",
+      "RegulatoryInformation",
+      "RequirementEntry",
+      "RequirementScope",
+      "ResponsibleParties",
+      "ResponsibleParty",
+      "SafetyInformation",
+      "SafetyItem",
+      "ScopeOfEvidence",
+      "StakeholderScope",
+      "StandardReference",
+      "StandardVersion",
+      "UsageInstructions",
+      "ValidityPeriod"
+    ],
+    "declared_name": "compliance_and_standards",
+    "id": "compliance-and-standards",
+    "keywords": [
+      "compliance",
+      "standard",
+      "regulation",
+      "certificate",
+      "declaration",
+      "conformity"
+    ],
+    "layer": "Compliance",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "namespace": "https://ce-rise-models.codeberg.page/compliance-and-standards/",
+    "summary": "Data model for regulatory compliance, standards, and conformity-related information for products and materials, including applicable regulations and standards, commitments, documentary evidence, process evidence, and structured regulatory information sheets. Supports both Digital Product Passports (DPP) and Digital Material Passports (DMP).",
+    "title": "CE-RISE Compliance and Standards Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/compliance-and-standards",
+    "version": "0.1.0"
+  },
+  {
+    "class_count": 12,
+    "classes": [
+      "DataCharacterization",
+      "DataQualityAssessment",
+      "DataQualityEvidenceReference",
+      "DataQualityFramework",
+      "DataQualityProfile",
+      "QualityAggregation",
+      "QualityCriterionAssessment",
+      "QualityDiagnostic",
+      "QualityIssue",
+      "QualityMetric",
+      "RemediationAction",
+      "UncertaintyTranslation"
+    ],
+    "declared_name": "data-quality-framework",
+    "id": "data-quality-framework",
+    "keywords": [
+      "data quality",
+      "dqr",
+      "representativeness",
+      "reliability",
+      "completeness"
+    ],
+    "layer": "Cross-cutting",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/data-quality-framework/",
+    "summary": "Cross-cutting utility data model for documenting data quality assessments, pedigree scores, diagnostics, remediation actions, provenance, and data-quality-derived uncertainty metadata for CE-RISE Digital Product Passport and Digital Material Passport data models.",
+    "title": "CE-RISE Data Quality Framework Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/data-quality-framework",
+    "version": "0.0.3"
+  },
+  {
+    "class_count": 31,
+    "classes": [
+      "AssessmentCriterion",
+      "CalibrationTraceability",
+      "ComponentHierarchy",
+      "ComponentInventory",
+      "ComponentSpecification",
+      "ComponentTestResults",
+      "ConditionMetrics",
+      "DataBearingComponent",
+      "DataSanitization",
+      "DegradationIndicators",
+      "DiagnosticEvent",
+      "DiagnosticQualityIssue",
+      "DiagnosticResults",
+      "DiagnosticSoftware",
+      "EnvironmentalConditions",
+      "MeasuredValue",
+      "PredictiveAnalytics",
+      "QualityAssessment",
+      "QualityMetadata",
+      "ReferenceValue",
+      "ReplacedPart",
+      "RiskFactor",
+      "ServiceActions",
+      "SessionMetadata",
+      "SoftwareVersionRecord",
+      "TestComparison",
+      "TestDeviation",
+      "TestParameter",
+      "TestingCertificate",
+      "UsageBasedPrediction",
+      "UsageQuantity"
+    ],
+    "declared_name": "diagnostic-results",
+    "id": "diagnostic-results",
+    "keywords": [
+      "diagnostic",
+      "test",
+      "inspection",
+      "condition",
+      "state of health"
+    ],
+    "layer": "Cross-cutting",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "namespace": "https://ce-rise-models.codeberg.page/diagnostic-results/",
+    "summary": "Structured outputs from diagnostic, repair, service, and condition-assessment operations",
+    "title": "Diagnostic Results Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/diagnostic-results",
+    "version": "0.2.0"
+  },
+  {
+    "class_count": 35,
+    "classes": [
+      "APISpecification",
+      "AccessControl",
+      "AccessLevels",
+      "AccessLogging",
+      "ArchivalStrategy",
+      "AuthenticatedAccess",
+      "AvailabilityCommitment",
+      "CapacityMetrics",
+      "CarrierLocation",
+      "CarrierRedundancy",
+      "CarrierUpdateMechanism",
+      "ConsentManagement",
+      "ConsumerSystem",
+      "DPAccessAndGovernance",
+      "DataCarrier",
+      "DataLongevity",
+      "DataMapping",
+      "DataSourceSystem",
+      "DisposalPolicy",
+      "FormatDelivery",
+      "InteroperabilityConfiguration",
+      "MaintenanceWindow",
+      "OperationalMetrics",
+      "PerformanceMetrics",
+      "ProtocolSupport",
+      "PublicAccess",
+      "RateLimit",
+      "RestrictedAccess",
+      "RetentionPolicy",
+      "RolePermission",
+      "SecuritySettings",
+      "ServiceMetrics",
+      "StandardsCompliance",
+      "SystemIntegration",
+      "UsageTracking"
+    ],
+    "declared_name": "dp_access_and_governance",
+    "id": "dp-access-and-governance",
+    "keywords": [
+      "access",
+      "governance",
+      "permission",
+      "role",
+      "consent",
+      "tiered"
+    ],
+    "layer": "Metadata",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/dp-access-and-governance/",
+    "summary": "Operational and access-related metadata that governs how DPP and DMP records are stored, exposed, shared, and maintained across systems. Full implementation with all five stages complete.",
+    "title": "CE-RISE DP Access and Governance Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/dp-access-and-governance",
+    "version": "0.0.3"
+  },
+  {
+    "class_count": 0,
+    "classes": [],
+    "declared_name": "dp-architecture",
     "id": "dp-architecture",
     "keywords": [
       "architecture",
@@ -10,688 +273,490 @@
       "module"
     ],
     "layer": "Architecture",
-    "neuro_symbolic_value": "The LLM interprets the user intent; symbolic routing maps the intent to the correct model layer before retrieval or calculation.",
-    "signals": [
-      {
-        "keywords": [
-          "schema",
-          "profile",
-          "passport"
-        ],
-        "label": "record composition",
-        "paths": [
-          "applied_schemas",
-          "schema_version"
-        ]
-      }
-    ],
-    "summary": "Overall CE-RISE DPP/DMP model architecture and composition strategy.",
-    "title": "DP Architecture",
-    "url": "https://codeberg.org/CE-RISE-models/dp-architecture"
+    "licence": "",
+    "licence_declared": "",
+    "namespace": "",
+    "summary": "This repository contains the source files for the CE-RISE Digital Product and Material Passport (DPP & DMP) data model architecture documentation website, published at: [https://ce-rise-models.codeberg.page/dp-architecture/](https://ce-rise-models.codeberg.page/dp-architecture/)",
+    "title": "dp-architecture",
+    "url": "https://codeberg.org/CE-RISE-models/dp-architecture",
+    "version": ""
   },
   {
-    "feature_use": "Strengthens Validate & Repair by checking whether a DPP declares which model/schema versions it follows.",
+    "class_count": 22,
+    "classes": [
+      "AuditRecord",
+      "BlockchainAnchoring",
+      "CustodianIdentity",
+      "CustodianRecord",
+      "CustodyEvent",
+      "CustodyPeriod",
+      "CustodyResponsibilities",
+      "DPRecordCustody",
+      "DataFingerprint",
+      "DisposalRecord",
+      "EventActor",
+      "EventIntegrity",
+      "EventMetadata",
+      "ExternalAttestation",
+      "GovernanceActions",
+      "IntegrityEvidence",
+      "RecordTransformationDetails",
+      "TransferAuthorization",
+      "TransferDetails",
+      "TransferRecord",
+      "TransferVerification",
+      "ValidationRecord"
+    ],
+    "declared_name": "dp_record_custody",
+    "id": "dp-record-custody",
+    "keywords": [
+      "custody",
+      "ownership",
+      "transfer",
+      "holder",
+      "chain"
+    ],
+    "layer": "Metadata",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/dp-record-custody/",
+    "summary": "Chain of custody and governance history of DPP and DMP records, capturing who did what when. Stage 1 focuses on Custody Events tracking with full audit trail capabilities.",
+    "title": "CE-RISE DP Record Custody Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/dp-record-custody",
+    "version": "0.0.3"
+  },
+  {
+    "class_count": 7,
+    "classes": [
+      "AppliedSchema",
+      "CompositionInfo",
+      "DPRecordMetadata",
+      "MetadataVersioning",
+      "RelatedPassport",
+      "SchemaReference",
+      "SchemaUsage"
+    ],
+    "declared_name": "dp-record-metadata",
     "id": "dp-record-metadata",
     "keywords": [
       "metadata",
       "schema",
       "version",
-      "related passport",
       "scope",
-      "record"
+      "record",
+      "identifier"
     ],
     "layer": "Metadata",
-    "neuro_symbolic_value": "Rules verify schema/version presence while the LLM explains missing metadata to non-technical users.",
-    "signals": [
-      {
-        "keywords": [
-          "dpp",
-          "passport",
-          "record"
-        ],
-        "label": "DPP identifier",
-        "paths": [
-          "dpp_id",
-          "id"
-        ]
-      },
-      {
-        "keywords": [
-          "schema",
-          "version"
-        ],
-        "label": "schema version",
-        "paths": [
-          "schema_version",
-          "applied_schemas"
-        ]
-      }
-    ],
-    "summary": "Universal metadata envelope declaring applied schemas, scope, related passports, and versioning.",
-    "title": "DP Record Metadata",
-    "url": "https://codeberg.org/CE-RISE-models/dp-record-metadata"
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/dp-record-metadata/",
+    "summary": "Universal metadata envelope for Digital Material and Product Passport records that declares which data models and schemas compose a DMP/DPP record, regardless of their origin. Supports any combination of CE-RISE models, industry standards, or proprietary schemas.",
+    "title": "CE-RISE DMP & DPP Record Metadata Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/dp-record-metadata",
+    "version": "0.0.2"
   },
   {
-    "feature_use": "Adds production readiness checks for who can read/write each DPP field and how data carriers expose it.",
-    "id": "dp-access-and-governance",
-    "keywords": [
-      "access",
-      "governance",
-      "role",
-      "permission",
-      "consent",
-      "public",
-      "restricted",
-      "carrier"
+    "class_count": 24,
+    "classes": [
+      "AggregatedResults",
+      "AssessmentBoundarySpecification",
+      "AssessmentIndicator",
+      "AssessmentInputReference",
+      "AssessmentInputSet",
+      "AssessmentResults",
+      "AssessmentToolExecution",
+      "AssessmentToolchain",
+      "CommissionerInfo",
+      "DatabaseInfo",
+      "FunctionalUnitSpecification",
+      "IndicatorResult",
+      "IntegratedLCAResults",
+      "InterpretationResults",
+      "LCAAnalysisInstance",
+      "LCADataQualityAssessment",
+      "LCAStudyMetadata",
+      "LifeCycleStageResult",
+      "Limitations",
+      "PractitionerInfo",
+      "SoftwareInfo",
+      "StandardCompliance",
+      "UncertaintyAnalysis",
+      "UncertaintyRange"
     ],
-    "layer": "Metadata",
-    "neuro_symbolic_value": "Symbolic access rules can block unsupported answers; the LLM can summarize policy in human terms.",
-    "signals": [
-      {
-        "keywords": [
-          "access",
-          "role",
-          "permission",
-          "restricted",
-          "public"
-        ],
-        "label": "access policy",
-        "paths": [
-          "access",
-          "governance",
-          "permissions"
-        ]
-      },
-      {
-        "keywords": [
-          "carrier",
-          "qr",
-          "nfc",
-          "data carrier"
-        ],
-        "label": "data carrier",
-        "paths": [
-          "carrier",
-          "qr",
-          "nfc"
-        ]
-      }
-    ],
-    "summary": "Operational access metadata for public, authenticated, restricted, consent, carrier, and logging rules.",
-    "title": "DP Access and Governance",
-    "url": "https://codeberg.org/CE-RISE-models/dp-access-and-governance"
-  },
-  {
-    "feature_use": "Supports audit trails for accepted repairs, generated DPP drafts, and provider writeback history.",
-    "id": "dp-record-custody",
-    "keywords": [
-      "custody",
-      "transfer",
-      "history",
-      "integrity",
-      "custodian",
-      "governance"
-    ],
-    "layer": "Metadata",
-    "neuro_symbolic_value": "The system can derive provenance chains symbolically and let the LLM narrate who changed what and why.",
-    "signals": [
-      {
-        "keywords": [
-          "custody",
-          "transfer",
-          "custodian",
-          "integrity"
-        ],
-        "label": "custody event",
-        "paths": [
-          "custody",
-          "history",
-          "events"
-        ]
-      }
-    ],
-    "summary": "Chain of custody and governance history for DPP/DMP records, including transfer and integrity evidence.",
-    "title": "DP Record Custody",
-    "url": "https://codeberg.org/CE-RISE-models/dp-record-custody"
-  },
-  {
-    "feature_use": "Anchors Search, Single DPP, Validate, and Synthesize around stable product identity.",
-    "id": "product-profile",
-    "keywords": [
-      "product",
-      "brand",
-      "model",
-      "gtin",
-      "serial",
-      "manufacturer",
-      "origin",
-      "category"
-    ],
-    "layer": "Core profile",
-    "neuro_symbolic_value": "The LLM normalizes messy product mentions; symbolic checks prevent mixing evidence from different products.",
-    "signals": [
-      {
-        "keywords": [
-          "product",
-          "brand",
-          "model",
-          "category"
-        ],
-        "label": "product identity",
-        "paths": [
-          "product.id",
-          "product.brand",
-          "product.model",
-          "product.category"
-        ]
-      },
-      {
-        "keywords": [
-          "gtin",
-          "serial",
-          "lot",
-          "identifier"
-        ],
-        "label": "product identifiers",
-        "paths": [
-          "gtin",
-          "serial",
-          "lot",
-          "dpp_id"
-        ]
-      }
-    ],
-    "summary": "Mandatory product identity, attributes, origin, and compliance context for Digital Product Passports.",
-    "title": "Product Profile",
-    "url": "https://codeberg.org/CE-RISE-models/product-profile"
-  },
-  {
-    "feature_use": "Improves Carbon and Synthesize by turning material lists into model-aligned material passport fields.",
-    "id": "material-profile",
-    "keywords": [
-      "material",
-      "composition",
-      "grade",
-      "supplier",
-      "origin",
-      "batch",
-      "chemical",
-      "recycled"
-    ],
-    "layer": "Core profile",
-    "neuro_symbolic_value": "Symbolic mass-balance checks validate material shares while the LLM extracts material names from free text.",
-    "signals": [
-      {
-        "keywords": [
-          "material",
-          "composition",
-          "share",
-          "mass"
-        ],
-        "label": "material composition",
-        "paths": [
-          "materials",
-          "composition"
-        ]
-      },
-      {
-        "keywords": [
-          "supplier",
-          "origin",
-          "batch",
-          "region"
-        ],
-        "label": "supplier/origin",
-        "paths": [
-          "supplier",
-          "origin",
-          "source_region"
-        ]
-      }
-    ],
-    "summary": "Mandatory material identity, composition, origin, supplier, and compliance context for Digital Material Passports.",
-    "title": "Material Profile",
-    "url": "https://codeberg.org/CE-RISE-models/material-profile"
-  },
-  {
-    "feature_use": "Adds lifecycle-event evidence to Search and enables route-specific carbon/repair/custody questions.",
-    "id": "traceability-and-life-cycle-events",
-    "keywords": [
-      "traceability",
-      "event",
-      "ownership",
-      "logistics",
-      "location",
-      "reverse logistics",
-      "return",
-      "batch"
-    ],
-    "layer": "Lifecycle events",
-    "neuro_symbolic_value": "LLM extraction can turn event narratives into candidate events; symbolic ordering checks timestamps and custody chains.",
-    "signals": [
-      {
-        "keywords": [
-          "event",
-          "logistics",
-          "ownership",
-          "location",
-          "return"
-        ],
-        "label": "lifecycle events",
-        "paths": [
-          "events",
-          "traceability",
-          "logistics"
-        ]
-      }
-    ],
-    "summary": "Dynamic lifecycle events for products/materials: ownership, logistics, value-adding activities, and reverse flows.",
-    "title": "Traceability and Life Cycle Events",
-    "url": "https://codeberg.org/CE-RISE-models/traceability-and-life-cycle-events"
-  },
-  {
-    "feature_use": "Powers practical technician questions and session-memory demonstrations around repair instructions.",
-    "id": "usage-and-maintenance",
-    "keywords": [
-      "usage",
-      "maintenance",
-      "manual",
-      "spare",
-      "service",
-      "repair",
-      "schedule",
-      "operating"
-    ],
-    "layer": "Lifecycle operations",
-    "neuro_symbolic_value": "The LLM answers technician language; symbolic filters require the answer to cite an instruction, schedule, or spare part.",
-    "signals": [
-      {
-        "keywords": [
-          "maintenance",
-          "repair",
-          "spare",
-          "service"
-        ],
-        "label": "maintenance instructions",
-        "paths": [
-          "maintenance",
-          "repair",
-          "spare_parts"
-        ]
-      },
-      {
-        "keywords": [
-          "usage",
-          "manual",
-          "operating",
-          "instruction"
-        ],
-        "label": "use instructions",
-        "paths": [
-          "usage",
-          "manual",
-          "instructions"
-        ]
-      }
-    ],
-    "summary": "Operational lifecycle model for use instructions, schedules, spare parts, usage metrics, and maintenance records.",
-    "title": "Usage and Maintenance",
-    "url": "https://codeberg.org/CE-RISE-models/usage-and-maintenance"
-  },
-  {
-    "feature_use": "Adds a new demo path for broken-product questions and repair evidence.",
-    "id": "diagnostic-results",
-    "keywords": [
-      "diagnostic",
-      "test",
-      "condition",
-      "fault",
-      "error",
-      "certificate",
-      "measurement",
-      "technician"
-    ],
-    "layer": "Lifecycle operations",
-    "neuro_symbolic_value": "LLM maps user symptom descriptions to diagnostics; symbolic rules compare measured values to pass/fail criteria.",
-    "signals": [
-      {
-        "keywords": [
-          "diagnostic",
-          "test",
-          "fault",
-          "error",
-          "condition"
-        ],
-        "label": "diagnostic event",
-        "paths": [
-          "diagnostic",
-          "tests",
-          "condition"
-        ]
-      }
-    ],
-    "summary": "Structured outputs from diagnostics, repair, service, predictive maintenance, and condition assessment.",
-    "title": "Diagnostic Results",
-    "url": "https://codeberg.org/CE-RISE-models/diagnostic-results"
-  },
-  {
-    "feature_use": "Formalizes the Carbon feature as an LCA evidence object instead of only a demo calculator output.",
+    "declared_name": "integrated-lca",
     "id": "integrated-lca",
     "keywords": [
       "lca",
-      "carbon",
-      "co2",
-      "co2e",
+      "life cycle",
       "footprint",
       "impact",
-      "functional unit",
-      "gwp"
+      "emission",
+      "carbon",
+      "pef"
     ],
     "layer": "Impact assessment",
-    "neuro_symbolic_value": "Rules compute totals and uncertainty; the LLM explains methodology, boundaries, and caveats.",
-    "signals": [
-      {
-        "keywords": [
-          "carbon",
-          "co2e",
-          "footprint",
-          "impact",
-          "gwp"
-        ],
-        "label": "impact result",
-        "paths": [
-          "carbon",
-          "lca",
-          "environmental"
-        ]
-      },
-      {
-        "keywords": [
-          "method",
-          "functional unit",
-          "boundary",
-          "scope"
-        ],
-        "label": "method boundary",
-        "paths": [
-          "methodology",
-          "functional_unit",
-          "boundary"
-        ]
-      }
-    ],
-    "summary": "Integrated life-cycle assessment results, impact indicators, methods, characterization choices, and settings.",
-    "title": "Integrated LCA",
-    "url": "https://codeberg.org/CE-RISE-models/integrated-lca"
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/integrated-lca/",
+    "summary": "Flexible framework for reproducible life cycle assessment across environmental, social, and economic dimensions, including study metadata, versioned assessment inputs, toolchains, methods, results, and data quality indicators. Supports both Digital Product Passports (DPP) and Digital Material Passports (DMP).",
+    "title": "CE-RISE Integrated Life Cycle Analysis Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/integrated-lca",
+    "version": "0.2.0"
   },
   {
-    "feature_use": "Connects Carbon, Validate, and Synthesize to formal circular economy/EOL indicators.",
-    "id": "circularity-and-eol",
+    "class_count": 10,
+    "classes": [
+      "Activity",
+      "ActivityType",
+      "ClassificationReference",
+      "Flow",
+      "FlowObject",
+      "LCIDataset",
+      "LCIDatasetLocation",
+      "LifecycleStage",
+      "SourceRecordReference",
+      "TemporalScope"
+    ],
+    "declared_name": "lci-dataset",
+    "id": "lci-dataset",
     "keywords": [
-      "circularity",
-      "end of life",
-      "recycling",
-      "repairability",
-      "recyclability",
-      "crm",
-      "disassembly",
-      "reuse"
+      "lci",
+      "inventory",
+      "dataset",
+      "unit process",
+      "exchange",
+      "flow"
     ],
-    "layer": "Circularity",
-    "neuro_symbolic_value": "The LLM extracts circularity claims; symbolic rules check score ranges, mass balance, and EOL route consistency.",
-    "signals": [
-      {
-        "keywords": [
-          "circularity",
-          "repairability",
-          "recyclability",
-          "reuse"
-        ],
-        "label": "circularity metrics",
-        "paths": [
-          "circularity",
-          "repairability",
-          "recyclability"
-        ]
-      },
-      {
-        "keywords": [
-          "end of life",
-          "eol",
-          "recycling",
-          "crm",
-          "disassembly"
-        ],
-        "label": "EOL pathways",
-        "paths": [
-          "end_of_life",
-          "eol"
-        ]
-      }
-    ],
-    "summary": "Circularity and EOL information including design-for-circularity, performance factors, scores, and EOL pathways.",
-    "title": "Circularity and End-of-Life",
-    "url": "https://codeberg.org/CE-RISE-models/circularity-and-eol"
+    "layer": "Impact assessment",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/lci-dataset/",
+    "summary": "A reusable, source-agnostic model for life cycle inventory datasets. It represents activities, flows, flow objects, lifecycle stages, locations, classifications, source records, and quantitative exchange data for products, materials, components, and assemblies. The model is independent of product-system assembly and life cycle assessment results and can be consumed by product-system, integrated-lca, and other tools.",
+    "title": "CE-RISE Life Cycle Inventory Dataset Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/lci-dataset",
+    "version": "0.0.1"
   },
   {
-    "feature_use": "Provides a formal target for future circularity scoring beyond the current simple dashboard values.",
+    "class_count": 33,
+    "classes": [
+      "AEOStatus",
+      "BatchTraceability",
+      "BorderCrossing",
+      "ChemicalIdentifier",
+      "ChemicalProperties",
+      "CommodityCode",
+      "Composition",
+      "CustomsDocumentation",
+      "ElectricalProperties",
+      "EoriNumber",
+      "Fingerprinting",
+      "ImportAuthorization",
+      "ImportExportOperation",
+      "ImporterJurisdiction",
+      "InformationRelatedToImportExport",
+      "MaterialGrade",
+      "MaterialIdentification",
+      "MaterialIdentity",
+      "MaterialName",
+      "MaterialOrigin",
+      "MaterialSpecifications",
+      "MechanicalProperties",
+      "OpticalProperties",
+      "OrganizationEntity",
+      "PhysicalProperties",
+      "ProcessingFacility",
+      "SpecificationCode",
+      "SupplierInformation",
+      "SupplierMaterialCode",
+      "TariffClassification",
+      "TestConditions",
+      "ThermalProperties",
+      "UniqueMaterialIdentifier"
+    ],
+    "declared_name": "material-profile",
+    "id": "material-profile",
+    "keywords": [
+      "material",
+      "substance",
+      "composition",
+      "recycled content",
+      "hazardous"
+    ],
+    "layer": "Core profile",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/material-profile/",
+    "summary": "Core data model defining the mandatory Material Profile for Digital Material Passports, including material identity, chemical composition, supplier details, and technical specifications.",
+    "title": "CE-RISE Material Profile Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/material-profile",
+    "version": "0.1.1"
+  },
+  {
+    "class_count": 14,
+    "classes": [
+      "BoundaryDefinition",
+      "CalibrationRecord",
+      "ComparabilityAssessment",
+      "CompetenceRecord",
+      "MeasurementProcedure",
+      "MeasurementStandard",
+      "MetrologicalTraceability",
+      "ReferenceEntity",
+      "ReferenceMaterial",
+      "TraceabilityBasis",
+      "TraceabilityChain",
+      "TraceabilityEvidenceReference",
+      "TraceabilityLink",
+      "TraceabilityStatement"
+    ],
+    "declared_name": "metrological-traceability",
+    "id": "metrological-traceability",
+    "keywords": [
+      "traceability",
+      "measurement",
+      "calibration",
+      "metrology",
+      "unit"
+    ],
+    "layer": "Cross-cutting",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/metrological-traceability/",
+    "summary": "Cross-cutting utility data model for documenting the traceability basis of measured, calculated, method-defined, and boundary-defined values in CE-RISE Digital Product Passport and Digital Material Passport data models.",
+    "title": "CE-RISE Metrological Traceability Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/metrological-traceability",
+    "version": "0.0.3"
+  },
+  {
+    "class_count": 34,
+    "classes": [
+      "AEOStatus",
+      "BorderCrossing",
+      "CustomsDocumentation",
+      "EoriNumber",
+      "GTIN14",
+      "GeneralProductInformation",
+      "ImportAuthorization",
+      "ImportExportOperation",
+      "ImporterJurisdiction",
+      "InformationRelatedToTheImporter",
+      "LengthMeasurement",
+      "LotBatchNumber",
+      "ManufacturersInformation",
+      "ManufacturingDate",
+      "ManufacturingFacility",
+      "MaterialIdentification",
+      "Name",
+      "OrganizationEntity",
+      "PhysicalAttributes",
+      "PhysicalDimensions",
+      "PostalAddress",
+      "ProductIdentification",
+      "ProductImages",
+      "ProductSpecification",
+      "ProductType",
+      "RegisteredTradeNameOrTradeMark",
+      "RegulatoryClassification",
+      "SerialNumber",
+      "SpecificProductInformation",
+      "TariffClassification",
+      "UniqueFacilityIdentifiers",
+      "UniqueOperatorIdentifier",
+      "UniqueProductIdentifier",
+      "Website"
+    ],
+    "declared_name": "product-profile",
+    "id": "product-profile",
+    "keywords": [
+      "product",
+      "manufacturer",
+      "model",
+      "identifier",
+      "gtin",
+      "origin"
+    ],
+    "layer": "Core profile",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/product-profile/",
+    "summary": "Core data model defining the mandatory Product Profile for Digital Product Passports, including product attributes, manufacturer details, and traceability information.",
+    "title": "CE-RISE Product Profile Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/product-profile",
+    "version": "0.2.0"
+  },
+  {
+    "class_count": 4,
+    "classes": [
+      "ActivityReference",
+      "LCIDatasetReference",
+      "ProductSystem",
+      "ReferenceFlowSpecification"
+    ],
+    "declared_name": "product-system",
+    "id": "product-system",
+    "keywords": [
+      "product system",
+      "value chain",
+      "system boundary",
+      "activity link"
+    ],
+    "layer": "Impact assessment",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/product-system/",
+    "summary": "A reusable, source-agnostic model for defining life cycle assessment product systems. It represents calculation-specific assemblies through versioned references to life cycle inventory datasets and selected activities, together with reference-flow specifications, scope, provenance, and optional utility records. The model is independent of life cycle assessment results and can be consumed by integrated-lca and other tools.",
+    "title": "CE-RISE Product System Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/product-system",
+    "version": "0.0.1"
+  },
+  {
+    "class_count": 9,
+    "classes": [
+      "AnswerOption",
+      "Assessment",
+      "IndicatorProductConfiguration",
+      "ParameterApplication",
+      "ParameterAssessment",
+      "ParameterSpecification",
+      "ProductInfo",
+      "QuestionAnswer",
+      "QuestionSpecification"
+    ],
+    "declared_name": "re_indicators",
     "id": "re-indicators-specification",
     "keywords": [
-      "re indicator",
-      "resource efficiency",
-      "recycle",
-      "reuse",
-      "remanufacture",
-      "assessment",
+      "indicator",
+      "re-indicator",
+      "circular",
+      "metric",
       "score"
     ],
     "layer": "Circularity",
-    "neuro_symbolic_value": "LLM reads product evidence; symbolic indicator formulas compute repeatable RE scores.",
-    "signals": [
-      {
-        "keywords": [
-          "indicator",
-          "recycle",
-          "reuse",
-          "assessment",
-          "score"
-        ],
-        "label": "RE indicator inputs",
-        "paths": [
-          "circularity",
-          "assessment",
-          "indicators"
-        ]
-      }
-    ],
-    "summary": "Data representation and computation of CE-RISE resource-efficiency indicators.",
-    "title": "RE-Indicators Specification",
-    "url": "https://codeberg.org/CE-RISE-models/re-indicators-specification"
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "namespace": "https://ce-rise-models.codeberg.page/re-indicators-specification/",
+    "summary": "Core data model for RE indicators specification and assessment",
+    "title": "CE-RISE RE-Indicators Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/re-indicators-specification",
+    "version": "0.0.5"
   },
   {
-    "feature_use": "Directly strengthens the existing compliance search and Validate & Repair feature.",
-    "id": "compliance-and-standards",
+    "class_count": 20,
+    "classes": [
+      "ActorTracking",
+      "AggregationEvents",
+      "CustomerReturnChannel",
+      "DataErasureEvidence",
+      "DisposalEvent",
+      "EntityHistory",
+      "ErrorDeclaration",
+      "IntakeConditionItem",
+      "IntakeEvent",
+      "IntermediateStop",
+      "LogisticsEvents",
+      "OwnershipEvent",
+      "PhysicalCustodyEvent",
+      "RecyclingEvent",
+      "RefurbishmentEvent",
+      "ReplacedComponent",
+      "ReverseLogistics",
+      "SupplyChainIncidents",
+      "TraceabilityLifecycleEvents",
+      "ValueAddingActivityLocation"
+    ],
+    "declared_name": "traceability_and_life_cycle_events",
+    "id": "traceability-and-life-cycle-events",
     "keywords": [
-      "compliance",
-      "standard",
-      "regulation",
-      "certificate",
-      "declaration",
-      "ce",
-      "rohs",
-      "reach",
-      "weee"
+      "event",
+      "traceability",
+      "history",
+      "custody",
+      "lifecycle"
     ],
-    "layer": "Compliance",
-    "neuro_symbolic_value": "LLM extracts compliance clauses; symbolic checks enforce required evidence types and market applicability.",
-    "signals": [
-      {
-        "keywords": [
-          "standard",
-          "regulation",
-          "directive",
-          "rohs",
-          "reach",
-          "weee"
-        ],
-        "label": "applicable standards",
-        "paths": [
-          "compliance.standards",
-          "compliance"
-        ]
-      },
-      {
-        "keywords": [
-          "certificate",
-          "declaration",
-          "doc",
-          "evidence"
-        ],
-        "label": "documentary evidence",
-        "paths": [
-          "certificates",
-          "declaration",
-          "sources"
-        ]
-      }
-    ],
-    "summary": "Regulations, standards, conformity evidence, commitments, declarations, certificates, and safe-use information.",
-    "title": "Compliance and Standards",
-    "url": "https://codeberg.org/CE-RISE-models/compliance-and-standards"
+    "layer": "Lifecycle events",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "namespace": "https://ce-rise-models.codeberg.page/traceability-and-life-cycle-events/",
+    "summary": "Dynamic event-based information throughout supply chain journey for products, materials, batches, and commodities aligned with GS1 EPCIS 2.0 standard. Supports both Digital Product Passports (DPP) and Digital Material Passports (DMP).",
+    "title": "Traceability and Life Cycle Events Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/traceability-and-life-cycle-events",
+    "version": "0.1.1"
   },
   {
-    "feature_use": "Upgrades confidence displays from route heuristics to explicit uncertainty objects.",
+    "class_count": 17,
+    "classes": [
+      "ComparisonAssessment",
+      "Correlation",
+      "DistributionParameter",
+      "InputQuantity",
+      "MeasurandSpecification",
+      "MethodReference",
+      "PropagationAnalysis",
+      "QuantityValue",
+      "ScenarioUncertainty",
+      "SensitivityResult",
+      "UncertaintyBudget",
+      "UncertaintyComponent",
+      "UncertaintyDistribution",
+      "UncertaintyEvidenceReference",
+      "UncertaintyInterval",
+      "UncertaintyQuantification",
+      "UncertaintyStatement"
+    ],
+    "declared_name": "uncertainty-quantification",
     "id": "uncertainty-quantification",
     "keywords": [
       "uncertainty",
       "confidence",
       "interval",
-      "range",
-      "distribution",
-      "budget",
-      "propagation"
+      "variance",
+      "distribution"
     ],
     "layer": "Cross-cutting",
-    "neuro_symbolic_value": "Rules propagate numeric uncertainty; the LLM explains what confidence and uncertainty mean to end users.",
-    "signals": [
-      {
-        "keywords": [
-          "uncertainty",
-          "confidence",
-          "interval",
-          "range"
-        ],
-        "label": "uncertainty statement",
-        "paths": [
-          "uncertainty",
-          "confidence",
-          "range"
-        ]
-      }
-    ],
-    "summary": "Reusable structures for uncertainty statements, distributions, coverage intervals, budgets, and propagation.",
-    "title": "Uncertainty Quantification",
-    "url": "https://codeberg.org/CE-RISE-models/uncertainty-quantification"
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/uncertainty-quantification/",
+    "summary": "Cross-cutting utility data model for expressing uncertainty statements, uncertainty budgets, probability distributions, propagation analyses, and comparison-relevant uncertainty metadata for CE-RISE Digital Product Passport and Digital Material Passport data models.",
+    "title": "CE-RISE Uncertainty Quantification Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/uncertainty-quantification",
+    "version": "0.0.3"
   },
   {
-    "feature_use": "Gives Validate & Repair and Search abstention a formal quality explanation layer.",
-    "id": "data-quality-framework",
+    "class_count": 16,
+    "classes": [
+      "MaintenanceHistory",
+      "MaintenanceInstructions",
+      "MaintenanceRepairRelatedData",
+      "MaintenanceSchedule",
+      "OperationalConditions",
+      "PerformanceTracking",
+      "RepairHistory",
+      "ReplacedComponent",
+      "ServiceProviderInformation",
+      "SoftwarePreparation",
+      "SparePartsInformation",
+      "UsageAndMaintenance",
+      "UsageMetrics",
+      "UsagePatterns",
+      "UsageRelatedData",
+      "UseInstructions"
+    ],
+    "declared_name": "usage-and-maintenance",
+    "id": "usage-and-maintenance",
     "keywords": [
-      "data quality",
-      "provenance",
-      "completeness",
-      "validity",
-      "accuracy",
-      "consistency",
-      "timeliness",
-      "pedigree"
+      "usage",
+      "maintenance",
+      "repair",
+      "service",
+      "spare part"
     ],
-    "layer": "Cross-cutting",
-    "neuro_symbolic_value": "Symbolic quality checks decide when to abstain; the LLM explains missingness and remediation steps.",
-    "signals": [
-      {
-        "keywords": [
-          "quality",
-          "completeness",
-          "validity",
-          "accuracy",
-          "pedigree"
-        ],
-        "label": "quality metadata",
-        "paths": [
-          "data_quality",
-          "quality",
-          "completeness"
-        ]
-      }
-    ],
-    "summary": "Fitness-for-purpose model for provenance, representativeness, validity, accuracy, consistency, timeliness, and completeness.",
-    "title": "Data Quality Framework",
-    "url": "https://codeberg.org/CE-RISE-models/data-quality-framework"
-  },
-  {
-    "feature_use": "Turns carbon factors, diagnostic measurements, and repair thresholds into traceable measured values.",
-    "id": "metrological-traceability",
-    "keywords": [
-      "metrological",
-      "traceability",
-      "calibration",
-      "measurement",
-      "unit",
-      "reference",
-      "procedure",
-      "standard"
-    ],
-    "layer": "Cross-cutting",
-    "neuro_symbolic_value": "Rules verify units and reference chains; the LLM translates technical measurement provenance.",
-    "signals": [
-      {
-        "keywords": [
-          "measurement",
-          "unit",
-          "reference",
-          "calibration",
-          "procedure"
-        ],
-        "label": "measurement basis",
-        "paths": [
-          "measurement",
-          "unit",
-          "methodology"
-        ]
-      }
-    ],
-    "summary": "Reference basis for measured, calculated, or method-defined values: units, standards, calibration chains, and procedures.",
-    "title": "Metrological Traceability",
-    "url": "https://codeberg.org/CE-RISE-models/metrological-traceability"
-  },
-  {
-    "feature_use": "Useful for developers adding new model-backed modules to the Workbench.",
-    "id": "template-data-model",
-    "keywords": [
-      "template",
-      "linkml",
-      "schema",
-      "workflow",
-      "ontology"
-    ],
-    "layer": "Tooling",
-    "neuro_symbolic_value": "The architecture can generate model-aware validators and UI forms from LinkML/JSON Schema artifacts.",
-    "signals": [
-      {
-        "keywords": [
-          "template",
-          "linkml",
-          "schema"
-        ],
-        "label": "model tooling",
-        "paths": [
-          "schema_version"
-        ]
-      }
-    ],
-    "summary": "Repository template and workflow used to create CE-RISE data model projects.",
-    "title": "Template Data Model",
-    "url": "https://codeberg.org/CE-RISE-models/template-data-model"
+    "layer": "Lifecycle operations",
+    "licence": "CC-BY-NC-4.0",
+    "licence_declared": "CC BY-NC 4.0",
+    "namespace": "https://ce-rise-models.codeberg.page/usage-and-maintenance/",
+    "summary": "Data model for capturing product operation, usage patterns, maintenance activities, and related instructions throughout the product lifecycle.",
+    "title": "CE-RISE Usage and Maintenance Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/usage-and-maintenance",
+    "version": "0.1.1"
   }
 ]

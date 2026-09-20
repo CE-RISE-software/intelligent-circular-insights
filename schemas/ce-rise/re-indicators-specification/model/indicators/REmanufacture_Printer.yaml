@@ -1,0 +1,82 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REmanufacture_Printer
+name: re_indicators_remanufacture_printer
+title: REmanufacture Indicator Configuration for Printers
+description: Product-specific configuration for REmanufacture indicator applied to printers
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    - ../model # Import core classes
+    - ./REmanufacture_core # Import core parameter definitions
+
+classes:
+    # ============================================
+    # PRINTER CONFIGURATION FOR REMANUFACTURE
+    # Uses all core parameters with their normalized weights
+    # ============================================
+
+    REmanufacture_Printer_Config:
+        is_a: IndicatorProductConfiguration
+        description: REmanufacture indicator configuration for Printer products
+        attributes:
+            id:
+                ifabsent: string(REmanufacture_Printer)
+            indicator_type:
+                ifabsent: IndicatorType(REmanufacture)
+            product_category:
+                ifabsent: ProductCategoryType(Printer)
+            name:
+                ifabsent: string(REmanufacture Indicator for Printer)
+            description:
+                ifabsent: string(REmanufacture assessment configuration for printers covering inspection/testing, disassembly/assembly, cleaning, and reprocessing capabilities)
+            parameter_applications:
+                range: REmanufacture_Printer_ParameterApplication
+                multivalued: true
+                inlined: true
+
+    REmanufacture_Printer_ParameterApplication:
+        is_a: ParameterApplication
+        union_of:
+            - REmanufacture_Printer_P1_Application
+            - REmanufacture_Printer_P2_Application
+            - REmanufacture_Printer_P3_Application
+            - REmanufacture_Printer_P4_Application
+
+    REmanufacture_Printer_P1_Application:
+        is_a: ParameterApplication
+        description: Ability to be Inspected and Tested parameter application for Printer
+        attributes:
+            parameter_ref:
+                ifabsent: string(P1_diagnostic)
+            weight:
+                ifabsent: float(0.25)
+
+    REmanufacture_Printer_P2_Application:
+        is_a: ParameterApplication
+        description: Ability to be Disassembled and Assembled parameter application for Printer
+        attributes:
+            parameter_ref:
+                ifabsent: string(P2_ease_of_disassembly)
+            weight:
+                ifabsent: float(0.25)
+
+    REmanufacture_Printer_P3_Application:
+        is_a: ParameterApplication
+        description: Ability to be Cleaned parameter application for Printer
+        attributes:
+            parameter_ref:
+                ifabsent: string(P3_ease_of_cleaning)
+            weight:
+                ifabsent: float(0.25)
+
+    REmanufacture_Printer_P4_Application:
+        is_a: ParameterApplication
+        description: Ability to be Reprocessed parameter application for Printer
+        attributes:
+            parameter_ref:
+                ifabsent: string(P4_wear_and_damage)
+            weight:
+                ifabsent: float(0.25)

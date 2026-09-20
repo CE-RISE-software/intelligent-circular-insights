@@ -1,0 +1,40 @@
+{
+  "title": "CE-RISE Compliance and Standards",
+  "description": "Data model for regulatory compliance, standards, and conformity-related information for products and materials, including applicable regulations and standards, commitments, documentary evidence, process evidence, and structured regulatory information sheets. Supports both Digital Product Passports (DPP) and Digital Material Passports (DMP).",
+  "license": "CC-BY-NC-4.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Boero, Riccardo",
+      "affiliation": "NILU",
+      "orcid": "0000-0002-7468-9096"
+    }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Compliance",
+    "Standards",
+    "Regulatory",
+    "Conformity",
+    "Digital Product Passport",
+    "DPP",
+    "Digital Material Passport",
+    "DMP",
+    "LinkML",
+    "Ontology"
+  ],
+  "communities": [
+    { "identifier": "ce-rise" },
+    { "identifier": "impact" }
+  ],
+  "grants": [
+    { "id": "101092281" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE-models/compliance-and-standards",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

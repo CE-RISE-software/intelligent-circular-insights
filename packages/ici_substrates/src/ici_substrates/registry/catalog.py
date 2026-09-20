@@ -28,15 +28,33 @@ CE_RISE_SOURCE = "https://codeberg.org/CE-RISE-models"
 
 @dataclass(frozen=True)
 class CeRiseModel:
-    """One of the 17 published CE-RISE data models."""
+    """One published CE-RISE data model, as its vendored LinkML schema declares it.
+
+    Derived from `schemas/ce-rise/*/model/model.yaml` by
+    `tooling/build_model_catalog.py`, not hand-maintained. The demo's hand-written
+    version had drifted: it listed `template-data-model`, which no longer exists,
+    and missed `lci-dataset` and `product-system`, which do.
+    """
 
     id: str
     title: str
     layer: str
     summary: str
     url: str
+    version: str = ""
+    licence: str = ""
+    """Normalised to SPDX. The models declare it as a human string or a URL."""
+    licence_declared: str = ""
+    namespace: str = ""
+    declared_name: str = ""
+    """The schema's own ``name:``. Five models underscore it where their repository
+    hyphenates, so ``id`` follows the repository and this records the difference."""
+    classes: tuple[str, ...] = ()
     keywords: tuple[str, ...] = ()
-    signals: tuple[dict[str, Any], ...] = ()
+
+    @property
+    def class_count(self) -> int:
+        return len(self.classes)
 
     @classmethod
     def from_dict(cls, raw: dict[str, Any]) -> CeRiseModel:
@@ -46,8 +64,13 @@ class CeRiseModel:
             layer=str(raw["layer"]),
             summary=str(raw.get("summary", "")),
             url=str(raw.get("url", "")),
+            version=str(raw.get("version", "")),
+            licence=str(raw.get("licence", "")),
+            licence_declared=str(raw.get("licence_declared", "")),
+            namespace=str(raw.get("namespace", "")),
+            declared_name=str(raw.get("declared_name", "")),
+            classes=tuple(raw.get("classes", ())),
             keywords=tuple(raw.get("keywords", ())),
-            signals=tuple(raw.get("signals", ())),
         )
 
     def matches(self, question: str) -> int:

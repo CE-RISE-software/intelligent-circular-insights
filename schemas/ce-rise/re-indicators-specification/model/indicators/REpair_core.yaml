@@ -1,0 +1,2577 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REpair_core
+name: re_indicators_repair_core
+title: REpair Core Parameters
+description: Core parameter definitions for REpair indicators - reusable across Laptop and Printer
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+
+classes:
+    # ============================================
+    # P1: RETURN MODEL
+    # ============================================
+
+    ReturnModel_Parameter:
+        is_a: ParameterSpecification
+        description: Return model and warranty parameter - core definition
+        attributes:
+            id:
+                ifabsent: string(P1_return_model)
+            name:
+                ifabsent: string(Return Model)
+            questions:
+                range: ReturnModelQuestion
+                multivalued: true
+                inlined: true
+
+    ReturnModelQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q1_1_ReturnPolicy
+            - Q1_2_WarrantyPeriod
+
+    # Q1.1: Return Policy for Repair (Combined: Type × Duration)
+    Q1_1_ReturnPolicy:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.1)
+            text:
+                ifabsent: string(Is there any return policy for repair, and if yes, for how long is the policy valid following the purchase?)
+            weight:
+                ifabsent: float(0.04285714285714286)
+            answer_options:
+                range: ReturnPolicyAnswerOption
+                multivalued: true
+                inlined: true
+
+    ReturnPolicyAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - ReturnPolicy_Comprehensive_7Plus
+            - ReturnPolicy_Comprehensive_6
+            - ReturnPolicy_Comprehensive_5
+            - ReturnPolicy_Comprehensive_4
+            - ReturnPolicy_Comprehensive_3
+            - ReturnPolicy_Comprehensive_2
+            - ReturnPolicy_Comprehensive_1
+            - ReturnPolicy_Basic_7Plus
+            - ReturnPolicy_Basic_6
+            - ReturnPolicy_Basic_5
+            - ReturnPolicy_Basic_4
+            - ReturnPolicy_Basic_3
+            - ReturnPolicy_Basic_2
+            - ReturnPolicy_Basic_1
+            - ReturnPolicy_None
+
+    ReturnPolicy_Comprehensive_7Plus:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_comprehensive_7plus)
+            text:
+                ifabsent: string(Comprehensive return option (Pickup service and replacement product) valid for 7 or more years)
+            score:
+                ifabsent: float(21.0)
+
+    ReturnPolicy_Comprehensive_6:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_comprehensive_6)
+            text:
+                ifabsent: string(Comprehensive return option (Pickup service and replacement product) valid for 6 years)
+            score:
+                ifabsent: float(18.0)
+
+    ReturnPolicy_Comprehensive_5:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_comprehensive_5)
+            text:
+                ifabsent: string(Comprehensive return option (Pickup service and replacement product) valid for 5 years)
+            score:
+                ifabsent: float(15.0)
+
+    ReturnPolicy_Comprehensive_4:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_comprehensive_4)
+            text:
+                ifabsent: string(Comprehensive return option (Pickup service and replacement product) valid for 4 years)
+            score:
+                ifabsent: float(12.0)
+
+    ReturnPolicy_Comprehensive_3:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_comprehensive_3)
+            text:
+                ifabsent: string(Comprehensive return option (Pickup service and replacement product) valid for 3 years)
+            score:
+                ifabsent: float(9.0)
+
+    ReturnPolicy_Comprehensive_2:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_comprehensive_2)
+            text:
+                ifabsent: string(Comprehensive return option (Pickup service and replacement product) valid for 2 years)
+            score:
+                ifabsent: float(6.0)
+
+    ReturnPolicy_Comprehensive_1:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_comprehensive_1)
+            text:
+                ifabsent: string(Comprehensive return option (Pickup service and replacement product) valid for 1 year)
+            score:
+                ifabsent: float(3.0)
+
+    ReturnPolicy_Basic_7Plus:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_basic_7plus)
+            text:
+                ifabsent: string(Basic return option (Mail-back/collection point) valid for 7 or more years)
+            score:
+                ifabsent: float(14.0)
+
+    ReturnPolicy_Basic_6:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_basic_6)
+            text:
+                ifabsent: string(Basic return option (Mail-back/collection point) valid for 6 years)
+            score:
+                ifabsent: float(12.0)
+
+    ReturnPolicy_Basic_5:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_basic_5)
+            text:
+                ifabsent: string(Basic return option (Mail-back/collection point) valid for 5 years)
+            score:
+                ifabsent: float(10.0)
+
+    ReturnPolicy_Basic_4:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_basic_4)
+            text:
+                ifabsent: string(Basic return option (Mail-back/collection point) valid for 4 years)
+            score:
+                ifabsent: float(8.0)
+
+    ReturnPolicy_Basic_3:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_basic_3)
+            text:
+                ifabsent: string(Basic return option (Mail-back/collection point) valid for 3 years)
+            score:
+                ifabsent: float(6.0)
+
+    ReturnPolicy_Basic_2:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_basic_2)
+            text:
+                ifabsent: string(Basic return option (Mail-back/collection point) valid for 2 years)
+            score:
+                ifabsent: float(4.0)
+
+    ReturnPolicy_Basic_1:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_basic_1)
+            text:
+                ifabsent: string(Basic return option (Mail-back/collection point) valid for 1 year)
+            score:
+                ifabsent: float(2.0)
+
+    ReturnPolicy_None:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(return_policy_none)
+            text:
+                ifabsent: string(No return option)
+            score:
+                ifabsent: float(0.0)
+
+    # Q1.2: Warranty Period
+    Q1_2_WarrantyPeriod:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.2)
+            text:
+                ifabsent: string(What is the warranty period for the product (only if greater than minimum for these products)?)
+            weight:
+                ifabsent: float(0.014285714285714285)
+            answer_options:
+                range: WarrantyPeriodAnswerOption
+                multivalued: true
+                inlined: true
+
+    WarrantyPeriodAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - WarrantyPeriod_7Plus
+            - WarrantyPeriod_6
+            - WarrantyPeriod_5
+            - WarrantyPeriod_4
+            - WarrantyPeriod_3
+            - WarrantyPeriod_2
+            - WarrantyPeriod_1
+
+    WarrantyPeriod_7Plus:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(warranty_period_7plus)
+            text:
+                ifabsent: string(7 or more years)
+            score:
+                ifabsent: float(7.0)
+
+    WarrantyPeriod_6:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(warranty_period_6)
+            text:
+                ifabsent: string(6 years)
+            score:
+                ifabsent: float(6.0)
+
+    WarrantyPeriod_5:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(warranty_period_5)
+            text:
+                ifabsent: string(5 years)
+            score:
+                ifabsent: float(5.0)
+
+    WarrantyPeriod_4:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(warranty_period_4)
+            text:
+                ifabsent: string(4 years)
+            score:
+                ifabsent: float(4.0)
+
+    WarrantyPeriod_3:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(warranty_period_3)
+            text:
+                ifabsent: string(3 years)
+            score:
+                ifabsent: float(3.0)
+
+    WarrantyPeriod_2:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(warranty_period_2)
+            text:
+                ifabsent: string(2 years)
+            score:
+                ifabsent: float(2.0)
+
+    WarrantyPeriod_1:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(warranty_period_1)
+            text:
+                ifabsent: string(1 year)
+            score:
+                ifabsent: float(1.0)
+
+    # ============================================
+    # P2: GENERAL QUESTIONS
+    # ============================================
+
+    GeneralQuestions_Parameter:
+        is_a: ParameterSpecification
+        description: General repair environment and skill level requirements - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_general_questions)
+            name:
+                ifabsent: string(General Questions)
+            questions:
+                range: GeneralQuestionsQuestion
+                multivalued: true
+                inlined: true
+
+    GeneralQuestionsQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q2_1_RepairEnvironment
+            - Q2_2_RepairerSkillLevel
+
+    # Q2.1: Repair Environment
+    Q2_1_RepairEnvironment:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.1)
+            text:
+                ifabsent: string(Where can the repair service happen?)
+            weight:
+                ifabsent: float(0.08823529411764706)
+            answer_options:
+                range: RepairEnvironmentAnswerOption
+                multivalued: true
+                inlined: true
+
+    RepairEnvironmentAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RepairEnv_Use
+            - RepairEnv_Workshop
+            - RepairEnv_Production
+
+    RepairEnv_Use:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(repair_env_use)
+            text:
+                ifabsent: string(Use environment)
+            score:
+                ifabsent: float(3.0)
+
+    RepairEnv_Workshop:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(repair_env_workshop)
+            text:
+                ifabsent: string(Workshop environment)
+            score:
+                ifabsent: float(2.0)
+
+    RepairEnv_Production:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(repair_env_production)
+            text:
+                ifabsent: string(Production-equivalent environment)
+            score:
+                ifabsent: float(1.0)
+
+    # Q2.2: Repairer Skill Level
+    Q2_2_RepairerSkillLevel:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.2)
+            text:
+                ifabsent: string(Who can carry out the repair process?)
+            weight:
+                ifabsent: float(0.14705882352941177)
+            answer_options:
+                range: RepairerSkillLevelAnswerOption
+                multivalued: true
+                inlined: true
+
+    RepairerSkillLevelAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - RepairerSkill_Layman
+            - RepairerSkill_Generalist
+            - RepairerSkill_Expert
+            - RepairerSkill_Authorized
+            - RepairerSkill_NotFeasible
+
+    RepairerSkill_Layman:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(repairer_skill_layman)
+            text:
+                ifabsent: string(Layman)
+            score:
+                ifabsent: float(5.0)
+
+    RepairerSkill_Generalist:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(repairer_skill_generalist)
+            text:
+                ifabsent: string(Generalist)
+            score:
+                ifabsent: float(4.0)
+
+    RepairerSkill_Expert:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(repairer_skill_expert)
+            text:
+                ifabsent: string(Expert)
+            score:
+                ifabsent: float(3.0)
+
+    RepairerSkill_Authorized:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(repairer_skill_authorized)
+            text:
+                ifabsent: string(Manufacturer or authorized expert)
+            score:
+                ifabsent: float(2.0)
+
+    RepairerSkill_NotFeasible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(repairer_skill_not_feasible)
+            text:
+                ifabsent: string(Not feasible with any existing skill)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P3: DISASSEMBLY
+    # ============================================
+
+    Disassembly_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of disassembly for priority components - core definition
+        attributes:
+            id:
+                ifabsent: string(P3_disassembly)
+            name:
+                ifabsent: string(Disassembly)
+            questions:
+                range: DisassemblyQuestion
+                multivalued: true
+                inlined: true
+
+    DisassemblyQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q3_1_DisplayAssembly
+            - Q3_2_Battery
+            - Q3_3_BackCover
+            - Q3_4_FrontCamera
+            - Q3_5_RearCamera
+            - Q3_6_ChargingPorts
+            - Q3_7_MechanicalButtons
+            - Q3_8_Microphone
+            - Q3_9_Speakers
+            - Q3_10_HingeAssembly
+
+    # Q3.1: Display Assembly Disassembly
+    Q3_1_DisplayAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.1)
+            text:
+                ifabsent: string(Disassembly steps for Display assembly (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.042105263)
+            answer_options:
+                range: DisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q3.2: Battery Disassembly
+    Q3_2_Battery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.2)
+            text:
+                ifabsent: string(Disassembly steps for Battery (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.042105263)
+            answer_options:
+                range: DisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q3.3: Back Cover Disassembly
+    Q3_3_BackCover:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.3)
+            text:
+                ifabsent: string(Disassembly steps for back cover or its assembly)
+            weight:
+                ifabsent: float(0.021052632)
+            answer_options:
+                range: DisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q3.4: Front Camera Disassembly
+    Q3_4_FrontCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.4)
+            text:
+                ifabsent: string(Disassembly steps for front-facing camera assembly)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: DisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q3.5: Rear Camera Disassembly
+    Q3_5_RearCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.5)
+            text:
+                ifabsent: string(Disassembly steps for rear-facing camera assembly)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: DisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q3.6: Charging Ports Disassembly
+    Q3_6_ChargingPorts:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.6)
+            text:
+                ifabsent: string(Disassembly steps for external charging ports)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: DisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q3.7: Mechanical Buttons Disassembly
+    Q3_7_MechanicalButtons:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.7)
+            text:
+                ifabsent: string(Disassembly steps for mechanical buttons)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: DisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q3.8: Microphone Disassembly
+    Q3_8_Microphone:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.8)
+            text:
+                ifabsent: string(Disassembly steps for microphone)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: DisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q3.9: Speakers Disassembly
+    Q3_9_Speakers:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.9)
+            text:
+                ifabsent: string(Disassembly steps for speaker(s))
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: DisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q3.10: Hinge Assembly Disassembly
+    Q3_10_HingeAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.10)
+            text:
+                ifabsent: string(Disassembly steps for hinge assembly or mechanical display folding mechanism)
+            weight:
+                ifabsent: float(0.010526316)
+            answer_options:
+                range: DisassemblyStepsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all disassembly questions
+    DisassemblyStepsAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - DisassemblySteps_2OrLess
+            - DisassemblySteps_2To5
+            - DisassemblySteps_5To10
+            - DisassemblySteps_10To15
+            - DisassemblySteps_Over15
+            - DisassemblySteps_CannotDisassemble
+            - DisassemblySteps_DataNotAvailable
+
+    DisassemblySteps_2OrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(disassembly_steps_2_or_less)
+            text:
+                ifabsent: string(x ≤ 2 steps)
+            score:
+                ifabsent: float(5.0)
+
+    DisassemblySteps_2To5:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(disassembly_steps_2_to_5)
+            text:
+                ifabsent: string(5 ≥ x > 2 steps)
+            score:
+                ifabsent: float(4.0)
+
+    DisassemblySteps_5To10:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(disassembly_steps_5_to_10)
+            text:
+                ifabsent: string(10 ≥ x > 5 steps)
+            score:
+                ifabsent: float(3.0)
+
+    DisassemblySteps_10To15:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(disassembly_steps_10_to_15)
+            text:
+                ifabsent: string(15 ≥ x > 10 steps)
+            score:
+                ifabsent: float(2.0)
+
+    DisassemblySteps_Over15:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(disassembly_steps_over_15)
+            text:
+                ifabsent: string(x > 15 steps)
+            score:
+                ifabsent: float(1.0)
+
+    DisassemblySteps_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(disassembly_steps_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    DisassemblySteps_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(disassembly_steps_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P4: FASTENERS
+    # ============================================
+
+    Fasteners_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of fastener removal and reusability for priority components - core definition
+        attributes:
+            id:
+                ifabsent: string(P4_fasteners)
+            name:
+                ifabsent: string(Fasteners)
+            questions:
+                range: FastenersQuestion
+                multivalued: true
+                inlined: true
+
+    FastenersQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q4_1_DisplayAssembly
+            - Q4_2_Battery
+            - Q4_3_BackCover
+            - Q4_4_FrontCamera
+            - Q4_5_RearCamera
+            - Q4_6_ChargingPorts
+            - Q4_7_MechanicalButtons
+            - Q4_8_Microphone
+            - Q4_9_Speakers
+            - Q4_10_HingeAssembly
+
+    # Q4.1: Display Assembly Fasteners
+    Q4_1_DisplayAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1)
+            text:
+                ifabsent: string(Fastener type for Display assembly (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.042105263)
+            answer_options:
+                range: FastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q4.2: Battery Fasteners
+    Q4_2_Battery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.2)
+            text:
+                ifabsent: string(Fastener type for Battery (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.042105263)
+            answer_options:
+                range: FastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q4.3: Back Cover Fasteners
+    Q4_3_BackCover:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.3)
+            text:
+                ifabsent: string(Fastener type for back cover or its assembly)
+            weight:
+                ifabsent: float(0.021052632)
+            answer_options:
+                range: FastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q4.4: Front Camera Fasteners
+    Q4_4_FrontCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.4)
+            text:
+                ifabsent: string(Fastener type for front-facing camera assembly)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: FastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q4.5: Rear Camera Fasteners
+    Q4_5_RearCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.5)
+            text:
+                ifabsent: string(Fastener type for rear-facing camera assembly)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: FastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q4.6: Charging Ports Fasteners
+    Q4_6_ChargingPorts:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.6)
+            text:
+                ifabsent: string(Fastener type for external charging ports)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: FastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q4.7: Mechanical Buttons Fasteners
+    Q4_7_MechanicalButtons:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.7)
+            text:
+                ifabsent: string(Fastener type for mechanical buttons)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: FastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q4.8: Microphone Fasteners
+    Q4_8_Microphone:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.8)
+            text:
+                ifabsent: string(Fastener type for microphone)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: FastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q4.9: Speakers Fasteners
+    Q4_9_Speakers:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.9)
+            text:
+                ifabsent: string(Fastener type for speaker(s))
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: FastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q4.10: Hinge Assembly Fasteners
+    Q4_10_HingeAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.10)
+            text:
+                ifabsent: string(Fastener type for hinge assembly or mechanical display folding mechanism)
+            weight:
+                ifabsent: float(0.010526316)
+            answer_options:
+                range: FastenersTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all fastener questions
+    FastenersTypeAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - FastenersType_ReusableRemovable
+            - FastenersType_SuppliedWithPart
+            - FastenersType_RemovableNotReusable
+            - FastenersType_NeitherRemovableNorReusable
+            - FastenersType_CannotDisassemble
+            - FastenersType_DataNotAvailable
+
+    FastenersType_ReusableRemovable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fasteners_reusable_removable)
+            text:
+                ifabsent: string(Reusable and removable)
+            score:
+                ifabsent: float(5.0)
+
+    FastenersType_SuppliedWithPart:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fasteners_supplied_with_part)
+            text:
+                ifabsent: string(New fastener is supplied with the new part)
+            score:
+                ifabsent: float(4.0)
+
+    FastenersType_RemovableNotReusable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fasteners_removable_not_reusable)
+            text:
+                ifabsent: string(Removable but not reusable)
+            score:
+                ifabsent: float(3.0)
+
+    FastenersType_NeitherRemovableNorReusable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fasteners_neither_removable_nor_reusable)
+            text:
+                ifabsent: string(Neither removable nor reusable)
+            score:
+                ifabsent: float(2.0)
+
+    FastenersType_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fasteners_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    FastenersType_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(fasteners_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P5: TOOLS
+    # ============================================
+
+    Tools_Parameter:
+        is_a: ParameterSpecification
+        description: Tool requirements for component repair - core definition
+        attributes:
+            id:
+                ifabsent: string(P5_tools)
+            name:
+                ifabsent: string(Tools)
+            questions:
+                range: ToolsQuestion
+                multivalued: true
+                inlined: true
+
+    ToolsQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q5_1_DisplayAssembly
+            - Q5_2_Battery
+            - Q5_3_BackCover
+            - Q5_4_FrontCamera
+            - Q5_5_RearCamera
+            - Q5_6_ChargingPorts
+            - Q5_7_MechanicalButtons
+            - Q5_8_Microphone
+            - Q5_9_Speakers
+            - Q5_10_HingeAssembly
+
+    # Q5.1: Display Assembly Tools
+    Q5_1_DisplayAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.1)
+            text:
+                ifabsent: string(Tool type required for Display assembly (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.042105263)
+            answer_options:
+                range: ToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q5.2: Battery Tools
+    Q5_2_Battery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.2)
+            text:
+                ifabsent: string(Tool type required for Battery (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.042105263)
+            answer_options:
+                range: ToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q5.3: Back Cover Tools
+    Q5_3_BackCover:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.3)
+            text:
+                ifabsent: string(Tool type required for back cover or its assembly)
+            weight:
+                ifabsent: float(0.021052632)
+            answer_options:
+                range: ToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q5.4: Front Camera Tools
+    Q5_4_FrontCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.4)
+            text:
+                ifabsent: string(Tool type required for front-facing camera assembly)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: ToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q5.5: Rear Camera Tools
+    Q5_5_RearCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.5)
+            text:
+                ifabsent: string(Tool type required for rear-facing camera assembly)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: ToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q5.6: Charging Ports Tools
+    Q5_6_ChargingPorts:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.6)
+            text:
+                ifabsent: string(Tool type required for external charging ports)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: ToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q5.7: Mechanical Buttons Tools
+    Q5_7_MechanicalButtons:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.7)
+            text:
+                ifabsent: string(Tool type required for mechanical buttons)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: ToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q5.8: Microphone Tools
+    Q5_8_Microphone:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.8)
+            text:
+                ifabsent: string(Tool type required for microphone)
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: ToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q5.9: Speakers Tools
+    Q5_9_Speakers:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.9)
+            text:
+                ifabsent: string(Tool type required for speaker(s))
+            weight:
+                ifabsent: float(0.014035088)
+            answer_options:
+                range: ToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q5.10: Hinge Assembly Tools
+    Q5_10_HingeAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.10)
+            text:
+                ifabsent: string(Tool type required for hinge assembly or mechanical display folding mechanism)
+            weight:
+                ifabsent: float(0.010526316)
+            answer_options:
+                range: ToolsTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all tools questions
+    ToolsTypeAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - ToolsType_NoTools
+            - ToolsType_BasicTools
+            - ToolsType_SuppliedWithPart
+            - ToolsType_SuppliedWithProduct
+            - ToolsType_ProductGroupSpecific
+            - ToolsType_Commercial
+            - ToolsType_Proprietary
+            - ToolsType_NotFeasible
+            - ToolsType_CannotDisassemble
+            - ToolsType_DataNotAvailable
+
+    ToolsType_NoTools:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_no_tools)
+            text:
+                ifabsent: string(No tools needed)
+            score:
+                ifabsent: float(5.0)
+
+    ToolsType_BasicTools:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_basic_tools)
+            text:
+                ifabsent: string(Basic tools needed)
+            score:
+                ifabsent: float(4.0)
+
+    ToolsType_SuppliedWithPart:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_supplied_with_part)
+            text:
+                ifabsent: string(Tools supplied with part)
+            score:
+                ifabsent: float(4.0)
+
+    ToolsType_SuppliedWithProduct:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_supplied_with_product)
+            text:
+                ifabsent: string(Tools supplied with product)
+            score:
+                ifabsent: float(4.0)
+
+    ToolsType_ProductGroupSpecific:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_product_group_specific)
+            text:
+                ifabsent: string(Product group specific tools which are defined with a finite list or can be distinguished verifiably)
+            score:
+                ifabsent: float(3.0)
+
+    ToolsType_Commercial:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_commercial)
+            text:
+                ifabsent: string(Commercial tools)
+            score:
+                ifabsent: float(2.0)
+
+    ToolsType_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_proprietary)
+            text:
+                ifabsent: string(Proprietary tools which are not available for purchase by the general public)
+            score:
+                ifabsent: float(1.0)
+
+    ToolsType_NotFeasible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_not_feasible)
+            text:
+                ifabsent: string(Not feasible with any existing tool)
+            score:
+                ifabsent: float(0.0)
+
+    ToolsType_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    ToolsType_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(tools_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P6: DOCUMENTATION AVAILABILITY
+    # ============================================
+
+    DocumentationAvailability_Parameter:
+        is_a: ParameterSpecification
+        description: Documentation availability for repair - core definition
+        attributes:
+            id:
+                ifabsent: string(P6_documentation_availability)
+            name:
+                ifabsent: string(Documentation Availability)
+            questions:
+                range: DocumentationAvailabilityQuestion
+                multivalued: true
+                inlined: true
+
+    DocumentationAvailabilityQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q6_1_UniqueProductID
+            - Q6_2_AssemblyDiagram
+            - Q6_3_WiringDiagram
+            - Q6_4_CircuitDiagram
+            - Q6_5_RepairMaterialsList
+            - Q6_6_TechnicalManual
+            - Q6_7_ErrorCodes
+            - Q6_8_ComponentDiagnostics
+            - Q6_9_SoftwareInstructions
+            - Q6_10_IncidentHistory
+            - Q6_11_TechnicalBulletins
+            - Q6_12_SelfRepairFramework
+            - Q6_13_ProfessionalRepairersInfo
+            - Q6_14_FaultDetection
+            - Q6_15_MaintenanceAdvice
+
+    # Q6.1: Unique Product Identification
+    Q6_1_UniqueProductID:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.1)
+            text:
+                ifabsent: string(Unique Product identification (product type, brand, commercial name, model, serie number))
+            weight:
+                ifabsent: float(0.0375)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.2: Assembly Diagram
+    Q6_2_AssemblyDiagram:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.2)
+            text:
+                ifabsent: string(Assembly diagram)
+            weight:
+                ifabsent: float(0.0375)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.3: Wiring Diagram
+    Q6_3_WiringDiagram:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.3)
+            text:
+                ifabsent: string(Wiring diagram)
+            weight:
+                ifabsent: float(0.01875)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.4: Circuit Diagram
+    Q6_4_CircuitDiagram:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.4)
+            text:
+                ifabsent: string(Circuit diagram)
+            weight:
+                ifabsent: float(0.01875)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.5: Repair Materials List
+    Q6_5_RepairMaterialsList:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.5)
+            text:
+                ifabsent: string(List of repair materials and tests required)
+            weight:
+                ifabsent: float(0.0125)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.6: Technical Manual
+    Q6_6_TechnicalManual:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.6)
+            text:
+                ifabsent: string(Technical instruction manual)
+            weight:
+                ifabsent: float(0.0125)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.7: Error Codes
+    Q6_7_ErrorCodes:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.7)
+            text:
+                ifabsent: string(Error codes and diagnostics)
+            weight:
+                ifabsent: float(0.0125)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.8: Component Diagnostics
+    Q6_8_ComponentDiagnostics:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.8)
+            text:
+                ifabsent: string(Component and diagnostic information)
+            weight:
+                ifabsent: float(0.0125)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.9: Software Instructions
+    Q6_9_SoftwareInstructions:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.9)
+            text:
+                ifabsent: string(Software instructions)
+            weight:
+                ifabsent: float(0.0125)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.10: Incident History
+    Q6_10_IncidentHistory:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.10)
+            text:
+                ifabsent: string(Access to incident history)
+            weight:
+                ifabsent: float(0.0125)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.11: Technical Bulletins
+    Q6_11_TechnicalBulletins:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.11)
+            text:
+                ifabsent: string(Technical bulletins)
+            weight:
+                ifabsent: float(0.0125)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.12: Self-Repair Framework
+    Q6_12_SelfRepairFramework:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.12)
+            text:
+                ifabsent: string(Specific framework for self-repair)
+            weight:
+                ifabsent: float(0.0125)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.13: Professional Repairers Info
+    Q6_13_ProfessionalRepairersInfo:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.13)
+            text:
+                ifabsent: string(Information on access to professional repairers)
+            weight:
+                ifabsent: float(0.0125)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.14: Fault Detection
+    Q6_14_FaultDetection:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.14)
+            text:
+                ifabsent: string(Fault detection and action required)
+            weight:
+                ifabsent: float(0.0125)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q6.15: Maintenance Advice
+    Q6_15_MaintenanceAdvice:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.15)
+            text:
+                ifabsent: string(Advice on use and maintenance)
+            weight:
+                ifabsent: float(0.0125)
+            answer_options:
+                range: DocumentationAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all documentation availability questions
+    DocumentationAvailabilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - DocAvail_PubliclyAvailable
+            - DocAvail_IndependentProviders
+            - DocAvail_AuthorizedProviders
+            - DocAvail_ManufacturerOnly
+            - DocAvail_NotAvailable
+            - DocAvail_DataNotAvailable
+
+    DocAvail_PubliclyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_avail_publicly_available)
+            text:
+                ifabsent: string(Publicly available)
+            score:
+                ifabsent: float(4.0)
+
+    DocAvail_IndependentProviders:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_avail_independent_providers)
+            text:
+                ifabsent: string(Available to independent repair service providers)
+            score:
+                ifabsent: float(3.0)
+
+    DocAvail_AuthorizedProviders:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_avail_authorized_providers)
+            text:
+                ifabsent: string(Available to manufacturer-authorized repair service providers)
+            score:
+                ifabsent: float(2.0)
+
+    DocAvail_ManufacturerOnly:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_avail_manufacturer_only)
+            text:
+                ifabsent: string(Available to manufacturer only)
+            score:
+                ifabsent: float(1.0)
+
+    DocAvail_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_avail_not_available)
+            text:
+                ifabsent: string(Not available at all)
+            score:
+                ifabsent: float(0.0)
+
+    DocAvail_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(doc_avail_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P7: SPARE PARTS DIAGNOSTICS
+    # ============================================
+
+    SparePartsDiagnostics_Parameter:
+        is_a: ParameterSpecification
+        description: Spare parts diagnostic capabilities - core definition
+        attributes:
+            id:
+                ifabsent: string(P7_spare_parts_diagnostics)
+            name:
+                ifabsent: string(Spare Parts Diagnostics)
+            questions:
+                range: SparePartsDiagnosticsQuestion
+                multivalued: true
+                inlined: true
+
+    SparePartsDiagnosticsQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q7_1_DisplayAssembly
+            - Q7_2_Battery
+            - Q7_3_BackCover
+            - Q7_4_FrontCamera
+            - Q7_5_RearCamera
+            - Q7_6_ChargingPorts
+            - Q7_7_MechanicalButtons
+            - Q7_8_Microphone
+            - Q7_9_Speakers
+            - Q7_10_HingeAssembly
+
+    # Q7.1: Display Assembly Diagnostics
+    Q7_1_DisplayAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q7.1)
+            text:
+                ifabsent: string(Diagnostic interface for Display assembly (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.052631579)
+            answer_options:
+                range: DiagnosticsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q7.2: Battery Diagnostics
+    Q7_2_Battery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q7.2)
+            text:
+                ifabsent: string(Diagnostic interface for Battery (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.052631579)
+            answer_options:
+                range: DiagnosticsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q7.3: Back Cover Diagnostics
+    Q7_3_BackCover:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q7.3)
+            text:
+                ifabsent: string(Diagnostic interface for back cover or its assembly)
+            weight:
+                ifabsent: float(0.026315790)
+            answer_options:
+                range: DiagnosticsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q7.4: Front Camera Diagnostics
+    Q7_4_FrontCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q7.4)
+            text:
+                ifabsent: string(Diagnostic interface for front-facing camera assembly)
+            weight:
+                ifabsent: float(0.017543860)
+            answer_options:
+                range: DiagnosticsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q7.5: Rear Camera Diagnostics
+    Q7_5_RearCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q7.5)
+            text:
+                ifabsent: string(Diagnostic interface for rear-facing camera assembly)
+            weight:
+                ifabsent: float(0.017543860)
+            answer_options:
+                range: DiagnosticsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q7.6: Charging Ports Diagnostics
+    Q7_6_ChargingPorts:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q7.6)
+            text:
+                ifabsent: string(Diagnostic interface for external charging ports)
+            weight:
+                ifabsent: float(0.017543860)
+            answer_options:
+                range: DiagnosticsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q7.7: Mechanical Buttons Diagnostics
+    Q7_7_MechanicalButtons:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q7.7)
+            text:
+                ifabsent: string(Diagnostic interface for mechanical buttons)
+            weight:
+                ifabsent: float(0.017543860)
+            answer_options:
+                range: DiagnosticsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q7.8: Microphone Diagnostics
+    Q7_8_Microphone:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q7.8)
+            text:
+                ifabsent: string(Diagnostic interface for microphone)
+            weight:
+                ifabsent: float(0.017543860)
+            answer_options:
+                range: DiagnosticsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q7.9: Speakers Diagnostics
+    Q7_9_Speakers:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q7.9)
+            text:
+                ifabsent: string(Diagnostic interface for speaker(s))
+            weight:
+                ifabsent: float(0.017543860)
+            answer_options:
+                range: DiagnosticsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q7.10: Hinge Assembly Diagnostics
+    Q7_10_HingeAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q7.10)
+            text:
+                ifabsent: string(Diagnostic interface for hinge assembly or mechanical display folding mechanism)
+            weight:
+                ifabsent: float(0.013157895)
+            answer_options:
+                range: DiagnosticsInterfaceAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all diagnostics questions
+    DiagnosticsInterfaceAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - DiagInterface_Intuitive
+            - DiagInterface_CodedPublic
+            - DiagInterface_PublicHardwareSoftware
+            - DiagInterface_Proprietary
+            - DiagInterface_NotPossible
+            - DiagInterface_DataNotAvailable
+
+    DiagInterface_Intuitive:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diag_interface_intuitive)
+            text:
+                ifabsent: string(Intuitive interface (easily understandable with the help of a diagnosis with a signal))
+            score:
+                ifabsent: float(4.0)
+
+    DiagInterface_CodedPublic:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diag_interface_coded_public)
+            text:
+                ifabsent: string(Coded interface with public reference table (via support documentation, fault-finding tree, code etc supplied with the product))
+            score:
+                ifabsent: float(3.0)
+
+    DiagInterface_PublicHardwareSoftware:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diag_interface_public_hardware_software)
+            text:
+                ifabsent: string(Publicly available hardware/software interface (it can be diagnosed via public hardware/software for which the interface is accessible without tools))
+            score:
+                ifabsent: float(2.0)
+
+    DiagInterface_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diag_interface_proprietary)
+            text:
+                ifabsent: string(Proprietary interface (with using proprietary tools or by transfer of software not included with the product))
+            score:
+                ifabsent: float(1.0)
+
+    DiagInterface_NotPossible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diag_interface_not_possible)
+            text:
+                ifabsent: string(Not possible with any type of interface)
+            score:
+                ifabsent: float(0.0)
+
+    DiagInterface_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(diag_interface_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P8: SPARE PARTS AVAILABILITY
+    # ============================================
+
+    SparePartsAvailability_Parameter:
+        is_a: ParameterSpecification
+        description: Spare parts availability duration - core definition
+        attributes:
+            id:
+                ifabsent: string(P8_spare_parts_availability)
+            name:
+                ifabsent: string(Spare Parts Availability)
+            questions:
+                range: SparePartsAvailabilityQuestion
+                multivalued: true
+                inlined: true
+
+    SparePartsAvailabilityQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q8_1_DisplayAssembly
+            - Q8_2_Battery
+            - Q8_3_BackCover
+            - Q8_4_FrontCamera
+            - Q8_5_RearCamera
+            - Q8_6_ChargingPorts
+            - Q8_7_MechanicalButtons
+            - Q8_8_Microphone
+            - Q8_9_Speakers
+            - Q8_10_HingeAssembly
+
+    # Q8.1: Display Assembly Availability
+    Q8_1_DisplayAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q8.1)
+            text:
+                ifabsent: string(Spare parts availability for Display assembly (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.070175439)
+            answer_options:
+                range: RepairSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q8.2: Battery Availability
+    Q8_2_Battery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q8.2)
+            text:
+                ifabsent: string(Spare parts availability for Battery (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.070175439)
+            answer_options:
+                range: RepairSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q8.3: Back Cover Availability
+    Q8_3_BackCover:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q8.3)
+            text:
+                ifabsent: string(Spare parts availability for back cover or its assembly)
+            weight:
+                ifabsent: float(0.035087719)
+            answer_options:
+                range: RepairSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q8.4: Front Camera Availability
+    Q8_4_FrontCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q8.4)
+            text:
+                ifabsent: string(Spare parts availability for front-facing camera assembly)
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q8.5: Rear Camera Availability
+    Q8_5_RearCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q8.5)
+            text:
+                ifabsent: string(Spare parts availability for rear-facing camera assembly)
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q8.6: Charging Ports Availability
+    Q8_6_ChargingPorts:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q8.6)
+            text:
+                ifabsent: string(Spare parts availability for external charging ports)
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q8.7: Mechanical Buttons Availability
+    Q8_7_MechanicalButtons:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q8.7)
+            text:
+                ifabsent: string(Spare parts availability for mechanical buttons)
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q8.8: Microphone Availability
+    Q8_8_Microphone:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q8.8)
+            text:
+                ifabsent: string(Spare parts availability for microphone)
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q8.9: Speakers Availability
+    Q8_9_Speakers:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q8.9)
+            text:
+                ifabsent: string(Spare parts availability for speaker(s))
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q8.10: Hinge Assembly Availability
+    Q8_10_HingeAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q8.10)
+            text:
+                ifabsent: string(Spare parts availability for hinge assembly or mechanical display folding mechanism)
+            weight:
+                ifabsent: float(0.017543860)
+            answer_options:
+                range: RepairSparePartsAvailabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all spare parts availability questions
+    RepairSparePartsAvailabilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SpareAvail_Repair7YearsOrMore
+            - SpareAvail_Repair6Years
+            - SpareAvail_Repair5Years
+            - SpareAvail_RepairLessThan4Years
+            - SpareAvail_RepairPleaseSelect
+            - SpareAvail_RepairNotAvailable
+
+    SpareAvail_Repair7YearsOrMore:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_7_years_or_more)
+            text:
+                ifabsent: string(Available for 7 years or even longer)
+            score:
+                ifabsent: float(3.0)
+
+    SpareAvail_Repair6Years:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_6_years)
+            text:
+                ifabsent: string(Available for 6 years)
+            score:
+                ifabsent: float(2.0)
+
+    SpareAvail_Repair5Years:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_5_years)
+            text:
+                ifabsent: string(Available for 5 years)
+            score:
+                ifabsent: float(1.0)
+
+    SpareAvail_RepairLessThan4Years:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_less_than_4_years)
+            text:
+                ifabsent: string(Available for less than 4 years)
+            score:
+                ifabsent: float(0.0)
+
+    SpareAvail_RepairPleaseSelect:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_please_select)
+            text:
+                ifabsent: string(Please select the availability)
+            score:
+                ifabsent: float(0.0)
+
+    SpareAvail_RepairNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_avail_not_available)
+            text:
+                ifabsent: string(Component not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P9: SPARE PARTS DELIVERY
+    # ============================================
+
+    SparePartsDelivery_Parameter:
+        is_a: ParameterSpecification
+        description: Spare parts delivery speed - core definition
+        attributes:
+            id:
+                ifabsent: string(P9_spare_parts_delivery)
+            name:
+                ifabsent: string(Spare Parts Delivery)
+            questions:
+                range: SparePartsDeliveryQuestion
+                multivalued: true
+                inlined: true
+
+    SparePartsDeliveryQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q9_1_DisplayAssembly
+            - Q9_2_Battery
+            - Q9_3_BackCover
+            - Q9_4_FrontCamera
+            - Q9_5_RearCamera
+            - Q9_6_ChargingPorts
+            - Q9_7_MechanicalButtons
+            - Q9_8_Microphone
+            - Q9_9_Speakers
+            - Q9_10_HingeAssembly
+
+    # Q9.1: Display Assembly Delivery
+    Q9_1_DisplayAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q9.1)
+            text:
+                ifabsent: string(Spare parts delivery speed for Display assembly (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.070175439)
+            answer_options:
+                range: RepairSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q9.2: Battery Delivery
+    Q9_2_Battery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q9.2)
+            text:
+                ifabsent: string(Spare parts delivery speed for Battery (if multiple, consider deepest))
+            weight:
+                ifabsent: float(0.070175439)
+            answer_options:
+                range: RepairSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q9.3: Back Cover Delivery
+    Q9_3_BackCover:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q9.3)
+            text:
+                ifabsent: string(Spare parts delivery speed for back cover or its assembly)
+            weight:
+                ifabsent: float(0.035087719)
+            answer_options:
+                range: RepairSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q9.4: Front Camera Delivery
+    Q9_4_FrontCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q9.4)
+            text:
+                ifabsent: string(Spare parts delivery speed for front-facing camera assembly)
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q9.5: Rear Camera Delivery
+    Q9_5_RearCamera:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q9.5)
+            text:
+                ifabsent: string(Spare parts delivery speed for rear-facing camera assembly)
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q9.6: Charging Ports Delivery
+    Q9_6_ChargingPorts:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q9.6)
+            text:
+                ifabsent: string(Spare parts delivery speed for external charging ports)
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q9.7: Mechanical Buttons Delivery
+    Q9_7_MechanicalButtons:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q9.7)
+            text:
+                ifabsent: string(Spare parts delivery speed for mechanical buttons)
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q9.8: Microphone Delivery
+    Q9_8_Microphone:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q9.8)
+            text:
+                ifabsent: string(Spare parts delivery speed for microphone)
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q9.9: Speakers Delivery
+    Q9_9_Speakers:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q9.9)
+            text:
+                ifabsent: string(Spare parts delivery speed for speaker(s))
+            weight:
+                ifabsent: float(0.023391813)
+            answer_options:
+                range: RepairSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q9.10: Hinge Assembly Delivery
+    Q9_10_HingeAssembly:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q9.10)
+            text:
+                ifabsent: string(Spare parts delivery speed for hinge assembly or mechanical display folding mechanism)
+            weight:
+                ifabsent: float(0.017543860)
+            answer_options:
+                range: RepairSparePartsDeliveryAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for all spare parts delivery questions
+    RepairSparePartsDeliveryAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SpareDeliv_Repair3DaysOrLess
+            - SpareDeliv_Repair3To5Days
+            - SpareDeliv_Repair5To10Days
+            - SpareDeliv_RepairPleaseSelect
+            - SpareDeliv_RepairMoreThan10Days
+            - SpareDeliv_RepairNotAvailable
+
+    SpareDeliv_Repair3DaysOrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_3_days_or_less)
+            text:
+                ifabsent: string(Delivered in 3 days or less)
+            score:
+                ifabsent: float(3.0)
+
+    SpareDeliv_Repair3To5Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_3_to_5_days)
+            text:
+                ifabsent: string(Delivered in 3 to 5 days (5 included))
+            score:
+                ifabsent: float(2.0)
+
+    SpareDeliv_Repair5To10Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_5_to_10_days)
+            text:
+                ifabsent: string(Delivered in 5 to 10 days (10 included))
+            score:
+                ifabsent: float(1.0)
+
+    SpareDeliv_RepairPleaseSelect:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_please_select)
+            text:
+                ifabsent: string(Please select the delivery time)
+            score:
+                ifabsent: float(0.0)
+
+    SpareDeliv_RepairMoreThan10Days:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_more_than_10_days)
+            text:
+                ifabsent: string(Delivered in more than 10 days)
+            score:
+                ifabsent: float(0.0)
+
+    SpareDeliv_RepairNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(spare_deliv_not_available)
+            text:
+                ifabsent: string(Component not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P10: PRODUCT SPECIFIC QUESTIONS
+    # ============================================
+
+    ProductSpecificQuestions_Parameter:
+        is_a: ParameterSpecification
+        description: Product-specific questions related to software, usage monitoring, support, and parts pairing - core definition
+        attributes:
+            id:
+                ifabsent: string(P10_product_specific)
+            name:
+                ifabsent: string(Product Specific Questions)
+            questions:
+                range: ProductSpecificQuestion
+                multivalued: true
+                inlined: true
+
+    ProductSpecificQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q10_1_SoftwareUpdateElectronicBoard
+            - Q10_2_SoftwareUpdateFirmware
+            - Q10_3_SoftwareUpdateInfo
+            - Q10_4_UsageCounter
+            - Q10_5_UsageAlerts
+            - Q10_6_UsageOptimization
+            - Q10_7_UsageLimitations
+            - Q10_8_RemoteAssistance
+            - Q10_9_MultiProductBattery
+
+    # Q10.1: Software Update - Electronic Board
+    Q10_1_SoftwareUpdateElectronicBoard:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q10.1)
+            text:
+                ifabsent: string(Is it possible to perform software updates on the electronic board?)
+            weight:
+                ifabsent: float(0.125)
+            answer_options:
+                range: YesNoAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q10.2: Software Update - Firmware
+    Q10_2_SoftwareUpdateFirmware:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q10.2)
+            text:
+                ifabsent: string(Is it possible to perform software updates on the firmware?)
+            weight:
+                ifabsent: float(0.125)
+            answer_options:
+                range: YesNoAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q10.3: Software Update Information
+    Q10_3_SoftwareUpdateInfo:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q10.3)
+            text:
+                ifabsent: "string(Is there any information provided on the upcoming software update? (Type of updates: corrective, evolutionary, or mixed))"
+            weight:
+                ifabsent: float(0.125)
+            answer_options:
+                range: YesNoAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q10.4: Usage Counter
+    Q10_4_UsageCounter:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q10.4)
+            text:
+                ifabsent: string(Can the user access a usage counter to monitor consumption? If no, is there a way in general to track product usage over time?)
+            weight:
+                ifabsent: float(0.125)
+            answer_options:
+                range: YesNoAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q10.5: Usage Alerts
+    Q10_5_UsageAlerts:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q10.5)
+            text:
+                ifabsent: string(Does the product provide alerts or notifications based on usage levels?)
+            weight:
+                ifabsent: float(0.125)
+            answer_options:
+                range: YesNoAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q10.6: Usage Optimization
+    Q10_6_UsageOptimization:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q10.6)
+            text:
+                ifabsent: string(Is there any system in place to optimize usage and extend product lifespan?)
+            weight:
+                ifabsent: float(0.125)
+            answer_options:
+                range: YesNoAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q10.7: Usage Limitations
+    Q10_7_UsageLimitations:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q10.7)
+            text:
+                ifabsent: string(Are there any limitations or restrictions based on usage patterns?)
+            weight:
+                ifabsent: float(0.125)
+            answer_options:
+                range: YesNoAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q10.8: Remote Assistance
+    Q10_8_RemoteAssistance:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q10.8)
+            text:
+                ifabsent: string(Is remote assistance available for free? (Through hotline, online support, etc.))
+            weight:
+                ifabsent: float(0.125)
+            answer_options:
+                range: YesNoAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Q10.9: Multi-Product Battery
+    Q10_9_MultiProductBattery:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q10.9)
+            text:
+                ifabsent: string(Is it possible to use a multi-product battery?)
+            weight:
+                ifabsent: float(0.125)
+            answer_options:
+                range: YesNoAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Common answer options for product-specific questions
+    YesNoAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - YesNo_Yes
+            - YesNo_No
+            - YesNo_DataUnavailable
+            - YesNo_Irrelevant
+
+    YesNo_Yes:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(yes_no_yes)
+            text:
+                ifabsent: string(Yes)
+            score:
+                ifabsent: float(1.0)
+
+    YesNo_No:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(yes_no_no)
+            text:
+                ifabsent: string(No)
+            score:
+                ifabsent: float(0.0)
+
+    YesNo_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(yes_no_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    YesNo_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(yes_no_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)

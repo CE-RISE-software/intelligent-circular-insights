@@ -1,0 +1,1449 @@
+id: https://ce-rise-models.codeberg.page/material-profile/
+name: material-profile
+title: CE-RISE Material Profile Data Model
+description: >
+    Core data model defining the mandatory Material Profile for Digital Material Passports,
+    including material identity, chemical composition, supplier details, and technical specifications.
+license: CC BY-NC 4.0
+version: 0.1.1
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    mat_prof: https://ce-rise-models.codeberg.page/material-profile/
+    xsd: http://www.w3.org/2001/XMLSchema#
+    rdfs: http://www.w3.org/2000/01/rdf-schema#
+    gs1: https://ref.gs1.org/voc/
+    eu_country: http://publications.europa.eu/resource/authority/country/
+    cas: https://www.cas.org/
+    unspsc: https://www.unspsc.org/
+    chebi: http://purl.obolibrary.org/obo/CHEBI_
+    cheminf: http://semanticscience.org/resource/CHEMINF_
+    qudt: http://qudt.org/schema/qudt/
+    unit: http://qudt.org/vocab/unit/
+    schema: http://schema.org/
+    bao: http://www.bioassayontology.org/bao#
+    obi: http://purl.obolibrary.org/obo/OBI_
+    emmo: https://w3id.org/emmo#
+    pato: http://purl.obolibrary.org/obo/PATO_
+    chmo: http://purl.obolibrary.org/obo/CHMO_
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+
+default_prefix: mat_prof
+default_range: string
+
+imports:
+    - linkml:types
+    - https://codeberg.org/CE-RISE-models/uncertainty-quantification/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/metrological-traceability/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/data-quality-framework/raw/tag/pages-v0.0.3/generated/schema
+
+slots:
+    # Step 1: Material Identity slots
+    cas_registry_number_value:
+        description: "CAS Registry Number for pure chemical substances (format: XXXXX-XX-X)"
+        range: string
+        pattern: "^\\d{2,7}-\\d{2}-\\d$"
+        annotations:
+            owl.filler: cas:registryNumber
+            sql_identifier: "mat_identity_cas_registry"
+
+    inchi_value:
+        description: "International Chemical Identifier (InChI) - structure-based identifier"
+        range: string
+        annotations:
+            owl.filler: cheminf:000396
+            sql_identifier: "mat_identity_inchi"
+
+    inchikey_value:
+        description: "InChIKey - hashed InChI for database matching"
+        range: string
+        pattern: "^[A-Z]{14}-[A-Z]{10}-[A-Z]$"
+        annotations:
+            owl.filler: cheminf:000399
+            sql_identifier: "mat_identity_inchikey"
+
+    smiles_value:
+        description: "SMILES (Simplified Molecular-Input Line-Entry System) - molecular structure string"
+        range: string
+        annotations:
+            owl.filler: cheminf:000018
+            sql_identifier: "mat_identity_smiles"
+
+    specification_code_value:
+        description: "ISO/EN/ASTM specification code for technical materials"
+        range: string
+        annotations:
+            owl.filler: schema:materialExtent
+            sql_identifier: "mat_identity_specification_code"
+
+    unspsc_code_value:
+        description: "UNSPSC (United Nations Standard Products and Services Code) - 8-digit commodity classification"
+        range: string
+        pattern: "^\\d{8}$"
+        annotations:
+            owl.filler: unspsc:code
+            sql_identifier: "mat_identity_unspsc_code"
+
+    hs_code_value:
+        description: "Harmonized System code - 6-digit for international trade commodities"
+        range: string
+        pattern: "^\\d{6}$"
+        annotations:
+            owl.filler: mat_prof:hsCodeValue
+            sql_identifier: "mat_identity_hs_code"
+
+    supplier_material_code_value:
+        description: "Supplier-specific material code or SKU"
+        range: string
+        annotations:
+            owl.filler: mat_prof:supplierMaterialCodeValue
+            sql_identifier: "mat_identity_supplier_code"
+
+    batch_number_value:
+        description: "Batch or lot number from material supplier (required for composite unique identifier)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:batchNumberValue
+            sql_identifier: "mat_identity_batch_number"
+
+    processing_date_value:
+        description: "Date of material extraction, processing, or import (ISO 8601 format: YYYY-MM-DD)"
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+        annotations:
+            owl.filler: mat_prof:processingDateValue
+            sql_identifier: "mat_identity_processing_date"
+
+    chemical_name_value:
+        description: "Chemical or material name (IUPAC, common names)"
+        range: string
+        annotations:
+            owl.filler: chebi:24431
+            sql_identifier: "mat_identity_chemical_name"
+
+    molecular_formula_value:
+        description: "Chemical formula"
+        range: string
+        annotations:
+            owl.filler: cheminf:000042
+            sql_identifier: "mat_identity_molecular_formula"
+
+    material_grade_value:
+        description: "Material grade designation (e.g., pharmaceutical, food, technical, commercial)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:materialGradeValue
+            sql_identifier: "mat_identity_material_grade"
+
+    unique_material_identifier_value:
+        description: "Composite unique identifier: [TYPE]:[VALUE]:[BATCH] (e.g., CAS:7732-18-5:BATCH-2024-001)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:uniqueMaterialIdentifierValue
+            sql_identifier: "mat_identity_unique_id"
+
+    # Step 2: Supplier Information slots (reuse from product model with standard ontologies)
+    organization_gln_value:
+        description: "Organization GLN (Global Location Number) - 13-digit GS1 identifier for the legal entity"
+        range: string
+        pattern: "^[0-9]{13}$"
+        annotations:
+            owl.filler: gs1:gln
+            sql_identifier: "mat_supplier_org_gln"
+
+    lei_code_value:
+        description: "Legal Entity Identifier - 20-character ISO 17442 identifier"
+        range: string
+        pattern: "^[A-Z0-9]{18}[0-9]{2}$"
+        annotations:
+            owl.filler: schema:leiCode
+            sql_identifier: "mat_supplier_lei_code"
+
+    legal_name_value:
+        description: "Legal name of the supplier organization"
+        range: string
+        annotations:
+            owl.filler: schema:legalName
+            sql_identifier: "mat_supplier_legal_name"
+
+    vat_number_value:
+        description: "VAT registration number"
+        range: string
+        annotations:
+            owl.filler: schema:vatID
+            sql_identifier: "mat_supplier_vat_number"
+
+    company_registration_value:
+        description: "Local company registration number"
+        range: string
+        annotations:
+            owl.filler: schema:identifier
+            sql_identifier: "mat_supplier_company_registration"
+
+    country_of_incorporation_value:
+        description: "Country of incorporation using EU Publications Office 3-character country codes"
+        range: string
+        pattern: "^[A-Z]{3}$"
+        annotations:
+            owl.filler: eu_country:countryOfIncorporation
+            sql_identifier: "mat_supplier_country_incorporation"
+
+    facility_gln_value:
+        description: "Facility GLN (Global Location Number) - 13-digit GS1 identifier for the processing facility"
+        range: string
+        pattern: "^[0-9]{13}$"
+        annotations:
+            owl.filler: gs1:gln
+            sql_identifier: "mat_supplier_facility_gln"
+
+    parent_gln_value:
+        description: "Parent organization GLN - links facility to parent organization"
+        range: string
+        pattern: "^[0-9]{13}$"
+        annotations:
+            owl.filler: gs1:gln
+            sql_identifier: "mat_supplier_parent_gln"
+
+    osid_value:
+        description: "Open Supply Hub ID for facility verification"
+        range: string
+        annotations:
+            owl.filler: mat_prof:osidValue
+            sql_identifier: "mat_supplier_osid"
+
+    facility_name_value:
+        description: "Name of the processing facility"
+        range: string
+        annotations:
+            owl.filler: schema:name
+            sql_identifier: "mat_supplier_facility_name"
+
+    facility_type_value:
+        description: "Type of facility - EXTRACTION, PROCESSING, RECYCLING, IMPORT"
+        range: string
+        pattern: "^(EXTRACTION|PROCESSING|RECYCLING|IMPORT)$"
+        annotations:
+            owl.filler: mat_prof:facilityTypeValue
+            sql_identifier: "mat_supplier_facility_type"
+
+    coordinates_value:
+        description: "GPS coordinates of the facility (latitude,longitude)"
+        range: string
+        pattern: "^-?[0-9]{1,2}\\.[0-9]+,-?[0-9]{1,3}\\.[0-9]+$"
+        annotations:
+            owl.filler: schema:geo
+            sql_identifier: "mat_supplier_coordinates"
+
+    material_origin_location_value:
+        description: "Geographic location of material source (mine, forest, recycling facility, synthesis plant)"
+        range: string
+        annotations:
+            owl.filler: schema:location
+            sql_identifier: "mat_supplier_origin_location"
+
+    material_source_type_value:
+        description: "Source of material: PRIMARY_EXTRACTION, RECYCLED, SYNTHESIZED, NATURAL_HARVEST"
+        range: string
+        pattern: "^(PRIMARY_EXTRACTION|RECYCLED|SYNTHESIZED|NATURAL_HARVEST)$"
+        annotations:
+            owl.filler: mat_prof:materialSourceTypeValue
+            sql_identifier: "mat_supplier_source_type"
+
+    extraction_harvest_date_value:
+        description: "Date of extraction or harvest (ISO 8601 format)"
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+        annotations:
+            owl.filler: schema:dateCreated
+            sql_identifier: "mat_supplier_extraction_date"
+
+    # Step 3: Import/Export Information slots (reuse from product model with standard ontologies)
+    eori_number_value:
+        description: "EORI number - 2-letter country code followed by up to 15 alphanumeric characters"
+        range: string
+        pattern: "^[A-Z]{2}[A-Z0-9]{1,15}$"
+        annotations:
+            owl.filler: schema:taxID
+            sql_identifier: "mat_import_eori"
+
+    customs_document_type_value:
+        description: "Type of customs document (e.g., MRN, declaration ID, customs certificate)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:customsDocumentTypeValue
+            sql_identifier: "mat_import_customs_doc_type"
+
+    customs_document_id_value:
+        description: "Unique identifier of the customs document"
+        range: string
+        annotations:
+            owl.filler: schema:identifier
+            sql_identifier: "mat_import_customs_doc_id"
+
+    customs_issuing_authority_value:
+        description: "Authority that issued the customs document"
+        range: string
+        annotations:
+            owl.filler: schema:issuedBy
+            sql_identifier: "mat_import_customs_authority"
+
+    customs_document_urls_value:
+        description: "URLs or references to digital copies of customs documents (comma-separated)"
+        range: string
+        pattern: "^https://.*\\.(pdf|doc|docx|jpg|jpeg|png|gif|bmp|webp)(,\\s*https://.*\\.(pdf|doc|docx|jpg|jpeg|png|gif|bmp|webp))*$"
+        annotations:
+            owl.filler: schema:url
+            sql_identifier: "mat_import_customs_doc_urls"
+
+    operation_type_value:
+        description: "Type of import/export operation (IMPORT, EXPORT, TRANSIT, RE_EXPORT)"
+        range: string
+        pattern: "^(IMPORT|EXPORT|TRANSIT|RE_EXPORT)$"
+        annotations:
+            owl.filler: mat_prof:operationTypeValue
+            sql_identifier: "mat_import_operation_type"
+
+    operation_date_value:
+        description: "Date of the import/export operation (ISO 8601 format)"
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}:\\d{2}(Z|[+-]\\d{2}:\\d{2}))?$"
+        annotations:
+            owl.filler: schema:dateCreated
+            sql_identifier: "mat_import_operation_date"
+
+    shipment_transaction_id_value:
+        description: "Unique identifier for the shipment or transaction"
+        range: string
+        annotations:
+            owl.filler: schema:identifier
+            sql_identifier: "mat_import_shipment_id"
+
+    operation_quantities_value:
+        description: "Quantities involved in the operation with units (e.g., 1000 kg, 500 pieces)"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_import_quantities"
+
+    incoterms_value:
+        description: "International commercial terms (e.g., FOB, CIF, EXW, DDP)"
+        range: string
+        pattern: "^(EXW|FCA|FAS|FOB|CFR|CIF|CPT|CIP|DAT|DAP|DDP)$"
+        annotations:
+            owl.filler: mat_prof:incotermsValue
+            sql_identifier: "mat_import_incoterms"
+
+    operation_value_amount_value:
+        description: "Monetary value of the operation with currency code (e.g., 15000.00 EUR)"
+        range: string
+        pattern: "^\\d+(\\.\\d{2})?\\s+[A-Z]{3}$"
+        annotations:
+            owl.filler: schema:price
+            sql_identifier: "mat_import_operation_value"
+
+    jurisdiction_country_value:
+        description: "Country of importer's legal establishment using EU Publications Office 3-character country codes"
+        range: string
+        pattern: "^[A-Z]{3}$"
+        annotations:
+            owl.filler: eu_country:jurisdictionCountry
+            sql_identifier: "mat_import_jurisdiction"
+
+    cn_code_value:
+        description: "8-digit Combined Nomenclature code used in EU customs"
+        range: string
+        pattern: "^[0-9]{8}$"
+        annotations:
+            owl.filler: mat_prof:cnCodeValue
+            sql_identifier: "mat_import_cn_code"
+
+    taric_code_value:
+        description: "10-digit TARIC (Integrated Tariff of European Communities) code"
+        range: string
+        pattern: "^[0-9]{10}$"
+        annotations:
+            owl.filler: mat_prof:taricCodeValue
+            sql_identifier: "mat_import_taric_code"
+
+    tariff_description_value:
+        description: "Human-readable description of the tariff classification"
+        range: string
+        annotations:
+            owl.filler: schema:description
+            sql_identifier: "mat_import_tariff_description"
+
+    duty_rate_value:
+        description: "Applied customs duty rate as percentage (e.g., 12.5)"
+        range: float
+        annotations:
+            owl.filler: mat_prof:dutyRateValue
+            sql_identifier: "mat_import_duty_rate"
+
+    entry_port_code_value:
+        description: "UN/LOCODE port/airport code where goods entered (e.g., DEHAM, NLRTM)"
+        range: string
+        pattern: "^[A-Z]{2}[A-Z0-9]{3}$"
+        annotations:
+            owl.filler: mat_prof:entryPortCodeValue
+            sql_identifier: "mat_import_entry_port"
+
+    exit_port_code_value:
+        description: "UN/LOCODE port/airport code where goods exited (e.g., GBFXT, FRMRS)"
+        range: string
+        pattern: "^[A-Z]{2}[A-Z0-9]{3}$"
+        annotations:
+            owl.filler: mat_prof:exitPortCodeValue
+            sql_identifier: "mat_import_exit_port"
+
+    border_crossing_date_value:
+        description: "Actual border crossing timestamp in ISO 8601 format"
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|[+-]\\d{2}:\\d{2})$"
+        annotations:
+            owl.filler: schema:dateCreated
+            sql_identifier: "mat_import_border_crossing_date"
+
+    customs_office_code_value:
+        description: "Responsible customs office code (e.g., DE005300 for Hamburg)"
+        range: string
+        pattern: "^[A-Z]{2}[0-9]{6}$"
+        annotations:
+            owl.filler: mat_prof:customsOfficeCodeValue
+            sql_identifier: "mat_import_customs_office"
+
+    aeo_certificate_number_value:
+        description: "Authorized Economic Operator certificate number"
+        range: string
+        annotations:
+            owl.filler: schema:identifier
+            sql_identifier: "mat_import_aeo_cert_number"
+
+    aeo_type_value:
+        description: "Type of AEO certification (AEOC, AEOS, AEOF)"
+        range: string
+        pattern: "^(AEOC|AEOS|AEOF)$"
+        annotations:
+            owl.filler: mat_prof:aeoTypeValue
+            sql_identifier: "mat_import_aeo_type"
+
+    aeo_validity_date_value:
+        description: "AEO certificate validity end date in ISO 8601 format"
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+        annotations:
+            owl.filler: schema:validThrough
+            sql_identifier: "mat_import_aeo_validity"
+
+    import_license_number_value:
+        description: "Import license or permit number for restricted materials"
+        range: string
+        annotations:
+            owl.filler: schema:identifier
+            sql_identifier: "mat_import_license_number"
+
+    permit_type_value:
+        description: "Type of import permit or license required"
+        range: string
+        annotations:
+            owl.filler: mat_prof:permitTypeValue
+            sql_identifier: "mat_import_permit_type"
+
+    permit_issuing_authority_value:
+        description: "Authority that issued the import permit or license"
+        range: string
+        annotations:
+            owl.filler: schema:issuedBy
+            sql_identifier: "mat_import_permit_authority"
+
+    permit_validity_period_value:
+        description: "Permit validity period (start and end dates)"
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}/\\d{4}-\\d{2}-\\d{2}$"
+        annotations:
+            owl.filler: mat_prof:permitValidityPeriodValue
+            sql_identifier: "mat_import_permit_validity"
+
+    # Step 4: Material Specifications slots
+    # Composition
+    primary_component_name_value:
+        description: "Name of primary component or substance"
+        range: string
+        annotations:
+            owl.filler: chebi:24431
+            sql_identifier: "mat_specs_primary_name"
+
+    primary_component_cas_value:
+        description: "CAS number of primary component"
+        range: string
+        pattern: "^\\d{2,7}-\\d{2}-\\d$"
+        annotations:
+            owl.filler: cas:registryNumber
+            sql_identifier: "mat_specs_primary_cas"
+
+    purity_percentage_value:
+        description: "Measured purity percentage of primary component (e.g., 99.7)"
+        range: float
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_purity"
+
+    additive_name_value:
+        description: "Name of additive"
+        range: string
+        annotations:
+            owl.filler: chebi:24431
+            sql_identifier: "mat_specs_additive_name"
+
+    additive_cas_value:
+        description: "CAS number of additive"
+        range: string
+        pattern: "^\\d{2,7}-\\d{2}-\\d$"
+        annotations:
+            owl.filler: cas:registryNumber
+            sql_identifier: "mat_specs_additive_cas"
+
+    additive_concentration_value:
+        description: "Concentration of additive (e.g., 0.2%, 10 ppm)"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_additive_concentration"
+
+    additive_function_value:
+        description: "Function of additive (e.g., hardener, stabilizer, lubricant)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:additiveFunctionValue
+            sql_identifier: "mat_specs_additive_function"
+
+    trace_element_name_value:
+        description: "Name of trace element"
+        range: string
+        annotations:
+            owl.filler: chebi:24431
+            sql_identifier: "mat_specs_trace_name"
+
+    trace_element_max_concentration_value:
+        description: "Maximum allowable concentration of trace element (e.g., 10 ppm, 5 ppt)"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_trace_max_concentration"
+
+    composition_test_method_value:
+        description: "Testing method used for composition analysis (e.g., ICP-MS, HPLC, XRF)"
+        range: string
+        annotations:
+            owl.filler: chmo:0000228
+            sql_identifier: "mat_specs_test_method"
+
+    composition_test_date_value:
+        description: "Date of composition analysis (ISO 8601)"
+        range: string
+        pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+        annotations:
+            owl.filler: schema:dateCreated
+            sql_identifier: "mat_specs_test_date"
+
+    composition_certification_authority_value:
+        description: "Certification authority for composition verification"
+        range: string
+        annotations:
+            owl.filler: schema:issuedBy
+            sql_identifier: "mat_specs_cert_authority"
+
+    recycled_content_percentage_value:
+        description: "Percentage of recycled content (0-100)"
+        range: float
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_recycled_percentage"
+
+    recycled_cycle_number_value:
+        description: "Recycling cycle number (e.g., 1st cycle, 2nd cycle, 3rd cycle)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:recycledCycleNumberValue
+            sql_identifier: "mat_specs_recycled_cycle"
+
+    recycled_source_value:
+        description: "Source of recycled material: post-consumer, post-industrial"
+        range: string
+        pattern: "^(post-consumer|post-industrial)$"
+        annotations:
+            owl.filler: mat_prof:recycledSourceValue
+            sql_identifier: "mat_specs_recycled_source"
+
+    # Physical Properties
+    density_value:
+        description: "Density in g/cm³"
+        range: string
+        annotations:
+            owl.filler: pato:0001019
+            sql_identifier: "mat_specs_density"
+
+    bulk_density_value:
+        description: "Bulk density in g/cm³"
+        range: string
+        annotations:
+            owl.filler: pato:0001019
+            sql_identifier: "mat_specs_bulk_density"
+            references: "IUPAC Gold Book: bulk density"
+
+    color_value:
+        description: "Color description or hex code"
+        range: string
+        annotations:
+            owl.filler: schema:color
+            sql_identifier: "mat_specs_color"
+
+    state_value:
+        description: "Physical state: solid, liquid, gas, paste"
+        range: string
+        pattern: "^(solid|liquid|gas|paste)$"
+        annotations:
+            owl.filler: pato:0001025
+            sql_identifier: "mat_specs_state"
+
+    particle_size_value:
+        description: "Particle size in micrometers (μm) for powders/granules"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_particle_size"
+
+    # Mechanical Properties
+    tensile_strength_value:
+        description: "Tensile strength in MPa"
+        range: string
+        annotations:
+            owl.filler: emmo:EMMO_6b24a43e_5a96_4e3c_9a6e_d6d1e6c0b0a0
+            sql_identifier: "mat_specs_tensile_strength"
+
+    hardness_value:
+        description: "Hardness value (Vickers, Brinell, or Rockwell scale)"
+        range: string
+        annotations:
+            owl.filler: pato:0000915
+            sql_identifier: "mat_specs_hardness"
+
+    young_modulus_value:
+        description: "Young's modulus in GPa"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_young_modulus"
+
+    # Thermal Properties
+    melting_point_value:
+        description: "Melting point in °C"
+        range: string
+        annotations:
+            owl.filler: pato:0000008
+            sql_identifier: "mat_specs_melting_point"
+
+    thermal_conductivity_value:
+        description: "Thermal conductivity in W/m·K"
+        range: string
+        annotations:
+            owl.filler: emmo:EMMO_c5ddfdce_c595_47a5_aea0_3b123b5e10dd
+            sql_identifier: "mat_specs_thermal_conductivity"
+
+    expansion_coefficient_value:
+        description: "Thermal expansion coefficient in ppm/K"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_expansion_coefficient"
+
+    # Chemical Properties
+    reactivity_value:
+        description: "Reactivity description (with air, water, acids, bases)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:reactivityValue
+            sql_identifier: "mat_specs_reactivity"
+
+    corrosion_resistance_value:
+        description: "Corrosion resistance description (specified environment)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:corrosionResistanceValue
+            sql_identifier: "mat_specs_corrosion_resistance"
+
+    solubility_value:
+        description: "Solubility description (in specified solvents)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:solubilityValue
+            sql_identifier: "mat_specs_solubility"
+
+    flammability_value:
+        description: "Flammability classification (ASTM D92, etc.)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:flammabilityValue
+            sql_identifier: "mat_specs_flammability"
+
+    # Electrical Properties
+    electrical_conductivity_value:
+        description: "Electrical conductivity in S/m"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_electrical_conductivity"
+
+    resistivity_value:
+        description: "Electrical resistivity in Ω·m"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_resistivity"
+
+    # Optical Properties
+    refractive_index_value:
+        description: "Refractive index"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_refractive_index"
+
+    # Fingerprinting
+    fingerprint_isotope_ratios_value:
+        description: "Isotope ratio measurements for fingerprinting (e.g., δ13C, δ18O)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:fingerprintIsotopeRatiosValue
+            sql_identifier: "mat_specs_fingerprint_isotopes"
+
+    fingerprint_spectroscopy_value:
+        description: "Spectroscopy signatures (XRF, NMR, Raman) for fingerprinting"
+        range: string
+        annotations:
+            owl.filler: mat_prof:fingerprintSpectroscopyValue
+            sql_identifier: "mat_specs_fingerprint_spectroscopy"
+
+    fingerprint_method_value:
+        description: "Analytical method used for fingerprinting"
+        range: string
+        annotations:
+            owl.filler: chmo:0000228
+            sql_identifier: "mat_specs_fingerprint_method"
+
+    # Test Conditions
+    test_reference_temperature_value:
+        description: "Reference temperature for testing (°C)"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_test_temperature"
+
+    test_reference_humidity_value:
+        description: "Reference humidity for testing (%)"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_test_humidity"
+
+    test_atmospheric_pressure_value:
+        description: "Atmospheric pressure during testing (Pa)"
+        range: string
+        annotations:
+            owl.filler: qudt:quantityValue
+            sql_identifier: "mat_specs_test_pressure"
+
+    test_standard_value:
+        description: "Testing standard applied (ISO, ASTM, EN)"
+        range: string
+        annotations:
+            owl.filler: mat_prof:testStandardValue
+            sql_identifier: "mat_specs_test_standard"
+
+    sql_identifier:
+        description: "Machine-friendly field name for databases"
+        range: string
+        annotations:
+            owl.filler: mat_prof:sqlIdentifier
+
+classes:
+    # Root class
+    MaterialIdentification:
+        class_uri: mat_prof:materialIdentification
+        description: "Root class for material identification information"
+        annotations:
+            sql_identifier: "mat_prof_root"
+
+    # Step 1: Material Identity
+    MaterialIdentity:
+        is_a: MaterialIdentification
+        class_uri: mat_prof:materialIdentity
+        description: "Material identity with chemical identifiers and batch traceability"
+        annotations:
+            sql_identifier: "mat_identity"
+
+    # Step 1 subclasses - Material Identity
+    ChemicalIdentifier:
+        is_a: MaterialIdentity
+        class_uri: mat_prof:chemicalIdentifier
+        description: "Chemical identifiers: CAS, InChI, InChIKey, SMILES"
+        comments:
+            - "Used for pure chemical substances and compounds"
+            - "At least one chemical identifier should be provided if material is a chemical substance"
+        attributes:
+            cas_registry_number_value:
+                range: string
+                required: false
+            inchi_value:
+                range: string
+                required: false
+            inchikey_value:
+                range: string
+                required: false
+            smiles_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_identity_chemical"
+
+    SpecificationCode:
+        is_a: MaterialIdentity
+        class_uri: mat_prof:specificationCode
+        description: "ISO/EN/ASTM specification code for technical materials"
+        comments:
+            - "Used for technical materials: alloys, polymers, ceramics"
+            - "Examples: ISO 21305 for plastics, ISO 3691 for aluminum alloys"
+        attributes:
+            specification_code_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_identity_specification"
+
+    CommodityCode:
+        is_a: MaterialIdentity
+        class_uri: mat_prof:commodityCode
+        description: "UNSPSC or HS code for commodity materials"
+        comments:
+            - "UNSPSC: 8-digit United Nations Standard Products and Services Code"
+            - "HS: 6-digit Harmonized System code for international trade"
+            - "Used for commodity materials: agricultural, mineral, energy"
+        attributes:
+            unspsc_code_value:
+                range: string
+                required: false
+            hs_code_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_identity_commodity"
+
+    SupplierMaterialCode:
+        is_a: MaterialIdentity
+        class_uri: mat_prof:supplierMaterialCode
+        description: "Supplier-specific material code or SKU"
+        comments:
+            - "Used for non-standardized materials"
+            - "Vendor-specific identification"
+        attributes:
+            supplier_material_code_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_identity_supplier_material_code"
+
+    BatchTraceability:
+        is_a: MaterialIdentity
+        class_uri: mat_prof:batchTraceability
+        description: "Batch/lot number and processing date for material traceability"
+        comments:
+            - "Batch number required for composite unique identifier"
+            - "Processing date: extraction, synthesis, or import date"
+        attributes:
+            batch_number_value:
+                range: string
+                required: false
+            processing_date_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_identity_batch"
+
+    MaterialName:
+        is_a: MaterialIdentity
+        class_uri: mat_prof:materialName
+        description: "Chemical or material name and molecular formula"
+        comments:
+            - "IUPAC and common names"
+            - "Molecular formula for chemical substances"
+        attributes:
+            chemical_name_value:
+                range: string
+                required: false
+            molecular_formula_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_identity_name"
+
+    MaterialGrade:
+        is_a: MaterialIdentity
+        class_uri: mat_prof:materialGrade
+        description: "Material grade designation"
+        comments:
+            - "Grade designation: pharmaceutical, food, technical, commercial"
+            - "Quality classification"
+        attributes:
+            material_grade_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_identity_grade"
+
+    UniqueMaterialIdentifier:
+        is_a: MaterialIdentity
+        class_uri: mat_prof:uniqueMaterialIdentifier
+        description: "Composite unique identifier enabling web link to material passport"
+        comments:
+            - "Format: [IDENTIFIER_TYPE]:[IDENTIFIER_VALUE]:[BATCH_NUMBER]"
+            - "Examples: CAS:7732-18-5:BATCH-2024-001, SPEC:ISO-21305:BATCH-2024-001"
+            - "Composite key allows same material referenced through different identifier systems"
+            - "Enables batch-level traceability"
+        attributes:
+            unique_material_identifier_value:
+                range: string
+                required: true
+        annotations:
+            sql_identifier: "mat_identity_unique_material_identifier"
+
+    # Step 2: Supplier Information
+    SupplierInformation:
+        is_a: MaterialIdentification
+        class_uri: mat_prof:supplierInformation
+        description: "Information about the material supplier and processing facility"
+        annotations:
+            sql_identifier: "mat_supplier"
+
+    # Step 2 subclasses - Supplier Information (GS1-centric hierarchical model)
+    OrganizationEntity:
+        is_a: SupplierInformation
+        class_uri: mat_prof:organizationEntity
+        description: "Supplier legal entity information with GS1 GLN as preferred identifier"
+        comments:
+            - "Hierarchical organization identification supporting GS1 GLN as primary standard"
+            - "Fallback support for LEI, VAT, and local registration numbers"
+            - "Addresses separation of legal entity from physical facilities"
+            - "Reused from product model structure"
+        attributes:
+            organization_gln_value:
+                range: string
+                required: false
+            lei_code_value:
+                range: string
+                required: false
+            legal_name_value:
+                range: string
+                required: false
+            vat_number_value:
+                range: string
+                required: false
+            company_registration_value:
+                range: string
+                required: false
+            country_of_incorporation_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_supplier_org_entity"
+
+    ProcessingFacility:
+        is_a: SupplierInformation
+        class_uri: mat_prof:processingFacility
+        description: "Physical processing facility with GS1 GLN and hierarchical linking"
+        comments:
+            - "Physical facility identification separate from legal entity"
+            - "GS1 GLN preferred with parent organization linking"
+            - "Integration with Open Supply Hub for facility verification"
+            - "GPS coordinates for precise location tracking"
+            - "Facility types: EXTRACTION, PROCESSING, RECYCLING, IMPORT"
+            - "Reused from product ManufacturingFacility structure"
+        attributes:
+            facility_gln_value:
+                range: string
+                required: false
+            parent_gln_value:
+                range: string
+                required: false
+            osid_value:
+                range: string
+                required: false
+            facility_name_value:
+                range: string
+                required: false
+            facility_type_value:
+                range: string
+                required: false
+            coordinates_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_supplier_facility"
+
+    MaterialOrigin:
+        is_a: SupplierInformation
+        class_uri: mat_prof:materialOrigin
+        description: "Material source location and extraction/harvest information"
+        comments:
+            - "Geographic location of material source (mine, forest, recycling facility, synthesis plant)"
+            - "Source type classification: PRIMARY_EXTRACTION, RECYCLED, SYNTHESIZED, NATURAL_HARVEST"
+            - "Extraction or harvest date tracking"
+        attributes:
+            material_origin_location_value:
+                range: string
+                required: false
+            material_source_type_value:
+                range: string
+                required: false
+            extraction_harvest_date_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_supplier_origin"
+
+    # Step 3: Information Related to Import/Export
+    InformationRelatedToImportExport:
+        is_a: MaterialIdentification
+        class_uri: mat_prof:informationRelatedToImportExport
+        description: "Information related to material import/export operations and customs compliance"
+        annotations:
+            sql_identifier: "mat_import"
+
+    # Step 3 subclasses - Import/Export Information (reused from product model)
+    EoriNumber:
+        is_a: InformationRelatedToImportExport
+        class_uri: mat_prof:eoriNumber
+        description: "EORI number - European Union registration and identification number for import/export businesses"
+        comments:
+            - "2-letter country code followed by up to 15 alphanumeric characters"
+            - "Example: GB123456789000, DE987654321"
+            - "Reused from product model structure"
+        attributes:
+            eori_number_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_import_eori_number"
+
+    CustomsDocumentation:
+        is_a: InformationRelatedToImportExport
+        class_uri: mat_prof:customsDocumentation
+        description: "Customs documents linked to import operations for verification and traceability"
+        comments:
+            - "Document types include MRN, declaration IDs, customs certificates"
+            - "URLs enable access to digital document copies"
+            - "Reused from product model structure"
+        attributes:
+            customs_document_type_value:
+                range: string
+                required: false
+            customs_document_id_value:
+                range: string
+                required: false
+            customs_issuing_authority_value:
+                range: string
+                required: false
+            customs_document_urls_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_import_customs_docs"
+
+    ImportExportOperation:
+        is_a: InformationRelatedToImportExport
+        class_uri: mat_prof:importExportOperation
+        description: "Individual import or export operation providing activity history"
+        comments:
+            - "Tracks specific trade operations with dates and transaction details"
+            - "Includes commercial terms (Incoterms) and monetary values"
+            - "Reused from product model structure"
+        attributes:
+            operation_type_value:
+                range: string
+                required: false
+            operation_date_value:
+                range: string
+                required: false
+            shipment_transaction_id_value:
+                range: string
+                required: false
+            operation_quantities_value:
+                range: string
+                required: false
+            incoterms_value:
+                range: string
+                required: false
+            operation_value_amount_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_import_operation"
+
+    ImporterJurisdiction:
+        is_a: InformationRelatedToImportExport
+        class_uri: mat_prof:importerJurisdiction
+        description: "Legal jurisdiction of importer's establishment"
+        comments:
+            - "EU Publications Office 3-character country codes"
+            - "Required for cross-border trade compliance"
+            - "Reused from product model structure"
+        attributes:
+            jurisdiction_country_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_import_importer_jurisdiction"
+
+    TariffClassification:
+        is_a: InformationRelatedToImportExport
+        class_uri: mat_prof:tariffClassification
+        description: "Customs tariff classification codes for proper duty calculation and trade statistics"
+        comments:
+            - "HS codes: internationally standardized 6-digit classification system"
+            - "CN codes: extend HS with 2 additional digits for EU-specific classification"
+            - "TARIC codes: add 4 more digits for detailed EU tariff measures"
+            - "Reused from product model structure"
+        attributes:
+            hs_code_value:
+                range: string
+                required: false
+            cn_code_value:
+                range: string
+                required: false
+            taric_code_value:
+                range: string
+                required: false
+            tariff_description_value:
+                range: string
+                required: false
+            duty_rate_value:
+                range: float
+                required: false
+        annotations:
+            sql_identifier: "mat_import_tariff"
+
+    BorderCrossing:
+        is_a: InformationRelatedToImportExport
+        class_uri: mat_prof:borderCrossing
+        description: "Border crossing and customs clearance location information"
+        comments:
+            - "UN/LOCODE standard port and airport codes for precise location tracking"
+            - "Customs office codes follow ISO format for responsible office identification"
+            - "Reused from product model structure"
+        attributes:
+            entry_port_code_value:
+                range: string
+                required: false
+            exit_port_code_value:
+                range: string
+                required: false
+            border_crossing_date_value:
+                range: string
+                required: false
+            customs_office_code_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_import_border"
+
+    AEOStatus:
+        is_a: InformationRelatedToImportExport
+        class_uri: mat_prof:aeoStatus
+        description: "Authorized Economic Operator certification for trusted trader status"
+        comments:
+            - "AEOC: Customs simplifications (reduced controls, priority treatment)"
+            - "AEOS: Security and safety benefits (reduced security checks)"
+            - "AEOF: Full AEO status combining both customs and security benefits"
+            - "Reused from product model structure"
+        attributes:
+            aeo_certificate_number_value:
+                range: string
+                required: false
+            aeo_type_value:
+                range: string
+                required: false
+            aeo_validity_date_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_import_aeo"
+
+    ImportAuthorization:
+        is_a: InformationRelatedToImportExport
+        class_uri: mat_prof:importAuthorization
+        description: "Import licenses and permits required for restricted materials"
+        comments:
+            - "Required for materials subject to import restrictions or quotas"
+            - "Includes licenses for dual-use goods, chemicals, etc."
+            - "Reused from product model structure"
+        attributes:
+            import_license_number_value:
+                range: string
+                required: false
+            permit_type_value:
+                range: string
+                required: false
+            permit_issuing_authority_value:
+                range: string
+                required: false
+            permit_validity_period_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_import_auth"
+
+    # Step 4: Material Specifications
+    MaterialSpecifications:
+        is_a: MaterialIdentification
+        class_uri: mat_prof:materialSpecifications
+        description: "Material composition and technical properties"
+        attributes:
+            uncertainty_statements:
+                description: "Optional uncertainty statements for measured, calculated, or reported material specification values"
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: "mat_specs_uncertainty_statements"
+            traceability_statements:
+                description: "Optional metrological traceability statements for material tests, methods, standards, calibrations, reference materials, or boundary definitions"
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: "mat_specs_traceability_statements"
+            data_quality_assessments:
+                description: "Optional data quality assessments for material specification values, evidence, provenance, representativeness, completeness, or pedigree"
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: "mat_specs_data_quality_assessments"
+        annotations:
+            sql_identifier: "mat_specs"
+
+    # Step 4 subclasses - Composition
+    Composition:
+        is_a: MaterialSpecifications
+        class_uri: mat_prof:composition
+        description: "Material composition with purity, additives, and trace elements"
+        comments:
+            - "Primary component with purity percentage"
+            - "Additives with function and concentration"
+            - "Trace elements with maximum allowable concentrations"
+            - "Recycled content tracking"
+        attributes:
+            primary_component_name_value:
+                range: string
+                required: false
+            primary_component_cas_value:
+                range: string
+                required: false
+            purity_percentage_value:
+                range: float
+                required: false
+            additive_name_value:
+                range: string
+                required: false
+            additive_cas_value:
+                range: string
+                required: false
+            additive_concentration_value:
+                range: string
+                required: false
+            additive_function_value:
+                range: string
+                required: false
+            trace_element_name_value:
+                range: string
+                required: false
+            trace_element_max_concentration_value:
+                range: string
+                required: false
+            composition_test_method_value:
+                range: string
+                required: false
+            composition_test_date_value:
+                range: string
+                required: false
+            composition_certification_authority_value:
+                range: string
+                required: false
+            recycled_content_percentage_value:
+                range: float
+                required: false
+            recycled_cycle_number_value:
+                range: string
+                required: false
+            recycled_source_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_specs_composition"
+
+    PhysicalProperties:
+        is_a: MaterialSpecifications
+        class_uri: mat_prof:physicalProperties
+        description: "Physical properties: density, bulk density, color, state, particle size"
+        attributes:
+            density_value:
+                range: string
+                required: false
+            bulk_density_value:
+                range: string
+                required: false
+            color_value:
+                range: string
+                required: false
+            state_value:
+                range: string
+                required: false
+            particle_size_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_specs_physical"
+
+    MechanicalProperties:
+        is_a: MaterialSpecifications
+        class_uri: mat_prof:mechanicalProperties
+        description: "Mechanical properties: tensile strength, hardness, Young's modulus"
+        attributes:
+            tensile_strength_value:
+                range: string
+                required: false
+            hardness_value:
+                range: string
+                required: false
+            young_modulus_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_specs_mechanical"
+
+    ThermalProperties:
+        is_a: MaterialSpecifications
+        class_uri: mat_prof:thermalProperties
+        description: "Thermal properties: melting point, thermal conductivity, expansion coefficient"
+        attributes:
+            melting_point_value:
+                range: string
+                required: false
+            thermal_conductivity_value:
+                range: string
+                required: false
+            expansion_coefficient_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_specs_thermal"
+
+    ChemicalProperties:
+        is_a: MaterialSpecifications
+        class_uri: mat_prof:chemicalProperties
+        description: "Chemical properties: reactivity, corrosion resistance, solubility, flammability"
+        attributes:
+            reactivity_value:
+                range: string
+                required: false
+            corrosion_resistance_value:
+                range: string
+                required: false
+            solubility_value:
+                range: string
+                required: false
+            flammability_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_specs_chemical"
+
+    ElectricalProperties:
+        is_a: MaterialSpecifications
+        class_uri: mat_prof:electricalProperties
+        description: "Electrical properties: conductivity, resistivity"
+        attributes:
+            electrical_conductivity_value:
+                range: string
+                required: false
+            resistivity_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_specs_electrical"
+
+    OpticalProperties:
+        is_a: MaterialSpecifications
+        class_uri: mat_prof:opticalProperties
+        description: "Optical properties: refractive index"
+        attributes:
+            refractive_index_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_specs_optical"
+
+    Fingerprinting:
+        is_a: MaterialSpecifications
+        class_uri: mat_prof:fingerprinting
+        description: "Fingerprinting methods: isotope ratios, spectroscopy signatures"
+        comments:
+            - "Isotope ratio measurements (δ13C, δ18O)"
+            - "Spectroscopy signatures (XRF, NMR, Raman)"
+            - "Trace element profiles"
+            - "Analytical method identification"
+        attributes:
+            fingerprint_isotope_ratios_value:
+                range: string
+                required: false
+            fingerprint_spectroscopy_value:
+                range: string
+                required: false
+            fingerprint_method_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_specs_fingerprint"
+
+    TestConditions:
+        is_a: MaterialSpecifications
+        class_uri: mat_prof:testConditions
+        description: "Reference test conditions for all property measurements"
+        comments:
+            - "Critical for all material property measurements"
+            - "Reference temperature, humidity, atmospheric pressure"
+            - "Testing standard applied (ISO, ASTM, EN)"
+        attributes:
+            test_reference_temperature_value:
+                range: string
+                required: false
+            test_reference_humidity_value:
+                range: string
+                required: false
+            test_atmospheric_pressure_value:
+                range: string
+                required: false
+            test_standard_value:
+                range: string
+                required: false
+        annotations:
+            sql_identifier: "mat_specs_test_conditions"

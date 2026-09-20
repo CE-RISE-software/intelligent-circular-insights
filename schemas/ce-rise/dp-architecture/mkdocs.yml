@@ -1,0 +1,71 @@
+site_name: CE-RISE DPP & DMP Data Model Architecture
+site_description: Documentation of the overall CE-RISE Digital Product and Material Passport (DPP & DMP) data-model architecture
+site_url: https://ce-rise-models.codeberg.page/dp-architecture/
+repo_url: https://codeberg.org/ce-rise-models/dp-architecture
+repo_name: ce-rise-models/dp-architecture
+
+theme:
+    name: material
+    logo: logo.png
+    favicon: favicon.png
+    palette:
+        scheme: default
+        primary: white
+        accent: blue
+    features:
+        - navigation.tabs
+        - navigation.sections
+        - navigation.expand
+        - search.suggest
+        - search.highlight
+        - content.code.copy
+
+plugins:
+    - search
+
+markdown_extensions:
+    - admonition
+    - attr_list
+    - def_list
+    - md_in_html
+    - toc:
+          permalink: true
+    - pymdownx.details
+    - pymdownx.superfences
+    - pymdownx.tabbed:
+          alternate_style: true
+
+nav:
+    - Home: index.md
+    - Approach:
+          - Aims & Objectives: approach/aims.md
+          - Approach: approach/principles.md
+    - Architecture:
+          - Overview: architecture/index.md
+          - Profiles: architecture/profiles.md
+    - Components:
+          - Overview: components/index.md
+          - Material Profile: components/material-profile.md
+          - Product Profile: components/product-profile.md
+          - DP Record Metadata: components/dp-record-metadata.md
+          - DP Access and Governance: components/dp-access-and-governance.md
+          - DP Record Custody: components/dp-record-custody.md
+          - Traceability and Lifecycle Events: components/traceability-and-life-cycle-events.md
+          - Diagnostic Results: components/diagnostic-results.md
+          - Usage and Maintenance: components/usage-and-maintenance.md
+          - Integrated Life Cycle Analysis: components/integrated-lca.md
+          - Product System: components/product-system.md
+          - Life Cycle Inventory Dataset: components/lci-dataset.md
+          - Circularity and End of Life: components/circularity-and-eol.md
+          - RE Indicators Specification: components/re-indicators-specification.md
+          - Compliance and Standards: components/compliance-and-standards.md
+          - Uncertainty Quantification: components/uncertainty-quantification.md
+          - Metrological Traceability: components/metrological-traceability.md
+          - Data Quality Framework: components/data-quality-framework.md
+extra:
+    copyright: |
+        &copy; 2025 CE-RISE consortium. Licensed under
+        <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>.
+
+extra_css:
+    - stylesheets/extra.css

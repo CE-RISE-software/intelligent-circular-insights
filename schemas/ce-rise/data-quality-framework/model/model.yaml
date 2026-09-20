@@ -1,0 +1,1717 @@
+id: https://ce-rise-models.codeberg.page/data-quality-framework/
+name: data-quality-framework
+title: CE-RISE Data Quality Framework Data Model
+description: >
+    Cross-cutting utility data model for documenting data quality assessments, pedigree scores,
+    diagnostics, remediation actions, provenance, and data-quality-derived uncertainty metadata
+    for CE-RISE Digital Product Passport and Digital Material Passport data models.
+license: CC BY-NC 4.0
+version: 0.0.3
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+    xsd: http://www.w3.org/2001/XMLSchema#
+    rdfs: http://www.w3.org/2000/01/rdf-schema#
+    dcterms: http://purl.org/dc/terms/
+    prov: http://www.w3.org/ns/prov#
+    pav: http://purl.org/pav/
+    dqv: http://www.w3.org/ns/dqv#
+    dcat: http://www.w3.org/ns/dcat#
+    qudt: http://qudt.org/schema/qudt/
+    schema: http://schema.org/
+    skos: http://www.w3.org/2004/02/skos/core#
+    owl: http://www.w3.org/2002/07/owl#
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+
+default_prefix: dqf
+default_range: string
+
+imports:
+    - linkml:types
+
+slots:
+    # Cross-model targeting and assessment metadata
+    data_quality_assessment_identifier_value:
+        description: "Identifier for a data quality assessment that can be referenced from another CE-RISE model"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_assessment_identifier"
+
+    data_quality_assessment_label_value:
+        description: "Human-readable label for the data quality assessment"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "dqf_assessment_label"
+
+    data_quality_assessment_type_value:
+        description: "Type of data quality assessment being documented"
+        range: DataQualityAssessmentTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "dqf_assessment_type"
+
+    data_quality_assessment_status_value:
+        description: "Lifecycle status of the data quality assessment"
+        range: AssessmentStatusEnum
+        annotations:
+            owl.filler: pav:version
+            sql_identifier: "dqf_assessment_status"
+
+    data_quality_assessment_date_value:
+        description: "Date and time when the data quality assessment was issued or last updated"
+        range: datetime
+        annotations:
+            owl.filler: dcterms:modified
+            sql_identifier: "dqf_assessment_date"
+
+    assessor_value:
+        description: "Person, organization, system, or workflow responsible for the data quality assessment"
+        range: string
+        annotations:
+            owl.filler: prov:wasAssociatedWith
+            sql_identifier: "dqf_assessor"
+
+    assessment_purpose_value:
+        description: "Purpose for which the data quality assessment is performed"
+        range: string
+        annotations:
+            owl.filler: dqf:assessmentPurposeValue
+            sql_identifier: "dqf_assessment_purpose"
+
+    intended_use_value:
+        description: "Intended use, decision context, or analytical purpose for which data fitness is assessed"
+        range: string
+        annotations:
+            owl.filler: dqf:intendedUseValue
+            sql_identifier: "dqf_intended_use"
+
+    fitness_for_purpose_value:
+        description: "Overall statement of whether the data are fit for the stated purpose"
+        range: FitnessForPurposeEnum
+        annotations:
+            owl.filler: dqv:hasQualityAnnotation
+            sql_identifier: "dqf_fitness_for_purpose"
+
+    data_quality_applies_to_model_value:
+        description: "Name, URI, or namespace of the external data model to which this data quality assessment applies"
+        range: string
+        annotations:
+            owl.filler: dqf:appliesToModelValue
+            sql_identifier: "dqf_applies_to_model"
+
+    data_quality_applies_to_class_value:
+        description: "Class in an external model to which this data quality assessment applies"
+        range: string
+        annotations:
+            owl.filler: dqf:appliesToClassValue
+            sql_identifier: "dqf_applies_to_class"
+
+    data_quality_applies_to_slot_value:
+        description: "Slot or attribute in an external model to which this data quality assessment applies"
+        range: string
+        annotations:
+            owl.filler: dqf:appliesToSlotValue
+            sql_identifier: "dqf_applies_to_slot"
+
+    data_quality_applies_to_record_value:
+        description: "Identifier of the external record, object, dataset, or passport entry to which this data quality assessment applies"
+        range: string
+        annotations:
+            owl.filler: dqf:appliesToRecordValue
+            sql_identifier: "dqf_applies_to_record"
+
+    data_quality_applies_to_value_path_value:
+        description: "JSONPath, XPath, RDF path, or other pointer to the value to which this data quality assessment applies"
+        range: string
+        annotations:
+            owl.filler: dqf:appliesToValuePathValue
+            sql_identifier: "dqf_applies_to_value_path"
+
+    data_quality_applies_to_value_identifier_value:
+        description: "Identifier of a specific value object when the target model gives value-level identifiers"
+        range: string
+        annotations:
+            owl.filler: dqf:appliesToValueIdentifierValue
+            sql_identifier: "dqf_applies_to_value_identifier"
+
+    data_quality_uncertainty_reference_value:
+        description: "Reference to an uncertainty statement, uncertainty budget, or uncertainty component informed by this data quality assessment"
+        range: string
+        annotations:
+            owl.filler: uq:uncertaintyReference
+            sql_identifier: "dqf_uncertainty_reference"
+
+    data_quality_traceability_reference_value:
+        description: "Reference to a metrological traceability statement, chain, method, calibration, or boundary definition related to this data quality assessment"
+        range: string
+        annotations:
+            owl.filler: mt:traceabilityReference
+            sql_identifier: "dqf_traceability_reference"
+
+    data_quality_evidence_reference_value:
+        description: "Reference to supporting evidence such as a report, dataset, diagnostic output, certificate, standard, or workflow record"
+        range: string
+        annotations:
+            owl.filler: prov:wasDerivedFrom
+            sql_identifier: "dqf_evidence_reference_value"
+
+    data_quality_standards_applied_value:
+        description: "Standard, guide, protocol, or scoring framework applied in the data quality assessment"
+        range: string
+        annotations:
+            owl.filler: dcterms:conformsTo
+            sql_identifier: "dqf_standards_applied"
+
+    assessment_notes_value:
+        description: "Additional notes about the data quality assessment"
+        range: string
+        annotations:
+            owl.filler: rdfs:comment
+            sql_identifier: "dqf_assessment_notes"
+
+    # Data characterization and provenance
+    data_characterization_identifier_value:
+        description: "Identifier for a data characterization record"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_data_characterization_identifier"
+
+    data_type_value:
+        description: "Type of data being assessed"
+        range: DataTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "dqf_data_type"
+
+    data_domain_value:
+        description: "Domain or subject area of the data, such as product specification, LCA, diagnostics, compliance, or circularity"
+        range: string
+        annotations:
+            owl.filler: dcterms:subject
+            sql_identifier: "dqf_data_domain"
+
+    data_source_identifier_value:
+        description: "Identifier for the assessed data source, dataset, value source, or information source"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_data_source_identifier"
+
+    data_source_name_value:
+        description: "Name of the assessed data source, dataset, value source, or information source"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "dqf_data_source_name"
+
+    data_source_type_value:
+        description: "Type of data source used"
+        range: DataSourceTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "dqf_data_source_type"
+
+    data_provider_value:
+        description: "Provider, owner, custodian, supplier, laboratory, or organization responsible for the data"
+        range: string
+        annotations:
+            owl.filler: prov:Agent
+            sql_identifier: "dqf_data_provider"
+
+    collection_method_value:
+        description: "Method, protocol, procedure, system, or workflow used to collect or generate the data"
+        range: string
+        annotations:
+            owl.filler: prov:used
+            sql_identifier: "dqf_collection_method"
+
+    collection_protocol_value:
+        description: "Documented collection protocol, questionnaire, instrument, test method, API, or extraction logic"
+        range: string
+        annotations:
+            owl.filler: dcterms:conformsTo
+            sql_identifier: "dqf_collection_protocol"
+
+    collection_start_date_value:
+        description: "Start date for the data collection or generation period"
+        range: date
+        annotations:
+            owl.filler: schema:startDate
+            sql_identifier: "dqf_collection_start_date"
+
+    collection_end_date_value:
+        description: "End date for the data collection or generation period"
+        range: date
+        annotations:
+            owl.filler: schema:endDate
+            sql_identifier: "dqf_collection_end_date"
+
+    data_version_value:
+        description: "Version, edition, revision, release date, or snapshot identifier for the assessed data"
+        range: string
+        annotations:
+            owl.filler: pav:version
+            sql_identifier: "dqf_data_version"
+
+    update_frequency_value:
+        description: "Update cadence or refresh frequency for the data"
+        range: string
+        annotations:
+            owl.filler: dcterms:accrualPeriodicity
+            sql_identifier: "dqf_update_frequency"
+
+    temporal_coverage_value:
+        description: "Temporal coverage or period represented by the data"
+        range: string
+        annotations:
+            owl.filler: dcterms:temporal
+            sql_identifier: "dqf_temporal_coverage"
+
+    geographic_coverage_value:
+        description: "Geographic coverage or spatial representativeness of the data"
+        range: string
+        annotations:
+            owl.filler: dcterms:spatial
+            sql_identifier: "dqf_geographic_coverage"
+
+    technological_coverage_value:
+        description: "Technological, product, process, or system coverage represented by the data"
+        range: string
+        annotations:
+            owl.filler: dqf:technologicalCoverageValue
+            sql_identifier: "dqf_technological_coverage"
+
+    population_or_scope_value:
+        description: "Target population, inference scope, product scope, material scope, or process scope represented by the data"
+        range: string
+        annotations:
+            owl.filler: dcterms:coverage
+            sql_identifier: "dqf_population_or_scope"
+
+    sample_size_value:
+        description: "Sample size, number of observations, number of records, or number of contributing sources"
+        range: integer
+        annotations:
+            owl.filler: dqf:sampleSizeValue
+            sql_identifier: "dqf_sample_size"
+
+    variable_definition_value:
+        description: "Definition of the variable, field, indicator, category, or qualitative construct being assessed"
+        range: string
+        annotations:
+            owl.filler: skos:definition
+            sql_identifier: "dqf_variable_definition"
+
+    data_quality_unit_value:
+        description: "Unit associated with a quantitative value or metric"
+        range: string
+        annotations:
+            owl.filler: qudt:unit
+            sql_identifier: "dqf_unit"
+
+    preprocessing_description_value:
+        description: "Preprocessing, cleaning, transformation, imputation, filtering, or normalization applied before assessment"
+        range: string
+        annotations:
+            owl.filler: dqf:preprocessingDescriptionValue
+            sql_identifier: "dqf_preprocessing_description"
+
+    harmonization_description_value:
+        description: "Harmonization, mapping, coding, unit conversion, or schema alignment applied to combine or compare data"
+        range: string
+        annotations:
+            owl.filler: dqf:harmonizationDescriptionValue
+            sql_identifier: "dqf_harmonization_description"
+
+    provenance_description_value:
+        description: "Narrative provenance of the data, including who collected it, when, under which protocol, and how it was processed"
+        range: string
+        annotations:
+            owl.filler: prov:wasDerivedFrom
+            sql_identifier: "dqf_provenance_description"
+
+    # Quality profiles and criterion assessments
+    data_quality_profile_identifier_value:
+        description: "Identifier for a data quality profile aggregating one or more criterion assessments"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_profile_identifier"
+
+    data_quality_profile_name_value:
+        description: "Human-readable name of a data quality profile"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "dqf_profile_name"
+
+    overall_quality_score_value:
+        description: "Overall pedigree score for the assessed data, typically from 1 very reliable to 4 dubious"
+        range: QualityScoreEnum
+        annotations:
+            owl.filler: dqv:hasQualityMeasurement
+            sql_identifier: "dqf_overall_quality_score"
+
+    overall_numeric_score_value:
+        description: "Numeric quality score when the score is represented as a number"
+        range: float
+        annotations:
+            owl.filler: dqf:overallNumericScoreValue
+            sql_identifier: "dqf_overall_numeric_score"
+
+    confidence_level_value:
+        description: "Confidence level implied by the data quality assessment"
+        range: ConfidenceLevelEnum
+        annotations:
+            owl.filler: dqf:confidenceLevelValue
+            sql_identifier: "dqf_confidence_level"
+
+    quality_flag_value:
+        description: "Operational decision flag derived from the quality profile"
+        range: QualityFlagEnum
+        annotations:
+            owl.filler: dqf:qualityFlagValue
+            sql_identifier: "dqf_quality_flag"
+
+    aggregation_method_value:
+        description: "Method used to aggregate criterion scores or lower-level assessments into a profile"
+        range: AggregationMethodEnum
+        annotations:
+            owl.filler: dqf:aggregationMethodValue
+            sql_identifier: "dqf_aggregation_method"
+
+    limiting_criteria_value:
+        description: "Criterion or criteria that limit the overall score, confidence, or decision flag"
+        range: string
+        annotations:
+            owl.filler: dqf:limitingCriteriaValue
+            sql_identifier: "dqf_limiting_criteria"
+
+    profile_summary_value:
+        description: "Summary of the data quality profile, including main strengths and weaknesses"
+        range: string
+        annotations:
+            owl.filler: dcterms:description
+            sql_identifier: "dqf_profile_summary"
+
+    criterion_assessment_identifier_value:
+        description: "Identifier for a criterion-level quality assessment"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_criterion_assessment_identifier"
+
+    criterion_type_value:
+        description: "Quality criterion being assessed"
+        range: QualityCriterionEnum
+        annotations:
+            owl.filler: dqv:Dimension
+            sql_identifier: "dqf_criterion_type"
+
+    criterion_score_value:
+        description: "Pedigree score assigned to a quality criterion"
+        range: QualityScoreEnum
+        annotations:
+            owl.filler: dqv:hasQualityMeasurement
+            sql_identifier: "dqf_criterion_score"
+
+    criterion_numeric_score_value:
+        description: "Numeric criterion score when the score is represented as a number"
+        range: float
+        annotations:
+            owl.filler: dqf:criterionNumericScoreValue
+            sql_identifier: "dqf_criterion_numeric_score"
+
+    criterion_weight_value:
+        description: "Weight assigned to the criterion in an aggregation or decision rule"
+        range: float
+        annotations:
+            owl.filler: dqf:criterionWeightValue
+            sql_identifier: "dqf_criterion_weight"
+
+    criterion_threshold_value:
+        description: "Threshold, rule, target, or expectation used to score the criterion"
+        range: string
+        annotations:
+            owl.filler: dqf:criterionThresholdValue
+            sql_identifier: "dqf_criterion_threshold"
+
+    criterion_metric_value:
+        description: "Metric value, observation, or diagnostic result used to support the criterion score"
+        range: string
+        annotations:
+            owl.filler: dqv:value
+            sql_identifier: "dqf_criterion_metric"
+
+    criterion_impact_value:
+        description: "Impact of this criterion on the intended use, uncertainty, bias, comparability, or decision"
+        range: string
+        annotations:
+            owl.filler: dqf:criterionImpactValue
+            sql_identifier: "dqf_criterion_impact"
+
+    criterion_rationale_value:
+        description: "Rationale for assigning the criterion score"
+        range: string
+        annotations:
+            owl.filler: skos:note
+            sql_identifier: "dqf_criterion_rationale"
+
+    # Metrics and diagnostic outputs
+    quality_metric_identifier_value:
+        description: "Identifier for a data quality metric or diagnostic metric"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_quality_metric_identifier"
+
+    quality_metric_name_value:
+        description: "Human-readable name of the data quality metric"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "dqf_quality_metric_name"
+
+    quality_metric_category_value:
+        description: "Category or criterion to which the quality metric belongs"
+        range: QualityCriterionEnum
+        annotations:
+            owl.filler: dqv:inDimension
+            sql_identifier: "dqf_quality_metric_category"
+
+    metric_numeric_value:
+        description: "Numeric value of a metric, indicator, diagnostic output, or score"
+        range: float
+        annotations:
+            owl.filler: qudt:numericValue
+            sql_identifier: "dqf_metric_numeric_value"
+
+    metric_text_value:
+        description: "Textual, categorical, or structured value of a metric, indicator, diagnostic output, or score"
+        range: string
+        annotations:
+            owl.filler: schema:value
+            sql_identifier: "dqf_metric_text_value"
+
+    metric_unit_value:
+        description: "Unit associated with a metric value"
+        range: string
+        annotations:
+            owl.filler: qudt:unit
+            sql_identifier: "dqf_metric_unit"
+
+    metric_threshold_value:
+        description: "Threshold, tolerance, expectation, or acceptance criterion for the metric"
+        range: string
+        annotations:
+            owl.filler: dqf:metricThresholdValue
+            sql_identifier: "dqf_metric_threshold"
+
+    metric_pass_flag_value:
+        description: "Whether the metric passes the defined threshold or expectation"
+        range: boolean
+        annotations:
+            owl.filler: dqf:metricPassFlagValue
+            sql_identifier: "dqf_metric_pass_flag"
+
+    metric_method_value:
+        description: "Method, query, diagnostic procedure, rule, or script used to compute the metric"
+        range: string
+        annotations:
+            owl.filler: prov:used
+            sql_identifier: "dqf_metric_method"
+
+    diagnostic_identifier_value:
+        description: "Identifier for a diagnostic run, check, or analysis"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_diagnostic_identifier"
+
+    diagnostic_type_value:
+        description: "Type of data quality diagnostic"
+        range: DiagnosticTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "dqf_diagnostic_type"
+
+    diagnostic_method_value:
+        description: "Diagnostic method, test, script, notebook, query, or procedure used"
+        range: string
+        annotations:
+            owl.filler: prov:used
+            sql_identifier: "dqf_diagnostic_method"
+
+    expectation_specification_value:
+        description: "Expected value, threshold, rule, contract, baseline, or target used by the diagnostic"
+        range: string
+        annotations:
+            owl.filler: dqf:expectationSpecificationValue
+            sql_identifier: "dqf_expectation_specification"
+
+    observed_deviation_value:
+        description: "Observed deviation from the expectation, threshold, baseline, or target"
+        range: string
+        annotations:
+            owl.filler: dqf:observedDeviationValue
+            sql_identifier: "dqf_observed_deviation"
+
+    diagnostic_severity_value:
+        description: "Severity of the diagnostic finding"
+        range: SeverityEnum
+        annotations:
+            owl.filler: dqf:diagnosticSeverityValue
+            sql_identifier: "dqf_diagnostic_severity"
+
+    diagnostic_cause_value:
+        description: "Plausible or confirmed cause of the observed diagnostic finding"
+        range: string
+        annotations:
+            owl.filler: dqf:diagnosticCauseValue
+            sql_identifier: "dqf_diagnostic_cause"
+
+    diagnostic_impact_value:
+        description: "Impact of the diagnostic finding on the intended analysis, decision, uncertainty, or comparability"
+        range: string
+        annotations:
+            owl.filler: dqf:diagnosticImpactValue
+            sql_identifier: "dqf_diagnostic_impact"
+
+    diagnostic_run_timestamp_value:
+        description: "Date and time when the diagnostic run was executed"
+        range: datetime
+        annotations:
+            owl.filler: prov:generatedAtTime
+            sql_identifier: "dqf_diagnostic_run_timestamp"
+
+    diagnostic_software_reference_value:
+        description: "Software, notebook, workflow, configuration, or service used to execute the diagnostic"
+        range: string
+        annotations:
+            owl.filler: prov:SoftwareAgent
+            sql_identifier: "dqf_diagnostic_software_reference"
+
+    diagnostic_reproducibility_value:
+        description: "Information needed to reproduce the diagnostic run, such as pinned dependencies, configuration, hash, or workflow version"
+        range: string
+        annotations:
+            owl.filler: dqf:diagnosticReproducibilityValue
+            sql_identifier: "dqf_diagnostic_reproducibility"
+
+    # Issues and remediation
+    quality_issue_identifier_value:
+        description: "Identifier for a data quality issue, limitation, anomaly, or risk"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_quality_issue_identifier"
+
+    quality_issue_type_value:
+        description: "Type of data quality issue"
+        range: QualityIssueTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "dqf_quality_issue_type"
+
+    issue_affected_criteria_value:
+        description: "Quality criteria affected by the issue"
+        range: string
+        annotations:
+            owl.filler: dqf:issueAffectedCriteriaValue
+            sql_identifier: "dqf_issue_affected_criteria"
+
+    issue_severity_value:
+        description: "Severity or criticality of the data quality issue"
+        range: SeverityEnum
+        annotations:
+            owl.filler: dqf:issueSeverityValue
+            sql_identifier: "dqf_issue_severity"
+
+    issue_status_value:
+        description: "Lifecycle status of the data quality issue"
+        range: IssueStatusEnum
+        annotations:
+            owl.filler: dqf:issueStatusValue
+            sql_identifier: "dqf_issue_status"
+
+    issue_root_cause_value:
+        description: "Root cause, suspected cause, or causal inference for the issue"
+        range: string
+        annotations:
+            owl.filler: dqf:issueRootCauseValue
+            sql_identifier: "dqf_issue_root_cause"
+
+    issue_risk_statement_value:
+        description: "Risk statement explaining how the issue may affect the intended use, decision, or analysis"
+        range: string
+        annotations:
+            owl.filler: dqf:issueRiskStatementValue
+            sql_identifier: "dqf_issue_risk_statement"
+
+    issue_scope_value:
+        description: "Scope of the issue, such as affected fields, records, time periods, regions, suppliers, or processes"
+        range: string
+        annotations:
+            owl.filler: dcterms:coverage
+            sql_identifier: "dqf_issue_scope"
+
+    issue_detected_date_value:
+        description: "Date when the issue was detected"
+        range: date
+        annotations:
+            owl.filler: dcterms:date
+            sql_identifier: "dqf_issue_detected_date"
+
+    remediation_action_identifier_value:
+        description: "Identifier for a remediation action, mitigation, containment, or improvement activity"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_remediation_action_identifier"
+
+    remediation_action_type_value:
+        description: "Type of remediation action"
+        range: RemediationActionTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "dqf_remediation_action_type"
+
+    remediation_description_value:
+        description: "Description of the remediation, mitigation, containment, or improvement activity"
+        range: string
+        annotations:
+            owl.filler: dcterms:description
+            sql_identifier: "dqf_remediation_description"
+
+    remediation_priority_value:
+        description: "Priority assigned to the remediation activity"
+        range: PriorityEnum
+        annotations:
+            owl.filler: dqf:remediationPriorityValue
+            sql_identifier: "dqf_remediation_priority"
+
+    remediation_status_value:
+        description: "Lifecycle status of the remediation activity"
+        range: RemediationStatusEnum
+        annotations:
+            owl.filler: dqf:remediationStatusValue
+            sql_identifier: "dqf_remediation_status"
+
+    remediation_owner_value:
+        description: "Person, organization, team, system, or workflow responsible for remediation"
+        range: string
+        annotations:
+            owl.filler: prov:Agent
+            sql_identifier: "dqf_remediation_owner"
+
+    remediation_due_date_value:
+        description: "Due date for the remediation activity"
+        range: date
+        annotations:
+            owl.filler: schema:endDate
+            sql_identifier: "dqf_remediation_due_date"
+
+    remediation_completion_date_value:
+        description: "Completion date for the remediation activity"
+        range: date
+        annotations:
+            owl.filler: schema:dateCompleted
+            sql_identifier: "dqf_remediation_completion_date"
+
+    expected_score_improvement_value:
+        description: "Expected score, score change, or quality improvement after remediation"
+        range: string
+        annotations:
+            owl.filler: dqf:expectedScoreImprovementValue
+            sql_identifier: "dqf_expected_score_improvement"
+
+    verification_method_value:
+        description: "Method or evidence used to verify that remediation was effective"
+        range: string
+        annotations:
+            owl.filler: dqf:verificationMethodValue
+            sql_identifier: "dqf_verification_method"
+
+    # DQA-to-uncertainty translation and aggregation
+    uncertainty_translation_identifier_value:
+        description: "Identifier for a translation from data quality scores to uncertainty information"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_uncertainty_translation_identifier"
+
+    uncertainty_translation_method_value:
+        description: "Method used to translate data quality information into uncertainty"
+        range: UncertaintyTranslationMethodEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "dqf_uncertainty_translation_method"
+
+    source_quality_score_value:
+        description: "Quality score used as input to the uncertainty translation"
+        range: QualityScoreEnum
+        annotations:
+            owl.filler: dqf:sourceQualityScoreValue
+            sql_identifier: "dqf_source_quality_score"
+
+    coefficient_of_variation_lower_value:
+        description: "Lower bound of coefficient of variation derived from data quality information"
+        range: float
+        annotations:
+            owl.filler: uq:coefficientOfVariationValue
+            sql_identifier: "dqf_coefficient_of_variation_lower"
+
+    coefficient_of_variation_upper_value:
+        description: "Upper bound of coefficient of variation derived from data quality information"
+        range: float
+        annotations:
+            owl.filler: uq:coefficientOfVariationValue
+            sql_identifier: "dqf_coefficient_of_variation_upper"
+
+    data_quality_uncertainty_factor_value:
+        description: "Uncertainty factor derived from data quality information"
+        range: float
+        annotations:
+            owl.filler: uq:uncertaintyFactorValue
+            sql_identifier: "dqf_uncertainty_factor"
+
+    combined_coefficient_of_variation_value:
+        description: "Combined coefficient of variation after aggregating data-quality-derived uncertainty contributions"
+        range: float
+        annotations:
+            owl.filler: uq:coefficientOfVariationValue
+            sql_identifier: "dqf_combined_coefficient_of_variation"
+
+    combined_uncertainty_factor_value:
+        description: "Combined uncertainty factor after aggregating data-quality-derived uncertainty contributions"
+        range: float
+        annotations:
+            owl.filler: uq:uncertaintyFactorValue
+            sql_identifier: "dqf_combined_uncertainty_factor"
+
+    uncertainty_distribution_assumption_value:
+        description: "Distributional assumption used for data-quality-derived uncertainty, such as normal or lognormal"
+        range: string
+        annotations:
+            owl.filler: dqf:uncertaintyDistributionAssumptionValue
+            sql_identifier: "dqf_uncertainty_distribution_assumption"
+
+    uncertainty_translation_rationale_value:
+        description: "Rationale explaining how data quality information was translated into uncertainty"
+        range: string
+        annotations:
+            owl.filler: skos:note
+            sql_identifier: "dqf_uncertainty_translation_rationale"
+
+    aggregation_identifier_value:
+        description: "Identifier for an aggregation of data quality assessments, profiles, criteria, metrics, or uncertainty translations"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_aggregation_identifier"
+
+    aggregation_level_value:
+        description: "Level at which aggregation is performed"
+        range: AggregationLevelEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "dqf_aggregation_level"
+
+    aggregation_input_references_value:
+        description: "References to the input assessments, profiles, criteria, metrics, or data sources used in the aggregation"
+        range: string
+        annotations:
+            owl.filler: prov:wasDerivedFrom
+            sql_identifier: "dqf_aggregation_input_references"
+
+    aggregation_weights_value:
+        description: "Weights or weighting rule used in the aggregation"
+        range: string
+        annotations:
+            owl.filler: dqf:aggregationWeightsValue
+            sql_identifier: "dqf_aggregation_weights"
+
+    aggregation_output_reference_value:
+        description: "Reference to the output assessment, profile, score, uncertainty translation, or decision produced by the aggregation"
+        range: string
+        annotations:
+            owl.filler: prov:generated
+            sql_identifier: "dqf_aggregation_output_reference"
+
+    aggregation_rationale_value:
+        description: "Rationale for the aggregation method and weighting choices"
+        range: string
+        annotations:
+            owl.filler: skos:note
+            sql_identifier: "dqf_aggregation_rationale"
+
+    # Evidence records
+    data_quality_evidence_identifier_value:
+        description: "Identifier for supporting evidence"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "dqf_evidence_identifier"
+
+    data_quality_evidence_type_value:
+        description: "Type of supporting evidence"
+        range: DataQualityEvidenceTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "dqf_evidence_type"
+
+    data_quality_evidence_url_value:
+        description: "URL for supporting evidence"
+        range: uri
+        annotations:
+            owl.filler: schema:url
+            sql_identifier: "dqf_evidence_url"
+
+    data_quality_evidence_description_value:
+        description: "Description of supporting evidence"
+        range: string
+        annotations:
+            owl.filler: dcterms:description
+            sql_identifier: "dqf_evidence_description"
+
+    data_quality_evidence_date_value:
+        description: "Date associated with supporting evidence"
+        range: date
+        annotations:
+            owl.filler: dcterms:date
+            sql_identifier: "dqf_evidence_date"
+
+    data_quality_evidence_provider_value:
+        description: "Provider, author, laboratory, supplier, or organization responsible for supporting evidence"
+        range: string
+        annotations:
+            owl.filler: prov:Agent
+            sql_identifier: "dqf_evidence_provider"
+
+    data_quality_evidence_version_value:
+        description: "Version, edition, or revision of supporting evidence"
+        range: string
+        annotations:
+            owl.filler: pav:version
+            sql_identifier: "dqf_evidence_version"
+
+    # Object relationship slots
+    data_quality_assessments:
+        description: "Reusable data quality assessments that can be embedded or referenced by other CE-RISE data models"
+        range: DataQualityAssessment
+        multivalued: true
+        annotations:
+            owl.filler: dqf:dataQualityAssessment
+            sql_identifier: "dqf_data_quality_assessments"
+
+    data_characterizations:
+        description: "Data characterization records available for reuse by one or more assessments"
+        range: DataCharacterization
+        multivalued: true
+        annotations:
+            owl.filler: dqf:dataCharacterization
+            sql_identifier: "dqf_data_characterizations"
+
+    data_quality_profiles:
+        description: "Data quality profiles available for reuse by one or more assessments"
+        range: DataQualityProfile
+        multivalued: true
+        annotations:
+            owl.filler: dqf:dataQualityProfile
+            sql_identifier: "dqf_data_quality_profiles"
+
+    criterion_assessments:
+        description: "Criterion-level pedigree assessments"
+        range: QualityCriterionAssessment
+        multivalued: true
+        annotations:
+            owl.filler: dqf:criterionAssessment
+            sql_identifier: "dqf_criterion_assessments"
+
+    quality_metrics:
+        description: "Quality metrics or diagnostic metrics used by profiles, criteria, or diagnostics"
+        range: QualityMetric
+        multivalued: true
+        annotations:
+            owl.filler: dqf:qualityMetric
+            sql_identifier: "dqf_quality_metrics"
+
+    quality_diagnostics:
+        description: "Data-quality diagnostic runs, checks, or analyses"
+        range: QualityDiagnostic
+        multivalued: true
+        annotations:
+            owl.filler: dqf:qualityDiagnostic
+            sql_identifier: "dqf_quality_diagnostics"
+
+    quality_issues:
+        description: "Data quality issues, limitations, anomalies, or risks"
+        range: QualityIssue
+        multivalued: true
+        annotations:
+            owl.filler: dqf:qualityIssue
+            sql_identifier: "dqf_quality_issues"
+
+    remediation_actions:
+        description: "Remediation, mitigation, containment, or improvement actions"
+        range: RemediationAction
+        multivalued: true
+        annotations:
+            owl.filler: dqf:remediationAction
+            sql_identifier: "dqf_remediation_actions"
+
+    uncertainty_translations:
+        description: "Translations from data quality scores to uncertainty information"
+        range: UncertaintyTranslation
+        multivalued: true
+        annotations:
+            owl.filler: dqf:uncertaintyTranslation
+            sql_identifier: "dqf_uncertainty_translations"
+
+    quality_aggregations:
+        description: "Aggregations of data quality assessments, profiles, criteria, metrics, or uncertainty translations"
+        range: QualityAggregation
+        multivalued: true
+        annotations:
+            owl.filler: dqf:qualityAggregation
+            sql_identifier: "dqf_quality_aggregations"
+
+    data_quality_evidence_references:
+        description: "Evidence records referenced by the data quality framework"
+        range: DataQualityEvidenceReference
+        multivalued: true
+        annotations:
+            owl.filler: dqf:evidenceReference
+            sql_identifier: "dqf_evidence_references"
+
+    data_characterization:
+        description: "Characterization of the assessed data and its provenance"
+        range: DataCharacterization
+        annotations:
+            owl.filler: dqf:dataCharacterization
+            sql_identifier: "dqf_data_characterization"
+
+    data_quality_profile:
+        description: "Data quality profile associated with an assessment"
+        range: DataQualityProfile
+        annotations:
+            owl.filler: dqf:dataQualityProfile
+            sql_identifier: "dqf_data_quality_profile"
+
+    uncertainty_translation:
+        description: "DQA-to-uncertainty translation associated with an assessment or profile"
+        range: UncertaintyTranslation
+        annotations:
+            owl.filler: dqf:uncertaintyTranslation
+            sql_identifier: "dqf_uncertainty_translation"
+
+classes:
+    # Root container
+    DataQualityFramework:
+        class_uri: dqf:dataQualityFramework
+        description: "Root container for data quality assessments and supporting records"
+        slots:
+            - data_quality_assessments
+            - data_characterizations
+            - data_quality_profiles
+            - criterion_assessments
+            - quality_metrics
+            - quality_diagnostics
+            - quality_issues
+            - remediation_actions
+            - uncertainty_translations
+            - quality_aggregations
+            - data_quality_evidence_references
+        annotations:
+            sql_identifier: "dqf_root"
+
+    # Main integration point
+    DataQualityAssessment:
+        class_uri: dqf:dataQualityAssessment
+        description: "Reusable assessment describing the quality, fitness for purpose, diagnostics, and improvement needs of data used by CE-RISE models"
+        comments:
+            - "Designed as the main integration point for other CE-RISE data models."
+            - "Other models may either embed this class or point to it through data_quality_assessment_identifier_value."
+        slots:
+            - data_quality_assessment_identifier_value
+            - data_quality_assessment_label_value
+            - data_quality_assessment_type_value
+            - data_quality_assessment_status_value
+            - data_quality_assessment_date_value
+            - assessor_value
+            - assessment_purpose_value
+            - intended_use_value
+            - fitness_for_purpose_value
+            - data_quality_applies_to_model_value
+            - data_quality_applies_to_class_value
+            - data_quality_applies_to_slot_value
+            - data_quality_applies_to_record_value
+            - data_quality_applies_to_value_path_value
+            - data_quality_applies_to_value_identifier_value
+            - data_characterization
+            - data_quality_profile
+            - quality_diagnostics
+            - quality_issues
+            - remediation_actions
+            - uncertainty_translation
+            - data_quality_uncertainty_reference_value
+            - data_quality_traceability_reference_value
+            - data_quality_evidence_reference_value
+            - data_quality_standards_applied_value
+            - assessment_notes_value
+        annotations:
+            references: "CE-RISE D2.4; W3C Data Quality Vocabulary; PROV-O; NUSAP; IPCC data quality guidance; ISO 14044; ISO 8000; ISO 9001"
+            sql_identifier: "dqf_assessment"
+
+    DataCharacterization:
+        class_uri: dqf:dataCharacterization
+        description: "Characterization of the assessed data, including source, provenance, scope, collection method, versioning, and preprocessing"
+        slots:
+            - data_characterization_identifier_value
+            - data_type_value
+            - data_domain_value
+            - data_source_identifier_value
+            - data_source_name_value
+            - data_source_type_value
+            - data_provider_value
+            - collection_method_value
+            - collection_protocol_value
+            - collection_start_date_value
+            - collection_end_date_value
+            - data_version_value
+            - update_frequency_value
+            - temporal_coverage_value
+            - geographic_coverage_value
+            - technological_coverage_value
+            - population_or_scope_value
+            - sample_size_value
+            - variable_definition_value
+            - data_quality_unit_value
+            - preprocessing_description_value
+            - harmonization_description_value
+            - provenance_description_value
+            - data_quality_traceability_reference_value
+            - data_quality_evidence_reference_value
+        annotations:
+            references: "W3C DCAT; PROV-O; DQV; ISO 8000"
+            sql_identifier: "dqf_data_characterization_record"
+
+    DataQualityProfile:
+        class_uri: dqf:dataQualityProfile
+        description: "Profile aggregating data quality criteria, scores, flags, and confidence for a dataset, value, source, or information product"
+        slots:
+            - data_quality_profile_identifier_value
+            - data_quality_profile_name_value
+            - criterion_assessments
+            - overall_quality_score_value
+            - overall_numeric_score_value
+            - confidence_level_value
+            - quality_flag_value
+            - aggregation_method_value
+            - limiting_criteria_value
+            - profile_summary_value
+            - uncertainty_translation
+            - data_quality_evidence_reference_value
+        annotations:
+            references: "CE-RISE D2.4; NUSAP; W3C Data Quality Vocabulary"
+            sql_identifier: "dqf_profile"
+
+    QualityCriterionAssessment:
+        class_uri: dqf:qualityCriterionAssessment
+        description: "Criterion-level assessment for a data quality dimension such as validity, accuracy, consistency, timeliness, or completeness"
+        slots:
+            - criterion_assessment_identifier_value
+            - criterion_type_value
+            - criterion_score_value
+            - criterion_numeric_score_value
+            - criterion_weight_value
+            - criterion_threshold_value
+            - criterion_metric_value
+            - criterion_impact_value
+            - criterion_rationale_value
+            - quality_metrics
+            - quality_issues
+            - uncertainty_translation
+            - data_quality_evidence_reference_value
+        annotations:
+            references: "CE-RISE D2.4; NUSAP; W3C Data Quality Vocabulary"
+            sql_identifier: "dqf_criterion_assessment_record"
+
+    QualityMetric:
+        class_uri: dqf:qualityMetric
+        description: "Metric, indicator, diagnostic output, threshold check, or quality measurement supporting a criterion score"
+        slots:
+            - quality_metric_identifier_value
+            - quality_metric_name_value
+            - quality_metric_category_value
+            - metric_numeric_value
+            - metric_text_value
+            - metric_unit_value
+            - metric_threshold_value
+            - metric_pass_flag_value
+            - metric_method_value
+            - data_quality_evidence_reference_value
+        annotations:
+            references: "W3C Data Quality Vocabulary"
+            sql_identifier: "dqf_quality_metric_record"
+
+    QualityDiagnostic:
+        class_uri: dqf:qualityDiagnostic
+        description: "Diagnostic run or analysis that compares data against expectations, detects deviations, infers causes, and estimates impact"
+        slots:
+            - diagnostic_identifier_value
+            - diagnostic_type_value
+            - diagnostic_method_value
+            - expectation_specification_value
+            - observed_deviation_value
+            - diagnostic_severity_value
+            - diagnostic_cause_value
+            - diagnostic_impact_value
+            - diagnostic_run_timestamp_value
+            - diagnostic_software_reference_value
+            - diagnostic_reproducibility_value
+            - quality_metrics
+            - quality_issues
+            - data_quality_evidence_reference_value
+        annotations:
+            references: "CE-RISE D2.4; W3C Data Quality Vocabulary; PROV-O"
+            sql_identifier: "dqf_diagnostic"
+
+    QualityIssue:
+        class_uri: dqf:qualityIssue
+        description: "Data quality issue, limitation, anomaly, or risk identified through scoring, diagnostics, provenance review, or expert assessment"
+        slots:
+            - quality_issue_identifier_value
+            - quality_issue_type_value
+            - issue_affected_criteria_value
+            - issue_severity_value
+            - issue_status_value
+            - issue_root_cause_value
+            - issue_risk_statement_value
+            - issue_scope_value
+            - issue_detected_date_value
+            - remediation_actions
+            - data_quality_uncertainty_reference_value
+            - data_quality_evidence_reference_value
+        annotations:
+            references: "CE-RISE D2.4"
+            sql_identifier: "dqf_issue"
+
+    RemediationAction:
+        class_uri: dqf:remediationAction
+        description: "Remediation, mitigation, containment, or improvement activity for a data quality issue"
+        slots:
+            - remediation_action_identifier_value
+            - remediation_action_type_value
+            - remediation_description_value
+            - remediation_priority_value
+            - remediation_status_value
+            - remediation_owner_value
+            - remediation_due_date_value
+            - remediation_completion_date_value
+            - expected_score_improvement_value
+            - verification_method_value
+            - data_quality_evidence_reference_value
+        annotations:
+            references: "CE-RISE D2.4"
+            sql_identifier: "dqf_remediation_action_record"
+
+    UncertaintyTranslation:
+        class_uri: dqf:uncertaintyTranslation
+        description: "Translation from data quality information into uncertainty metadata, such as coefficient of variation or uncertainty factor"
+        slots:
+            - uncertainty_translation_identifier_value
+            - uncertainty_translation_method_value
+            - source_quality_score_value
+            - coefficient_of_variation_lower_value
+            - coefficient_of_variation_upper_value
+            - data_quality_uncertainty_factor_value
+            - combined_coefficient_of_variation_value
+            - combined_uncertainty_factor_value
+            - uncertainty_distribution_assumption_value
+            - data_quality_uncertainty_reference_value
+            - uncertainty_translation_rationale_value
+            - data_quality_evidence_reference_value
+        annotations:
+            references: "CE-RISE D2.4; JCGM 100:2008; JCGM 101:2008"
+            sql_identifier: "dqf_uncertainty_translation_record"
+
+    QualityAggregation:
+        class_uri: dqf:qualityAggregation
+        description: "Aggregation of assessments, profiles, criterion scores, metrics, or uncertainty translations across values, records, datasets, or indicators"
+        slots:
+            - aggregation_identifier_value
+            - aggregation_level_value
+            - aggregation_method_value
+            - aggregation_input_references_value
+            - aggregation_weights_value
+            - aggregation_output_reference_value
+            - aggregation_rationale_value
+            - data_quality_evidence_reference_value
+        annotations:
+            references: "CE-RISE D2.4; W3C Data Quality Vocabulary"
+            sql_identifier: "dqf_aggregation_record"
+
+    DataQualityEvidenceReference:
+        class_uri: dqf:evidenceReference
+        description: "Supporting evidence record for a data quality assessment, score, diagnostic, issue, remediation action, uncertainty translation, or aggregation"
+        slots:
+            - data_quality_evidence_identifier_value
+            - data_quality_evidence_type_value
+            - data_quality_evidence_url_value
+            - data_quality_evidence_description_value
+            - data_quality_evidence_date_value
+            - data_quality_evidence_provider_value
+            - data_quality_evidence_version_value
+        annotations:
+            sql_identifier: "dqf_evidence_reference"
+
+enums:
+    DataQualityAssessmentTypeEnum:
+        description: "Kinds of data quality assessments supported by this model"
+        permissible_values:
+            value_assessment:
+                description: "Assessment of a specific value or field"
+            record_assessment:
+                description: "Assessment of a record, object, or passport entry"
+            dataset_assessment:
+                description: "Assessment of a dataset or data source"
+            indicator_input_assessment:
+                description: "Assessment of an input used to compute an indicator"
+            indicator_output_assessment:
+                description: "Assessment of a derived indicator, score, or model output"
+            evidence_assessment:
+                description: "Assessment of evidence quality"
+            process_assessment:
+                description: "Assessment of a data generation, collection, or processing process"
+            composite_assessment:
+                description: "Assessment aggregating multiple lower-level assessments"
+            not_evaluated:
+                description: "Data quality has not been evaluated"
+            other:
+                description: "Other data quality assessment type"
+
+    AssessmentStatusEnum:
+        description: "Lifecycle status values for data quality assessments"
+        permissible_values:
+            draft:
+                description: "Assessment is being prepared"
+            active:
+                description: "Assessment is currently active"
+            reviewed:
+                description: "Assessment has been reviewed"
+            verified:
+                description: "Assessment has been verified against supporting evidence"
+            partial:
+                description: "Assessment is partially documented or partially verified"
+            superseded:
+                description: "Assessment has been superseded"
+            expired:
+                description: "Assessment is no longer valid"
+            unavailable:
+                description: "Assessment status is unavailable"
+
+    FitnessForPurposeEnum:
+        description: "Fitness-for-purpose decision values"
+        permissible_values:
+            fit:
+                description: "Data are fit for the stated purpose"
+            fit_with_conditions:
+                description: "Data are fit only under stated conditions, limitations, or treatments"
+            exploratory_only:
+                description: "Data are suitable for exploratory or preliminary use only"
+            not_fit:
+                description: "Data are not fit for the stated purpose"
+            insufficient_information:
+                description: "There is insufficient information to judge fitness"
+            not_evaluated:
+                description: "Fitness for purpose has not been evaluated"
+
+    DataTypeEnum:
+        description: "Types of data covered by data quality assessments"
+        permissible_values:
+            quantitative:
+                description: "Quantitative numerical data"
+            semi_quantitative:
+                description: "Semi-quantitative scores, categories, scales, or ratings"
+            qualitative:
+                description: "Qualitative observations, narratives, claims, or interpretations"
+            categorical:
+                description: "Categorical data"
+            boolean:
+                description: "Boolean or binary data"
+            time_series:
+                description: "Time-series data"
+            geospatial:
+                description: "Geospatial data"
+            modelled:
+                description: "Modelled, calculated, or simulated data"
+            mixed:
+                description: "Mixed data types"
+            other:
+                description: "Other data type"
+
+    DataSourceTypeEnum:
+        description: "Types of data sources"
+        permissible_values:
+            direct_measurement:
+                description: "Direct measurement or observation"
+            laboratory_test:
+                description: "Laboratory test or analytical result"
+            supplier_declaration:
+                description: "Supplier declaration or provided data"
+            administrative_record:
+                description: "Administrative, operational, or management system record"
+            database:
+                description: "Database, inventory, registry, or factor set"
+            literature:
+                description: "Literature, report, publication, or secondary source"
+            expert_judgement:
+                description: "Expert judgement or elicitation"
+            survey_or_interview:
+                description: "Survey, interview, focus group, or qualitative source"
+            sensor_or_iot:
+                description: "Sensor, IoT, telemetry, or monitoring source"
+            calculation_or_model:
+                description: "Calculation, simulation, or model output"
+            mixed:
+                description: "Mixed source types"
+            other:
+                description: "Other source type"
+
+    QualityCriterionEnum:
+        description: "Data quality criteria supported by the framework"
+        permissible_values:
+            validity:
+                description: "Appropriateness of the data for the intended purpose or construct"
+            accuracy:
+                description: "Closeness to true values, intended meanings, or accepted references"
+            consistency:
+                description: "Internal coherence and stability across sources, contexts, units, definitions, coders, or time"
+            timeliness:
+                description: "Temporal relevance, currency, update cadence, and version suitability"
+            completeness:
+                description: "Extent to which required data, metadata, coverage, or contextual factors are present"
+            representativeness:
+                description: "Degree to which data represent the target population, technology, geography, or time period"
+            transparency:
+                description: "Degree to which methods, assumptions, provenance, and transformations are visible"
+            provenance:
+                description: "Quality and auditability of origin, custody, and processing history"
+            reproducibility:
+                description: "Degree to which the result can be reproduced from documented data and workflows"
+            precision:
+                description: "Repeatability, variability, or dispersion of repeated observations"
+            other:
+                description: "Other quality criterion"
+
+    QualityScoreEnum:
+        description: "Pedigree score scale for data quality"
+        permissible_values:
+            score_1_very_reliable:
+                description: "Score 1: very reliable; data meet the highest standards with minimal limitations"
+            score_2_reliable:
+                description: "Score 2: reliable; data have minor limitations but remain fit for most purposes"
+            score_3_unreliable:
+                description: "Score 3: unreliable; substantial limitations require caution and remediation"
+            score_4_dubious:
+                description: "Score 4: dubious; severe flaws make data unsuitable for formal decisions without remediation"
+            not_evaluated:
+                description: "Score has not been evaluated"
+            not_applicable:
+                description: "Score is not applicable"
+
+    ConfidenceLevelEnum:
+        description: "Confidence levels derived from data quality assessment"
+        permissible_values:
+            high:
+                description: "High confidence"
+            medium:
+                description: "Medium confidence"
+            low:
+                description: "Low confidence"
+            very_low:
+                description: "Very low confidence"
+            not_evaluated:
+                description: "Confidence has not been evaluated"
+
+    QualityFlagEnum:
+        description: "Operational decision flags derived from quality scores"
+        permissible_values:
+            green_proceed:
+                description: "Proceed; criteria are acceptable for the intended purpose"
+            orange_review:
+                description: "Review; one or more criteria require scrutiny, treatment, or caveats"
+            red_reject:
+                description: "Reject or pause; severe issue makes the data unsuitable without remediation"
+            grey_not_evaluated:
+                description: "No decision flag because quality has not been evaluated"
+
+    DiagnosticTypeEnum:
+        description: "Types of data-quality diagnostics"
+        permissible_values:
+            comprehensive_profiling:
+                description: "Comprehensive profiling of records, fields, distributions, and metadata"
+            missing_data_analysis:
+                description: "Missing-data characterization and mechanism analysis"
+            structural_integrity_validation:
+                description: "Schema, key, type, and structural integrity validation"
+            relational_integrity_validation:
+                description: "Foreign key, hierarchy, component sum, and relational consistency validation"
+            distributional_alignment:
+                description: "Distributional alignment, benchmark comparison, or drift detection"
+            semantic_unit_consistency:
+                description: "Semantic, unit, coding, or label consistency verification"
+            temporal_spatial_alignment:
+                description: "Temporal or spatial alignment verification"
+            provenance_correlation:
+                description: "Provenance correlation and causal inference"
+            impact_sensitivity:
+                description: "Impact quantification or sensitivity analysis"
+            scoring_rule_check:
+                description: "Scoring model and decision rule check"
+            reproducibility_check:
+                description: "Implementation reproducibility or workflow rerun check"
+            other:
+                description: "Other diagnostic type"
+
+    SeverityEnum:
+        description: "Severity values for diagnostics and quality issues"
+        permissible_values:
+            low:
+                description: "Low severity"
+            moderate:
+                description: "Moderate severity"
+            high:
+                description: "High severity"
+            critical:
+                description: "Critical severity"
+            not_evaluated:
+                description: "Severity has not been evaluated"
+
+    QualityIssueTypeEnum:
+        description: "Types of data quality issues"
+        permissible_values:
+            missingness:
+                description: "Missing values, missing metadata, or incomplete coverage"
+            non_representativeness:
+                description: "Sampling, source, geographic, temporal, technological, or population representativeness issue"
+            timeliness_deficit:
+                description: "Outdated, stale, provisional, or insufficiently versioned data"
+            schema_drift:
+                description: "Schema drift, unexpected structure, or incompatible data contract"
+            unit_mismatch:
+                description: "Unit mismatch, conversion issue, or scale inconsistency"
+            coding_mismatch:
+                description: "Coding, category, definition, or harmonization mismatch"
+            calibration_gap:
+                description: "Missing, expired, or inadequate calibration or traceability evidence"
+            provenance_gap:
+                description: "Missing, incomplete, or unverifiable provenance"
+            method_mismatch:
+                description: "Method mismatch or insufficient procedural fidelity"
+            boundary_mismatch:
+                description: "System boundary, scope, scenario, or model mismatch"
+            outlier_or_anomaly:
+                description: "Outlier, anomaly, discontinuity, or drift finding"
+            duplicate_or_conflict:
+                description: "Duplicate, contradiction, unresolved conflict, or inconsistent record"
+            bias:
+                description: "Known or suspected systematic bias"
+            invalid_value:
+                description: "Invalid value, failed range check, or failed rule"
+            other:
+                description: "Other quality issue type"
+
+    IssueStatusEnum:
+        description: "Lifecycle status of data quality issues"
+        permissible_values:
+            open:
+                description: "Issue is open"
+            under_review:
+                description: "Issue is under review"
+            mitigated:
+                description: "Issue has been mitigated but not fully resolved"
+            remediated:
+                description: "Issue has been remediated"
+            accepted_risk:
+                description: "Issue remains but has been accepted with documented risk"
+            closed:
+                description: "Issue is closed"
+            superseded:
+                description: "Issue has been superseded"
+
+    RemediationActionTypeEnum:
+        description: "Types of remediation, mitigation, or improvement actions"
+        permissible_values:
+            sampling_redesign:
+                description: "Redesign sampling, sourcing, or coverage strategy"
+            reweighting:
+                description: "Apply reweighting, propensity adjustment, or post-stratification"
+            imputation:
+                description: "Apply missing-data treatment or imputation"
+            recalibration:
+                description: "Recalibrate instrument, method, model, rating, or scale"
+            metadata_completion:
+                description: "Complete missing metadata, provenance, or evidence"
+            data_contract_enforcement:
+                description: "Enforce schema, unit, encoding, or semantic data contracts"
+            unit_canonicalization:
+                description: "Canonicalize units, labels, codes, or categories"
+            source_refresh:
+                description: "Refresh outdated source data or update versions"
+            governance_agreement:
+                description: "Create or update governance, access, data sharing, or reporting agreement"
+            uncertainty_inflation:
+                description: "Increase uncertainty or apply uncertainty factors to contain risk"
+            quarantine:
+                description: "Quarantine affected records, fields, or components"
+            rejection:
+                description: "Reject data for the intended purpose"
+            other:
+                description: "Other remediation action type"
+
+    PriorityEnum:
+        description: "Priority values for remediation actions"
+        permissible_values:
+            low:
+                description: "Low priority"
+            medium:
+                description: "Medium priority"
+            high:
+                description: "High priority"
+            urgent:
+                description: "Urgent priority"
+            not_assigned:
+                description: "Priority has not been assigned"
+
+    RemediationStatusEnum:
+        description: "Lifecycle status of remediation actions"
+        permissible_values:
+            proposed:
+                description: "Action has been proposed"
+            planned:
+                description: "Action has been planned"
+            in_progress:
+                description: "Action is in progress"
+            completed:
+                description: "Action is completed"
+            verified:
+                description: "Action has been verified"
+            deferred:
+                description: "Action has been deferred"
+            cancelled:
+                description: "Action has been cancelled"
+            not_applicable:
+                description: "Action is not applicable"
+
+    UncertaintyTranslationMethodEnum:
+        description: "Methods for translating data quality into uncertainty"
+        permissible_values:
+            cv_lookup:
+                description: "Lookup from quality score to coefficient of variation range"
+            uf_lookup:
+                description: "Lookup from quality score to uncertainty factor"
+            direct_cv:
+                description: "Directly assigned coefficient of variation"
+            direct_uf:
+                description: "Directly assigned uncertainty factor"
+            lognormal_uf:
+                description: "Uncertainty factor interpreted on a lognormal scale"
+            expert_judgement:
+                description: "Expert judgement or elicitation"
+            sensitivity_analysis:
+                description: "Sensitivity analysis used to translate data quality into uncertainty"
+            monte_carlo:
+                description: "Monte Carlo simulation using data-quality-derived inputs"
+            not_evaluated:
+                description: "Translation has not been evaluated"
+            other:
+                description: "Other uncertainty translation method"
+
+    AggregationMethodEnum:
+        description: "Methods for aggregating data quality information"
+        permissible_values:
+            worst_score:
+                description: "Overall score is determined by the worst criterion or limiting factor"
+            rule_based:
+                description: "Rule-based aggregation, such as green/orange/red decision rules"
+            weighted_mean:
+                description: "Weighted arithmetic mean"
+            arithmetic_mean:
+                description: "Arithmetic mean"
+            geometric_mean:
+                description: "Geometric mean"
+            maximum_risk:
+                description: "Maximum risk or most severe issue determines the aggregate"
+            hierarchical:
+                description: "Hierarchical aggregation from inputs to profiles to overall indicators"
+            expert_judgement:
+                description: "Expert judgement aggregation"
+            custom:
+                description: "Custom aggregation method"
+            not_evaluated:
+                description: "Aggregation method has not been evaluated"
+
+    AggregationLevelEnum:
+        description: "Levels at which data quality may be aggregated"
+        permissible_values:
+            value:
+                description: "Single value or field"
+            record:
+                description: "Record, object, or passport entry"
+            dataset:
+                description: "Dataset or data source"
+            input_quantity:
+                description: "Input quantity or parameter"
+            indicator:
+                description: "Derived indicator, score, or model output"
+            model:
+                description: "Model, calculation workflow, or assessment"
+            component:
+                description: "Component, subsystem, product part, or process group"
+            product:
+                description: "Product-level aggregation"
+            material:
+                description: "Material-level aggregation"
+            portfolio:
+                description: "Portfolio, batch, or group-level aggregation"
+            other:
+                description: "Other aggregation level"
+
+    DataQualityEvidenceTypeEnum:
+        description: "Types of evidence used to support data quality assessments"
+        permissible_values:
+            diagnostic_report:
+                description: "Diagnostic report or quality check output"
+            data_profile:
+                description: "Data profiling output"
+            dataset_snapshot:
+                description: "Dataset snapshot, extract, or versioned source"
+            provenance_record:
+                description: "Provenance or lineage record"
+            metadata_record:
+                description: "Metadata record, data dictionary, or schema documentation"
+            calibration_certificate:
+                description: "Calibration certificate or measurement-system evidence"
+            traceability_record:
+                description: "Metrological traceability record"
+            validation_report:
+                description: "Validation, verification, or qualification report"
+            harmonization_log:
+                description: "Harmonization, mapping, coding, or unit conversion log"
+            remediation_record:
+                description: "Remediation, mitigation, or improvement record"
+            workflow_record:
+                description: "Notebook, workflow, script, configuration, or reproducibility record"
+            supplier_declaration:
+                description: "Supplier declaration or third-party declaration"
+            standard_or_protocol:
+                description: "Standard, protocol, guide, or procedure document"
+            other:
+                description: "Other evidence type"

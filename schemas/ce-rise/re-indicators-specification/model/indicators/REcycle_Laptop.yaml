@@ -1,0 +1,1426 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REcycle_Laptop
+name: re_indicators_recycle_laptop
+title: REcycle Indicator Configuration for Laptops
+description: Product-specific configuration for REcycle indicator applied to laptops
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    - ../model # Import core classes
+    - ./REcycle_core # Import core parameter definitions
+
+classes:
+    # ============================================
+    # LAPTOP-SPECIFIC PARAMETERS (P1, P2, P3, P4, P5)
+    # Laptop has different weights and some different questions
+    # ============================================
+
+    # P1: DOCUMENTATION - Laptop specific (equal weights 0.25 each)
+    Laptop_Documentation_Parameter:
+        is_a: ParameterSpecification
+        description: Documentation availability parameter for Laptops - equal weighting
+        attributes:
+            id:
+                ifabsent: string(P1_documentation)
+            name:
+                ifabsent: string(Documentation availability)
+            questions:
+                range: Laptop_DocumentationQuestion
+                multivalued: true
+                inlined: true
+
+    Laptop_DocumentationQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Laptop_Q1_1_UniqueIdentifier
+            - Laptop_Q1_2_BOM
+            - Laptop_Q1_3_SafetyManual
+            - Laptop_Q1_4_DisassemblyManual
+
+    Laptop_Q1_1_UniqueIdentifier:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.1)
+            text:
+                ifabsent: string(Unique Product identifier (product type, brand, commercial name, model, serie number))
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: Laptop_DocumentationAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q1_2_BOM:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.2)
+            text:
+                ifabsent: string(Bill of material (BOM))
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: Laptop_DocumentationAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q1_3_SafetyManual:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.3)
+            text:
+                ifabsent: string(Safety manual)
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: Laptop_DocumentationAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q1_4_DisassemblyManual:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.4)
+            text:
+                ifabsent: string(Disassembly manual)
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: Laptop_DocumentationAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_DocumentationAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_Doc_PubliclyAvailable
+            - Laptop_Doc_IndependentRecyclers
+            - Laptop_Doc_AuthorizedRecyclers
+            - Laptop_Doc_ManufacturersOnly
+            - Laptop_Doc_NotAvailable
+
+    Laptop_Doc_PubliclyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_doc_public)
+            text:
+                ifabsent: string(Publicly available)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Doc_IndependentRecyclers:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_doc_independent)
+            text:
+                ifabsent: string(Available to independent recyclers)
+            score:
+                ifabsent: float(4.0)
+
+    Laptop_Doc_AuthorizedRecyclers:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_doc_authorized)
+            text:
+                ifabsent: string(Available to manufacturer-authorized recyclers providers)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_Doc_ManufacturersOnly:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_doc_manufacturers)
+            text:
+                ifabsent: string(Available to manufactures only)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_Doc_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_doc_not_available)
+            text:
+                ifabsent: string(Document is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # P2: MATERIAL COMPOSITION - Laptop specific (4 questions including recyclability classification)
+    Laptop_MaterialComposition_Parameter:
+        is_a: ParameterSpecification
+        description: Material composition parameter for Laptops - includes recyclability classification
+        attributes:
+            id:
+                ifabsent: string(P2_material_composition)
+            name:
+                ifabsent: string(Material composition)
+            questions:
+                range: Laptop_MaterialCompositionQuestion
+                multivalued: true
+                inlined: true
+
+    Laptop_MaterialCompositionQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Laptop_Q2_1_MaterialCompositionScore
+            - Laptop_Q2_2_CRMInfo
+            - Laptop_Q2_3_HazardousInfo
+            - Laptop_Q2_4_RecyclabilityClassification
+
+    Laptop_Q2_1_MaterialCompositionScore:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.1)
+            text:
+                ifabsent: string(Discloser of material composition score)
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: Laptop_MaterialCompositionScoreAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q2_2_CRMInfo:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.2)
+            text:
+                ifabsent: string(Discloser of amount and location of critical raw material)
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: Laptop_CRMAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q2_3_HazardousInfo:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.3)
+            text:
+                ifabsent: string(Discloser of concentration and location of hazardous material in the battery)
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: Laptop_HazardousAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q2_4_RecyclabilityClassification:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.4)
+            text:
+                ifabsent: string(Use of material in priority part based on their recyclability)
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: Laptop_RecyclabilityClassificationAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Material Composition Answer Options
+    Laptop_MaterialCompositionScoreAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_MatComp_MoreThan99
+            - Laptop_MatComp_MoreThan95
+            - Laptop_MatComp_MoreThan90
+            - Laptop_MatComp_MoreThan70
+            - Laptop_MatComp_LessThan70
+            - Laptop_MatComp_NotAvailable
+
+    Laptop_MatComp_MoreThan99:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_matcomp_99plus)
+            text:
+                ifabsent: string(More than 99% of product mass)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_MatComp_MoreThan95:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_matcomp_95plus)
+            text:
+                ifabsent: string(More than 95% of product mass)
+            score:
+                ifabsent: float(4.0)
+
+    Laptop_MatComp_MoreThan90:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_matcomp_90plus)
+            text:
+                ifabsent: string(More than 90% of product mass)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_MatComp_MoreThan70:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_matcomp_70plus)
+            text:
+                ifabsent: string(More than 70% of product mass)
+            score:
+                ifabsent: float(2.0)
+
+    Laptop_MatComp_LessThan70:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_matcomp_less70)
+            text:
+                ifabsent: string(less than 70% of product mass)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_MatComp_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_matcomp_not_available)
+            text:
+                ifabsent: string(Data not available)
+            score:
+                ifabsent: float(0.0)
+
+    Laptop_CRMAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_CRM_CompletelyDisclosed
+            - Laptop_CRM_PartiallyDisclosed
+            - Laptop_CRM_NotDisclosed
+
+    Laptop_CRM_CompletelyDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_crm_complete)
+            text:
+                ifabsent: string(Completely disclosed to professional recycler)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_CRM_PartiallyDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_crm_partial)
+            text:
+                ifabsent: string(Partially disclosed to professional recycler)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_CRM_NotDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_crm_not_disclosed)
+            text:
+                ifabsent: string(Not disclosed to professional recycler)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_HazardousAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_Hazardous_NotApplicable
+            - Laptop_Hazardous_CompletelyDisclosed
+            - Laptop_Hazardous_PartiallyDisclosed
+            - Laptop_Hazardous_NotDisclosed
+
+    Laptop_Hazardous_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_hazardous_not_applicable)
+            text:
+                ifabsent: string(Not applicable due to absence of hazardous material)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Hazardous_CompletelyDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_hazardous_complete)
+            text:
+                ifabsent: string(Completely disclosed to professional recycler)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Hazardous_PartiallyDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_hazardous_partial)
+            text:
+                ifabsent: string(Partially disclosed to professional recycler)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_Hazardous_NotDisclosed:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_hazardous_not_disclosed)
+            text:
+                ifabsent: string(Not disclosed to professional recycler)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_RecyclabilityClassificationAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_RecClass_High
+            - Laptop_RecClass_Conditional
+            - Laptop_RecClass_Low
+            - Laptop_RecClass_NotAvailable
+
+    Laptop_RecClass_High:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_recclass_high)
+            text:
+                ifabsent: string(High recyclability (green list))
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_RecClass_Conditional:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_recclass_conditional)
+            text:
+                ifabsent: string(Conditional recyclability (orange list))
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_RecClass_Low:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_recclass_low)
+            text:
+                ifabsent: string(low recyclability (red list))
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_RecClass_NotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_recclass_not_available)
+            text:
+                ifabsent: string(Data not available)
+            score:
+                ifabsent: float(0.0)
+
+    # P3: TAKEBACK SCHEME - Laptop uses this as P3 (not P6!)
+    Laptop_TakebackScheme_Parameter:
+        is_a: ParameterSpecification
+        description: Take-back scheme parameter for Laptops
+        attributes:
+            id:
+                ifabsent: string(P3_takeback_scheme)
+            name:
+                ifabsent: string(Take back scheme)
+            questions:
+                range: Laptop_TakebackSchemeQuestion
+                multivalued: true
+                inlined: true
+
+    Laptop_TakebackSchemeQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Laptop_Q3_1_1_TakebackAvailable
+            - Laptop_Q3_1_2_CollectionSystem
+
+    Laptop_Q3_1_1_TakebackAvailable:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.1.1)
+            text:
+                ifabsent: string(Is there any take back scheme available on the product)
+            weight:
+                ifabsent: float(0.50)
+            answer_options:
+                range: Laptop_TakebackAvailableAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q3_1_2_CollectionSystem:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.1.2)
+            text:
+                ifabsent: string(Collection system for returning the product (if any))
+            weight:
+                ifabsent: float(0.50)
+            answer_options:
+                range: Laptop_CollectionSystemAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_TakebackAvailableAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_Takeback_SystemApplicable
+            - Laptop_Takeback_NotApplicable
+            - Laptop_Takeback_DataNotAvailable
+
+    Laptop_Takeback_SystemApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_takeback_system_applicable)
+            text:
+                ifabsent: string(Take back system applicable)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Takeback_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_takeback_not_applicable)
+            text:
+                ifabsent: string(Not applicable)
+            score:
+                ifabsent: float(0.0)
+
+    Laptop_Takeback_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_takeback_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    Laptop_CollectionSystemAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_Collection_FreePickup
+            - Laptop_Collection_CustomerPays
+            - Laptop_Collection_NotApplicable
+
+    Laptop_Collection_FreePickup:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_collection_free_pickup)
+            text:
+                ifabsent: string(Free of Cost (pickup service provided))
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Collection_CustomerPays:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_collection_customer_pays)
+            text:
+                ifabsent: string(Customer has to pay for the take back service)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_Collection_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_collection_not_applicable)
+            text:
+                ifabsent: string(Not applicable)
+            score:
+                ifabsent: float(0.0)
+
+    # P4: DEPOLLUTION - Laptop specific with fastener strength classification
+    Laptop_Depollution_Parameter:
+        is_a: ParameterSpecification
+        description: Depollution parameter for Laptops - includes fastener strength assessment
+        attributes:
+            id:
+                ifabsent: string(P4_depollution)
+            name:
+                ifabsent: string(Depollution)
+            questions:
+                range: Laptop_DepollutionQuestion
+                multivalued: true
+                inlined: true
+
+    Laptop_DepollutionQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Laptop_Q4_1_ComponentList
+            - Laptop_Q4_2_IdentifyPollutant
+            - Laptop_Q4_3_EaseRemovability
+            - Laptop_Q4_4_ToolsRequired
+            - Laptop_Q4_5_FastenerStrength
+
+    Laptop_Q4_1_ComponentList:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1)
+            text:
+                ifabsent: string(List of components/material requires to be removed during depollution process)
+            weight:
+                ifabsent: float(0.20)
+            answer_options:
+                range: Laptop_ComponentListAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q4_2_IdentifyPollutant:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.2)
+            text:
+                ifabsent: string(Ability to identify the pollutant component/material (e.g. marking / labelling))
+            weight:
+                ifabsent: float(0.20)
+            answer_options:
+                range: Laptop_IdentifyPollutantAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q4_3_EaseRemovability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.3)
+            text:
+                ifabsent: string(Ease of removability of pollutant component/material (Disassembly depth))
+            weight:
+                ifabsent: float(0.20)
+            answer_options:
+                range: Laptop_EaseRemovabilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q4_4_ToolsRequired:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.4)
+            text:
+                ifabsent: string(Type of tools required to remove the pollutant component)
+            weight:
+                ifabsent: float(0.20)
+            answer_options:
+                range: Laptop_ToolsRequiredAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q4_5_FastenerStrength:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.5)
+            text:
+                ifabsent: string(Type of fastener connecting the pollutant component)
+            weight:
+                ifabsent: float(0.20)
+            answer_options:
+                range: Laptop_FastenerStrengthAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_ComponentListAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_CompList_DepollutionNotRequired
+            - Laptop_CompList_PubliclyAvailable
+            - Laptop_CompList_IndependentRecyclers
+            - Laptop_CompList_AuthorizedRecyclers
+            - Laptop_CompList_ManufacturersOnly
+
+    Laptop_CompList_DepollutionNotRequired:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_complist_not_required)
+            text:
+                ifabsent: string(Depollution not required)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_CompList_PubliclyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_complist_public)
+            text:
+                ifabsent: string(Publicly available)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_CompList_IndependentRecyclers:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_complist_independent)
+            text:
+                ifabsent: string(Available to independent recyclers)
+            score:
+                ifabsent: float(4.0)
+
+    Laptop_CompList_AuthorizedRecyclers:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_complist_authorized)
+            text:
+                ifabsent: string(Available to manufacturer-authorized recyclers providers)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_CompList_ManufacturersOnly:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_complist_manufacturers)
+            text:
+                ifabsent: string(Available to manufactures only)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_IdentifyPollutantAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_Identify_DepollutionNotRequired
+            - Laptop_Identify_WellMarked
+            - Laptop_Identify_NotMarkedButIdentifiable
+            - Laptop_Identify_NotMarkedNotIdentifiable
+
+    Laptop_Identify_DepollutionNotRequired:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_identify_not_required)
+            text:
+                ifabsent: string(Depollution not required)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Identify_WellMarked:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_identify_well_marked)
+            text:
+                ifabsent: string(Well marked and identifiable)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Identify_NotMarkedButIdentifiable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_identify_not_marked_identifiable)
+            text:
+                ifabsent: string(not-marked but identifiable)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_Identify_NotMarkedNotIdentifiable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_identify_not_marked_not_identifiable)
+            text:
+                ifabsent: string(not marked and not identifiable)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_EaseRemovabilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_Removability_DepollutionNotRequired
+            - Laptop_Removability_2StepsOrLess
+            - Laptop_Removability_2To5Steps
+            - Laptop_Removability_5To10Steps
+            - Laptop_Removability_10To15Steps
+            - Laptop_Removability_CannotDisassemble
+            - Laptop_Removability_DataNotAvailable
+
+    Laptop_Removability_DepollutionNotRequired:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_removability_not_required)
+            text:
+                ifabsent: string(Depollution not required)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Removability_2StepsOrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_removability_2_or_less)
+            text:
+                ifabsent: string(x ≤ 2 steps)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Removability_2To5Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_removability_2_to_5)
+            text:
+                ifabsent: string(5 ≥ x > 2 steps)
+            score:
+                ifabsent: float(4.0)
+
+    Laptop_Removability_5To10Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_removability_5_to_10)
+            text:
+                ifabsent: string(10 ≥ x > 5 steps)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_Removability_10To15Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_removability_10_to_15)
+            text:
+                ifabsent: string(15 ≥ x > 10 steps)
+            score:
+                ifabsent: float(2.0)
+
+    Laptop_Removability_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_removability_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    Laptop_Removability_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_removability_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    Laptop_ToolsRequiredAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_Tools_DepollutionNotRequired
+            - Laptop_Tools_NoToolsOrBasic
+            - Laptop_Tools_ProductGroupSpecific
+            - Laptop_Tools_CommerciallyAvailable
+            - Laptop_Tools_Proprietary
+            - Laptop_Tools_CannotDismantle
+
+    Laptop_Tools_DepollutionNotRequired:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_tools_not_required)
+            text:
+                ifabsent: string(Depollution not required)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Tools_NoToolsOrBasic:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_tools_no_tools_basic)
+            text:
+                ifabsent: string(without tools, or tools are delivered with the product or only basic tools)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Tools_ProductGroupSpecific:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_tools_product_group_specific)
+            text:
+                ifabsent: string(with product group specific tools)
+            score:
+                ifabsent: float(4.0)
+
+    Laptop_Tools_CommerciallyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_tools_commercially_available)
+            text:
+                ifabsent: string(with commercially available tools)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_Tools_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_tools_proprietary)
+            text:
+                ifabsent: string(with proprietary tools)
+            score:
+                ifabsent: float(2.0)
+
+    Laptop_Tools_CannotDismantle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_tools_cannot_dismantle)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    Laptop_FastenerStrengthAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_Fastener_DepollutionNotRequired
+            - Laptop_Fastener_Weak
+            - Laptop_Fastener_Standard
+            - Laptop_Fastener_StrongComplex
+            - Laptop_Fastener_CannotDisassemble
+
+    Laptop_Fastener_DepollutionNotRequired:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_fastener_not_required)
+            text:
+                ifabsent: string(Depollution not required)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Fastener_Weak:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_fastener_weak)
+            text:
+                ifabsent: string(Weak)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Fastener_Standard:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_fastener_standard)
+            text:
+                ifabsent: string(Standard)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_Fastener_StrongComplex:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_fastener_strong_complex)
+            text:
+                ifabsent: string(Strong/complex)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_Fastener_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_fastener_cannot_disassemble)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    # P5: DISMANTLING - Laptop specific (only 3 questions shown in spec)
+    Laptop_Dismantling_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of dismantling parameter for Laptops - pack into modules
+        attributes:
+            id:
+                ifabsent: string(P5_dismantling)
+            name:
+                ifabsent: string(Dismantling)
+            questions:
+                range: Laptop_DismantlingQuestion
+                multivalued: true
+                inlined: true
+
+    Laptop_DismantlingQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Laptop_Q5_1_1_PackToModules_Ease
+            - Laptop_Q5_1_2_PackToModules_Tools
+            - Laptop_Q5_1_3_PackToModules_Fastener
+
+    Laptop_Q5_1_1_PackToModules_Ease:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.1.1)
+            text:
+                ifabsent: string(Ease of dismantling packs of battery into module)
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: Laptop_DismantlingEaseAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q5_1_2_PackToModules_Tools:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.1.2)
+            text:
+                ifabsent: string(Type of tool required packs of battery into module)
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: Laptop_DismantlingToolsAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q5_1_3_PackToModules_Fastener:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.1.3)
+            text:
+                ifabsent: string(Type of fastener connecting the modules to form pack)
+            weight:
+                ifabsent: float(0.25)
+            answer_options:
+                range: Laptop_DismantlingFastenerAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_DismantlingEaseAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_Dismantling_2StepsOrLess
+            - Laptop_Dismantling_2To5Steps
+            - Laptop_Dismantling_5To10Steps
+            - Laptop_Dismantling_10To15Steps
+            - Laptop_Dismantling_Over15Steps
+            - Laptop_Dismantling_CannotDisassemble
+            - Laptop_Dismantling_NotApplicable
+            - Laptop_Dismantling_DataNotAvailable
+
+    Laptop_Dismantling_2StepsOrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_2_or_less)
+            text:
+                ifabsent: string(x ≤ 2 steps)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_Dismantling_2To5Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_2_to_5)
+            text:
+                ifabsent: string(5 ≥ x > 2 steps)
+            score:
+                ifabsent: float(4.0)
+
+    Laptop_Dismantling_5To10Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_5_to_10)
+            text:
+                ifabsent: string(10 ≥ x > 5 steps)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_Dismantling_10To15Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_10_to_15)
+            text:
+                ifabsent: string(15 ≥ x > 10 steps)
+            score:
+                ifabsent: float(2.0)
+
+    Laptop_Dismantling_Over15Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_over_15)
+            text:
+                ifabsent: string(x > 15 steps)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_Dismantling_CannotDisassemble:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_cannot)
+            text:
+                ifabsent: string(Cannot be disassembled)
+            score:
+                ifabsent: float(0.0)
+
+    Laptop_Dismantling_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_not_applicable)
+            text:
+                ifabsent: string(Not applicable)
+            score:
+                ifabsent: float(0.0)
+
+    Laptop_Dismantling_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    Laptop_DismantlingToolsAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_DismantlingTools_NoToolsOrBasic
+            - Laptop_DismantlingTools_ProductGroupSpecific
+            - Laptop_DismantlingTools_CommerciallyAvailable
+            - Laptop_DismantlingTools_Proprietary
+            - Laptop_DismantlingTools_CannotDismantle
+            - Laptop_DismantlingTools_NotApplicable
+
+    Laptop_DismantlingTools_NoToolsOrBasic:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_tools_no_tools_basic)
+            text:
+                ifabsent: string(without tools, or tools are delivered with the product or only basic tools)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_DismantlingTools_ProductGroupSpecific:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_tools_product_group_specific)
+            text:
+                ifabsent: string(with product group specific tools)
+            score:
+                ifabsent: float(4.0)
+
+    Laptop_DismantlingTools_CommerciallyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_tools_commercially_available)
+            text:
+                ifabsent: string(with commercially available tools)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_DismantlingTools_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_tools_proprietary)
+            text:
+                ifabsent: string(with proprietary tools)
+            score:
+                ifabsent: float(2.0)
+
+    Laptop_DismantlingTools_CannotDismantle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_tools_cannot)
+            text:
+                ifabsent: string(not possible to dismantle)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_DismantlingTools_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_tools_not_applicable)
+            text:
+                ifabsent: string(Not applicable)
+            score:
+                ifabsent: float(0.0)
+
+    Laptop_DismantlingFastenerAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_DismantlingFastener_Weak
+            - Laptop_DismantlingFastener_Standard
+            - Laptop_DismantlingFastener_StrongComplex
+            - Laptop_DismantlingFastener_CannotDismantle
+
+    Laptop_DismantlingFastener_Weak:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_fastener_weak)
+            text:
+                ifabsent: string(Weak)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_DismantlingFastener_Standard:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_fastener_standard)
+            text:
+                ifabsent: string(Standard)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_DismantlingFastener_StrongComplex:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_fastener_strong_complex)
+            text:
+                ifabsent: string(Strong/complex)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_DismantlingFastener_CannotDismantle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_dismantling_fastener_cannot)
+            text:
+                ifabsent: string(not possible to dismantle)
+            score:
+                ifabsent: float(0.0)
+
+    # P6: RECYCLABILITY RATE - Laptop specific (battery components)
+    Laptop_RecyclabilityRate_Parameter:
+        is_a: ParameterSpecification
+        description: Recyclability rate parameter for Laptops - battery component assessment
+        attributes:
+            id:
+                ifabsent: string(P6_recyclability_rate)
+            name:
+                ifabsent: string(Recyclability rate)
+            questions:
+                range: Laptop_RecyclabilityRateQuestion
+                multivalued: true
+                inlined: true
+
+    Laptop_RecyclabilityRateQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Laptop_Q6_1_BatteryRecyclability
+            - Laptop_Q6_2_1_NickelRecyclability
+            - Laptop_Q6_2_2_CobaltRecyclability
+            - Laptop_Q6_2_3_LithiumRecyclability
+            - Laptop_Q6_2_4_GraphiteRecyclability
+
+    Laptop_Q6_1_BatteryRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.1)
+            text:
+                ifabsent: string(Recyclability rate of battery)
+            weight:
+                ifabsent: float(0.40)
+            answer_options:
+                range: Laptop_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q6_2_1_NickelRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.2.1)
+            text:
+                ifabsent: string(Recyclability rate of nickel)
+            weight:
+                ifabsent: float(0.15)
+            answer_options:
+                range: Laptop_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q6_2_2_CobaltRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.2.2)
+            text:
+                ifabsent: string(Recyclability rate of cobalt)
+            weight:
+                ifabsent: float(0.15)
+            answer_options:
+                range: Laptop_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q6_2_3_LithiumRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q6.2.3)
+            text:
+                ifabsent: string(Recyclability rate of lithium)
+            weight:
+                ifabsent: float(0.15)
+            answer_options:
+                range: Laptop_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_Q6_2_4_GraphiteRecyclability:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(laptop_q6_2_4)
+            text:
+                ifabsent: string(Recyclability rate of graphite)
+            weight:
+                ifabsent: float(0.15)
+            answer_options:
+                range: Laptop_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    Laptop_RecyclabilityRateAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Laptop_RecRate_MoreThan60
+            - Laptop_RecRate_Between50And60
+            - Laptop_RecRate_Below50
+            - Laptop_RecRate_CannotRecycle
+            - Laptop_RecRate_DataNotAvailable
+
+    Laptop_RecRate_MoreThan60:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_rec_rate_more_than_60)
+            text:
+                ifabsent: string(More than 60%)
+            score:
+                ifabsent: float(5.0)
+
+    Laptop_RecRate_Between50And60:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_rec_rate_50_to_60)
+            text:
+                ifabsent: string(Between 60-50%)
+            score:
+                ifabsent: float(3.0)
+
+    Laptop_RecRate_Below50:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_rec_rate_below_50)
+            text:
+                ifabsent: string(Below 50%)
+            score:
+                ifabsent: float(1.0)
+
+    Laptop_RecRate_CannotRecycle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_rec_rate_cannot_recycle)
+            text:
+                ifabsent: string(Cannot be recycled)
+            score:
+                ifabsent: float(0.0)
+
+    Laptop_RecRate_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(laptop_rec_rate_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # LAPTOP-SPECIFIC CONFIGURATION
+    # ============================================
+
+    REcycle_Laptop_Config:
+        is_a: REcycle_Configuration
+        description: Configuration for REcycle indicator specifically for laptops
+        attributes:
+            id:
+                ifabsent: string(REcycle_Laptop)
+            product_category:
+                ifabsent: ProductCategoryType(Laptop)
+            name:
+                ifabsent: string(Recyclability Index for Laptops)
+            parameter_applications:
+                inlined_as_list: true
+                inlined: true
+                ifabsent:
+                    - parameter_ref: P1_documentation
+                      weight: 0.018181818181818182
+                    - parameter_ref: P2_material_composition
+                      weight: 0.05454545454545454
+                    - parameter_ref: P3_takeback_scheme
+                      weight: 0.018181818181818182
+                    - parameter_ref: P4_depollution
+                      weight: 0.018181818181818182
+                    - parameter_ref: P5_dismantling
+                      weight: 0.018181818181818182
+                    - parameter_ref: P6_recyclability_rate
+                      weight: 0.07272727272727272

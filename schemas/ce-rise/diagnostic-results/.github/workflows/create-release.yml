@@ -1,0 +1,75 @@
+name: Create Release from Tag
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Matches semantic versioning tags like v1.0.0
+      - 'v*.*.*-*'  # Matches pre-release tags like v1.0.0-beta
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for creating releases
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for changelog generation
+
+      - name: Extract tag name
+        id: tag
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Check if release exists
+        id: check_release
+        run: |
+          if gh release view "${{ steps.tag.outputs.TAG_NAME }}" >/dev/null 2>&1; then
+            echo "EXISTS=true" >> $GITHUB_OUTPUT
+          else
+            echo "EXISTS=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate Release Notes
+        id: notes
+        if: steps.check_release.outputs.EXISTS == 'false'
+        run: |
+          cat << 'EOF' > release_notes.md
+          ## CE-RISE RE-Indicators Specification ${{ steps.tag.outputs.TAG_NAME }}
+
+          This release is automatically mirrored from [Codeberg](https://codeberg.org/CE-RISE-models/re-indicators-specification).
+
+          ### 📦 Generated Artifacts
+
+          The following schema files are available at [Codeberg Pages](https://ce-rise-models.codeberg.page/re-indicators-specification/):
+          - [JSON Schema](https://ce-rise-models.codeberg.page/re-indicators-specification/schema.json)
+          - [SHACL (Turtle)](https://ce-rise-models.codeberg.page/re-indicators-specification/shacl.ttl)
+          - [OWL Ontology (Turtle)](https://ce-rise-models.codeberg.page/re-indicators-specification/model.ttl)
+
+          ### 📄 Citation
+
+          Please cite this work using the metadata in CITATION.cff or the DOI provided by Zenodo.
+
+          ### 📝 License
+
+          Licensed under [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/)
+
+          ---
+
+          **Note**: This is a mirror repository. For issues and contributions, please visit the [main repository on Codeberg](https://codeberg.org/CE-RISE-models/re-indicators-specification).
+          EOF
+
+      - name: Create GitHub Release
+        if: steps.check_release.outputs.EXISTS == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.TAG_NAME }}
+          name: Release ${{ steps.tag.outputs.TAG_NAME }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: ${{ contains(steps.tag.outputs.TAG_NAME, '-') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,1764 @@
+id: https://ce-rise-models.codeberg.page/dp-access-and-governance/
+name: dp_access_and_governance
+title: CE-RISE DP Access and Governance Data Model
+description: >
+    Operational and access-related metadata that governs how DPP and DMP records are stored, exposed, shared,
+    and maintained across systems. Full implementation with all five stages complete.
+license: CC BY-NC 4.0
+version: 0.0.3
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    dpag: https://ce-rise-models.codeberg.page/dp-access-and-governance/
+    odrl: http://www.w3.org/ns/odrl/2/
+    acl: http://www.w3.org/ns/auth/acl#
+    dcterms: http://purl.org/dc/terms/
+    foaf: http://xmlns.com/foaf/0.1/
+    schema: http://schema.org/
+    xacml: urn:oasis:names:tc:xacml:3.0:core:schema:wd-17#
+    oauth: https://www.w3.org/ns/auth/oauth#
+    cert: http://www.w3.org/ns/auth/cert#
+    vcard: http://www.w3.org/2006/vcard/ns#
+    sec: https://w3id.org/security#
+    prov: http://www.w3.org/ns/prov#
+    gdpr: https://w3id.org/dpv/dpv-gdpr#
+    dpv: https://w3id.org/dpv#
+    xsd: http://www.w3.org/2001/XMLSchema#
+    dcat: http://www.w3.org/ns/dcat#
+
+imports:
+    - linkml:types
+
+default_range: string
+
+classes:
+    DPAccessAndGovernance:
+        description: >
+            Root class for operational and access-related metadata governing DPP and DMP records.
+            Full implementation includes all five stages: Access Control, Data Carrier, Data Longevity,
+            Interoperability, and System Integration mechanisms.
+        class_uri: dpag:DPAccessAndGovernance
+        attributes:
+            access_control:
+                description: Access control configuration defining who can access what data under what conditions
+                range: AccessControl
+                slot_uri: dpag:hasAccessControl
+                annotations:
+                    sql_identifier: dpag_access_control
+                    owl.filler: dpag:access_control
+            data_carrier:
+                description: Configuration for how and where DPP and DMP data is stored and accessed
+                range: DataCarrier
+                slot_uri: dpag:hasDataCarrier
+                annotations:
+                    sql_identifier: dpag_data_carrier
+                    owl.filler: dpag:data_carrier
+            data_longevity:
+                description: Lifecycle policies for data retention, availability, archival, and disposal
+                range: DataLongevity
+                slot_uri: dpag:hasDataLongevity
+                annotations:
+                    sql_identifier: dpag_data_longevity
+                    owl.filler: dpag:data_longevity
+            interoperability_configuration:
+                description: Configuration for cross-system data exchange and protocol support
+                range: InteroperabilityConfiguration
+                slot_uri: dpag:hasInteroperabilityConfiguration
+                annotations:
+                    sql_identifier: dpag_interoperability_config
+                    owl.filler: dpag:interoperability_configuration
+            system_integration:
+                description: Configuration for upstream source systems and downstream consumers
+                range: SystemIntegration
+                slot_uri: dpag:hasSystemIntegration
+                annotations:
+                    sql_identifier: dpag_system_integration
+                    owl.filler: dpag:system_integration
+
+    # Stage 1: Access Control Classes
+
+    AccessControl:
+        description: >
+            Comprehensive access control configuration including access levels, security settings,
+            and consent management for DPP and DMP data
+        class_uri: acl:AccessControl
+        attributes:
+            access_levels:
+                description: Multi-tier access model defining public, authenticated, and restricted access
+                range: AccessLevels
+                slot_uri: acl:accessTo
+                annotations:
+                    sql_identifier: dpag_access_levels
+                    owl.filler: acl:accessTo
+                    comment: "Mandatory: compliance with GDPR Article 6/9 for lawful basis of data processing"
+                    references: "GDPR Articles 6, 9, 12-22 (data subject rights); ISO/IEC 27001 (access control)"
+            security_settings:
+                description: Security configuration for data protection and transport
+                range: SecuritySettings
+                slot_uri: sec:SecuritySettings
+                annotations:
+                    sql_identifier: dpag_security_settings
+                    owl.filler: sec:SecuritySettings
+            consent_management:
+                description: GDPR-compliant consent handling configuration
+                range: ConsentManagement
+                slot_uri: dpv:hasConsent
+                annotations:
+                    sql_identifier: dpag_consent_management
+                    owl.filler: dpv:hasConsent
+                    comment: "Mandatory: GDPR Article 7 requirements for valid consent"
+                    references: "GDPR Article 7 (conditions for consent); Article 13/14 (information requirements); ePrivacy Directive"
+
+    AccessLevels:
+        description: Three-tier access model for granular data access control
+        class_uri: odrl:Permission
+        attributes:
+            public_access:
+                description: Configuration for publicly accessible data
+                range: PublicAccess
+                slot_uri: acl:Read
+                annotations:
+                    sql_identifier: dpag_access_public
+                    owl.filler: acl:Read
+            authenticated_access:
+                description: Configuration for authenticated user access
+                range: AuthenticatedAccess
+                slot_uri: acl:AuthenticatedAgent
+                annotations:
+                    sql_identifier: dpag_access_authenticated
+                    owl.filler: acl:AuthenticatedAgent
+            restricted_access:
+                description: Configuration for role-based restricted access
+                range: RestrictedAccess
+                slot_uri: odrl:Prohibition
+                annotations:
+                    sql_identifier: dpag_access_restricted
+                    owl.filler: odrl:Prohibition
+
+    PublicAccess:
+        description: Configuration for data that can be accessed without authentication
+        class_uri: acl:Read
+        attributes:
+            public_fields:
+                description: List of field identifiers that are openly accessible
+                multivalued: true
+                range: string
+                slot_uri: dcat:accessURL
+                annotations:
+                    sql_identifier: dpag_access_public_fields
+                    owl.filler: dpag:public_fields
+            public_access_url:
+                description: URL endpoint for public data access
+                range: uri
+                slot_uri: dcat:accessURL
+                annotations:
+                    sql_identifier: dpag_access_public_url
+                    owl.filler: dcat:accessURL
+            public_data_license:
+                description: License governing public data usage
+                range: string
+                slot_uri: dcterms:license
+                annotations:
+                    sql_identifier: dpag_access_public_license
+                    owl.filler: dcterms:license
+
+    AuthenticatedAccess:
+        description: Configuration for data requiring authentication
+        class_uri: acl:AuthenticatedAgent
+        attributes:
+            authentication_method:
+                description: Method used for authentication (OAuth2, API key, certificate, etc.)
+                range: AuthenticationMethodEnum
+                slot_uri: oauth:authenticationMethod
+                annotations:
+                    sql_identifier: dpag_access_auth_method
+                    owl.filler: dpag:authentication_method
+                    comment: "Mandatory: strong authentication required for restricted data access"
+                    references: "eIDAS Regulation (EU) 910/2014; ISO/IEC 27001 A.9.2 (user access management)"
+            authenticated_fields:
+                description: List of field identifiers accessible after authentication
+                multivalued: true
+                range: string
+                slot_uri: acl:accessToClass
+                annotations:
+                    sql_identifier: dpag_access_auth_fields
+                    owl.filler: dpag:authenticated_fields
+            authentication_endpoint:
+                description: URL endpoint for authentication services
+                range: uri
+                slot_uri: oauth:authorizationEndpoint
+                annotations:
+                    sql_identifier: dpag_access_auth_endpoint
+                    owl.filler: oauth:authorizationEndpoint
+            token_lifetime:
+                description: Duration of authentication token validity in seconds
+                range: integer
+                slot_uri: sec:tokenLifetime
+                annotations:
+                    sql_identifier: dpag_access_token_lifetime
+                    owl.filler: dpag:token_lifetime
+
+    RestrictedAccess:
+        description: Configuration for role-based and specially restricted data access
+        class_uri: odrl:Prohibition
+        attributes:
+            role_based_permissions:
+                description: Map of roles to their permitted field access
+                multivalued: true
+                range: RolePermission
+                slot_uri: xacml:Role
+                annotations:
+                    sql_identifier: dpag_access_role_permissions
+                    owl.filler: dpag:role_based_permissions
+            restricted_fields:
+                description: List of field identifiers under restricted access
+                multivalued: true
+                range: string
+                slot_uri: odrl:prohibit
+                annotations:
+                    sql_identifier: dpag_access_restricted_fields
+                    owl.filler: odrl:prohibit
+            access_request_process:
+                description: URL or description of process to request access
+                range: string
+                slot_uri: schema:HowToSection
+                annotations:
+                    sql_identifier: dpag_access_request_process
+                    owl.filler: dpag:access_request_process
+            access_justification_required:
+                description: Whether access requests require justification
+                range: boolean
+                slot_uri: dpv:hasJustification
+                annotations:
+                    sql_identifier: dpag_access_justification_required
+                    owl.filler: dpv:hasJustification
+
+    RolePermission:
+        description: Mapping of a role to its permitted data access
+        class_uri: xacml:Role
+        attributes:
+            role_name:
+                description: Name or identifier of the role
+                required: true
+                range: string
+                slot_uri: foaf:name
+                annotations:
+                    sql_identifier: dpag_role_name
+                    owl.filler: foaf:name
+            permitted_fields:
+                description: Fields this role can access
+                multivalued: true
+                range: string
+                slot_uri: acl:accessToClass
+                annotations:
+                    sql_identifier: dpag_role_permitted_fields
+                    owl.filler: dpag:permitted_fields
+            role_description:
+                description: Description of the role's purpose and scope
+                range: string
+                slot_uri: dcterms:description
+                annotations:
+                    sql_identifier: dpag_role_description
+                    owl.filler: dcterms:description
+
+    SecuritySettings:
+        description: Security configuration for data protection in transit and at rest
+        class_uri: sec:SecurityConfiguration
+        attributes:
+            encryption_method:
+                description: Encryption method for data in transit
+                range: EncryptionMethodEnum
+                slot_uri: sec:encryptionAlgorithm
+                annotations:
+                    sql_identifier: dpag_security_encryption_method
+                    owl.filler: sec:encryptionAlgorithm
+                    comment: "Mandatory: encryption required for personal and confidential data"
+                    references: "GDPR Article 32(1)(a); ETSI EN 303 645 (cyber security for consumer IoT)"
+            data_classification:
+                description: Security classification level of the data
+                range: DataClassificationEnum
+                slot_uri: dpv:hasDataCategory
+                annotations:
+                    sql_identifier: dpag_security_data_classification
+                    owl.filler: dpv:hasDataCategory
+                    comment: "Mandatory: classification required for compliance with data protection regulations"
+                    references: "ISO/IEC 27001:2022; GDPR Article 32 (security of processing)"
+            transport_security:
+                description: Transport layer security configuration
+                range: TransportSecurityEnum
+                slot_uri: sec:transportSecurity
+                annotations:
+                    sql_identifier: dpag_security_transport
+                    owl.filler: dpag:transport_security
+            access_attempt_logging:
+                description: Configuration for logging access attempts
+                range: AccessLogging
+                slot_uri: prov:wasGeneratedBy
+                annotations:
+                    sql_identifier: dpag_security_access_logging
+                    owl.filler: dpag:access_attempt_logging
+            integrity_verification:
+                description: Method for verifying data integrity
+                range: string
+                slot_uri: sec:digestAlgorithm
+                annotations:
+                    sql_identifier: dpag_security_integrity_method
+                    owl.filler: sec:digestAlgorithm
+
+    AccessLogging:
+        description: Configuration for logging access attempts and security events
+        class_uri: prov:Activity
+        attributes:
+            log_failed_attempts:
+                description: Whether to log failed access attempts
+                range: boolean
+                slot_uri: prov:wasInvalidatedBy
+                annotations:
+                    sql_identifier: dpag_log_failed_attempts
+                    owl.filler: dpag:log_failed_attempts
+            log_permission_checks:
+                description: Whether to log permission check events
+                range: boolean
+                slot_uri: prov:hadActivity
+                annotations:
+                    sql_identifier: dpag_log_permission_checks
+                    owl.filler: dpag:log_permission_checks
+            log_retention_days:
+                description: Number of days to retain access logs
+                range: integer
+                slot_uri: prov:generatedAtTime
+                annotations:
+                    sql_identifier: dpag_log_retention_days
+                    owl.filler: dpag:log_retention_days
+            log_storage_location:
+                description: Where access logs are stored
+                range: string
+                slot_uri: prov:atLocation
+                annotations:
+                    sql_identifier: dpag_log_storage_location
+                    owl.filler: prov:atLocation
+
+    ConsentManagement:
+        description: GDPR-compliant consent handling and management
+        class_uri: dpv:Consent
+        attributes:
+            consent_required:
+                description: Whether consent is required for data access
+                range: boolean
+                slot_uri: dpv:hasLegalBasis
+                annotations:
+                    sql_identifier: dpag_consent_required
+                    owl.filler: dpv:hasLegalBasis
+                    comment: "Mandatory: must identify legal basis under GDPR Article 6"
+                    references: "GDPR Article 6 (lawfulness of processing); Article 9 (special categories)"
+            consent_scope:
+                description: Scope and purpose of the consent
+                multivalued: true
+                range: string
+                slot_uri: dpv:hasPurpose
+                annotations:
+                    sql_identifier: dpag_consent_scope
+                    owl.filler: dpv:hasPurpose
+            consent_revocation_method:
+                description: Method or endpoint for revoking consent
+                range: string
+                slot_uri: dpv:hasWithdrawalMethod
+                annotations:
+                    sql_identifier: dpag_consent_revocation_method
+                    owl.filler: dpv:hasWithdrawalMethod
+            consent_duration:
+                description: Duration of consent validity in days
+                range: integer
+                slot_uri: dpv:hasDuration
+                annotations:
+                    sql_identifier: dpag_consent_duration
+                    owl.filler: dpv:hasDuration
+            consent_granularity:
+                description: Level of granularity for consent (field-level, record-level, etc.)
+                range: string
+                slot_uri: dpv:hasDataSubjectCategory
+                annotations:
+                    sql_identifier: dpag_consent_granularity
+                    owl.filler: dpag:consent_granularity
+
+    # Stage 2: Data Carrier Classes
+
+    DataCarrier:
+        description: >
+            Configuration specifying how and where DPP and DMP data is physically or digitally stored,
+            including carrier types, capacity, location, redundancy, and update mechanisms
+        class_uri: dcat:Distribution
+        attributes:
+            carrier_type:
+                description: Type of physical or digital storage mechanism (QR code, RFID, NFC, URL, API, blockchain, etc.)
+                range: CarrierTypeEnum
+                slot_uri: dcat:mediaType
+                annotations:
+                    sql_identifier: dpag_carrier_type
+                    owl.filler: dcat:mediaType
+                    comment: "Mandatory: carrier type must be specified for ESPR compliance"
+                    references: "ESPR Annex III - unique product identifier requirements; ISO/IEC 18000 (RFID standards)"
+            carrier_capacity:
+                description: Data size limits in bytes for the carrier
+                range: integer
+                slot_uri: dcat:byteSize
+                annotations:
+                    sql_identifier: dpag_carrier_capacity_bytes
+                    owl.filler: dcat:byteSize
+            carrier_location:
+                description: Physical or digital location of the carrier
+                range: CarrierLocation
+                slot_uri: prov:atLocation
+                annotations:
+                    sql_identifier: dpag_carrier_location
+                    owl.filler: dpag:carrier_location
+            carrier_redundancy:
+                description: Backup and failover carrier configurations
+                multivalued: true
+                range: CarrierRedundancy
+                slot_uri: dpag:hasRedundancy
+                annotations:
+                    sql_identifier: dpag_carrier_redundancy
+                    owl.filler: dpag:carrier_redundancy
+            carrier_update_mechanism:
+                description: How carrier data is refreshed and synchronized
+                range: CarrierUpdateMechanism
+                slot_uri: dpag:hasUpdateMechanism
+                annotations:
+                    sql_identifier: dpag_carrier_update_mechanism
+                    owl.filler: dpag:carrier_update_mechanism
+
+    CarrierLocation:
+        description: Physical or digital location details for the data carrier
+        class_uri: prov:Location
+        attributes:
+            location_type:
+                description: Type of location (physical, digital, hybrid)
+                range: LocationTypeEnum
+                slot_uri: dcterms:type
+                annotations:
+                    sql_identifier: dpag_location_type
+                    owl.filler: dcterms:type
+            physical_location:
+                description: Physical address or coordinates if applicable
+                range: string
+                slot_uri: schema:address
+                annotations:
+                    sql_identifier: dpag_physical_location
+                    owl.filler: schema:address
+            digital_location:
+                description: URL, URI, or digital endpoint
+                range: uri
+                slot_uri: dcat:accessURL
+                annotations:
+                    sql_identifier: dpag_digital_location
+                    owl.filler: dcat:accessURL
+            access_instructions:
+                description: Instructions for accessing the carrier at this location
+                range: string
+                slot_uri: schema:instructions
+                annotations:
+                    sql_identifier: dpag_access_instructions
+                    owl.filler: dpag:access_instructions
+
+    CarrierRedundancy:
+        description: Backup and redundancy configuration for data carriers
+        class_uri: dpag:CarrierRedundancy
+        attributes:
+            redundancy_level:
+                description: Level or priority of this redundancy (primary, secondary, tertiary)
+                range: RedundancyLevelEnum
+                slot_uri: dpag:redundancyLevel
+                annotations:
+                    sql_identifier: dpag_redundancy_level
+                    owl.filler: dpag:redundancy_level
+            backup_carrier_type:
+                description: Type of carrier used for backup
+                range: CarrierTypeEnum
+                slot_uri: dcat:mediaType
+                annotations:
+                    sql_identifier: dpag_backup_carrier_type
+                    owl.filler: dpag:backup_carrier_type
+            backup_location:
+                description: Location of the backup carrier
+                range: CarrierLocation
+                slot_uri: prov:atLocation
+                annotations:
+                    sql_identifier: dpag_backup_location
+                    owl.filler: dpag:backup_location
+            failover_mechanism:
+                description: How failover to this redundancy is triggered
+                range: string
+                slot_uri: dpag:failoverMechanism
+                annotations:
+                    sql_identifier: dpag_failover_mechanism
+                    owl.filler: dpag:failover_mechanism
+            sync_frequency:
+                description: How often this redundancy is synchronized in seconds
+                range: integer
+                slot_uri: dpag:syncFrequency
+                annotations:
+                    sql_identifier: dpag_sync_frequency_seconds
+                    owl.filler: dpag:sync_frequency
+
+    CarrierUpdateMechanism:
+        description: Configuration for how carrier data is updated and maintained
+        class_uri: dpag:UpdateMechanism
+        attributes:
+            update_method:
+                description: Method used to update carrier data
+                range: UpdateMethodEnum
+                slot_uri: dpag:updateMethod
+                annotations:
+                    sql_identifier: dpag_update_method
+                    owl.filler: dpag:update_method
+            update_frequency:
+                description: How often updates occur in seconds (0 for real-time)
+                range: integer
+                slot_uri: dpag:updateFrequency
+                annotations:
+                    sql_identifier: dpag_update_frequency_seconds
+                    owl.filler: dpag:update_frequency
+            update_endpoint:
+                description: Endpoint for pushing or pulling updates
+                range: uri
+                slot_uri: dcat:accessURL
+                annotations:
+                    sql_identifier: dpag_update_endpoint
+                    owl.filler: dcat:accessURL
+            offline_capability:
+                description: Whether carrier can function when offline
+                range: boolean
+                slot_uri: dpag:offlineCapable
+                annotations:
+                    sql_identifier: dpag_offline_capable
+                    owl.filler: dpag:offline_capable
+            cache_duration:
+                description: How long cached data remains valid in seconds
+                range: integer
+                slot_uri: dpag:cacheDuration
+                annotations:
+                    sql_identifier: dpag_cache_duration_seconds
+                    owl.filler: dpag:cache_duration
+
+    # Stage 3: Data Longevity Classes
+
+    DataLongevity:
+        description: >
+            Lifecycle policies and strategies for data retention, availability commitments,
+            archival processes, and disposal policies throughout the DPP and DMP data lifecycle
+        class_uri: dpag:DataLongevity
+        attributes:
+            retention_policy:
+                description: Policies defining how long data must or can be retained
+                range: RetentionPolicy
+                slot_uri: dpag:hasRetentionPolicy
+                annotations:
+                    sql_identifier: dpag_retention_policy
+                    owl.filler: dpag:retention_policy
+            availability_commitment:
+                description: Service level agreements and uptime guarantees
+                range: AvailabilityCommitment
+                slot_uri: dpag:hasAvailabilityCommitment
+                annotations:
+                    sql_identifier: dpag_availability_commitment
+                    owl.filler: dpag:availability_commitment
+            archival_strategy:
+                description: Long-term preservation and archival approach
+                range: ArchivalStrategy
+                slot_uri: dpag:hasArchivalStrategy
+                annotations:
+                    sql_identifier: dpag_archival_strategy
+                    owl.filler: dpag:archival_strategy
+            disposal_policy:
+                description: Policies for when and how to dispose of data
+                range: DisposalPolicy
+                slot_uri: dpag:hasDisposalPolicy
+                annotations:
+                    sql_identifier: dpag_disposal_policy
+                    owl.filler: dpag:disposal_policy
+
+    RetentionPolicy:
+        description: Data retention requirements and justifications
+        class_uri: dpag:RetentionPolicy
+        attributes:
+            minimum_retention_period:
+                description: Minimum required retention period in days
+                range: integer
+                slot_uri: dcterms:extent
+                annotations:
+                    sql_identifier: dpag_min_retention_days
+                    owl.filler: dpag:minimum_retention_period
+                    comment: "Mandatory: must comply with sector-specific retention requirements"
+                    references: "ESPR Article 8 (product passport availability); Battery Regulation Article 77"
+            maximum_retention_period:
+                description: Maximum allowed retention period in days (0 for indefinite)
+                range: integer
+                slot_uri: dcterms:extent
+                annotations:
+                    sql_identifier: dpag_max_retention_days
+                    owl.filler: dpag:maximum_retention_period
+            retention_justification:
+                description: Legal or business justification for retention period
+                range: string
+                slot_uri: dpv:hasLegalBasis
+                annotations:
+                    sql_identifier: dpag_retention_justification
+                    owl.filler: dpv:hasLegalBasis
+                    comment: "Mandatory: must document retention justification for compliance"
+                    references: "GDPR Article 5(1)(e) - storage limitation; Article 17 - right to erasure"
+            regulatory_requirement:
+                description: Specific regulations requiring this retention
+                multivalued: true
+                range: string
+                slot_uri: dpv:hasApplicableLaw
+                annotations:
+                    sql_identifier: dpag_regulatory_requirement
+                    owl.filler: dpv:hasApplicableLaw
+                    comment: "Parameter representation: e.g., GDPR, ESPR, EU Battery Regulation, national laws"
+                    references: "ESPR (Ecodesign for Sustainable Products Regulation); EU Battery Regulation 2023/1542"
+            data_categories:
+                description: Categories of data covered by this retention policy
+                multivalued: true
+                range: string
+                slot_uri: dpv:hasDataCategory
+                annotations:
+                    sql_identifier: dpag_retention_data_categories
+                    owl.filler: dpv:hasDataCategory
+
+    AvailabilityCommitment:
+        description: Service level agreements and availability guarantees
+        class_uri: dpag:AvailabilityCommitment
+        attributes:
+            guaranteed_availability_period:
+                description: Period during which availability is guaranteed in days
+                range: integer
+                slot_uri: dpag:guaranteedPeriod
+                annotations:
+                    sql_identifier: dpag_guaranteed_availability_days
+                    owl.filler: dpag:guaranteed_availability_period
+            service_level_agreement:
+                description: Uptime percentage commitment (e.g., 99.9)
+                range: float
+                slot_uri: dpag:slaUptime
+                annotations:
+                    sql_identifier: dpag_sla_uptime_percentage
+                    owl.filler: dpag:service_level_agreement
+            maintenance_windows:
+                description: Scheduled maintenance periods
+                multivalued: true
+                range: MaintenanceWindow
+                slot_uri: dpag:hasMaintenanceWindow
+                annotations:
+                    sql_identifier: dpag_maintenance_windows
+                    owl.filler: dpag:maintenance_windows
+            availability_zones:
+                description: Geographic or logical zones where data is available
+                multivalued: true
+                range: string
+                slot_uri: prov:atLocation
+                annotations:
+                    sql_identifier: dpag_availability_zones
+                    owl.filler: prov:atLocation
+            disaster_recovery_time:
+                description: Maximum recovery time objective in hours
+                range: integer
+                slot_uri: dpag:recoveryTimeObjective
+                annotations:
+                    sql_identifier: dpag_disaster_recovery_hours
+                    owl.filler: dpag:disaster_recovery_time
+
+    MaintenanceWindow:
+        description: Scheduled maintenance period configuration
+        class_uri: dpag:MaintenanceWindow
+        attributes:
+            window_start:
+                description: Start time of maintenance window (ISO 8601)
+                range: datetime
+                slot_uri: schema:startTime
+                annotations:
+                    sql_identifier: dpag_maintenance_start
+                    owl.filler: schema:startTime
+            window_duration:
+                description: Duration of maintenance window in minutes
+                range: integer
+                slot_uri: schema:duration
+                annotations:
+                    sql_identifier: dpag_maintenance_duration_minutes
+                    owl.filler: schema:duration
+            window_recurrence:
+                description: Recurrence pattern (e.g., weekly, monthly)
+                range: string
+                slot_uri: schema:repeatFrequency
+                annotations:
+                    sql_identifier: dpag_maintenance_recurrence
+                    owl.filler: schema:repeatFrequency
+            advance_notice:
+                description: Advance notice period for maintenance in hours
+                range: integer
+                slot_uri: dpag:advanceNotice
+                annotations:
+                    sql_identifier: dpag_maintenance_notice_hours
+                    owl.filler: dpag:advance_notice
+
+    ArchivalStrategy:
+        description: Long-term data preservation and archival configuration
+        class_uri: dpag:ArchivalStrategy
+        attributes:
+            archive_format:
+                description: Format for archived data
+                range: ArchiveFormatEnum
+                slot_uri: dcterms:format
+                annotations:
+                    sql_identifier: dpag_archive_format
+                    owl.filler: dcterms:format
+            archive_location:
+                description: Where archives are stored
+                range: string
+                slot_uri: prov:atLocation
+                annotations:
+                    sql_identifier: dpag_archive_location
+                    owl.filler: prov:atLocation
+            archive_access_process:
+                description: Process for accessing archived data
+                range: string
+                slot_uri: dcat:accessService
+                annotations:
+                    sql_identifier: dpag_archive_access_process
+                    owl.filler: dpag:archive_access_process
+            archive_encryption:
+                description: Encryption method for archived data
+                range: EncryptionMethodEnum
+                slot_uri: sec:encryptionAlgorithm
+                annotations:
+                    sql_identifier: dpag_archive_encryption
+                    owl.filler: sec:encryptionAlgorithm
+                    comment: "Mandatory: encryption required for data protection compliance"
+                    references: "GDPR Article 32(1)(a) - pseudonymisation and encryption; ISO/IEC 27001"
+            archive_integrity_check:
+                description: Method for verifying archive integrity
+                range: string
+                slot_uri: sec:digestAlgorithm
+                annotations:
+                    sql_identifier: dpag_archive_integrity_check
+                    owl.filler: sec:digestAlgorithm
+            archive_retrieval_time:
+                description: Expected time to retrieve from archive in hours
+                range: integer
+                slot_uri: dpag:retrievalTime
+                annotations:
+                    sql_identifier: dpag_archive_retrieval_hours
+                    owl.filler: dpag:archive_retrieval_time
+
+    DisposalPolicy:
+        description: Policies governing when and how data should be disposed
+        class_uri: dpag:DisposalPolicy
+        attributes:
+            disposal_criteria:
+                description: Conditions triggering data disposal
+                multivalued: true
+                range: string
+                slot_uri: dpag:disposalCriteria
+                annotations:
+                    sql_identifier: dpag_disposal_criteria
+                    owl.filler: dpag:disposal_criteria
+            disposal_method:
+                description: Method for data disposal
+                range: DisposalMethodEnum
+                slot_uri: dpag:disposalMethod
+                annotations:
+                    sql_identifier: dpag_disposal_method
+                    owl.filler: dpag:disposal_method
+            disposal_notification:
+                description: Who to notify about disposal
+                multivalued: true
+                range: string
+                slot_uri: prov:wasInformedBy
+                annotations:
+                    sql_identifier: dpag_disposal_notification
+                    owl.filler: prov:wasInformedBy
+            disposal_verification:
+                description: Method for verifying successful disposal
+                range: string
+                slot_uri: dpag:disposalVerification
+                annotations:
+                    sql_identifier: dpag_disposal_verification
+                    owl.filler: dpag:disposal_verification
+            legal_hold_check:
+                description: Whether to check for legal holds before disposal
+                range: boolean
+                slot_uri: dpv:hasLegalBasis
+                annotations:
+                    sql_identifier: dpag_legal_hold_check
+                    owl.filler: dpag:legal_hold_check
+                    comment: "Mandatory: must verify no legal holds exist before data disposal"
+                    references: "GDPR Article 17(3)(e) - exceptions to erasure for legal claims"
+
+    # Stage 4: Interoperability Configuration Classes
+
+    InteroperabilityConfiguration:
+        description: >
+            Configuration for enabling cross-system data exchange through APIs, format negotiation,
+            protocol support, and standards compliance
+        class_uri: dpag:InteroperabilityConfiguration
+        attributes:
+            api_specification:
+                description: RESTful or other API definitions and configurations
+                range: APISpecification
+                slot_uri: dcat:DataService
+                annotations:
+                    sql_identifier: dpag_api_specification
+                    owl.filler: dpag:api_specification
+            format_delivery:
+                description: Format negotiation and delivery configuration
+                range: FormatDelivery
+                slot_uri: dpag:hasFormatDelivery
+                annotations:
+                    sql_identifier: dpag_format_delivery
+                    owl.filler: dpag:format_delivery
+            protocol_support:
+                description: Supported communication and data transfer protocols
+                range: ProtocolSupport
+                slot_uri: dpag:hasProtocolSupport
+                annotations:
+                    sql_identifier: dpag_protocol_support
+                    owl.filler: dpag:protocol_support
+            standards_compliance:
+                description: Industry standards and certifications
+                range: StandardsCompliance
+                slot_uri: dcterms:conformsTo
+                annotations:
+                    sql_identifier: dpag_standards_compliance
+                    owl.filler: dpag:standards_compliance
+
+    APISpecification:
+        description: API endpoint definitions and configuration
+        class_uri: dcat:DataService
+        attributes:
+            api_endpoints:
+                description: List of available API endpoints
+                multivalued: true
+                range: string
+                slot_uri: dcat:endpointURL
+                annotations:
+                    sql_identifier: dpag_api_endpoints
+                    owl.filler: dcat:endpointURL
+            api_version:
+                description: API version identifier
+                range: string
+                slot_uri: dcat:version
+                annotations:
+                    sql_identifier: dpag_api_version
+                    owl.filler: dcat:version
+            api_documentation_url:
+                description: URL to API documentation
+                range: uri
+                slot_uri: dcat:landingPage
+                annotations:
+                    sql_identifier: dpag_api_documentation_url
+                    owl.filler: dcat:landingPage
+            rate_limits:
+                description: API rate limiting configuration
+                multivalued: true
+                range: RateLimit
+                slot_uri: dpag:hasRateLimit
+                annotations:
+                    sql_identifier: dpag_rate_limits
+                    owl.filler: dpag:rate_limits
+            api_authentication:
+                description: Required authentication for API access
+                range: AuthenticationMethodEnum
+                slot_uri: sec:authenticationMethod
+                annotations:
+                    sql_identifier: dpag_api_authentication
+                    owl.filler: dpag:api_authentication
+                    comment: "Mandatory: API authentication required for data security"
+                    references: "ISO/IEC 27001 A.14.1.2 (securing application services); OAuth 2.0 (RFC 6749)"
+
+    RateLimit:
+        description: Rate limiting configuration for API access
+        class_uri: dpag:RateLimit
+        attributes:
+            limit_type:
+                description: Type of rate limit (per minute, per hour, per day)
+                range: RateLimitTypeEnum
+                slot_uri: dpag:limitType
+                annotations:
+                    sql_identifier: dpag_rate_limit_type
+                    owl.filler: dpag:limit_type
+            request_limit:
+                description: Maximum number of requests allowed
+                range: integer
+                slot_uri: dpag:requestLimit
+                annotations:
+                    sql_identifier: dpag_request_limit
+                    owl.filler: dpag:request_limit
+            limit_scope:
+                description: Scope of the limit (per user, per API key, global)
+                range: string
+                slot_uri: dpag:limitScope
+                annotations:
+                    sql_identifier: dpag_limit_scope
+                    owl.filler: dpag:limit_scope
+
+    FormatDelivery:
+        description: Configuration for format negotiation and content delivery
+        class_uri: dpag:FormatDelivery
+        attributes:
+            format_negotiation:
+                description: Content negotiation method used
+                range: FormatNegotiationEnum
+                slot_uri: dpag:negotiationMethod
+                annotations:
+                    sql_identifier: dpag_format_negotiation
+                    owl.filler: dpag:format_negotiation
+            supported_formats:
+                description: List of supported output formats
+                multivalued: true
+                range: string
+                slot_uri: dcterms:format
+                annotations:
+                    sql_identifier: dpag_supported_formats
+                    owl.filler: dcterms:format
+            format_conversion_service:
+                description: Service endpoint for format conversion
+                range: uri
+                slot_uri: dcat:accessService
+                annotations:
+                    sql_identifier: dpag_format_conversion_service
+                    owl.filler: dpag:format_conversion_service
+            compression_options:
+                description: Available compression methods
+                multivalued: true
+                range: CompressionMethodEnum
+                slot_uri: dpag:compressionMethod
+                annotations:
+                    sql_identifier: dpag_compression_options
+                    owl.filler: dpag:compression_options
+            default_format:
+                description: Default format when none specified
+                range: string
+                slot_uri: dcterms:format
+                annotations:
+                    sql_identifier: dpag_default_format
+                    owl.filler: dpag:default_format
+
+    ProtocolSupport:
+        description: Supported communication and data transfer protocols
+        class_uri: dpag:ProtocolSupport
+        attributes:
+            transfer_protocols:
+                description: Supported data transfer protocols (HTTPS, MQTT, CoAP, etc.)
+                multivalued: true
+                range: TransferProtocolEnum
+                slot_uri: dpag:transferProtocol
+                annotations:
+                    sql_identifier: dpag_transfer_protocols
+                    owl.filler: dpag:transfer_protocols
+            query_protocols:
+                description: Supported query protocols (REST, GraphQL, SPARQL)
+                multivalued: true
+                range: QueryProtocolEnum
+                slot_uri: dpag:queryProtocol
+                annotations:
+                    sql_identifier: dpag_query_protocols
+                    owl.filler: dpag:query_protocols
+            subscription_protocols:
+                description: Supported subscription protocols (WebSocket, SSE)
+                multivalued: true
+                range: SubscriptionProtocolEnum
+                slot_uri: dpag:subscriptionProtocol
+                annotations:
+                    sql_identifier: dpag_subscription_protocols
+                    owl.filler: dpag:subscription_protocols
+            protocol_version:
+                description: Specific protocol versions supported
+                multivalued: true
+                range: string
+                slot_uri: dpag:protocolVersion
+                annotations:
+                    sql_identifier: dpag_protocol_versions
+                    owl.filler: dpag:protocol_version
+
+    StandardsCompliance:
+        description: Industry standards and certification compliance
+        class_uri: dcterms:Standard
+        attributes:
+            compliance_standards:
+                description: List of standards complied with (ISO, W3C, GS1, etc.)
+                multivalued: true
+                range: string
+                slot_uri: dcterms:conformsTo
+                annotations:
+                    sql_identifier: dpag_compliance_standards
+                    owl.filler: dcterms:conformsTo
+                    comment: "Parameter representation: ISO/IEC 27001, ISO/IEC 27701, SOC2, ETSI standards"
+                    references: "ISO/IEC 27001 (ISMS); ISO/IEC 27701 (PIMS); ETSI EN 303 645 (IoT security)"
+            conformance_certificates:
+                description: URLs or identifiers for conformance certificates
+                multivalued: true
+                range: string
+                slot_uri: dpag:hasCertificate
+                annotations:
+                    sql_identifier: dpag_conformance_certificates
+                    owl.filler: dpag:conformance_certificates
+            validation_endpoint:
+                description: Endpoint for validating compliance
+                range: uri
+                slot_uri: dpag:validationService
+                annotations:
+                    sql_identifier: dpag_validation_endpoint
+                    owl.filler: dpag:validation_endpoint
+            compliance_level:
+                description: Level of compliance achieved
+                range: string
+                slot_uri: dpag:complianceLevel
+                annotations:
+                    sql_identifier: dpag_compliance_level
+                    owl.filler: dpag:compliance_level
+
+    # Stage 5: System Integration Classes
+
+    SystemIntegration:
+        description: >
+            Configuration for connecting with upstream data sources and downstream consumer systems,
+            including synchronization, usage tracking, and operational monitoring
+        class_uri: dpag:SystemIntegration
+        attributes:
+            data_source_systems:
+                description: Configuration for upstream systems providing data
+                multivalued: true
+                range: DataSourceSystem
+                slot_uri: prov:wasGeneratedBy
+                annotations:
+                    sql_identifier: dpag_data_source_systems
+                    owl.filler: dpag:data_source_systems
+            consumer_systems:
+                description: Configuration for downstream systems consuming data
+                multivalued: true
+                range: ConsumerSystem
+                slot_uri: prov:wasUsedBy
+                annotations:
+                    sql_identifier: dpag_consumer_systems
+                    owl.filler: dpag:consumer_systems
+            operational_metrics:
+                description: Metrics for monitoring system operations
+                range: OperationalMetrics
+                slot_uri: dpag:hasOperationalMetrics
+                annotations:
+                    sql_identifier: dpag_operational_metrics
+                    owl.filler: dpag:operational_metrics
+
+    DataSourceSystem:
+        description: Configuration for an upstream system providing data
+        class_uri: prov:Agent
+        attributes:
+            source_system_identifier:
+                description: Unique identifier for the source system
+                required: true
+                range: string
+                slot_uri: dcterms:identifier
+                annotations:
+                    sql_identifier: dpag_source_system_id
+                    owl.filler: dcterms:identifier
+            source_system_name:
+                description: Human-readable name of the source system
+                range: string
+                slot_uri: foaf:name
+                annotations:
+                    sql_identifier: dpag_source_system_name
+                    owl.filler: foaf:name
+            source_system_type:
+                description: Type of source system
+                range: SourceSystemTypeEnum
+                slot_uri: dcterms:type
+                annotations:
+                    sql_identifier: dpag_source_system_type
+                    owl.filler: dcterms:type
+            sync_frequency:
+                description: How often data is synchronized in seconds
+                range: integer
+                slot_uri: dpag:syncFrequency
+                annotations:
+                    sql_identifier: dpag_source_sync_frequency_seconds
+                    owl.filler: dpag:sync_frequency
+            data_mappings:
+                description: Mappings between source and target data fields
+                multivalued: true
+                range: DataMapping
+                slot_uri: dpag:hasDataMapping
+                annotations:
+                    sql_identifier: dpag_data_mappings
+                    owl.filler: dpag:data_mappings
+            connection_endpoint:
+                description: Endpoint for connecting to source system
+                range: uri
+                slot_uri: dcat:endpointURL
+                annotations:
+                    sql_identifier: dpag_source_connection_endpoint
+                    owl.filler: dcat:endpointURL
+            last_sync_timestamp:
+                description: Timestamp of last successful synchronization
+                range: datetime
+                slot_uri: prov:endedAtTime
+                annotations:
+                    sql_identifier: dpag_last_sync_timestamp
+                    owl.filler: prov:endedAtTime
+
+    DataMapping:
+        description: Mapping between source and target data fields
+        class_uri: dpag:DataMapping
+        attributes:
+            source_field:
+                description: Field identifier in source system
+                required: true
+                range: string
+                slot_uri: dpag:sourceField
+                annotations:
+                    sql_identifier: dpag_mapping_source_field
+                    owl.filler: dpag:source_field
+            target_field:
+                description: Field identifier in target system
+                required: true
+                range: string
+                slot_uri: dpag:targetField
+                annotations:
+                    sql_identifier: dpag_mapping_target_field
+                    owl.filler: dpag:target_field
+            transformation_rule:
+                description: Transformation applied during mapping
+                range: string
+                slot_uri: dpag:transformationRule
+                annotations:
+                    sql_identifier: dpag_mapping_transformation
+                    owl.filler: dpag:transformation_rule
+
+    ConsumerSystem:
+        description: Configuration for a downstream system consuming data
+        class_uri: prov:Agent
+        attributes:
+            consumer_identifier:
+                description: Unique identifier for the consumer system
+                required: true
+                range: string
+                slot_uri: dcterms:identifier
+                annotations:
+                    sql_identifier: dpag_consumer_id
+                    owl.filler: dcterms:identifier
+            consumer_name:
+                description: Human-readable name of the consumer system
+                range: string
+                slot_uri: foaf:name
+                annotations:
+                    sql_identifier: dpag_consumer_name
+                    owl.filler: foaf:name
+            consumer_type:
+                description: Type of consumer system
+                range: ConsumerSystemTypeEnum
+                slot_uri: dcterms:type
+                annotations:
+                    sql_identifier: dpag_consumer_type
+                    owl.filler: dcterms:type
+            usage_restrictions:
+                description: Restrictions on how consumer can use data
+                multivalued: true
+                range: string
+                slot_uri: odrl:prohibition
+                annotations:
+                    sql_identifier: dpag_usage_restrictions
+                    owl.filler: odrl:prohibition
+            usage_tracking:
+                description: Configuration for tracking data usage
+                range: UsageTracking
+                slot_uri: dpag:hasUsageTracking
+                annotations:
+                    sql_identifier: dpag_usage_tracking
+                    owl.filler: dpag:usage_tracking
+            authorized_scopes:
+                description: Data scopes this consumer is authorized to access
+                multivalued: true
+                range: string
+                slot_uri: odrl:permission
+                annotations:
+                    sql_identifier: dpag_authorized_scopes
+                    owl.filler: odrl:permission
+
+    UsageTracking:
+        description: Configuration for tracking how data is used
+        class_uri: prov:Activity
+        attributes:
+            track_access:
+                description: Whether to track data access events
+                range: boolean
+                slot_uri: prov:wasAssociatedWith
+                annotations:
+                    sql_identifier: dpag_track_access
+                    owl.filler: dpag:track_access
+            track_modifications:
+                description: Whether to track data modification events
+                range: boolean
+                slot_uri: prov:wasRevisionOf
+                annotations:
+                    sql_identifier: dpag_track_modifications
+                    owl.filler: dpag:track_modifications
+            usage_log_retention:
+                description: How long to retain usage logs in days
+                range: integer
+                slot_uri: prov:generatedAtTime
+                annotations:
+                    sql_identifier: dpag_usage_log_retention_days
+                    owl.filler: dpag:usage_log_retention
+            usage_analytics_enabled:
+                description: Whether to enable usage analytics
+                range: boolean
+                slot_uri: dpag:analyticsEnabled
+                annotations:
+                    sql_identifier: dpag_usage_analytics_enabled
+                    owl.filler: dpag:usage_analytics_enabled
+
+    OperationalMetrics:
+        description: Metrics for monitoring system operations and performance
+        class_uri: dpag:OperationalMetrics
+        attributes:
+            performance_metrics:
+                description: Performance-related metrics
+                range: PerformanceMetrics
+                slot_uri: dpag:hasPerformanceMetrics
+                annotations:
+                    sql_identifier: dpag_performance_metrics
+                    owl.filler: dpag:performance_metrics
+            capacity_metrics:
+                description: Capacity and resource usage metrics
+                range: CapacityMetrics
+                slot_uri: dpag:hasCapacityMetrics
+                annotations:
+                    sql_identifier: dpag_capacity_metrics
+                    owl.filler: dpag:capacity_metrics
+            service_metrics:
+                description: Service-level operational metrics
+                range: ServiceMetrics
+                slot_uri: dpag:hasServiceMetrics
+                annotations:
+                    sql_identifier: dpag_service_metrics
+                    owl.filler: dpag:service_metrics
+
+    PerformanceMetrics:
+        description: Performance-related operational metrics
+        class_uri: dpag:PerformanceMetrics
+        attributes:
+            average_response_time:
+                description: Average response time in milliseconds
+                range: float
+                slot_uri: dpag:responseTime
+                annotations:
+                    sql_identifier: dpag_avg_response_time_ms
+                    owl.filler: dpag:average_response_time
+            throughput:
+                description: Requests processed per second
+                range: float
+                slot_uri: dpag:throughput
+                annotations:
+                    sql_identifier: dpag_throughput_per_second
+                    owl.filler: dpag:throughput
+            latency_p99:
+                description: 99th percentile latency in milliseconds
+                range: float
+                slot_uri: dpag:latencyP99
+                annotations:
+                    sql_identifier: dpag_latency_p99_ms
+                    owl.filler: dpag:latency_p99
+            concurrent_connections:
+                description: Maximum concurrent connections supported
+                range: integer
+                slot_uri: dpag:concurrentConnections
+                annotations:
+                    sql_identifier: dpag_concurrent_connections
+                    owl.filler: dpag:concurrent_connections
+
+    CapacityMetrics:
+        description: Capacity and resource usage metrics
+        class_uri: dpag:CapacityMetrics
+        attributes:
+            storage_usage:
+                description: Current storage usage in bytes
+                range: integer
+                slot_uri: dcat:byteSize
+                annotations:
+                    sql_identifier: dpag_storage_usage_bytes
+                    owl.filler: dcat:byteSize
+            storage_capacity:
+                description: Total storage capacity in bytes
+                range: integer
+                slot_uri: dpag:storageCapacity
+                annotations:
+                    sql_identifier: dpag_storage_capacity_bytes
+                    owl.filler: dpag:storage_capacity
+            bandwidth_usage:
+                description: Current bandwidth usage in bytes per second
+                range: integer
+                slot_uri: dpag:bandwidthUsage
+                annotations:
+                    sql_identifier: dpag_bandwidth_usage_bps
+                    owl.filler: dpag:bandwidth_usage
+            compute_utilization:
+                description: CPU utilization percentage
+                range: float
+                slot_uri: dpag:cpuUtilization
+                annotations:
+                    sql_identifier: dpag_cpu_utilization_percent
+                    owl.filler: dpag:compute_utilization
+
+    ServiceMetrics:
+        description: Service-level operational metrics
+        class_uri: dpag:ServiceMetrics
+        attributes:
+            uptime_percentage:
+                description: Service uptime percentage
+                range: float
+                slot_uri: dpag:uptime
+                annotations:
+                    sql_identifier: dpag_uptime_percentage
+                    owl.filler: dpag:uptime_percentage
+            error_rate:
+                description: Error rate percentage
+                range: float
+                slot_uri: dpag:errorRate
+                annotations:
+                    sql_identifier: dpag_error_rate_percentage
+                    owl.filler: dpag:error_rate
+            sla_compliance:
+                description: SLA compliance percentage
+                range: float
+                slot_uri: dpag:slaCompliance
+                annotations:
+                    sql_identifier: dpag_sla_compliance_percentage
+                    owl.filler: dpag:sla_compliance
+            availability_status:
+                description: Current availability status
+                range: AvailabilityStatusEnum
+                slot_uri: dpag:availabilityStatus
+                annotations:
+                    sql_identifier: dpag_availability_status
+                    owl.filler: dpag:availability_status
+
+enums:
+    AuthenticationMethodEnum:
+        description: Supported authentication methods
+        permissible_values:
+            OAUTH2:
+                description: OAuth 2.0 authentication
+                meaning: oauth:OAuth2
+            API_KEY:
+                description: API key authentication
+                meaning: sec:APIKey
+            CERTIFICATE:
+                description: X.509 certificate authentication
+                meaning: cert:X509Certificate
+            JWT:
+                description: JSON Web Token authentication
+                meaning: sec:JsonWebToken
+            BASIC:
+                description: HTTP Basic authentication
+                meaning: sec:BasicAuthentication
+            SAML:
+                description: SAML authentication
+                meaning: sec:SAML
+            OIDC:
+                description: OpenID Connect authentication
+                meaning: oauth:OpenIDConnect
+
+    DataClassificationEnum:
+        description: Data security classification levels
+        permissible_values:
+            PUBLIC:
+                description: Publicly accessible data
+                meaning: dpv:PublicData
+            INTERNAL:
+                description: Internal use only
+                meaning: dpv:InternalData
+            CONFIDENTIAL:
+                description: Confidential data
+                meaning: dpv:ConfidentialData
+            SECRET:
+                description: Secret data requiring highest protection
+                meaning: dpv:SecretData
+            PERSONAL:
+                description: Personal data under GDPR
+                meaning: dpv:PersonalData
+
+    TransportSecurityEnum:
+        description: Transport layer security protocols
+        permissible_values:
+            TLS_1_2:
+                description: TLS version 1.2
+                meaning: sec:TLS12
+            TLS_1_3:
+                description: TLS version 1.3
+                meaning: sec:TLS13
+            MTLS:
+                description: Mutual TLS authentication
+                meaning: sec:MutualTLS
+            HTTPS:
+                description: HTTP over TLS
+                meaning: sec:HTTPS
+            VPN:
+                description: Virtual Private Network
+                meaning: sec:VPN
+            API_SIGNATURE:
+                description: API request signatures
+                meaning: sec:HTTPSignature
+
+    EncryptionMethodEnum:
+        description: Supported encryption algorithms
+        permissible_values:
+            AES_256_GCM:
+                description: AES 256-bit in GCM mode
+                meaning: sec:AES256GCM
+            AES_256_CBC:
+                description: AES 256-bit in CBC mode
+                meaning: sec:AES256CBC
+            RSA_2048:
+                description: RSA 2048-bit encryption
+                meaning: sec:RSA2048
+            RSA_4096:
+                description: RSA 4096-bit encryption
+                meaning: sec:RSA4096
+            CHACHA20_POLY1305:
+                description: ChaCha20-Poly1305 AEAD
+                meaning: sec:ChaCha20Poly1305
+            ECDH:
+                description: Elliptic Curve Diffie-Hellman
+                meaning: sec:ECDH
+
+    CarrierTypeEnum:
+        description: Types of data carriers supported
+        permissible_values:
+            QR_CODE:
+                description: Quick Response code
+                meaning: dpag:QRCode
+            RFID:
+                description: Radio Frequency Identification
+                meaning: dpag:RFID
+            NFC:
+                description: Near Field Communication
+                meaning: dpag:NFC
+            BARCODE:
+                description: Traditional barcode (1D or 2D)
+                meaning: dpag:Barcode
+            URL:
+                description: Web URL endpoint
+                meaning: dcat:accessURL
+            API:
+                description: Application Programming Interface
+                meaning: dcat:DataService
+            BLOCKCHAIN:
+                description: Blockchain or DLT storage
+                meaning: dpag:Blockchain
+            IPFS:
+                description: InterPlanetary File System
+                meaning: dpag:IPFS
+            DATABASE:
+                description: Traditional database storage
+                meaning: dpag:Database
+            FILE_SYSTEM:
+                description: File system storage
+                meaning: dpag:FileSystem
+            CLOUD_STORAGE:
+                description: Cloud storage service
+                meaning: dpag:CloudStorage
+
+    LocationTypeEnum:
+        description: Types of carrier locations
+        permissible_values:
+            PHYSICAL:
+                description: Physical world location
+                meaning: prov:Location
+            DIGITAL:
+                description: Digital/online location
+                meaning: dcat:accessURL
+            HYBRID:
+                description: Both physical and digital aspects
+                meaning: dpag:HybridLocation
+
+    RedundancyLevelEnum:
+        description: Redundancy priority levels
+        permissible_values:
+            PRIMARY:
+                description: Primary data carrier
+                meaning: dpag:Primary
+            SECONDARY:
+                description: Secondary backup carrier
+                meaning: dpag:Secondary
+            TERTIARY:
+                description: Tertiary backup carrier
+                meaning: dpag:Tertiary
+            ARCHIVE:
+                description: Long-term archive carrier
+                meaning: dpag:Archive
+
+    UpdateMethodEnum:
+        description: Methods for updating carrier data
+        permissible_values:
+            PUSH:
+                description: Data is pushed to the carrier
+                meaning: dpag:PushUpdate
+            PULL:
+                description: Carrier pulls data from source
+                meaning: dpag:PullUpdate
+            BIDIRECTIONAL:
+                description: Both push and pull supported
+                meaning: dpag:BidirectionalUpdate
+            STATIC:
+                description: No updates after initial write
+                meaning: dpag:StaticData
+            EVENT_DRIVEN:
+                description: Updates triggered by events
+                meaning: dpag:EventDrivenUpdate
+            SCHEDULED:
+                description: Updates on fixed schedule
+                meaning: dpag:ScheduledUpdate
+
+    ArchiveFormatEnum:
+        description: Supported archive formats
+        permissible_values:
+            ZIP:
+                description: ZIP compressed archive
+                meaning: dpag:ZipArchive
+            TAR_GZ:
+                description: TAR with GZIP compression
+                meaning: dpag:TarGzArchive
+            PARQUET:
+                description: Apache Parquet format
+                meaning: dpag:ParquetArchive
+            JSON_LD:
+                description: JSON-LD for linked data
+                meaning: dpag:JsonLdArchive
+            RDF_TURTLE:
+                description: RDF Turtle format
+                meaning: dpag:TurtleArchive
+            WARC:
+                description: Web ARChive format
+                meaning: dpag:WarcArchive
+            BAGIT:
+                description: BagIt format for digital preservation
+                meaning: dpag:BagItArchive
+
+    DisposalMethodEnum:
+        description: Methods for data disposal
+        permissible_values:
+            DELETION:
+                description: Simple deletion from storage
+                meaning: dpag:Deletion
+            SECURE_DELETION:
+                description: Cryptographic secure deletion
+                meaning: dpag:SecureDeletion
+            ANONYMIZATION:
+                description: Remove identifying information
+                meaning: dpv:Anonymisation
+            PSEUDONYMIZATION:
+                description: Replace identifying information
+                meaning: dpv:Pseudonymisation
+            AGGREGATION:
+                description: Aggregate into summary statistics
+                meaning: dpv:DataAggregation
+            ARCHIVAL:
+                description: Move to long-term archive
+                meaning: dpag:ArchivalDisposal
+
+    RateLimitTypeEnum:
+        description: Types of rate limiting periods
+        permissible_values:
+            PER_SECOND:
+                description: Limit per second
+                meaning: dpag:PerSecond
+            PER_MINUTE:
+                description: Limit per minute
+                meaning: dpag:PerMinute
+            PER_HOUR:
+                description: Limit per hour
+                meaning: dpag:PerHour
+            PER_DAY:
+                description: Limit per day
+                meaning: dpag:PerDay
+            PER_REQUEST:
+                description: Limit per request
+                meaning: dpag:PerRequest
+
+    FormatNegotiationEnum:
+        description: Content negotiation methods
+        permissible_values:
+            HTTP_ACCEPT:
+                description: HTTP Accept header negotiation
+                meaning: dpag:HttpAcceptNegotiation
+            URL_PARAMETER:
+                description: Format specified in URL parameter
+                meaning: dpag:UrlParameterNegotiation
+            FILE_EXTENSION:
+                description: Format determined by file extension
+                meaning: dpag:FileExtensionNegotiation
+            CONTENT_TYPE:
+                description: Content-Type header negotiation
+                meaning: dpag:ContentTypeNegotiation
+
+    CompressionMethodEnum:
+        description: Supported compression methods
+        permissible_values:
+            GZIP:
+                description: GZIP compression
+                meaning: dpag:GzipCompression
+            BROTLI:
+                description: Brotli compression
+                meaning: dpag:BrotliCompression
+            DEFLATE:
+                description: Deflate compression
+                meaning: dpag:DeflateCompression
+            ZIP:
+                description: ZIP compression
+                meaning: dpag:ZipCompression
+            NONE:
+                description: No compression
+                meaning: dpag:NoCompression
+
+    TransferProtocolEnum:
+        description: Data transfer protocols
+        permissible_values:
+            HTTPS:
+                description: HTTP over TLS
+                meaning: dpag:HTTPS
+            HTTP2:
+                description: HTTP/2 protocol
+                meaning: dpag:HTTP2
+            HTTP3:
+                description: HTTP/3 with QUIC
+                meaning: dpag:HTTP3
+            MQTT:
+                description: Message Queuing Telemetry Transport
+                meaning: dpag:MQTT
+            COAP:
+                description: Constrained Application Protocol
+                meaning: dpag:CoAP
+            FTP:
+                description: File Transfer Protocol
+                meaning: dpag:FTP
+            SFTP:
+                description: Secure File Transfer Protocol
+                meaning: dpag:SFTP
+            WEBSOCKET:
+                description: WebSocket protocol
+                meaning: dpag:WebSocket
+
+    QueryProtocolEnum:
+        description: Query and API protocols
+        permissible_values:
+            REST:
+                description: RESTful API
+                meaning: dpag:REST
+            GRAPHQL:
+                description: GraphQL API
+                meaning: dpag:GraphQL
+            SPARQL:
+                description: SPARQL query language
+                meaning: dpag:SPARQL
+            SQL:
+                description: SQL database access
+                meaning: dpag:SQL
+            ODATA:
+                description: Open Data Protocol
+                meaning: dpag:OData
+            GRPC:
+                description: gRPC protocol
+                meaning: dpag:gRPC
+
+    SubscriptionProtocolEnum:
+        description: Event subscription protocols
+        permissible_values:
+            WEBSOCKET:
+                description: WebSocket for real-time
+                meaning: dpag:WebSocketSubscription
+            SSE:
+                description: Server-Sent Events
+                meaning: dpag:ServerSentEvents
+            WEBHOOK:
+                description: Webhook callbacks
+                meaning: dpag:Webhook
+            MQTT_SUB:
+                description: MQTT subscription
+                meaning: dpag:MQTTSubscription
+            AMQP:
+                description: Advanced Message Queuing Protocol
+                meaning: dpag:AMQP
+
+    SourceSystemTypeEnum:
+        description: Types of source systems
+        permissible_values:
+            ERP:
+                description: Enterprise Resource Planning system
+                meaning: dpag:ERPSystem
+            MES:
+                description: Manufacturing Execution System
+                meaning: dpag:MESSystem
+            PLM:
+                description: Product Lifecycle Management system
+                meaning: dpag:PLMSystem
+            IOT_PLATFORM:
+                description: IoT data platform
+                meaning: dpag:IoTPlatform
+            DATABASE:
+                description: Direct database connection
+                meaning: dpag:DatabaseSource
+            API_SERVICE:
+                description: External API service
+                meaning: dpag:APIService
+            FILE_SYSTEM:
+                description: File system source
+                meaning: dpag:FileSystemSource
+            STREAMING:
+                description: Streaming data source
+                meaning: dpag:StreamingSource
+
+    ConsumerSystemTypeEnum:
+        description: Types of consumer systems
+        permissible_values:
+            ANALYTICS:
+                description: Analytics platform
+                meaning: dpag:AnalyticsPlatform
+            REPORTING:
+                description: Reporting system
+                meaning: dpag:ReportingSystem
+            VISUALIZATION:
+                description: Data visualization tool
+                meaning: dpag:VisualizationTool
+            MARKETPLACE:
+                description: Digital marketplace
+                meaning: dpag:Marketplace
+            REGULATORY:
+                description: Regulatory reporting system
+                meaning: dpag:RegulatorySystem
+            PARTNER:
+                description: Partner system
+                meaning: dpag:PartnerSystem
+            MOBILE_APP:
+                description: Mobile application
+                meaning: dpag:MobileApp
+            WEB_APP:
+                description: Web application
+                meaning: dpag:WebApp
+
+    AvailabilityStatusEnum:
+        description: Service availability status
+        permissible_values:
+            OPERATIONAL:
+                description: Fully operational
+                meaning: dpag:Operational
+            DEGRADED:
+                description: Degraded performance
+                meaning: dpag:Degraded
+            PARTIAL_OUTAGE:
+                description: Partial service outage
+                meaning: dpag:PartialOutage
+            MAJOR_OUTAGE:
+                description: Major service outage
+                meaning: dpag:MajorOutage
+            MAINTENANCE:
+                description: Under maintenance
+                meaning: dpag:Maintenance

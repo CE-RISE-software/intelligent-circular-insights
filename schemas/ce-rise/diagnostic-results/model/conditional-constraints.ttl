@@ -1,0 +1,18 @@
+@prefix diag: <https://ce-rise-models.codeberg.page/diagnostic-results/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+# LinkML does not emit this conditional class rule in SHACL.
+diag:OverallGradeRequiresAssessmentStandardShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf diag:overall_grade ;
+    sh:sparql [
+        sh:message "A reported overall grade requires an assessment standard." ;
+        sh:select """
+            PREFIX diag: <https://ce-rise-models.codeberg.page/diagnostic-results/>
+            SELECT $this
+            WHERE {
+                $this diag:overall_grade ?overall_grade .
+                FILTER NOT EXISTS { $this diag:assessment_standard ?assessment_standard . }
+            }
+        """
+    ] .

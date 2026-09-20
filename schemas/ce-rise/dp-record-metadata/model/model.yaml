@@ -1,0 +1,325 @@
+id: https://ce-rise-models.codeberg.page/dp-record-metadata/
+name: dp-record-metadata
+title: CE-RISE DMP & DPP Record Metadata Data Model
+description: >
+    Universal metadata envelope for Digital Material and Product Passport records that declares which
+    data models and schemas compose a DMP/DPP record, regardless of their origin. Supports
+    any combination of CE-RISE models, industry standards, or proprietary schemas.
+license: CC BY-NC 4.0
+version: 0.0.2
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    dpm: https://ce-rise-models.codeberg.page/dp-record-metadata/
+    xsd: http://www.w3.org/2001/XMLSchema#
+    rdfs: http://www.w3.org/2000/01/rdf-schema#
+    dcterms: http://purl.org/dc/terms/
+    dcat: http://www.w3.org/ns/dcat#
+    void: http://rdfs.org/ns/void#
+    prov: http://www.w3.org/ns/prov#
+    schema: http://schema.org/
+    owl: http://www.w3.org/2002/07/owl#
+    pav: http://purl.org/pav/
+    spdx: http://spdx.org/rdfterms/spdx-v2.3#
+    prof: http://www.w3.org/ns/dx/prof/
+
+default_prefix: dpm
+default_range: string
+
+imports:
+    - linkml:types
+
+classes:
+    DPRecordMetadata:
+        description: "Root class for DMP & DPP Record Metadata model"
+        tree_root: true
+        attributes:
+            record_scope:
+                range: RecordScopeEnum
+                description: "Whether this record describes a product or a material"
+                annotations:
+                    sql_identifier: dpm_record_scope
+            related_passports:
+                range: RelatedPassport
+                multivalued: true
+                description: "Links to related passport records with optional operation references"
+                annotations:
+                    sql_identifier: dpm_related_passports
+            applied_schemas:
+                range: AppliedSchema
+                multivalued: true
+                description: "List of schemas/models that compose this DMP/DPP record"
+                annotations:
+                    sql_identifier: dpm_applied_schemas
+            metadata_versioning:
+                range: MetadataVersioning
+                description: "Version information for the metadata structure itself"
+                annotations:
+                    sql_identifier: dpm_metadata_versioning
+
+    # Step 1: Schema References (Core Metadata)
+
+    AppliedSchema:
+        description: "Reference to a schema or data model used in the DMP/DPP record"
+        attributes:
+            schema_reference:
+                range: SchemaReference
+                description: "Core reference information for the schema"
+                annotations:
+                    sql_identifier: dpm_schema_reference
+            schema_usage:
+                range: SchemaUsage
+                description: "Context about how this schema is used"
+                annotations:
+                    sql_identifier: dpm_schema_usage
+            composition_info:
+                range: CompositionInfo
+                description: "Information about how this schema fits in the composite record"
+                annotations:
+                    sql_identifier: dpm_composition_info
+
+    SchemaReference:
+        description: "Core identification and reference information for a schema"
+        class_uri: dcat:Resource
+        attributes:
+            schema_url:
+                range: uri
+                description: "URL or URI identifying the schema"
+                slot_uri: dcat:accessURL
+                annotations:
+                    sql_identifier: dpm_schema_url
+                    owl.filler: dpm:schema_url_value
+            schema_identifier:
+                range: string
+                description: "Alternative identifier if URL not available (e.g., URN, DOI, registry ID)"
+                slot_uri: dcterms:identifier
+                annotations:
+                    sql_identifier: dpm_schema_identifier
+                    owl.filler: dpm:schema_identifier_value
+            schema_type:
+                range: string
+                description: "Classification of schema source (CE-RISE, GS1, Schema.org, ISO, custom, etc.)"
+                slot_uri: dcterms:type
+                annotations:
+                    sql_identifier: dpm_schema_type
+                    owl.filler: dpm:schema_type_value
+            schema_language:
+                range: string
+                description: "Technical format/language of the schema (LinkML, JSON-Schema, XSD, SHACL, RDF-Schema, OWL, etc.)"
+                slot_uri: dcterms:format
+                annotations:
+                    sql_identifier: dpm_schema_language
+                    owl.filler: dpm:schema_language_value
+            schema_version:
+                range: string
+                description: "Version of the referenced schema"
+                slot_uri: pav:version
+                annotations:
+                    sql_identifier: dpm_schema_version
+                    owl.filler: dpm:schema_version_value
+            schema_hash:
+                range: string
+                description: "Cryptographic hash/checksum for schema integrity verification"
+                slot_uri: spdx:checksumValue
+                annotations:
+                    sql_identifier: dpm_schema_hash
+                    owl.filler: dpm:schema_hash_value
+            hash_algorithm:
+                range: string
+                description: "Algorithm used for hash (SHA-256, SHA-512, MD5, etc.)"
+                slot_uri: spdx:checksumAlgorithm
+                annotations:
+                    sql_identifier: dpm_schema_hash_algorithm
+                    owl.filler: dpm:schema_hash_algorithm_value
+            schema_namespace:
+                range: string
+                description: "Namespace or prefix used for this schema in the record"
+                slot_uri: void:uriSpace
+                annotations:
+                    sql_identifier: dpm_schema_namespace
+                    owl.filler: dpm:schema_namespace_value
+            documentation_url:
+                range: uri
+                description: "URL to human-readable documentation for this schema"
+                slot_uri: schema:url
+                annotations:
+                    sql_identifier: dpm_schema_documentation_url
+                    owl.filler: dpm:schema_documentation_url_value
+
+    SchemaUsage:
+        description: "Context about how a schema is used in the DMP/DPP record"
+        attributes:
+            schema_role:
+                range: string
+                description: "Purpose of this schema in the DMP/DPP (core-identity, sustainability-data, regulatory-compliance, usage-tracking, material-identity, material-composition, processing-history, batch-traceability, safety-sheet, recycled-content, etc.)"
+                slot_uri: prof:hasRole
+                annotations:
+                    sql_identifier: dpm_schema_role
+                    owl.filler: dpm:schema_role_value
+            schema_profile:
+                range: string
+                description: "Specific profile or subset of the schema being used"
+                slot_uri: prof:hasProfile
+                annotations:
+                    sql_identifier: dpm_schema_profile
+                    owl.filler: dpm:schema_profile_value
+            data_completeness:
+                range: string
+                description: "Level of data completeness for this schema (full, partial, minimal)"
+                annotations:
+                    sql_identifier: dpm_data_completeness
+                    owl.filler: dpm:data_completeness_value
+            completeness_percentage:
+                range: float
+                description: "Percentage of schema fields that contain data (0-100)"
+                annotations:
+                    sql_identifier: dpm_completeness_percentage
+                    owl.filler: dpm:completeness_percentage_value
+            fallback_schema_url:
+                range: uri
+                description: "Alternative schema to use if primary is not recognized"
+                annotations:
+                    sql_identifier: dpm_fallback_schema_url
+                    owl.filler: dpm:fallback_schema_url_value
+            schema_notes:
+                range: string
+                description: "Additional notes about schema usage or exceptions"
+                slot_uri: rdfs:comment
+                annotations:
+                    sql_identifier: dpm_schema_notes
+                    owl.filler: dpm:schema_notes_value
+
+    CompositionInfo:
+        description: "Information about how a schema fits within the composite DMP/DPP record"
+        attributes:
+            sequence_order:
+                range: integer
+                description: "Position of this schema's data in the composite record (1-based)"
+                annotations:
+                    sql_identifier: dpm_sequence_order
+                    owl.filler: dpm:sequence_order_value
+            composition_method:
+                range: string
+                description: "How this schema's data is integrated (sequential, nested, mixed, overlay)"
+                annotations:
+                    sql_identifier: dpm_composition_method
+                    owl.filler: dpm:composition_method_value
+            data_location:
+                range: string
+                description: "JSONPath, XPath, or other pointer to where this schema's data resides"
+                annotations:
+                    sql_identifier: dpm_data_location
+                    owl.filler: dpm:data_location_value
+            parent_schema:
+                range: string
+                description: "Reference to parent schema if this is nested"
+                annotations:
+                    sql_identifier: dpm_parent_schema
+                    owl.filler: dpm:parent_schema_value
+            dependency_schemas:
+                range: string
+                description: "List of other schemas this one depends on (comma-separated)"
+                annotations:
+                    sql_identifier: dpm_dependency_schemas
+                    owl.filler: dpm:dependency_schemas_value
+
+    # Step 3: Metadata Versioning (Meta-metadata)
+
+    MetadataVersioning:
+        description: "Version information for the DMP & DPP Record Metadata structure itself"
+        class_uri: void:Dataset
+        attributes:
+            metadata_schema_version:
+                range: string
+                description: "Version of this DMP & DPP Record Metadata schema structure"
+                slot_uri: pav:version
+                annotations:
+                    sql_identifier: dpm_metadata_schema_version
+                    owl.filler: dpm:metadata_schema_version_value
+            compatibility_level:
+                range: string
+                description: "Backward/forward compatibility declaration (e.g., compatible-with: 1.x)"
+                slot_uri: pav:compatibleWith
+                annotations:
+                    sql_identifier: dpm_compatibility_level
+                    owl.filler: dpm:compatibility_level_value
+            metadata_created:
+                range: datetime
+                description: "Timestamp when this metadata record was created"
+                slot_uri: dcterms:created
+                annotations:
+                    sql_identifier: dpm_metadata_created
+                    owl.filler: dpm:metadata_created_value
+            metadata_modified:
+                range: datetime
+                description: "Timestamp when this metadata record was last modified"
+                slot_uri: dcterms:modified
+                annotations:
+                    sql_identifier: dpm_metadata_modified
+                    owl.filler: dpm:metadata_modified_value
+            metadata_schema_url:
+                range: uri
+                description: "URL to the schema defining this metadata structure"
+                slot_uri: void:inDataset
+                annotations:
+                    sql_identifier: dpm_metadata_schema_url
+                    owl.filler: dpm:metadata_schema_url_value
+            minimum_parser_version:
+                range: string
+                description: "Minimum parser version required to process this metadata"
+                annotations:
+                    sql_identifier: dpm_minimum_parser_version
+                    owl.filler: dpm:minimum_parser_version_value
+            metadata_language:
+                range: string
+                description: "Language of descriptive text in metadata (ISO 639-1 code)"
+                slot_uri: dcterms:language
+                annotations:
+                    sql_identifier: dpm_metadata_language
+                    owl.filler: dpm:metadata_language_value
+
+    RelatedPassport:
+        description: "Link to another passport record, optionally tied to a traceability or life-cycle event"
+        attributes:
+            related_passport_id:
+                range: uri
+                description: "Identifier or URL of the related passport record"
+                annotations:
+                    sql_identifier: dpm_related_passport_id
+                    owl.filler: dpm:related_passport_id_value
+            relation_type:
+                range: PassportRelationTypeEnum
+                description: "Type of linkage between this record and the related passport"
+                annotations:
+                    sql_identifier: dpm_relation_type
+                    owl.filler: dpm:relation_type_value
+            operation_ref:
+                range: string
+                description: "Reference to the traceability or life-cycle event data within the DP that defines this relationship"
+                annotations:
+                    sql_identifier: dpm_operation_ref
+                    owl.filler: dpm:operation_ref_value
+
+enums:
+    RecordScopeEnum:
+        description: "Whether the record is about a product or a material"
+        permissible_values:
+            product:
+                description: "Product-level record"
+            material:
+                description: "Material-level record"
+    PassportRelationTypeEnum:
+        description: "Relationship type between passport records"
+        permissible_values:
+            derived_from:
+                description: "This record derives from the related passport"
+            contributes_to:
+                description: "This record contributes to the related passport"
+            split_from:
+                description: "This record is a split from the related passport"
+            merged_into:
+                description: "This record is merged into the related passport"
+            recycled_into:
+                description: "This record is recycled into the related passport"
+            manufactured_from:
+                description: "This record is manufactured from the related passport"

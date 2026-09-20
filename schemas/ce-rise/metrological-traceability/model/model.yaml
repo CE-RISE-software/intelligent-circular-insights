@@ -1,0 +1,1716 @@
+id: https://ce-rise-models.codeberg.page/metrological-traceability/
+name: metrological-traceability
+title: CE-RISE Metrological Traceability Data Model
+description: >
+    Cross-cutting utility data model for documenting the traceability basis of measured,
+    calculated, method-defined, and boundary-defined values in CE-RISE Digital Product Passport
+    and Digital Material Passport data models.
+license: CC BY-NC 4.0
+version: 0.0.3
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+    xsd: http://www.w3.org/2001/XMLSchema#
+    rdfs: http://www.w3.org/2000/01/rdf-schema#
+    dcterms: http://purl.org/dc/terms/
+    prov: http://www.w3.org/ns/prov#
+    pav: http://purl.org/pav/
+    qudt: http://qudt.org/schema/qudt/
+    schema: http://schema.org/
+    sosa: http://www.w3.org/ns/sosa/
+    ssn: http://www.w3.org/ns/ssn/
+    skos: http://www.w3.org/2004/02/skos/core#
+    owl: http://www.w3.org/2002/07/owl#
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+
+default_prefix: mt
+default_range: string
+
+imports:
+    - linkml:types
+
+slots:
+    # Cross-model targeting and statement metadata
+    traceability_statement_identifier_value:
+        description: "Identifier for a metrological traceability statement that can be referenced from another CE-RISE model"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_statement_identifier"
+
+    traceability_statement_label_value:
+        description: "Human-readable label for the traceability statement"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "mt_statement_label"
+
+    traceability_statement_type_value:
+        description: "Type of traceability being documented"
+        range: TraceabilityStatementTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "mt_statement_type"
+
+    traceability_status_value:
+        description: "Lifecycle or validity status of the traceability statement"
+        range: TraceabilityStatusEnum
+        annotations:
+            owl.filler: pav:version
+            sql_identifier: "mt_traceability_status"
+
+    traceability_statement_date_value:
+        description: "Date and time when the traceability statement was issued or last updated"
+        range: datetime
+        annotations:
+            owl.filler: dcterms:modified
+            sql_identifier: "mt_statement_date"
+
+    traceability_applies_to_model_value:
+        description: "Name, URI, or namespace of the external data model to which this traceability statement applies"
+        range: string
+        annotations:
+            owl.filler: mt:appliesToModelValue
+            sql_identifier: "mt_applies_to_model"
+
+    traceability_applies_to_class_value:
+        description: "Class in an external model to which this traceability statement applies"
+        range: string
+        annotations:
+            owl.filler: mt:appliesToClassValue
+            sql_identifier: "mt_applies_to_class"
+
+    traceability_applies_to_slot_value:
+        description: "Slot or attribute in an external model to which this traceability statement applies"
+        range: string
+        annotations:
+            owl.filler: mt:appliesToSlotValue
+            sql_identifier: "mt_applies_to_slot"
+
+    traceability_applies_to_record_value:
+        description: "Identifier of the external record, object, dataset, or passport entry to which this traceability statement applies"
+        range: string
+        annotations:
+            owl.filler: mt:appliesToRecordValue
+            sql_identifier: "mt_applies_to_record"
+
+    traceability_applies_to_value_path_value:
+        description: "JSONPath, XPath, RDF path, or other pointer to the value to which this traceability statement applies"
+        range: string
+        annotations:
+            owl.filler: mt:appliesToValuePathValue
+            sql_identifier: "mt_applies_to_value_path"
+
+    traceability_applies_to_value_identifier_value:
+        description: "Identifier of a specific value object when the target model gives value-level identifiers"
+        range: string
+        annotations:
+            owl.filler: mt:appliesToValueIdentifierValue
+            sql_identifier: "mt_applies_to_value_identifier"
+
+    traceability_uncertainty_reference_value:
+        description: "Reference to an uncertainty statement, uncertainty budget, or uncertainty component associated with this traceability record"
+        range: string
+        annotations:
+            owl.filler: uq:uncertaintyReference
+            sql_identifier: "mt_uncertainty_reference"
+
+    traceability_data_quality_reference_value:
+        description: "Reference to a data quality assessment associated with this traceability record"
+        range: string
+        annotations:
+            owl.filler: dqf:dataQualityReference
+            sql_identifier: "mt_data_quality_reference"
+
+    traceability_evidence_reference_value:
+        description: "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record"
+        range: string
+        annotations:
+            owl.filler: prov:wasDerivedFrom
+            sql_identifier: "mt_evidence_reference_value"
+
+    traceability_standards_applied_value:
+        description: "Standard, guide, protocol, or normative document applied when establishing traceability"
+        range: string
+        annotations:
+            owl.filler: dcterms:conformsTo
+            sql_identifier: "mt_standards_applied"
+
+    traceability_statement_notes_value:
+        description: "Additional notes about the traceability statement"
+        range: string
+        annotations:
+            owl.filler: rdfs:comment
+            sql_identifier: "mt_statement_notes"
+
+    # Quantity, measurand, and value basis
+    traceability_measurand_identifier_value:
+        description: "Identifier for the measurand, quantity, indicator, or value of interest"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_measurand_identifier"
+
+    traceability_measurand_name_value:
+        description: "Name of the measurand, quantity, indicator, or value of interest"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "mt_measurand_name"
+
+    traceability_measurand_description_value:
+        description: "Operational definition of the measurand, including what is measured, calculated, or assessed"
+        range: string
+        annotations:
+            owl.filler: skos:definition
+            sql_identifier: "mt_measurand_description"
+
+    traceability_quantity_kind_value:
+        description: "Kind of quantity or indicator being traced, such as mass, length, concentration, carbon footprint, or circularity indicator"
+        range: string
+        annotations:
+            owl.filler: qudt:hasQuantityKind
+            sql_identifier: "mt_quantity_kind"
+
+    traceability_quantity_unit_value:
+        description: "Unit in which the value or measurand is expressed"
+        range: string
+        annotations:
+            owl.filler: qudt:unit
+            sql_identifier: "mt_quantity_unit"
+
+    reported_value_identifier_value:
+        description: "Identifier for the reported measured, calculated, or assessed value"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_reported_value_identifier"
+
+    reported_value_value:
+        description: "Reported value to which the traceability statement applies"
+        range: string
+        annotations:
+            owl.filler: schema:value
+            sql_identifier: "mt_reported_value"
+
+    reported_value_unit_value:
+        description: "Unit associated with the reported value"
+        range: string
+        annotations:
+            owl.filler: qudt:unit
+            sql_identifier: "mt_reported_value_unit"
+
+    result_date_value:
+        description: "Date or time at which the reported result was generated, measured, calculated, or issued"
+        range: datetime
+        annotations:
+            owl.filler: prov:generatedAtTime
+            sql_identifier: "mt_result_date"
+
+    # Traceability basis and reference records
+    traceability_basis_identifier_value:
+        description: "Identifier for a traceability basis record"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_basis_identifier"
+
+    traceability_basis_type_value:
+        description: "Type of reference basis used to establish traceability"
+        range: TraceabilityBasisTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "mt_basis_type"
+
+    traceability_basis_description_value:
+        description: "Description of the common reference basis that gives meaning to the result"
+        range: string
+        annotations:
+            owl.filler: dcterms:description
+            sql_identifier: "mt_basis_description"
+
+    common_reference_identifier_value:
+        description: "Identifier for the final reference, such as an SI unit realization, standard method, reference material, system boundary definition, or characterization model"
+        range: string
+        annotations:
+            owl.filler: mt:commonReferenceIdentifierValue
+            sql_identifier: "mt_common_reference_identifier"
+
+    common_reference_name_value:
+        description: "Name of the final common reference"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "mt_common_reference_name"
+
+    common_reference_uri_value:
+        description: "URI or URL identifying the final common reference"
+        range: uri
+        annotations:
+            owl.filler: schema:url
+            sql_identifier: "mt_common_reference_uri"
+
+    reference_authority_value:
+        description: "Authority, organization, metrology institute, standards body, or publisher responsible for the reference"
+        range: string
+        annotations:
+            owl.filler: dcterms:publisher
+            sql_identifier: "mt_reference_authority"
+
+    reference_version_value:
+        description: "Version, edition, revision, or publication date of the reference"
+        range: string
+        annotations:
+            owl.filler: pav:version
+            sql_identifier: "mt_reference_version"
+
+    reference_used_date_value:
+        description: "Date at which the reference was used to establish the traceability hierarchy"
+        range: date
+        annotations:
+            owl.filler: dcterms:date
+            sql_identifier: "mt_reference_used_date"
+
+    reference_scope_value:
+        description: "Scope or field of application for the reference"
+        range: string
+        annotations:
+            owl.filler: dcterms:coverage
+            sql_identifier: "mt_reference_scope"
+
+    # Reference entities
+    reference_entity_identifier_value:
+        description: "Identifier for a reference entity, material, standard, instrument, facility, method, or dataset"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_reference_entity_identifier"
+
+    reference_entity_name_value:
+        description: "Name of the reference entity"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "mt_reference_entity_name"
+
+    reference_entity_type_value:
+        description: "Type of reference entity"
+        range: ReferenceEntityTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "mt_reference_entity_type"
+
+    reference_entity_uri_value:
+        description: "URI or URL for the reference entity"
+        range: uri
+        annotations:
+            owl.filler: schema:url
+            sql_identifier: "mt_reference_entity_uri"
+
+    reference_entity_provider_value:
+        description: "Provider, custodian, producer, laboratory, institute, or publisher of the reference entity"
+        range: string
+        annotations:
+            owl.filler: prov:Agent
+            sql_identifier: "mt_reference_entity_provider"
+
+    assigned_value_value:
+        description: "Assigned value of a measurement standard, reference material, calibrator, or conventional reference"
+        range: string
+        annotations:
+            owl.filler: schema:value
+            sql_identifier: "mt_assigned_value"
+
+    assigned_value_unit_value:
+        description: "Unit associated with the assigned value"
+        range: string
+        annotations:
+            owl.filler: qudt:unit
+            sql_identifier: "mt_assigned_value_unit"
+
+    assigned_value_uncertainty_value:
+        description: "Uncertainty associated with the assigned value"
+        range: string
+        annotations:
+            owl.filler: uq:uncertaintyReference
+            sql_identifier: "mt_assigned_value_uncertainty"
+
+    reference_valid_from_value:
+        description: "Start date of validity for the reference entity or assigned value"
+        range: date
+        annotations:
+            owl.filler: schema:validFrom
+            sql_identifier: "mt_reference_valid_from"
+
+    reference_valid_until_value:
+        description: "End date of validity for the reference entity or assigned value"
+        range: date
+        annotations:
+            owl.filler: schema:validThrough
+            sql_identifier: "mt_reference_valid_until"
+
+    # Traceability chains and links
+    traceability_chain_identifier_value:
+        description: "Identifier for a traceability chain or traceability network"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_chain_identifier"
+
+    traceability_chain_name_value:
+        description: "Human-readable name of the traceability chain"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "mt_chain_name"
+
+    traceability_chain_type_value:
+        description: "Type or topology of the traceability chain"
+        range: TraceabilityChainTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "mt_chain_type"
+
+    chain_start_reference_value:
+        description: "Reference or value at the user-facing end of the traceability chain"
+        range: string
+        annotations:
+            owl.filler: mt:chainStartReferenceValue
+            sql_identifier: "mt_chain_start_reference"
+
+    chain_end_reference_value:
+        description: "Final reference reached by the traceability chain"
+        range: string
+        annotations:
+            owl.filler: mt:chainEndReferenceValue
+            sql_identifier: "mt_chain_end_reference"
+
+    chain_completeness_value:
+        description: "Assessment of whether the chain is complete, partial, inferred, or unavailable"
+        range: ChainCompletenessEnum
+        annotations:
+            owl.filler: mt:chainCompletenessValue
+            sql_identifier: "mt_chain_completeness"
+
+    chain_validation_status_value:
+        description: "Validation status of the traceability chain"
+        range: TraceabilityStatusEnum
+        annotations:
+            owl.filler: mt:chainValidationStatusValue
+            sql_identifier: "mt_chain_validation_status"
+
+    chain_notes_value:
+        description: "Additional notes about the traceability chain, including gaps or assumptions"
+        range: string
+        annotations:
+            owl.filler: rdfs:comment
+            sql_identifier: "mt_chain_notes"
+
+    traceability_link_identifier_value:
+        description: "Identifier for a step, edge, or link in a traceability chain"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_link_identifier"
+
+    link_sequence_value:
+        description: "Position of the link in the traceability chain, where lower numbers are closer to the reported result"
+        range: integer
+        annotations:
+            owl.filler: mt:linkSequenceValue
+            sql_identifier: "mt_link_sequence"
+
+    link_role_value:
+        description: "Role of the traceability link in the chain"
+        range: TraceabilityLinkRoleEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "mt_link_role"
+
+    link_from_reference_value:
+        description: "Reference entity, value, standard, method, or node from which this link starts"
+        range: string
+        annotations:
+            owl.filler: prov:wasDerivedFrom
+            sql_identifier: "mt_link_from_reference"
+
+    link_to_reference_value:
+        description: "Reference entity, value, standard, method, or node to which this link points"
+        range: string
+        annotations:
+            owl.filler: prov:wasInfluencedBy
+            sql_identifier: "mt_link_to_reference"
+
+    link_procedure_value:
+        description: "Procedure, calibration, comparison, transformation, conversion, or modelling step used in this link"
+        range: string
+        annotations:
+            owl.filler: sosa:usedProcedure
+            sql_identifier: "mt_link_procedure"
+
+    link_uncertainty_reference_value:
+        description: "Reference to the uncertainty contribution associated with this traceability link"
+        range: string
+        annotations:
+            owl.filler: uq:uncertaintyReference
+            sql_identifier: "mt_link_uncertainty_reference"
+
+    link_date_value:
+        description: "Date on which this traceability link, calibration, comparison, transformation, or modelling step was established"
+        range: date
+        annotations:
+            owl.filler: dcterms:date
+            sql_identifier: "mt_link_date"
+
+    # Calibration records
+    calibration_identifier_value:
+        description: "Identifier for a calibration, comparison, verification, or check record"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_calibration_identifier"
+
+    calibration_certificate_identifier_value:
+        description: "Identifier of the calibration certificate or equivalent evidence record"
+        range: string
+        annotations:
+            owl.filler: mt:calibrationCertificateIdentifierValue
+            sql_identifier: "mt_calibration_certificate_identifier"
+
+    calibration_certificate_url_value:
+        description: "URL for the calibration certificate or equivalent evidence record"
+        range: uri
+        annotations:
+            owl.filler: schema:url
+            sql_identifier: "mt_calibration_certificate_url"
+
+    calibration_laboratory_value:
+        description: "Laboratory, organization, or facility that performed the calibration"
+        range: string
+        annotations:
+            owl.filler: prov:Agent
+            sql_identifier: "mt_calibration_laboratory"
+
+    calibration_laboratory_accreditation_value:
+        description: "Accreditation identifier, scope, or body associated with the calibration provider"
+        range: string
+        annotations:
+            owl.filler: mt:calibrationLaboratoryAccreditationValue
+            sql_identifier: "mt_calibration_laboratory_accreditation"
+
+    calibrated_item_identifier_value:
+        description: "Identifier of the instrument, sensor, measuring system, reference material, standard, or software item calibrated or checked"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_calibrated_item_identifier"
+
+    calibrated_item_type_value:
+        description: "Type of calibrated item"
+        range: string
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "mt_calibrated_item_type"
+
+    calibration_method_value:
+        description: "Calibration method, procedure, comparison method, or protocol used"
+        range: string
+        annotations:
+            owl.filler: sosa:usedProcedure
+            sql_identifier: "mt_calibration_method"
+
+    calibration_date_value:
+        description: "Date on which the calibration was performed"
+        range: date
+        annotations:
+            owl.filler: dcterms:date
+            sql_identifier: "mt_calibration_date"
+
+    calibration_due_date_value:
+        description: "Date by which recalibration is due"
+        range: date
+        annotations:
+            owl.filler: schema:endDate
+            sql_identifier: "mt_calibration_due_date"
+
+    calibration_interval_value:
+        description: "Calibration interval or recalibration frequency"
+        range: string
+        annotations:
+            owl.filler: mt:calibrationIntervalValue
+            sql_identifier: "mt_calibration_interval"
+
+    calibration_result_value:
+        description: "Calibration result, correction, factor, or outcome statement"
+        range: string
+        annotations:
+            owl.filler: schema:result
+            sql_identifier: "mt_calibration_result"
+
+    calibration_status_value:
+        description: "Validity or acceptance status of the calibration record"
+        range: CalibrationStatusEnum
+        annotations:
+            owl.filler: mt:calibrationStatusValue
+            sql_identifier: "mt_calibration_status"
+
+    # Procedures, methods, and boundary definitions
+    procedure_identifier_value:
+        description: "Identifier of a measurement, calculation, sampling, calibration, analytical, or modelling procedure"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_procedure_identifier"
+
+    procedure_name_value:
+        description: "Name of the procedure or method"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "mt_procedure_name"
+
+    procedure_role_value:
+        description: "Role of the procedure in establishing traceability"
+        range: ProcedureRoleEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "mt_procedure_role"
+
+    procedure_standard_value:
+        description: "Standardized procedure, protocol, guide, or method document"
+        range: string
+        annotations:
+            owl.filler: dcterms:conformsTo
+            sql_identifier: "mt_procedure_standard"
+
+    procedure_version_value:
+        description: "Version, edition, revision, or publication date of the procedure"
+        range: string
+        annotations:
+            owl.filler: pav:version
+            sql_identifier: "mt_procedure_version"
+
+    procedure_uri_value:
+        description: "URI or URL identifying the procedure"
+        range: uri
+        annotations:
+            owl.filler: schema:url
+            sql_identifier: "mt_procedure_uri"
+
+    procedure_description_value:
+        description: "Description of the procedure and how it defines or transfers the value"
+        range: string
+        annotations:
+            owl.filler: dcterms:description
+            sql_identifier: "mt_procedure_description"
+
+    method_parameters_value:
+        description: "Key method parameters, such as extraction conditions, incubation time, temperature, calibration model, or reporting rule"
+        range: string
+        annotations:
+            owl.filler: mt:methodParametersValue
+            sql_identifier: "mt_method_parameters"
+
+    sampling_or_specimen_definition_value:
+        description: "Definition of the sample, specimen, item, batch, population subset, or material matrix used by the method"
+        range: string
+        annotations:
+            owl.filler: sosa:hasSample
+            sql_identifier: "mt_sampling_or_specimen_definition"
+
+    traceability_environmental_conditions_value:
+        description: "Environmental, operating, or procedural conditions relevant to traceability"
+        range: string
+        annotations:
+            owl.filler: ssn:hasProperty
+            sql_identifier: "mt_environmental_conditions"
+
+    operator_or_software_value:
+        description: "Operator, laboratory, instrument system, model, or software used to apply the procedure"
+        range: string
+        annotations:
+            owl.filler: prov:wasAssociatedWith
+            sql_identifier: "mt_operator_or_software"
+
+    boundary_identifier_value:
+        description: "Identifier for a boundary, scope, scenario, or modelling reference definition"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_boundary_identifier"
+
+    boundary_type_value:
+        description: "Type of boundary or scope definition"
+        range: BoundaryTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "mt_boundary_type"
+
+    boundary_name_value:
+        description: "Name of the boundary, scope, scenario, or modelling definition"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "mt_boundary_name"
+
+    goal_scope_definition_value:
+        description: "Goal and scope definition or equivalent statement that defines the assessed value"
+        range: string
+        annotations:
+            owl.filler: mt:goalScopeDefinitionValue
+            sql_identifier: "mt_goal_scope_definition"
+
+    included_processes_value:
+        description: "Processes, stages, flows, compartments, or elements included in the boundary"
+        range: string
+        annotations:
+            owl.filler: mt:includedProcessesValue
+            sql_identifier: "mt_included_processes"
+
+    excluded_processes_value:
+        description: "Processes, stages, flows, compartments, or elements excluded from the boundary"
+        range: string
+        annotations:
+            owl.filler: mt:excludedProcessesValue
+            sql_identifier: "mt_excluded_processes"
+
+    allocation_rule_value:
+        description: "Allocation, partitioning, substitution, cut-off, or burden-sharing rule applied in the boundary definition"
+        range: string
+        annotations:
+            owl.filler: mt:allocationRuleValue
+            sql_identifier: "mt_allocation_rule"
+
+    impact_method_value:
+        description: "Impact assessment, characterization, scoring, or calculation method used for a modelled result"
+        range: string
+        annotations:
+            owl.filler: mt:impactMethodValue
+            sql_identifier: "mt_impact_method"
+
+    characterization_model_value:
+        description: "Characterization model, factor set, time horizon, scenario, or model version used to convert inputs into the reported result"
+        range: string
+        annotations:
+            owl.filler: mt:characterizationModelValue
+            sql_identifier: "mt_characterization_model"
+
+    data_source_scope_value:
+        description: "Temporal, geographical, technological, or population scope of the data sources used by the boundary definition"
+        range: string
+        annotations:
+            owl.filler: dcterms:coverage
+            sql_identifier: "mt_data_source_scope"
+
+    # Reference material and measurement standard details
+    reference_material_identifier_value:
+        description: "Identifier for a reference material or certified reference material"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_reference_material_identifier"
+
+    reference_material_name_value:
+        description: "Name of the reference material"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "mt_reference_material_name"
+
+    reference_material_type_value:
+        description: "Type or role of the reference material"
+        range: ReferenceMaterialTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "mt_reference_material_type"
+
+    reference_material_producer_value:
+        description: "Producer, supplier, or certifying body responsible for the reference material"
+        range: string
+        annotations:
+            owl.filler: dcterms:publisher
+            sql_identifier: "mt_reference_material_producer"
+
+    reference_material_lot_value:
+        description: "Lot, batch, serial number, or production identifier of the reference material"
+        range: string
+        annotations:
+            owl.filler: mt:referenceMaterialLotValue
+            sql_identifier: "mt_reference_material_lot"
+
+    matrix_or_material_value:
+        description: "Matrix, material, substance, artefact, or object represented by the reference material"
+        range: string
+        annotations:
+            owl.filler: mt:matrixOrMaterialValue
+            sql_identifier: "mt_matrix_or_material"
+
+    certified_property_value:
+        description: "Certified or assigned property of the reference material"
+        range: string
+        annotations:
+            owl.filler: mt:certifiedPropertyValue
+            sql_identifier: "mt_certified_property"
+
+    certificate_identifier_value:
+        description: "Identifier of the reference material certificate"
+        range: string
+        annotations:
+            owl.filler: mt:certificateIdentifierValue
+            sql_identifier: "mt_certificate_identifier"
+
+    certificate_url_value:
+        description: "URL for the reference material certificate"
+        range: uri
+        annotations:
+            owl.filler: schema:url
+            sql_identifier: "mt_certificate_url"
+
+    measurement_standard_identifier_value:
+        description: "Identifier for a measurement standard, artefact, instrument standard, or realization"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_measurement_standard_identifier"
+
+    measurement_standard_name_value:
+        description: "Name of the measurement standard"
+        range: string
+        annotations:
+            owl.filler: rdfs:label
+            sql_identifier: "mt_measurement_standard_name"
+
+    measurement_standard_type_value:
+        description: "Type or level of measurement standard"
+        range: MeasurementStandardTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "mt_measurement_standard_type"
+
+    measurement_standard_owner_value:
+        description: "Owner, custodian, laboratory, or institute responsible for the measurement standard"
+        range: string
+        annotations:
+            owl.filler: prov:Agent
+            sql_identifier: "mt_measurement_standard_owner"
+
+    measurement_standard_level_value:
+        description: "Position of the measurement standard in the calibration hierarchy"
+        range: string
+        annotations:
+            owl.filler: mt:measurementStandardLevelValue
+            sql_identifier: "mt_measurement_standard_level"
+
+    # Competence and comparability
+    competence_record_identifier_value:
+        description: "Identifier for a competence, accreditation, authorization, or quality system record"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_competence_record_identifier"
+
+    competence_provider_value:
+        description: "Laboratory, person, organization, facility, or software provider whose competence is documented"
+        range: string
+        annotations:
+            owl.filler: prov:Agent
+            sql_identifier: "mt_competence_provider"
+
+    competence_basis_value:
+        description: "Basis for competence, such as accreditation, proficiency testing, validation, authorization, or quality management system"
+        range: string
+        annotations:
+            owl.filler: mt:competenceBasisValue
+            sql_identifier: "mt_competence_basis"
+
+    accreditation_identifier_value:
+        description: "Accreditation, authorization, scope, or certificate identifier"
+        range: string
+        annotations:
+            owl.filler: mt:accreditationIdentifierValue
+            sql_identifier: "mt_accreditation_identifier"
+
+    accreditation_body_value:
+        description: "Accreditation body, authority, or organization responsible for the competence record"
+        range: string
+        annotations:
+            owl.filler: dcterms:publisher
+            sql_identifier: "mt_accreditation_body"
+
+    competence_scope_value:
+        description: "Scope of competence, accreditation, validation, or authorization"
+        range: string
+        annotations:
+            owl.filler: dcterms:coverage
+            sql_identifier: "mt_competence_scope"
+
+    competence_status_value:
+        description: "Status of the competence or accreditation record"
+        range: CompetenceStatusEnum
+        annotations:
+            owl.filler: mt:competenceStatusValue
+            sql_identifier: "mt_competence_status"
+
+    comparability_assessment_identifier_value:
+        description: "Identifier for an assessment of metrological comparability"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_comparability_assessment_identifier"
+
+    left_traceability_reference_value:
+        description: "Reference to the first traceability statement, chain, or basis being compared"
+        range: string
+        annotations:
+            owl.filler: mt:leftTraceabilityReferenceValue
+            sql_identifier: "mt_left_traceability_reference"
+
+    right_traceability_reference_value:
+        description: "Reference to the second traceability statement, chain, or basis being compared"
+        range: string
+        annotations:
+            owl.filler: mt:rightTraceabilityReferenceValue
+            sql_identifier: "mt_right_traceability_reference"
+
+    same_reference_basis_value:
+        description: "Whether the compared results are traceable to the same reference basis"
+        range: boolean
+        annotations:
+            owl.filler: mt:sameReferenceBasisValue
+            sql_identifier: "mt_same_reference_basis"
+
+    same_measurand_definition_value:
+        description: "Whether the compared results use the same measurand or operational definition"
+        range: boolean
+        annotations:
+            owl.filler: mt:sameMeasurandDefinitionValue
+            sql_identifier: "mt_same_measurand_definition"
+
+    same_method_or_boundary_value:
+        description: "Whether the compared results use the same method-defined or boundary-defined reference"
+        range: boolean
+        annotations:
+            owl.filler: mt:sameMethodOrBoundaryValue
+            sql_identifier: "mt_same_method_or_boundary"
+
+    comparability_decision_value:
+        description: "Decision about whether the compared results are metrologically comparable"
+        range: ComparabilityDecisionEnum
+        annotations:
+            owl.filler: mt:comparabilityDecisionValue
+            sql_identifier: "mt_comparability_decision"
+
+    comparability_rationale_value:
+        description: "Rationale for the comparability decision, including relevant mismatches or limitations"
+        range: string
+        annotations:
+            owl.filler: rdfs:comment
+            sql_identifier: "mt_comparability_rationale"
+
+    # Evidence records
+    traceability_evidence_identifier_value:
+        description: "Identifier for supporting evidence"
+        range: string
+        annotations:
+            owl.filler: dcterms:identifier
+            sql_identifier: "mt_evidence_identifier"
+
+    traceability_evidence_type_value:
+        description: "Type of supporting evidence"
+        range: TraceabilityEvidenceTypeEnum
+        annotations:
+            owl.filler: dcterms:type
+            sql_identifier: "mt_evidence_type"
+
+    traceability_evidence_url_value:
+        description: "URL for supporting evidence"
+        range: uri
+        annotations:
+            owl.filler: schema:url
+            sql_identifier: "mt_evidence_url"
+
+    traceability_evidence_description_value:
+        description: "Description of supporting evidence"
+        range: string
+        annotations:
+            owl.filler: dcterms:description
+            sql_identifier: "mt_evidence_description"
+
+    traceability_evidence_date_value:
+        description: "Date associated with supporting evidence"
+        range: date
+        annotations:
+            owl.filler: dcterms:date
+            sql_identifier: "mt_evidence_date"
+
+    traceability_evidence_provider_value:
+        description: "Provider, author, laboratory, supplier, or organization responsible for supporting evidence"
+        range: string
+        annotations:
+            owl.filler: prov:Agent
+            sql_identifier: "mt_evidence_provider"
+
+    traceability_evidence_version_value:
+        description: "Version, edition, or revision of supporting evidence"
+        range: string
+        annotations:
+            owl.filler: pav:version
+            sql_identifier: "mt_evidence_version"
+
+    # Object relationship slots
+    traceability_statements:
+        description: "Reusable traceability statements that can be embedded or referenced by other CE-RISE data models"
+        range: TraceabilityStatement
+        multivalued: true
+        annotations:
+            owl.filler: mt:traceabilityStatement
+            sql_identifier: "mt_traceability_statements"
+
+    traceability_chains:
+        description: "Traceability chains or networks available for reuse by one or more traceability statements"
+        range: TraceabilityChain
+        multivalued: true
+        annotations:
+            owl.filler: mt:traceabilityChain
+            sql_identifier: "mt_traceability_chains"
+
+    traceability_bases:
+        description: "Reference bases used to establish metrological traceability"
+        range: TraceabilityBasis
+        multivalued: true
+        annotations:
+            owl.filler: mt:traceabilityBasis
+            sql_identifier: "mt_traceability_bases"
+
+    reference_entities:
+        description: "Reference entities, standards, methods, instruments, datasets, or organizations used in traceability"
+        range: ReferenceEntity
+        multivalued: true
+        annotations:
+            owl.filler: mt:referenceEntity
+            sql_identifier: "mt_reference_entities"
+
+    calibration_records:
+        description: "Calibration, comparison, verification, or check records that support traceability"
+        range: CalibrationRecord
+        multivalued: true
+        annotations:
+            owl.filler: mt:calibrationRecord
+            sql_identifier: "mt_calibration_records"
+
+    measurement_procedures:
+        description: "Measurement, calculation, sampling, calibration, analytical, or modelling procedures used for traceability"
+        range: MeasurementProcedure
+        multivalued: true
+        annotations:
+            owl.filler: mt:measurementProcedure
+            sql_identifier: "mt_measurement_procedures"
+
+    boundary_definitions:
+        description: "Boundary, goal-and-scope, scenario, or model definitions used as traceability references"
+        range: BoundaryDefinition
+        multivalued: true
+        annotations:
+            owl.filler: mt:boundaryDefinition
+            sql_identifier: "mt_boundary_definitions"
+
+    reference_materials:
+        description: "Reference materials and certified reference materials used in traceability"
+        range: ReferenceMaterial
+        multivalued: true
+        annotations:
+            owl.filler: mt:referenceMaterial
+            sql_identifier: "mt_reference_materials"
+
+    measurement_standards:
+        description: "Measurement standards, artefacts, instruments, and realizations used in traceability"
+        range: MeasurementStandard
+        multivalued: true
+        annotations:
+            owl.filler: mt:measurementStandard
+            sql_identifier: "mt_measurement_standards"
+
+    competence_records:
+        description: "Competence, accreditation, validation, or quality system records supporting traceability"
+        range: CompetenceRecord
+        multivalued: true
+        annotations:
+            owl.filler: mt:competenceRecord
+            sql_identifier: "mt_competence_records"
+
+    comparability_assessments:
+        description: "Assessments of whether traceability statements support meaningful comparison"
+        range: ComparabilityAssessment
+        multivalued: true
+        annotations:
+            owl.filler: mt:comparabilityAssessment
+            sql_identifier: "mt_comparability_assessments"
+
+    traceability_evidence_references:
+        description: "Evidence records referenced by the metrological traceability model"
+        range: TraceabilityEvidenceReference
+        multivalued: true
+        annotations:
+            owl.filler: mt:evidenceReference
+            sql_identifier: "mt_evidence_references"
+
+    traceability_basis:
+        description: "Reference basis that establishes the meaning and comparability of the value"
+        range: TraceabilityBasis
+        annotations:
+            owl.filler: mt:traceabilityBasis
+            sql_identifier: "mt_traceability_basis"
+
+    traceability_chain:
+        description: "Traceability chain or network that relates the result to a reference"
+        range: TraceabilityChain
+        annotations:
+            owl.filler: mt:traceabilityChain
+            sql_identifier: "mt_traceability_chain"
+
+    measurement_procedure:
+        description: "Procedure or method used to define, obtain, transfer, or compare the value"
+        range: MeasurementProcedure
+        annotations:
+            owl.filler: mt:measurementProcedure
+            sql_identifier: "mt_measurement_procedure"
+
+    boundary_definition:
+        description: "Boundary, goal-and-scope, scenario, or model definition used to define a modelled value"
+        range: BoundaryDefinition
+        annotations:
+            owl.filler: mt:boundaryDefinition
+            sql_identifier: "mt_boundary_definition"
+
+    traceability_links:
+        description: "Ordered or networked links that make up a traceability chain"
+        range: TraceabilityLink
+        multivalued: true
+        annotations:
+            owl.filler: mt:traceabilityLink
+            sql_identifier: "mt_traceability_links"
+
+classes:
+    # Root container
+    MetrologicalTraceability:
+        class_uri: mt:metrologicalTraceability
+        description: "Root container for metrological traceability statements and supporting records"
+        slots:
+            - traceability_statements
+            - traceability_chains
+            - traceability_bases
+            - reference_entities
+            - calibration_records
+            - measurement_procedures
+            - boundary_definitions
+            - reference_materials
+            - measurement_standards
+            - competence_records
+            - comparability_assessments
+            - traceability_evidence_references
+        annotations:
+            sql_identifier: "mt_root"
+
+    # Main integration point
+    TraceabilityStatement:
+        class_uri: mt:traceabilityStatement
+        description: "Reusable statement documenting the traceability basis of a measured, calculated, method-defined, or boundary-defined value"
+        comments:
+            - "Designed as the main integration point for other CE-RISE data models."
+            - "Other models may either embed this class or point to it through traceability_statement_identifier_value."
+        slots:
+            - traceability_statement_identifier_value
+            - traceability_statement_label_value
+            - traceability_statement_type_value
+            - traceability_status_value
+            - traceability_statement_date_value
+            - traceability_applies_to_model_value
+            - traceability_applies_to_class_value
+            - traceability_applies_to_slot_value
+            - traceability_applies_to_record_value
+            - traceability_applies_to_value_path_value
+            - traceability_applies_to_value_identifier_value
+            - traceability_measurand_identifier_value
+            - traceability_measurand_name_value
+            - traceability_measurand_description_value
+            - traceability_quantity_kind_value
+            - traceability_quantity_unit_value
+            - reported_value_identifier_value
+            - reported_value_value
+            - reported_value_unit_value
+            - result_date_value
+            - traceability_basis
+            - traceability_chain
+            - measurement_procedure
+            - boundary_definition
+            - calibration_records
+            - reference_entities
+            - reference_materials
+            - measurement_standards
+            - competence_records
+            - traceability_uncertainty_reference_value
+            - traceability_data_quality_reference_value
+            - traceability_evidence_reference_value
+            - traceability_standards_applied_value
+            - traceability_statement_notes_value
+        annotations:
+            references: "JCGM 200:2012; ISO/IEC 17025; ILAC P10; ISO 17034; ISO Guide 35; ISO 14040; ISO 14044"
+            sql_identifier: "mt_statement"
+
+    TraceabilityBasis:
+        class_uri: mt:traceabilityBasis
+        description: "Reference basis to which a result is related, such as an SI realization, measurement standard, reference material, standard method, or boundary definition"
+        slots:
+            - traceability_basis_identifier_value
+            - traceability_basis_type_value
+            - traceability_basis_description_value
+            - common_reference_identifier_value
+            - common_reference_name_value
+            - common_reference_uri_value
+            - reference_authority_value
+            - reference_version_value
+            - reference_used_date_value
+            - reference_scope_value
+            - traceability_uncertainty_reference_value
+            - traceability_evidence_reference_value
+        annotations:
+            references: "JCGM 200:2012; ISO/IEC 17025; ILAC P10"
+            sql_identifier: "mt_basis"
+
+    ReferenceEntity:
+        class_uri: mt:referenceEntity
+        description: "Generic reference entity used in a traceability statement, chain, procedure, calibration, or boundary definition"
+        slots:
+            - reference_entity_identifier_value
+            - reference_entity_name_value
+            - reference_entity_type_value
+            - reference_entity_uri_value
+            - reference_entity_provider_value
+            - assigned_value_value
+            - assigned_value_unit_value
+            - assigned_value_uncertainty_value
+            - reference_valid_from_value
+            - reference_valid_until_value
+            - traceability_evidence_reference_value
+        annotations:
+            references: "JCGM 200:2012"
+            sql_identifier: "mt_reference_entity"
+
+    TraceabilityChain:
+        class_uri: mt:traceabilityChain
+        description: "Documented chain or network relating a measurement result to a reference"
+        slots:
+            - traceability_chain_identifier_value
+            - traceability_chain_name_value
+            - traceability_chain_type_value
+            - chain_start_reference_value
+            - chain_end_reference_value
+            - chain_completeness_value
+            - chain_validation_status_value
+            - traceability_links
+            - traceability_uncertainty_reference_value
+            - traceability_evidence_reference_value
+            - chain_notes_value
+        annotations:
+            references: "JCGM 200:2012; ISO/IEC 17025; ILAC P10"
+            sql_identifier: "mt_chain"
+
+    TraceabilityLink:
+        class_uri: mt:traceabilityLink
+        description: "Single documented step in a traceability chain, including calibration, comparison, transfer, method adherence, or boundary reference"
+        slots:
+            - traceability_link_identifier_value
+            - link_sequence_value
+            - link_role_value
+            - link_from_reference_value
+            - link_to_reference_value
+            - link_procedure_value
+            - link_uncertainty_reference_value
+            - link_date_value
+            - calibration_records
+            - traceability_evidence_reference_value
+            - traceability_statement_notes_value
+        annotations:
+            references: "JCGM 200:2012; ISO/IEC 17025"
+            sql_identifier: "mt_link"
+
+    CalibrationRecord:
+        class_uri: mt:calibrationRecord
+        description: "Calibration, comparison, verification, or check record contributing to a traceability chain"
+        slots:
+            - calibration_identifier_value
+            - calibration_certificate_identifier_value
+            - calibration_certificate_url_value
+            - calibration_laboratory_value
+            - calibration_laboratory_accreditation_value
+            - calibrated_item_identifier_value
+            - calibrated_item_type_value
+            - calibration_method_value
+            - calibration_date_value
+            - calibration_due_date_value
+            - calibration_interval_value
+            - calibration_result_value
+            - calibration_status_value
+            - traceability_uncertainty_reference_value
+            - traceability_environmental_conditions_value
+            - traceability_evidence_reference_value
+        annotations:
+            references: "ISO/IEC 17025; ILAC P10; JCGM 200:2012"
+            sql_identifier: "mt_calibration"
+
+    MeasurementProcedure:
+        class_uri: mt:measurementProcedure
+        description: "Measurement, calculation, sampling, calibration, analytical, or modelling procedure used to define or transfer a value"
+        slots:
+            - procedure_identifier_value
+            - procedure_name_value
+            - procedure_role_value
+            - procedure_standard_value
+            - procedure_version_value
+            - procedure_uri_value
+            - procedure_description_value
+            - method_parameters_value
+            - sampling_or_specimen_definition_value
+            - traceability_environmental_conditions_value
+            - operator_or_software_value
+            - traceability_uncertainty_reference_value
+            - traceability_evidence_reference_value
+        annotations:
+            references: "JCGM 200:2012; ISO/IEC 17025; ISO 5725"
+            sql_identifier: "mt_procedure"
+
+    BoundaryDefinition:
+        class_uri: mt:boundaryDefinition
+        description: "Goal-and-scope, system boundary, scenario, allocation, or model definition used as the reference for a boundary-defined result"
+        slots:
+            - boundary_identifier_value
+            - boundary_type_value
+            - boundary_name_value
+            - goal_scope_definition_value
+            - included_processes_value
+            - excluded_processes_value
+            - allocation_rule_value
+            - impact_method_value
+            - characterization_model_value
+            - data_source_scope_value
+            - procedure_standard_value
+            - procedure_version_value
+            - traceability_uncertainty_reference_value
+            - traceability_data_quality_reference_value
+            - traceability_evidence_reference_value
+        annotations:
+            references: "ISO 14040; ISO 14044; ISO 14067; Product Environmental Footprint; JCGM 200:2012"
+            sql_identifier: "mt_boundary_definition_record"
+
+    ReferenceMaterial:
+        class_uri: mt:referenceMaterial
+        description: "Reference material or certified reference material used to establish traceability"
+        slots:
+            - reference_material_identifier_value
+            - reference_material_name_value
+            - reference_material_type_value
+            - reference_material_producer_value
+            - reference_material_lot_value
+            - matrix_or_material_value
+            - certified_property_value
+            - assigned_value_value
+            - assigned_value_unit_value
+            - assigned_value_uncertainty_value
+            - certificate_identifier_value
+            - certificate_url_value
+            - reference_valid_from_value
+            - reference_valid_until_value
+            - traceability_evidence_reference_value
+        annotations:
+            references: "ISO 17034; ISO Guide 35; JCGM 200:2012"
+            sql_identifier: "mt_reference_material"
+
+    MeasurementStandard:
+        class_uri: mt:measurementStandard
+        description: "Measurement standard, artefact, instrument standard, or unit realization used in a calibration hierarchy"
+        slots:
+            - measurement_standard_identifier_value
+            - measurement_standard_name_value
+            - measurement_standard_type_value
+            - measurement_standard_owner_value
+            - measurement_standard_level_value
+            - traceability_quantity_kind_value
+            - traceability_quantity_unit_value
+            - assigned_value_value
+            - assigned_value_unit_value
+            - assigned_value_uncertainty_value
+            - calibration_records
+            - reference_valid_from_value
+            - reference_valid_until_value
+            - traceability_evidence_reference_value
+        annotations:
+            references: "JCGM 200:2012; ISO/IEC 17025; ILAC P10"
+            sql_identifier: "mt_measurement_standard"
+
+    CompetenceRecord:
+        class_uri: mt:competenceRecord
+        description: "Competence, accreditation, validation, proficiency, or quality system evidence supporting traceability"
+        slots:
+            - competence_record_identifier_value
+            - competence_provider_value
+            - competence_basis_value
+            - accreditation_identifier_value
+            - accreditation_body_value
+            - competence_scope_value
+            - competence_status_value
+            - reference_valid_from_value
+            - reference_valid_until_value
+            - traceability_evidence_reference_value
+        annotations:
+            references: "ISO/IEC 17025; ISO 17034; ISO 9001; ILAC P10"
+            sql_identifier: "mt_competence_record"
+
+    ComparabilityAssessment:
+        class_uri: mt:comparabilityAssessment
+        description: "Assessment of whether two reported values are metrologically comparable through the same reference basis, measurand definition, method, or boundary"
+        slots:
+            - comparability_assessment_identifier_value
+            - left_traceability_reference_value
+            - right_traceability_reference_value
+            - same_reference_basis_value
+            - same_measurand_definition_value
+            - same_method_or_boundary_value
+            - comparability_decision_value
+            - traceability_uncertainty_reference_value
+            - comparability_rationale_value
+        annotations:
+            references: "JCGM 200:2012; JCGM 106:2012"
+            sql_identifier: "mt_comparability_assessment"
+
+    TraceabilityEvidenceReference:
+        class_uri: mt:evidenceReference
+        description: "Supporting evidence record for a traceability statement, chain, calibration, method, boundary, reference material, or competence record"
+        slots:
+            - traceability_evidence_identifier_value
+            - traceability_evidence_type_value
+            - traceability_evidence_url_value
+            - traceability_evidence_description_value
+            - traceability_evidence_date_value
+            - traceability_evidence_provider_value
+            - traceability_evidence_version_value
+        annotations:
+            sql_identifier: "mt_evidence_reference"
+
+enums:
+    TraceabilityStatementTypeEnum:
+        description: "Kinds of traceability statements supported by this model"
+        permissible_values:
+            si_traceability:
+                description: "Traceability to SI units through a calibration hierarchy"
+            method_defined_traceability:
+                description: "Traceability to a standardized or documented method that defines the property"
+            boundary_defined_traceability:
+                description: "Traceability to a documented system boundary, goal and scope, scenario, or modelling rule set"
+            reference_material_traceability:
+                description: "Traceability through a reference material or certified reference material"
+            conventional_reference_traceability:
+                description: "Traceability to a conventional value, conventional scale, or agreed reference"
+            hybrid_traceability:
+                description: "Traceability requiring more than one traceability type"
+            not_evaluated:
+                description: "Traceability has not been evaluated"
+            other:
+                description: "Other traceability statement type"
+
+    TraceabilityStatusEnum:
+        description: "Lifecycle and validation status values for traceability records"
+        permissible_values:
+            draft:
+                description: "Record is being prepared"
+            active:
+                description: "Record is currently active or valid"
+            reviewed:
+                description: "Record has been reviewed"
+            verified:
+                description: "Record has been verified against supporting evidence"
+            partial:
+                description: "Record is partially documented or partially verified"
+            expired:
+                description: "Record is no longer valid"
+            superseded:
+                description: "Record has been superseded"
+            unavailable:
+                description: "Record or status information is unavailable"
+
+    TraceabilityBasisTypeEnum:
+        description: "Types of references that can serve as the basis for traceability"
+        permissible_values:
+            si_unit_realization:
+                description: "Definition or practical realization of an SI unit"
+            measurement_standard:
+                description: "Measurement standard used in a calibration hierarchy"
+            certified_reference_material:
+                description: "Certified reference material with assigned property values and uncertainties"
+            reference_material:
+                description: "Reference material used for calibration, validation, or quality control"
+            measurement_procedure:
+                description: "Measurement procedure defining or transferring the value"
+            standard_method:
+                description: "Standardized analytical, test, calculation, or reporting method"
+            system_boundary:
+                description: "System boundary, goal-and-scope, or scenario definition"
+            characterization_model:
+                description: "Model or factor set defining a calculated indicator"
+            data_source_or_dataset:
+                description: "Versioned data source, dataset, or database used as a reference"
+            conventional_reference:
+                description: "Conventional reference, convention, or agreed value"
+            other:
+                description: "Other traceability basis type"
+
+    ReferenceEntityTypeEnum:
+        description: "Types of reference entities used in traceability records"
+        permissible_values:
+            si_definition:
+                description: "SI unit definition or realization"
+            national_standard:
+                description: "National measurement standard"
+            international_standard:
+                description: "International measurement standard"
+            working_standard:
+                description: "Working standard or laboratory standard"
+            instrument:
+                description: "Instrument, sensor, measuring system, or equipment"
+            reference_material:
+                description: "Reference material or certified reference material"
+            calibration_certificate:
+                description: "Calibration certificate or report"
+            method_document:
+                description: "Measurement, analytical, test, calculation, or modelling method document"
+            dataset:
+                description: "Dataset, database, emission factor set, or reference data source"
+            software:
+                description: "Software, model implementation, or calculation service"
+            boundary_document:
+                description: "Goal-and-scope, system boundary, or scenario definition"
+            organization:
+                description: "Organization, laboratory, institute, or authority"
+            other:
+                description: "Other reference entity type"
+
+    TraceabilityChainTypeEnum:
+        description: "Topology or kind of traceability chain"
+        permissible_values:
+            linear_calibration_chain:
+                description: "Single unbroken calibration chain"
+            branched_calibration_network:
+                description: "Branched or networked hierarchy for multiple input quantities"
+            method_traceability_chain:
+                description: "Chain linking the result to a method-defined reference"
+            boundary_traceability_chain:
+                description: "Chain linking the result to a boundary-defined or model-defined reference"
+            hybrid_chain:
+                description: "Chain combining calibration, method, boundary, and/or dataset references"
+            not_documented:
+                description: "Traceability chain is not documented"
+
+    ChainCompletenessEnum:
+        description: "Completeness of a traceability chain"
+        permissible_values:
+            complete:
+                description: "All relevant links are documented"
+            partial:
+                description: "Some relevant links are documented"
+            inferred:
+                description: "Some links are inferred from available evidence"
+            gap_identified:
+                description: "One or more gaps are explicitly identified"
+            unavailable:
+                description: "Chain evidence is unavailable"
+
+    TraceabilityLinkRoleEnum:
+        description: "Roles of links in a traceability chain"
+        permissible_values:
+            calibration:
+                description: "Calibration step"
+            comparison:
+                description: "Comparison between standards, methods, instruments, or values"
+            verification:
+                description: "Verification or intermediate check"
+            correction:
+                description: "Correction or adjustment step"
+            value_transfer:
+                description: "Transfer of a value from one reference to another"
+            method_definition:
+                description: "Method or procedure defining the property"
+            boundary_definition:
+                description: "Boundary, goal-and-scope, or modelling definition"
+            data_source_mapping:
+                description: "Mapping to a dataset, factor set, or data source"
+            software_or_model_execution:
+                description: "Software, model, or calculation execution step"
+            other:
+                description: "Other link role"
+
+    CalibrationStatusEnum:
+        description: "Status of a calibration or equivalent record"
+        permissible_values:
+            valid:
+                description: "Calibration is valid for the intended use"
+            valid_with_restrictions:
+                description: "Calibration is valid only within specified restrictions"
+            due:
+                description: "Recalibration is due"
+            expired:
+                description: "Calibration validity has expired"
+            failed:
+                description: "Calibration or verification failed"
+            superseded:
+                description: "Calibration record has been superseded"
+            not_available:
+                description: "Calibration status is not available"
+
+    ProcedureRoleEnum:
+        description: "Roles of procedures in a traceability statement"
+        permissible_values:
+            measurement:
+                description: "Procedure used to measure a value"
+            calibration:
+                description: "Procedure used for calibration"
+            sampling:
+                description: "Procedure used for sampling or specimen preparation"
+            analytical_method:
+                description: "Analytical or laboratory method"
+            calculation:
+                description: "Calculation or transformation procedure"
+            modelling:
+                description: "Modelling procedure"
+            quality_control:
+                description: "Quality control or verification procedure"
+            reporting:
+                description: "Reporting or rounding procedure"
+            other:
+                description: "Other procedure role"
+
+    BoundaryTypeEnum:
+        description: "Types of boundary or scope definitions"
+        permissible_values:
+            system_boundary:
+                description: "System boundary defining included and excluded processes"
+            goal_and_scope:
+                description: "Goal and scope definition"
+            functional_unit:
+                description: "Functional unit or declared unit definition"
+            allocation_boundary:
+                description: "Allocation, substitution, cut-off, or crediting boundary"
+            scenario_definition:
+                description: "Scenario definition"
+            temporal_boundary:
+                description: "Temporal boundary or time horizon"
+            geographical_boundary:
+                description: "Geographical boundary"
+            technological_boundary:
+                description: "Technological boundary"
+            characterization_model:
+                description: "Characterization model or impact method boundary"
+            other:
+                description: "Other boundary type"
+
+    ReferenceMaterialTypeEnum:
+        description: "Types of reference materials"
+        permissible_values:
+            certified_reference_material:
+                description: "Certified reference material"
+            reference_material:
+                description: "Reference material"
+            calibrator:
+                description: "Calibrator"
+            quality_control_material:
+                description: "Quality control material"
+            matrix_reference_material:
+                description: "Matrix reference material"
+            in_house_reference_material:
+                description: "In-house reference material"
+            other:
+                description: "Other reference material type"
+
+    MeasurementStandardTypeEnum:
+        description: "Types or hierarchy levels of measurement standards"
+        permissible_values:
+            international_standard:
+                description: "International measurement standard"
+            national_standard:
+                description: "National measurement standard"
+            primary_standard:
+                description: "Primary measurement standard"
+            secondary_standard:
+                description: "Secondary measurement standard"
+            reference_standard:
+                description: "Reference standard"
+            working_standard:
+                description: "Working standard"
+            transfer_standard:
+                description: "Transfer standard"
+            instrument_standard:
+                description: "Instrument standard or calibrated measuring system"
+            unit_realization:
+                description: "Practical realization of a unit"
+            other:
+                description: "Other measurement standard type"
+
+    CompetenceStatusEnum:
+        description: "Status values for competence and accreditation records"
+        permissible_values:
+            active:
+                description: "Competence or accreditation is active"
+            suspended:
+                description: "Competence or accreditation is suspended"
+            expired:
+                description: "Competence or accreditation has expired"
+            withdrawn:
+                description: "Competence or accreditation has been withdrawn"
+            not_applicable:
+                description: "Competence record is not applicable"
+            not_available:
+                description: "Competence record is not available"
+
+    ComparabilityDecisionEnum:
+        description: "Decision values for metrological comparability assessments"
+        permissible_values:
+            comparable:
+                description: "Results are traceable to a sufficiently common basis for comparison"
+            comparable_with_conditions:
+                description: "Results are comparable only under stated conditions or restrictions"
+            not_comparable:
+                description: "Results are not metrologically comparable"
+            insufficient_information:
+                description: "There is insufficient information to assess comparability"
+            not_evaluated:
+                description: "Comparability has not been evaluated"
+
+    TraceabilityEvidenceTypeEnum:
+        description: "Types of evidence used to support traceability"
+        permissible_values:
+            calibration_certificate:
+                description: "Calibration certificate"
+            reference_material_certificate:
+                description: "Reference material certificate"
+            test_report:
+                description: "Test, inspection, or measurement report"
+            method_standard:
+                description: "Standardized method or protocol"
+            procedure_document:
+                description: "Internal or external procedure document"
+            accreditation_record:
+                description: "Accreditation, authorization, competence, or quality system record"
+            proficiency_test:
+                description: "Proficiency testing or interlaboratory comparison evidence"
+            validation_report:
+                description: "Validation, verification, or qualification report"
+            dataset_reference:
+                description: "Dataset, database, or factor set reference"
+            software_record:
+                description: "Software, model, workflow, or calculation service record"
+            boundary_document:
+                description: "Goal-and-scope, boundary, scenario, or modelling rule document"
+            supplier_declaration:
+                description: "Supplier declaration or third-party declaration"
+            other:
+                description: "Other evidence type"

@@ -1,0 +1,50 @@
+{
+  "title": "CE-RISE Life Cycle Inventory Dataset Data Model",
+  "description": "A reusable, source-agnostic data model for life cycle inventory datasets. It represents activities, flows, flow objects, lifecycle stages, locations, classifications, source records, and quantitative exchange data for products, materials, components, and assemblies.",
+  "license": "CC-BY-NC-4.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Boero, Riccardo",
+      "affiliation": "NILU",
+      "orcid": "0000-0002-7468-9096"
+    },
+    {
+      "name": "Mintjes, Berend",
+      "affiliation": "Leiden University",
+      "orcid": "0009-0008-3997-4351"
+    },
+    {
+      "name": "Barilli, Francesco",
+      "affiliation": "Empa",
+      "orcid": "0009-0008-1189-0260"
+    },
+    {
+      "name": "Hischier, Roland",
+      "affiliation": "Empa",
+      "orcid": "0000-0002-1084-7665"
+    }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Data Model",
+    "Life Cycle Inventory",
+    "LCI Dataset",
+    "Digital Product Passport",
+    "Digital Material Passport"
+  ],
+  "communities": [
+    { "identifier": "ce-rise" },
+    { "identifier": "impact" }
+  ],
+  "grants": [
+    { "id": "101092281" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE-models/lci-dataset",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

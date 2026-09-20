@@ -81,9 +81,9 @@ class TestValidate:
 
 
 class TestModels:
-    def test_all_seventeen_with_their_licence_declared(self, client) -> None:
+    def test_all_eighteen_with_their_licence_declared(self, client) -> None:
         body = client.get("/api/ce-rise-models/catalog").json()
-        assert body["model_count"] == 17
+        assert body["model_count"] == 18
         # The models are CC-BY-NC-4.0 while this code is EUPL-1.2 (ADR 0010), so
         # the licence travels with the data rather than being implied by the root.
         assert body["licence"] == "CC-BY-NC-4.0"

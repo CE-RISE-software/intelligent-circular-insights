@@ -1,0 +1,493 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REcycle_Battery
+name: re_indicators_recycle_battery
+title: REcycle Indicator Configuration for Batteries
+description: Product-specific configuration for REcycle indicator applied to batteries
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    - ../model # Import core classes
+    - ./REcycle_core # Import core parameter definitions
+
+classes:
+    # ============================================
+    # BATTERY-SPECIFIC PARAMETERS (P3, P4, P5)
+    # P3 has no questions (fixed score 5)
+    # P4 and P5 have battery-specific questions
+    # ============================================
+
+    # P3: DEPOLLUTION - Battery specific (no questions, fixed score)
+    Battery_Depollution_Parameter:
+        is_a: ParameterSpecification
+        description: Depollution parameter for Batteries - not required (fixed score 5)
+        attributes:
+            id:
+                ifabsent: string(P3_depollution)
+            name:
+                ifabsent: string(Depollution)
+            weight:
+                ifabsent: float(1.0)
+
+    # P4: DISMANTLING - Battery specific with EV battery parts
+    Battery_Dismantling_Parameter:
+        is_a: ParameterSpecification
+        description: Ease of dismantling parameter for Batteries - specific to EV battery structure
+        attributes:
+            id:
+                ifabsent: string(P4_dismantling)
+            name:
+                ifabsent: string(Dismantling)
+            questions:
+                range: Battery_DismantlingQuestion
+                multivalued: true
+                inlined: true
+
+    Battery_DismantlingQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Battery_Q4_1_1_PackToModules_Ease
+            - Battery_Q4_1_2_PackToModules_Joints
+            - Battery_Q4_1_3_PackToModules_Tools
+            - Battery_Q4_2_1_ModulesToCells_Ease
+            - Battery_Q4_2_2_ModulesToCells_Joints
+            - Battery_Q4_2_3_ModulesToCells_Tools
+
+    # Pack to Modules questions
+    Battery_Q4_1_1_PackToModules_Ease:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1.1)
+            text:
+                ifabsent: string(Ease of dismantling pack into modules (For EV batteries))
+            weight:
+                ifabsent: float(0.166666667)
+            answer_options:
+                range: Battery_DismantlingEaseAnswerOption
+                multivalued: true
+                inlined: true
+
+    Battery_Q4_1_2_PackToModules_Joints:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1.2)
+            text:
+                ifabsent: string(Type of joints in between to dismantle pack into modules)
+            weight:
+                ifabsent: float(0.166666667)
+            answer_options:
+                range: Battery_JointTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    Battery_Q4_1_3_PackToModules_Tools:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1.3)
+            text:
+                ifabsent: string(Type of tool required to dismantle pack into modules)
+            weight:
+                ifabsent: float(0.166666667)
+            answer_options:
+                range: Battery_DismantlingToolsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Modules to Cells questions
+    Battery_Q4_2_1_ModulesToCells_Ease:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.2.1)
+            text:
+                ifabsent: string(Ease of dismantling modules into battery cells (For EV batteries))
+            weight:
+                ifabsent: float(0.166666667)
+            answer_options:
+                range: Battery_DismantlingEaseAnswerOption
+                multivalued: true
+                inlined: true
+
+    Battery_Q4_2_2_ModulesToCells_Joints:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.2.2)
+            text:
+                ifabsent: string(Type of joints in between to dismantle modules into battery cells)
+            weight:
+                ifabsent: float(0.166666667)
+            answer_options:
+                range: Battery_JointTypeAnswerOption
+                multivalued: true
+                inlined: true
+
+    Battery_Q4_2_3_ModulesToCells_Tools:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.2.3)
+            text:
+                ifabsent: string(Type of tool required to dismantle modules into battery cells)
+            weight:
+                ifabsent: float(0.166666667)
+            answer_options:
+                range: Battery_DismantlingToolsAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Answer options for Battery Dismantling - Ease
+    Battery_DismantlingEaseAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Battery_Dismantling_5StepsOrLess
+            - Battery_Dismantling_5To10Steps
+            - Battery_Dismantling_10To15Steps
+            - Battery_Dismantling_15To30Steps
+            - Battery_Dismantling_Over30Steps
+            - Battery_Dismantling_CannotDismantle
+            - Battery_Dismantling_DataNotAvailable
+
+    Battery_Dismantling_5StepsOrLess:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_5_or_less)
+            text:
+                ifabsent: string(5 ≥ x > 2 steps)
+            score:
+                ifabsent: float(5.0)
+
+    Battery_Dismantling_5To10Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_5_to_10)
+            text:
+                ifabsent: string(10 ≥ x > 5 steps)
+            score:
+                ifabsent: float(4.0)
+
+    Battery_Dismantling_10To15Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_10_to_15)
+            text:
+                ifabsent: string(15 ≥ x > 10 steps)
+            score:
+                ifabsent: float(3.0)
+
+    Battery_Dismantling_15To30Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_15_to_30)
+            text:
+                ifabsent: string(30 ≥ x > 15 steps)
+            score:
+                ifabsent: float(2.0)
+
+    Battery_Dismantling_Over30Steps:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_over_30)
+            text:
+                ifabsent: string(x > 30)
+            score:
+                ifabsent: float(1.0)
+
+    Battery_Dismantling_CannotDismantle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_cannot)
+            text:
+                ifabsent: string(Cannot be dismantled)
+            score:
+                ifabsent: float(0.0)
+
+    Battery_Dismantling_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Answer options for Battery Dismantling - Joints
+    Battery_JointTypeAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Battery_Joint_Removable
+            - Battery_Joint_NonRemovable
+
+    Battery_Joint_Removable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_joint_removable)
+            text:
+                ifabsent: string(removable)
+            score:
+                ifabsent: float(5.0)
+
+    Battery_Joint_NonRemovable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_joint_non_removable)
+            text:
+                ifabsent: string(non-removable)
+            score:
+                ifabsent: float(0.0)
+
+    # Answer options for Battery Dismantling - Tools
+    Battery_DismantlingToolsAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Battery_DismantlingTools_NoToolsOrBasic
+            - Battery_DismantlingTools_ProductGroupSpecific
+            - Battery_DismantlingTools_CommerciallyAvailable
+            - Battery_DismantlingTools_Proprietary
+            - Battery_DismantlingTools_CannotDismantle
+
+    Battery_DismantlingTools_NoToolsOrBasic:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_tools_no_tools_basic)
+            text:
+                ifabsent: string(without tools/basic tools)
+            score:
+                ifabsent: float(5.0)
+
+    Battery_DismantlingTools_ProductGroupSpecific:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_tools_product_group_specific)
+            text:
+                ifabsent: string(with product group specific tools)
+            score:
+                ifabsent: float(4.0)
+
+    Battery_DismantlingTools_CommerciallyAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_tools_commercially_available)
+            text:
+                ifabsent: string(with commercially available tools)
+            score:
+                ifabsent: float(3.0)
+
+    Battery_DismantlingTools_Proprietary:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_tools_proprietary)
+            text:
+                ifabsent: string(with proprietary tools)
+            score:
+                ifabsent: float(2.0)
+
+    Battery_DismantlingTools_CannotDismantle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_dismantling_tools_cannot)
+            text:
+                ifabsent: string(Cannot be dismantled)
+            score:
+                ifabsent: float(0.0)
+
+    # P5: RECYCLABILITY RATE - Battery specific with component-based weights
+    Battery_RecyclabilityRate_Parameter:
+        is_a: ParameterSpecification
+        description: Recyclability rate parameter for Batteries - specific battery components with material-based weights
+        attributes:
+            id:
+                ifabsent: string(P5_recyclability_rate)
+            name:
+                ifabsent: string(Recyclability rate)
+            questions:
+                range: Battery_RecyclabilityRateQuestion
+                multivalued: true
+                inlined: true
+
+    Battery_RecyclabilityRateQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Battery_Q5_1_ActiveCathodeMaterial
+            - Battery_Q5_2_CathodeCurrentCollector
+            - Battery_Q5_3_ActiveAnodeMaterial
+            - Battery_Q5_4_AnodeCurrentCollector
+            - Battery_Q5_5_LithiumSalt
+
+    Battery_Q5_1_ActiveCathodeMaterial:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.1)
+            text:
+                ifabsent: string(Recyclability rate of Active cathode material)
+            weight:
+                ifabsent: float(0.440107672)
+            answer_options:
+                range: Battery_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    Battery_Q5_2_CathodeCurrentCollector:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.2)
+            text:
+                ifabsent: string(Recyclability rate of Cathode current collector)
+            weight:
+                ifabsent: float(0.100942127)
+            answer_options:
+                range: Battery_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    Battery_Q5_3_ActiveAnodeMaterial:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.3)
+            text:
+                ifabsent: string(Recyclability rate of Active anode material)
+            weight:
+                ifabsent: float(0.226110363)
+            answer_options:
+                range: Battery_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    Battery_Q5_4_AnodeCurrentCollector:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.4)
+            text:
+                ifabsent: string(Recyclability rate of Anode current collector)
+            weight:
+                ifabsent: float(0.187079408)
+            answer_options:
+                range: Battery_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    Battery_Q5_5_LithiumSalt:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.5)
+            text:
+                ifabsent: string(Recyclability rate of Lithium salt)
+            weight:
+                ifabsent: float(0.045760431)
+            answer_options:
+                range: Battery_RecyclabilityRateAnswerOption
+                multivalued: true
+                inlined: true
+
+    # Battery recyclability uses normalized scale (0-1 input -> 1-5 score output)
+    Battery_RecyclabilityRateAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Battery_RecRate_MoreThan60
+            - Battery_RecRate_Between50And60
+            - Battery_RecRate_Below50
+            - Battery_RecRate_CannotRecycle
+            - Battery_RecRate_DataNotAvailable
+
+    Battery_RecRate_MoreThan60:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_rec_rate_more_than_60)
+            text:
+                ifabsent: string(More than 60%)
+            score:
+                ifabsent: float(5.0)
+
+    Battery_RecRate_Between50And60:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_rec_rate_50_to_60)
+            text:
+                ifabsent: string(Between 60-50%)
+            score:
+                ifabsent: float(3.0)
+
+    Battery_RecRate_Below50:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_rec_rate_below_50)
+            text:
+                ifabsent: string(Below 50%)
+            score:
+                ifabsent: float(1.0)
+
+    Battery_RecRate_CannotRecycle:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_rec_rate_cannot_recycle)
+            text:
+                ifabsent: string(Cannot be recycled)
+            score:
+                ifabsent: float(0.0)
+
+    Battery_RecRate_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(battery_rec_rate_data_not_available)
+            text:
+                ifabsent: string(Data is not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # BATTERY-SPECIFIC CONFIGURATION
+    # ============================================
+
+    REcycle_Battery_Config:
+        is_a: REcycle_Configuration
+        description: Configuration for REcycle indicator specifically for batteries
+        attributes:
+            id:
+                ifabsent: string(REcycle_Battery)
+            product_category:
+                ifabsent: ProductCategoryType(Battery)
+            name:
+                ifabsent: string(Recyclability Index for Batteries)
+            parameter_applications:
+                inlined_as_list: true
+                inlined: true
+                ifabsent:
+                    - parameter_ref: P1_documentation
+                      weight: 0.02
+                    - parameter_ref: P2_material_composition
+                      weight: 0.02
+                    - parameter_ref: P3_depollution
+                      weight: 0.04
+                    - parameter_ref: P4_dismantling
+                      weight: 0.04
+                    - parameter_ref: P5_recyclability_rate
+                      weight: 0.08

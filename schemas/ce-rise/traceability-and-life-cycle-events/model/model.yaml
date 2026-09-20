@@ -1,0 +1,2207 @@
+id: https://ce-rise-models.codeberg.page/traceability-and-life-cycle-events/
+name: traceability_and_life_cycle_events
+title: Traceability and Life Cycle Events Data Model
+description: Dynamic event-based information throughout supply chain journey for products, materials, batches, and commodities aligned with GS1 EPCIS 2.0 standard. Supports both Digital Product Passports (DPP) and Digital Material Passports (DMP).
+license: https://creativecommons.org/licenses/by-nc/4.0/
+version: 0.1.1
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    trc: https://ce-rise-models.codeberg.page/traceability-and-life-cycle-events/
+    epcis: https://ns.gs1.org/epcis/
+    cbv: https://ns.gs1.org/cbv/
+    schema: http://schema.org/
+    iso: https://www.iso.org/
+    unece: https://unece.org/trade/
+    gs1: https://www.gs1.org/voc/
+    prov: http://www.w3.org/ns/prov#
+    dcterms: http://purl.org/dc/terms/
+    sosa: http://www.w3.org/ns/sosa/
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+
+imports:
+    - linkml:types
+    - https://codeberg.org/CE-RISE-models/uncertainty-quantification/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/metrological-traceability/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/data-quality-framework/raw/tag/pages-v0.0.3/generated/schema
+
+default_range: string
+
+# Root class
+classes:
+    TraceabilityLifecycleEvents:
+        description: Root container for all traceability and lifecycle events for products, materials, batches, or commodities throughout their supply chain journey
+        tree_root: true
+        attributes:
+            entity_history:
+                range: EntityHistory
+                description: Foundation for all lifecycle events with complete audit trail for products, materials, batches, or commodities
+                multivalued: true
+            ownership_event:
+                range: OwnershipEvent
+                description: Legal ownership and custody transfers throughout supply chain
+                multivalued: true
+            physical_custody:
+                range: PhysicalCustodyEvent
+                description: In-workshop physical custody handoffs (e.g. intake, storage, bench, data wipe, QA, resale), distinct from legal ownership
+                multivalued: true
+            value_adding_activity:
+                range: ValueAddingActivityLocation
+                description: Transformation and processing events that modify or enhance entities (products, materials, batches, commodities)
+                multivalued: true
+            actor_tracking:
+                range: ActorTracking
+                description: All supply chain participants and their interactions with entities (products, materials, batches, commodities)
+                multivalued: true
+            logistics_events:
+                range: LogisticsEvents
+                description: Supply chain transportation and movement tracking post-import
+                multivalued: true
+            reverse_logistics:
+                range: ReverseLogistics
+                description: End-of-life and return pathway management
+                multivalued: true
+            aggregation_events:
+                range: AggregationEvents
+                description: Packaging hierarchy operations - packing and unpacking of items into containers
+                multivalued: true
+            supply_chain_incidents:
+                range: SupplyChainIncidents
+                description: Exception events and disruptions during supply chain operations
+                multivalued: true
+
+    EntityHistory:
+        description: EPCIS-compatible base event structure for complete lifecycle audit trail of products, materials, batches, or commodities
+        attributes:
+            event_identifier:
+                range: string
+                description: Unique identifier for each event - aligns with EPCIS eventID concept
+                annotations:
+                    sql_identifier: trc_hist_event_id
+                pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+
+            event_identifier_value:
+                range: string
+                description: Value holder for event identifier
+
+            event_timestamp:
+                range: datetime
+                description: ISO 8601 timestamp with timezone - aligns with EPCIS eventTime concept
+                annotations:
+                    sql_identifier: trc_hist_event_timestamp
+                    references: "CIRPASS"
+
+            event_timestamp_value:
+                range: string
+                description: Value holder for event timestamp
+
+            event_type:
+                range: string
+                description: Uses EPCIS EventType vocabulary directly - ObjectEvent TransactionEvent etc
+                annotations:
+                    sql_identifier: trc_hist_event_type
+                    owl.filler: epcis:EventType
+
+            event_type_value:
+                range: string
+                description: Value holder for event type
+
+            event_location:
+                range: string
+                description: GLN or URI for location - aligns with EPCIS readPoint/bizLocation concepts
+                annotations:
+                    sql_identifier: trc_hist_event_location
+                    owl.filler: gs1:GlobalLocationNumber
+                    references: "CIRPASS; Jensen et al."
+                pattern: "^(urn:epc:id:sgln:|https?://|[0-9]{13}).*"
+
+            event_location_value:
+                range: string
+                description: Value holder for event location
+
+            event_description:
+                range: string
+                description: Human-readable event description extends EPCIS
+                annotations:
+                    sql_identifier: trc_hist_event_description
+
+            event_description_value:
+                range: string
+                description: Value holder for event description
+
+            linked_entity_identifier:
+                range: string
+                description: EPC URI, GTIN plus serial, batch number, or lot identifier for the tracked entity (product, material, batch, commodity) - aligns with EPCIS epcList concept
+                annotations:
+                    sql_identifier: trc_hist_linked_entity_id
+                pattern: "^(urn:epc:id:|[0-9]{14}:).*"
+
+            linked_entity_identifier_value:
+                range: string
+                description: Value holder for linked entity identifier
+
+            disposition:
+                range: string
+                description: Business state of objects - aligns with EPCIS disposition concept
+                annotations:
+                    sql_identifier: trc_hist_disposition
+
+            disposition_value:
+                range: string
+                description: Value holder for disposition
+
+            biz_step:
+                range: string
+                description: Uses CBV BizStep vocabulary directly
+                annotations:
+                    sql_identifier: trc_hist_biz_step
+                    owl.filler: cbv:BizStep
+
+            biz_step_value:
+                range: string
+                description: Value holder for business step
+
+            action:
+                range: string
+                description: Uses EPCIS Action vocabulary directly - ADD OBSERVE DELETE
+                annotations:
+                    sql_identifier: trc_hist_action
+                    owl.filler: epcis:Action
+
+            action_value:
+                range: string
+                description: Value holder for action
+
+            event_time_zone_offset:
+                range: string
+                description: Time zone offset from UTC like +01:00 or -05:00
+                annotations:
+                    sql_identifier: trc_hist_timezone_offset
+                pattern: "^[+-][0-9]{2}:[0-9]{2}$"
+
+            event_time_zone_offset_value:
+                range: string
+                description: Value holder for timezone offset
+
+            read_point:
+                range: string
+                description: Specific location where event occurred EPCIS readPoint
+                annotations:
+                    sql_identifier: trc_hist_read_point
+                    owl.filler: gs1:GlobalLocationNumber
+                    references: "CIRPASS"
+
+            read_point_value:
+                range: string
+                description: Value holder for read point
+
+            biz_location:
+                range: string
+                description: Business location where objects are expected following event EPCIS bizLocation
+                annotations:
+                    sql_identifier: trc_hist_biz_location
+                    owl.filler: gs1:GlobalLocationNumber
+                    references: "CIRPASS"
+
+            biz_location_value:
+                range: string
+                description: Value holder for business location
+
+            error_declaration:
+                range: ErrorDeclaration
+                description: Declaration that this event is in error EPCIS errorDeclaration
+
+            certification_info:
+                range: uri
+                multivalued: true
+                description: URI references to relevant certification documents or standards
+                annotations:
+                    sql_identifier: trc_hist_certification_info
+                    reference_type: "certification"
+                    references: "King et al."
+
+            certification_info_value:
+                range: string
+                description: Value holder for certification info
+
+            sensor_metadata:
+                range: string
+                description: IoT sensor data using EPCIS 2.0 SensorReport structure
+                annotations:
+                    sql_identifier: trc_hist_sensor_metadata
+                    owl.filler: epcis:SensorReport
+
+            sensor_metadata_value:
+                range: string
+                description: Value holder for sensor metadata
+
+    OwnershipEvent:
+        description: Legal ownership and custody transfers extending EPCIS TransactionEvent
+        attributes:
+            transfer_date:
+                range: datetime
+                description: Precise timestamp of ownership change - aligns with EPCIS eventTime concept
+                annotations:
+                    sql_identifier: trc_owner_transfer_date
+                    references: "CIRPASS"
+
+            transfer_date_value:
+                range: string
+                description: Value holder for transfer date
+
+            previous_owner:
+                range: string
+                description: Source party GLN - aligns with EPCIS source concept
+                annotations:
+                    sql_identifier: trc_owner_previous_owner
+                    owl.filler: gs1:GlobalLocationNumber
+                pattern: "^[0-9]{13}$"
+
+            previous_owner_value:
+                range: string
+                description: Value holder for previous owner
+
+            new_owner:
+                range: string
+                description: Destination party GLN - aligns with EPCIS destination concept
+                annotations:
+                    sql_identifier: trc_owner_new_owner
+                    owl.filler: gs1:GlobalLocationNumber
+                pattern: "^[0-9]{13}$"
+
+            new_owner_value:
+                range: string
+                description: Value holder for new owner
+
+            transfer_type:
+                range: string
+                description: Uses CBV Business Transaction Type vocabulary directly - po desadv inv rma etc
+                annotations:
+                    sql_identifier: trc_owner_transfer_type
+                    owl.filler: cbv:BTT
+
+            transfer_type_value:
+                range: string
+                description: Value holder for transfer type
+
+            transfer_location:
+                range: string
+                description: Physical location GLN - aligns with EPCIS bizLocation concept
+                annotations:
+                    sql_identifier: trc_owner_transfer_location
+                    owl.filler: gs1:GlobalLocationNumber
+                    references: "CIRPASS"
+                pattern: "^[0-9]{13}$"
+
+            transfer_location_value:
+                range: string
+                description: Value holder for transfer location
+
+            chain_of_custody_reference:
+                range: uri
+                multivalued: true
+                description: Previous event links EPCIS extensions
+                annotations:
+                    sql_identifier: trc_owner_custody_chain
+                    epcis_aligned: true
+
+            chain_of_custody_reference_value:
+                range: string
+                description: Value holder for custody chain references
+
+            ownership_documentation:
+                range: uri
+                multivalued: true
+                description: Digital references EPCIS bizTransactionList URIs to documents
+                annotations:
+                    sql_identifier: trc_owner_documentation
+                    epcis_aligned: true
+
+            ownership_documentation_value:
+                range: string
+                description: Value holder for ownership documentation
+
+            action:
+                range: string
+                description: EPCIS action ADD OBSERVE DELETE
+                annotations:
+                    sql_identifier: trc_owner_action
+                    owl.filler: epcis:Action
+
+            action_value:
+                range: string
+                description: Value holder for action
+
+            linked_entity_identifier:
+                range: string
+                description: Reference to entities (products, materials, batches, commodities) being transferred - aligns with EPCIS epcList concept
+                annotations:
+                    sql_identifier: trc_owner_linked_entity
+                pattern: "^(urn:epc:id:|[0-9]{14}:).*"
+
+            linked_entity_identifier_value:
+                range: string
+                description: Value holder for linked entity identifier
+
+            quantity_transferred:
+                range: integer
+                description: Quantity transferred using EPCIS QuantityElement structure
+                annotations:
+                    sql_identifier: trc_owner_quantity
+                    owl.filler: epcis:QuantityElement
+
+            quantity_transferred_value:
+                range: string
+                description: Value holder for quantity transferred
+
+            transfer_value:
+                range: float
+                description: Monetary value of transfer
+                annotations:
+                    sql_identifier: trc_owner_transfer_value
+
+            transfer_value_value:
+                range: string
+                description: Value holder for transfer monetary value
+
+            currency:
+                range: string
+                description: Currency code for transfer value using ISO 4217 standard
+                annotations:
+                    sql_identifier: trc_owner_currency
+                    owl.filler: iso:4217
+                pattern: "^[A-Z]{3}$"
+
+            currency_value:
+                range: string
+                description: Value holder for currency
+
+            ownership_status:
+                range: OwnershipStatusEnum
+                description: Legal status of ownership after transfer DPP extension beyond EPCIS
+                annotations:
+                    sql_identifier: trc_owner_status
+                    dpp_extension: true
+
+            ownership_status_value:
+                range: string
+                description: Value holder for ownership status
+
+    PhysicalCustodyEvent:
+        description: A single in-workshop physical custody handoff of an entity, distinct from legal ownership transfer. A sequence of these events forms the granular physical custody chain (e.g. intake to storage to bench to data wipe to QA to resale).
+        class_uri: prov:Activity
+        attributes:
+            custody_event_identifier:
+                range: string
+                description: Unique identifier for the physical custody event
+                annotations:
+                    sql_identifier: trc_custody_event_id
+                    owl.filler: dcterms:identifier
+
+            custody_event_identifier_value:
+                range: string
+                description: Value holder for custody event identifier
+
+            linked_entity_identifier:
+                range: string
+                description: Reference to the entity in custody - aligns with EPCIS epcList concept
+                annotations:
+                    sql_identifier: trc_custody_linked_entity
+                pattern: "^(urn:epc:id:|[0-9]{14}:).*"
+
+            linked_entity_identifier_value:
+                range: string
+                description: Value holder for linked entity identifier
+
+            custody_stage:
+                range: CustodyStageEnum
+                description: Workshop stage at which the entity is held
+                annotations:
+                    sql_identifier: trc_custody_stage
+                    owl.filler: dcterms:type
+
+            custody_stage_value:
+                range: string
+                description: Value holder for custody stage
+
+            holder:
+                range: string
+                description: Person, station, or department physically holding the entity
+                annotations:
+                    sql_identifier: trc_custody_holder
+                    owl.filler: prov:wasAssociatedWith
+
+            holder_value:
+                range: string
+                description: Value holder for holder
+
+            custody_location:
+                range: string
+                description: Physical location of custody - GLN or internal location identifier
+                annotations:
+                    sql_identifier: trc_custody_location
+                    owl.filler: gs1:GlobalLocationNumber
+
+            custody_location_value:
+                range: string
+                description: Value holder for custody location
+
+            custody_timestamp:
+                range: datetime
+                description: When the entity entered this custody stage ISO 8601 format
+                annotations:
+                    sql_identifier: trc_custody_timestamp
+                    owl.filler: dcterms:date
+                    iso_8601: true
+
+            custody_timestamp_value:
+                range: string
+                description: Value holder for custody timestamp
+
+            transfer_reason:
+                range: string
+                description: Reason for the custody transfer or handoff
+                annotations:
+                    sql_identifier: trc_custody_transfer_reason
+                    owl.filler: dcterms:description
+
+            transfer_reason_value:
+                range: string
+                description: Value holder for transfer reason
+
+            seal_status:
+                range: SealStatusEnum
+                description: Whether the entity or its packaging is sealed or open at this custody stage
+                annotations:
+                    sql_identifier: trc_custody_seal_status
+                    owl.filler: dcterms:type
+
+            seal_status_value:
+                range: string
+                description: Value holder for seal status
+
+            custody_evidence:
+                range: uri
+                multivalued: true
+                description: URI references to custody evidence such as handoff records, signatures, or photos
+                annotations:
+                    sql_identifier: trc_custody_evidence
+                    owl.filler: dcterms:references
+                    reference_type: "evidence"
+
+            custody_evidence_value:
+                range: string
+                description: Value holder for custody evidence
+
+    ValueAddingActivityLocation:
+        description: Transformation and processing events extending EPCIS TransformationEvent
+        attributes:
+            activity_identifier:
+                range: string
+                description: Unique activity reference - aligns with EPCIS eventID concept
+                annotations:
+                    sql_identifier: trc_value_activity_id
+                pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+
+            activity_identifier_value:
+                range: string
+                description: Value holder for activity identifier
+
+            activity_type:
+                range: string
+                description: Uses CBV BizStep vocabulary directly - commissioning transformation decommissioning
+                annotations:
+                    sql_identifier: trc_value_activity_type
+                    owl.filler: cbv:BizStep
+
+            activity_type_value:
+                range: string
+                description: Value holder for activity type
+
+            activity_date:
+                range: datetime
+                description: When activity occurred - aligns with EPCIS eventTime concept
+                annotations:
+                    references: "CIRPASS"
+                    sql_identifier: trc_value_activity_date
+
+            activity_date_value:
+                range: string
+                description: Value holder for activity date
+
+            facility_identifier:
+                range: string
+                description: GLN or OSID of processing facility
+                annotations:
+                    sql_identifier: trc_value_facility_id
+                    owl.filler: gs1:GlobalLocationNumber
+                    references: "ESPR; CIRPASS; King et al."
+                pattern: "^[0-9]{13}$"
+
+            facility_identifier_value:
+                range: string
+                description: Value holder for facility identifier
+
+            process_description:
+                range: string
+                description: Detailed transformation process description EPCIS extension
+                annotations:
+                    sql_identifier: trc_value_process_desc
+                    dpp_extension: true
+
+            process_description_value:
+                range: string
+                description: Value holder for process description
+
+            input_entities:
+                range: string
+                multivalued: true
+                description: Input entities (components, materials, batches, commodities) consumed in transformation - aligns with EPCIS inputEPCList
+                annotations:
+                    sql_identifier: trc_value_input_entities
+                    owl.filler: epcis:EPCList
+
+            input_entities_value:
+                range: string
+                description: Value holder for input entities
+
+            output_entities:
+                range: string
+                multivalued: true
+                description: Output entities (products, materials, batches, commodities) resulting from transformation - aligns with EPCIS outputEPCList
+                annotations:
+                    sql_identifier: trc_value_output_entities
+                    owl.filler: epcis:EPCList
+
+            output_entities_value:
+                range: string
+                description: Value holder for output entities
+
+            transformation_id:
+                range: string
+                description: Transformation identifier using EPCIS transformationID
+                annotations:
+                    sql_identifier: trc_value_transformation_id
+                    owl.filler: epcis:TransformationID
+
+            transformation_id_value:
+                range: string
+                description: Value holder for transformation ID
+
+            process_step:
+                range: string
+                description: Specific process step within transformation EPCIS bizStep
+                annotations:
+                    sql_identifier: trc_value_process_step
+                    epcis_cbv_aligned: true
+
+            process_step_value:
+                range: string
+                description: Value holder for process step
+
+            quality_check_performed:
+                range: boolean
+                description: Whether quality control was performed DPP extension
+                annotations:
+                    sql_identifier: trc_value_quality_check
+                    dpp_extension: true
+
+            quality_check_performed_value:
+                range: string
+                description: Value holder for quality check flag
+
+            quality_check_results:
+                range: string
+                description: Quality control test results DPP extension
+                annotations:
+                    sql_identifier: trc_value_quality_results
+                    dpp_extension: true
+                    references: "King et al."
+
+            quality_check_results_value:
+                range: string
+                description: Value holder for quality results
+
+            value_adding_activity_uncertainty_statements:
+                range: UncertaintyStatement
+                description: Optional uncertainty statements for measured, estimated, or quality-checked transformation and processing values
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: trc_value_uncertainty_statements
+
+            value_adding_activity_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: Optional metrological traceability statements for quality checks, process measurements, methods, standards, calibrations, or reference materials
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: trc_value_metrological_traceability
+
+            value_adding_activity_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for transformation and processing event data, quality checks, evidence, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: trc_value_data_quality_assessments
+
+            process_duration:
+                range: string
+                description: Process duration in ISO 8601 format (e.g. PT30M for 30 minutes)
+                annotations:
+                    sql_identifier: trc_value_duration
+                    iso_8601_duration: true
+                    dpp_extension: true
+                pattern: "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+
+            process_duration_value:
+                range: string
+                description: Value holder for process duration
+
+            operator_identifier:
+                range: string
+                description: GLN or ID of operator performing activity
+                annotations:
+                    sql_identifier: trc_value_operator_id
+                    references: "ESPR; CIRPASS"
+
+            operator_identifier_value:
+                range: string
+                description: Value holder for operator identifier
+
+            batch_identifier:
+                range: string
+                description: Batch or lot number for this processing run
+                annotations:
+                    sql_identifier: trc_value_batch_id
+
+            batch_identifier_value:
+                range: string
+                description: Value holder for batch identifier
+
+            value_added:
+                range: float
+                description: Economic value added by this activity DPP extension
+                annotations:
+                    sql_identifier: trc_value_added_amount
+                    dpp_extension: true
+
+            value_added_value:
+                range: string
+                description: Value holder for value added
+
+            process_certification:
+                range: uri
+                multivalued: true
+                description: URI references to process certifications ISO standards or quality systems
+                annotations:
+                    sql_identifier: trc_value_certifications
+                    dpp_extension: true
+                    reference_type: "certification"
+                    references: "King et al."
+
+            process_certification_value:
+                range: string
+                description: Value holder for process certifications
+
+    ErrorDeclaration:
+        description: Declaration that an event was recorded in error EPCIS errorDeclaration
+        attributes:
+            declaration_time:
+                range: datetime
+                description: When the error was declared
+                annotations:
+                    sql_identifier: trc_hist_error_declaration_time
+
+            declaration_time_value:
+                range: string
+                description: Value holder for declaration time
+
+            reason:
+                range: string
+                description: Reason for the error declaration
+                annotations:
+                    sql_identifier: trc_hist_error_reason
+
+            reason_value:
+                range: string
+                description: Value holder for error reason
+
+            corrective_event_ids:
+                range: string
+                multivalued: true
+                description: IDs of events that correct this error
+                annotations:
+                    sql_identifier: trc_hist_corrective_event_ids
+
+            corrective_event_ids_value:
+                range: string
+                description: Value holder for corrective event IDs
+
+    ActorTracking:
+        description: Supply chain participants and their interactions with entities (products, materials, batches, commodities)
+        attributes:
+            actor_identifier:
+                range: string
+                description: Organization identifier GLN LEI or VAT
+                annotations:
+                    sql_identifier: trc_actor_id
+                    owl.filler: gs1:PartyGlobalLocationNumber
+                    references: "Berger et al.; ESPR"
+                pattern: "^([0-9]{13}|[A-Z0-9]{20}|[A-Z]{2}[A-Z0-9]+)$"
+
+            actor_identifier_value:
+                range: string
+                description: Value holder for actor identifier
+
+            actor_role:
+                range: string
+                description: Role in supply chain using CBV Source/Destination types
+                annotations:
+                    sql_identifier: trc_actor_role
+                    owl.filler: cbv:SourceDestinationType
+                    references: "Berger et al."
+
+            actor_role_value:
+                range: string
+                description: Value holder for actor role
+
+            activity_timestamp:
+                range: datetime
+                description: When actor interacted with entity (product, material, batch, commodity)
+                annotations:
+                    sql_identifier: trc_actor_timestamp
+                    references: "CIRPASS"
+
+            activity_timestamp_value:
+                range: string
+                description: Value holder for activity timestamp
+
+            action_performed:
+                range: string
+                description: Specific action taken by actor
+                annotations:
+                    sql_identifier: trc_actor_action
+
+            action_performed_value:
+                range: string
+                description: Value holder for action performed
+
+            responsibility_scope:
+                range: string
+                description: Actor responsibility boundaries
+                annotations:
+                    sql_identifier: trc_actor_responsibility
+
+            responsibility_scope_value:
+                range: string
+                description: Value holder for responsibility scope
+
+            certification_status:
+                range: uri
+                multivalued: true
+                description: URI references to actor certifications ISO 9001 ISO 14001 organic fair trade
+                annotations:
+                    sql_identifier: trc_actor_certifications
+                    reference_type: "certification"
+                    references: "King et al."
+
+            certification_status_value:
+                range: string
+                description: Value holder for certification status
+
+    LogisticsEvents:
+        description: Supply chain transportation tracking post-import - aligns with EPCIS ObjectEvent concepts
+        attributes:
+            shipment_identifier:
+                range: string
+                description: Unique shipment reference carrier tracking number
+                annotations:
+                    sql_identifier: trc_logis_shipment_id
+
+            shipment_identifier_value:
+                range: string
+                description: Value holder for shipment identifier
+
+            transport_mode:
+                range: string
+                description: Mode of transport using UN/ECE Recommendation 19 codes
+                annotations:
+                    sql_identifier: trc_logis_transport_mode
+                    owl.filler: unece:TransportModeCode
+
+            transport_mode_value:
+                range: string
+                description: Value holder for transport mode
+
+            departure_location:
+                range: string
+                description: Origin UN/LOCODE or GLN
+                annotations:
+                    sql_identifier: trc_logis_departure_loc
+                    owl.filler: unece:UNLOCODE
+                    references: "CIRPASS"
+                pattern: "^([A-Z]{2}[A-Z0-9]{3}|[0-9]{13})$"
+
+            departure_location_value:
+                range: string
+                description: Value holder for departure location
+
+            departure_timestamp:
+                range: datetime
+                description: Departure time with timezone
+                annotations:
+                    sql_identifier: trc_logis_departure_time
+
+            departure_timestamp_value:
+                range: string
+                description: Value holder for departure timestamp
+
+            arrival_location:
+                range: string
+                description: Destination UN/LOCODE or GLN
+                annotations:
+                    sql_identifier: trc_logis_arrival_loc
+                    owl.filler: unece:UNLOCODE
+                pattern: "^([A-Z]{2}[A-Z0-9]{3}|[0-9]{13})$"
+
+            arrival_location_value:
+                range: string
+                description: Value holder for arrival location
+
+            arrival_timestamp:
+                range: datetime
+                description: Actual or estimated arrival
+                annotations:
+                    sql_identifier: trc_logis_arrival_time
+
+            arrival_timestamp_value:
+                range: string
+                description: Value holder for arrival timestamp
+
+            carrier_identifier:
+                range: string
+                description: Transport company GLN or identifier
+                annotations:
+                    sql_identifier: trc_logis_carrier_id
+                    owl.filler: gs1:PartyGlobalLocationNumber
+
+            carrier_identifier_value:
+                range: string
+                description: Value holder for carrier identifier
+
+            route_information:
+                range: string
+                description: Planned route using GS1 route information structure
+                annotations:
+                    sql_identifier: trc_logis_route_info
+                    owl.filler: gs1:RouteInformation
+
+            route_information_value:
+                range: string
+                description: Value holder for route information
+
+            intermediate_stops:
+                range: IntermediateStop
+                multivalued: true
+                description: Distribution centers warehouses transshipment points
+
+            transport_conditions:
+                range: string
+                description: Transport conditions using EPCIS 2.0 SensorReport for temperature humidity shock
+                annotations:
+                    sql_identifier: trc_logis_conditions
+                    owl.filler: epcis:SensorReport
+
+            transport_conditions_value:
+                range: string
+                description: Value holder for transport conditions
+
+            logistics_uncertainty_statements:
+                range: UncertaintyStatement
+                description: Optional uncertainty statements for transport condition sensor data, timestamps, route estimates, or other logistics measurements
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: trc_logis_uncertainty_statements
+
+            logistics_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: Optional metrological traceability statements for logistics measurements, transport condition sensors, methods, standards, calibrations, or reference materials
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: trc_logis_metrological_traceability
+
+            logistics_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for logistics event data, sensor evidence, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: trc_logis_data_quality_assessments
+
+    IntermediateStop:
+        description: Stop location during logistics movement
+        attributes:
+            stop_location:
+                range: string
+                description: UN/LOCODE or GLN of stop location
+                annotations:
+                    sql_identifier: trc_logis_stop_location
+                    owl.filler: unece:UNLOCODE
+                pattern: "^([A-Z]{2}[A-Z0-9]{3}|[0-9]{13})$"
+
+            stop_location_value:
+                range: string
+                description: Value holder for stop location
+
+            stop_timestamp:
+                range: datetime
+                description: When arrived at stop
+                annotations:
+                    sql_identifier: trc_logis_stop_time
+
+            stop_timestamp_value:
+                range: string
+                description: Value holder for stop timestamp
+
+            stop_duration:
+                range: string
+                description: Stop duration in ISO 8601 format (e.g. PT2H30M for 2 hours 30 minutes)
+                annotations:
+                    sql_identifier: trc_logis_stop_duration
+                    iso_8601_duration: true
+                pattern: "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+
+            stop_duration_value:
+                range: string
+                description: Value holder for stop duration
+
+    ReverseLogistics:
+        description: End-of-life and return pathway management beyond EPCIS scope
+        attributes:
+            return_event_identifier:
+                range: string
+                description: Unique return tracking ID
+                annotations:
+                    sql_identifier: trc_reverse_event_id
+
+            return_event_identifier_value:
+                range: string
+                description: Value holder for return event identifier
+
+            return_initiation_date:
+                range: datetime
+                description: When return process started
+                annotations:
+                    sql_identifier: trc_reverse_init_date
+
+            return_initiation_date_value:
+                range: string
+                description: Value holder for return initiation date
+
+            return_reason:
+                range: ReturnReasonEnum
+                description: Reason for return
+                annotations:
+                    sql_identifier: trc_reverse_reason
+
+            return_reason_value:
+                range: string
+                description: Value holder for return reason
+
+            intake_event:
+                range: IntakeEvent
+                description: Condition assessment and triage of the entity at intake into the return/refurbishment workflow
+                inlined: true
+
+            customer_return_channels:
+                range: CustomerReturnChannel
+                multivalued: true
+                description: Available return methods and locations
+
+            refurbishment_event:
+                range: RefurbishmentEvent
+                description: Repair and refurbishment activities
+
+            recycling_event:
+                range: RecyclingEvent
+                description: Material and product recovery and recycling processes
+
+            disposal_event:
+                range: DisposalEvent
+                description: Final disposal method and certification
+
+    CustomerReturnChannel:
+        description: Return channel information
+        attributes:
+            return_location:
+                range: string
+                description: Location where entities (products, materials, batches, commodities) can be returned - GLN identifier
+                annotations:
+                    sql_identifier: trc_reverse_return_location
+                    owl.filler: gs1:GlobalLocationNumber
+
+            return_location_value:
+                range: string
+                description: Value holder for return location
+
+            return_method:
+                range: ReturnMethodEnum
+                description: How entity (product, material, batch, commodity) can be returned
+                annotations:
+                    sql_identifier: trc_reverse_method
+
+            return_method_value:
+                range: string
+                description: Value holder for return method
+
+            return_documentation:
+                range: uri
+                multivalued: true
+                description: URI references to return authorization shipping labels RMA documents
+                annotations:
+                    sql_identifier: trc_reverse_return_docs
+                    reference_type: "documentation"
+
+            return_documentation_value:
+                range: string
+                description: Value holder for return documentation
+
+    IntakeEvent:
+        description: Condition assessment and triage of an entity (product, component) at intake into a return or refurbishment workflow
+        class_uri: prov:Activity
+        attributes:
+            intake_identifier:
+                range: string
+                description: Unique intake identifier or intake ticket ID
+                annotations:
+                    sql_identifier: trc_intake_id
+                    owl.filler: dcterms:identifier
+                    references: "CE-RISE Deliverable 1.1"
+
+            intake_identifier_value:
+                range: string
+                description: Value holder for intake identifier
+
+            intake_date:
+                range: datetime
+                description: When the entity was received at intake ISO 8601 format
+                annotations:
+                    sql_identifier: trc_intake_date
+                    owl.filler: dcterms:date
+                    iso_8601: true
+
+            intake_date_value:
+                range: string
+                description: Value holder for intake date
+
+            internal_asset_id:
+                range: string
+                description: Internal refurbisher asset tag or tracking ID, distinct from serial number, GTIN, or passport ID
+                annotations:
+                    sql_identifier: trc_intake_internal_asset_id
+                    owl.filler: dcterms:identifier
+
+            internal_asset_id_value:
+                range: string
+                description: Value holder for internal asset ID
+
+            customer_asset_tag:
+                range: string
+                description: Customer-provided asset tag for the received unit
+                annotations:
+                    sql_identifier: trc_intake_customer_asset_tag
+                    owl.filler: dcterms:identifier
+
+            customer_asset_tag_value:
+                range: string
+                description: Value holder for customer asset tag
+
+            previous_owner_reference:
+                range: string
+                description: Reference to the previous owner of the received unit
+                annotations:
+                    sql_identifier: trc_intake_previous_owner_ref
+                    owl.filler: prov:wasAttributedTo
+
+            previous_owner_reference_value:
+                range: string
+                description: Value holder for previous owner reference
+
+            intake_location:
+                range: string
+                description: Location where the entity was received - GLN identifier
+                annotations:
+                    sql_identifier: trc_intake_location
+                    owl.filler: gs1:GlobalLocationNumber
+
+            intake_location_value:
+                range: string
+                description: Value holder for intake location
+
+            received_by:
+                range: string
+                description: Technician, organisation, or system that received and assessed the entity
+                annotations:
+                    sql_identifier: trc_intake_received_by
+                    owl.filler: prov:wasAssociatedWith
+
+            received_by_value:
+                range: string
+                description: Value holder for received by
+
+            condition_items:
+                range: IntakeConditionItem
+                description: Structured condition findings recorded at intake
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+
+            media_status:
+                range: string
+                description: Status of data-bearing media at intake (e.g. present, removed, wiped, unknown)
+                annotations:
+                    sql_identifier: trc_intake_media_status
+                    owl.filler: dcterms:type
+
+            media_status_value:
+                range: string
+                description: Value holder for media status
+
+            triage_decision:
+                range: TriageDecisionEnum
+                description: Triage decision made at intake
+                annotations:
+                    sql_identifier: trc_intake_triage_decision
+                    owl.filler: prov:wasInformedBy
+
+            triage_decision_value:
+                range: string
+                description: Value holder for triage decision
+
+            intake_notes:
+                range: string
+                description: Free-text notes about the intake assessment
+                annotations:
+                    sql_identifier: trc_intake_notes
+                    owl.filler: dcterms:description
+
+            intake_notes_value:
+                range: string
+                description: Value holder for intake notes
+
+            intake_evidence:
+                range: uri
+                multivalued: true
+                description: URI references to intake evidence such as photos, condition reports, or intake forms
+                annotations:
+                    sql_identifier: trc_intake_evidence
+                    owl.filler: dcterms:references
+                    reference_type: "evidence"
+
+            intake_evidence_value:
+                range: string
+                description: Value holder for intake evidence
+
+    IntakeConditionItem:
+        description: A single structured condition finding recorded during intake assessment
+        attributes:
+            condition_category:
+                range: IntakeConditionCategoryEnum
+                description: Category of the condition finding
+                annotations:
+                    sql_identifier: trc_intake_cond_category
+                    owl.filler: dcterms:type
+
+            condition_category_value:
+                range: string
+                description: Value holder for condition category
+
+            condition_status:
+                range: string
+                description: Status for this category (e.g. PRESENT, ABSENT, DAMAGED, OK, LOCKED)
+                annotations:
+                    sql_identifier: trc_intake_cond_status
+
+            condition_status_value:
+                range: string
+                description: Value holder for condition status
+
+            condition_description:
+                range: string
+                description: Description of the condition finding
+                annotations:
+                    sql_identifier: trc_intake_cond_description
+                    owl.filler: dcterms:description
+
+            condition_description_value:
+                range: string
+                description: Value holder for condition description
+
+            evidence_reference:
+                range: uri
+                description: URI reference to evidence supporting this condition finding
+                annotations:
+                    sql_identifier: trc_intake_cond_evidence
+                    owl.filler: dcterms:references
+
+            evidence_reference_value:
+                range: string
+                description: Value holder for evidence reference
+
+    RefurbishmentEvent:
+        description: Entity (product, material, component) repair and refurbishment details
+        attributes:
+            refurbishment_date:
+                range: datetime
+                description: When refurbishment occurred ISO 8601 format
+                annotations:
+                    sql_identifier: trc_reverse_refurb_date
+                    iso_8601: true
+                    references: "King et al.; CE-RISE Deliverable 1.1"
+
+            refurbishment_date_value:
+                range: string
+                description: Value holder for refurbishment date
+
+            refurbishment_activities:
+                range: string
+                multivalued: true
+                description: List of refurbishment activities performed
+                annotations:
+                    sql_identifier: trc_reverse_refurb_activities
+                    references: "King et al.; CE-RISE Deliverable 1.1"
+
+            refurbishment_activities_value:
+                range: string
+                description: Value holder for refurbishment activities
+
+            components_replaced:
+                range: ReplacedComponent
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                description: Structured records of components replaced during refurbishment
+                annotations:
+                    sql_identifier: trc_reverse_components
+                    references: "CIRPASS; CE-RISE Deliverable 1.1"
+
+            refurbishment_certification:
+                range: uri
+                description: URI reference to refurbishment quality certification or standard
+                annotations:
+                    sql_identifier: trc_reverse_refurb_cert
+                    reference_type: "certification"
+                    references: "King et al."
+
+            refurbishment_certification_value:
+                range: string
+                description: Value holder for refurbishment certification
+
+            data_erasure_evidence:
+                range: DataErasureEvidence
+                description: Structured, auditable proof of secure data erasure for data-bearing media (ICT refurbishment)
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: trc_reverse_erasure_evidence
+                    references: "NIST SP 800-88; IEEE 2883; ISO/IEC 27001; CE-RISE Deliverable 1.1"
+
+    ReplacedComponent:
+        description: Structured record of a single part or component replaced during refurbishment. Harmonised with usage-and-maintenance ReplacedComponent and diagnostic-results ReplacedPart.
+        attributes:
+            component_name:
+                range: string
+                description: Name of the replaced part or component
+                annotations:
+                    sql_identifier: trc_replaced_component_name
+                    owl.filler: schema:name
+
+            component_name_value:
+                range: string
+                description: Value holder for component name
+
+            old_part_number:
+                range: string
+                description: Part number of the removed part
+                annotations:
+                    sql_identifier: trc_replaced_old_part_number
+                    owl.filler: dcterms:identifier
+
+            old_part_number_value:
+                range: string
+                description: Value holder for old part number
+
+            old_serial_number:
+                range: string
+                description: Serial number of the removed part
+                annotations:
+                    sql_identifier: trc_replaced_old_serial_number
+                    owl.filler: schema:serialNumber
+
+            old_serial_number_value:
+                range: string
+                description: Value holder for old serial number
+
+            new_part_number:
+                range: string
+                description: Part number of the installed replacement part
+                annotations:
+                    sql_identifier: trc_replaced_new_part_number
+                    owl.filler: dcterms:identifier
+
+            new_part_number_value:
+                range: string
+                description: Value holder for new part number
+
+            new_serial_number:
+                range: string
+                description: Serial number of the installed replacement part
+                annotations:
+                    sql_identifier: trc_replaced_new_serial_number
+                    owl.filler: schema:serialNumber
+
+            new_serial_number_value:
+                range: string
+                description: Value holder for new serial number
+
+            manufacturer:
+                range: string
+                description: Manufacturer of the replacement part
+                annotations:
+                    sql_identifier: trc_replaced_manufacturer
+                    owl.filler: schema:manufacturer
+
+            manufacturer_value:
+                range: string
+                description: Value holder for manufacturer
+
+            replacement_quantity:
+                range: integer
+                description: Quantity of parts replaced
+                annotations:
+                    sql_identifier: trc_replaced_quantity
+                    owl.filler: schema:value
+
+            replacement_quantity_value:
+                range: string
+                description: Value holder for replacement quantity
+
+            replacement_reason:
+                range: string
+                description: Reason for the replacement
+                annotations:
+                    sql_identifier: trc_replaced_reason
+                    owl.filler: dcterms:description
+
+            replacement_reason_value:
+                range: string
+                description: Value holder for replacement reason
+
+            replacement_condition:
+                range: string
+                description: Condition of the replacement part (e.g. new, refurbished, used)
+                annotations:
+                    sql_identifier: trc_replaced_condition
+                    owl.filler: schema:itemCondition
+
+            replacement_condition_value:
+                range: string
+                description: Value holder for replacement condition
+
+    DataErasureEvidence:
+        description: Auditable evidence of secure data erasure performed on data-bearing media. Harmonised with diagnostic-results DataSanitization.
+        class_uri: prov:Activity
+        attributes:
+            erasure_identifier:
+                range: string
+                description: Unique identifier or certificate/report ID of the erasure activity
+                annotations:
+                    sql_identifier: trc_erasure_id
+                    owl.filler: dcterms:identifier
+                    references: "NIST SP 800-88"
+
+            erasure_identifier_value:
+                range: string
+                description: Value holder for erasure identifier
+
+            erasure_method:
+                range: string
+                description: Erasure method applied (e.g. cryptographic erase, overwrite, degauss, physical destruction)
+                annotations:
+                    sql_identifier: trc_erasure_method
+                    owl.filler: sosa:usedProcedure
+
+            erasure_method_value:
+                range: string
+                description: Value holder for erasure method
+
+            erasure_standard:
+                range: uri
+                description: URI reference to the erasure standard followed (e.g. NIST SP 800-88, IEEE 2883)
+                annotations:
+                    sql_identifier: trc_erasure_standard
+                    owl.filler: dcterms:conformsTo
+
+            erasure_standard_value:
+                range: string
+                description: Value holder for erasure standard
+
+            erasure_tool:
+                range: string
+                description: Tool or software (name and version) used to perform the erasure
+                annotations:
+                    sql_identifier: trc_erasure_tool
+                    owl.filler: prov:used
+
+            erasure_tool_value:
+                range: string
+                description: Value holder for erasure tool
+
+            media_serial_number:
+                range: string
+                description: Serial number of the wiped data-bearing media or device
+                annotations:
+                    sql_identifier: trc_erasure_media_serial
+                    owl.filler: schema:serialNumber
+
+            media_serial_number_value:
+                range: string
+                description: Value holder for media serial number
+
+            operator:
+                range: string
+                description: Technician, organisation, or automated system that performed the erasure
+                annotations:
+                    sql_identifier: trc_erasure_operator
+                    owl.filler: prov:wasAssociatedWith
+
+            operator_value:
+                range: string
+                description: Value holder for operator
+
+            erasure_timestamp:
+                range: datetime
+                description: Timestamp when erasure was completed ISO 8601 format
+                annotations:
+                    sql_identifier: trc_erasure_timestamp
+                    owl.filler: prov:endedAtTime
+                    iso_8601: true
+
+            erasure_timestamp_value:
+                range: string
+                description: Value holder for erasure timestamp
+
+            erasure_result:
+                range: string
+                description: Outcome of the erasure activity (e.g. PASS, FAIL, INCOMPLETE)
+                annotations:
+                    sql_identifier: trc_erasure_result
+                    owl.filler: sosa:hasResult
+
+            erasure_result_value:
+                range: string
+                description: Value holder for erasure result
+
+            document_reference:
+                range: uri
+                description: URI reference to the erasure certificate document or supporting evidence
+                annotations:
+                    sql_identifier: trc_erasure_document_ref
+                    owl.filler: dcterms:references
+
+            document_reference_value:
+                range: string
+                description: Value holder for document reference
+
+    RecyclingEvent:
+        description: Material and product recovery and recycling details
+        attributes:
+            recycling_date:
+                range: datetime
+                description: When recycling occurred
+                annotations:
+                    sql_identifier: trc_reverse_recycle_date
+                    references: "ESPR; Battery Pass; CIRPASS; King et al.; CE-RISE Deliverable 1.1"
+
+            recycling_date_value:
+                range: string
+                description: Value holder for recycling date
+
+            recovery_operation:
+                range: RecoveryOperationEnum
+                description: Recovery operation performed, aligned with WFD Annex II (separates recycling, preparation for re-use, and energy recovery)
+                annotations:
+                    sql_identifier: trc_reverse_recovery_operation
+                    owl.filler: dcterms:type
+                    references: "EU Waste Framework Directive 2008/98/EC Annex II"
+
+            recovery_operation_value:
+                range: string
+                description: Value holder for recovery operation
+
+            recycling_stream:
+                range: RecyclingStreamEnum
+                description: Which recycling stream
+                annotations:
+                    sql_identifier: trc_reverse_stream
+
+            recycling_stream_value:
+                range: string
+                description: Value holder for recycling stream
+
+            materials_recovered:
+                range: string
+                multivalued: true
+                description: List of recovered materials
+                annotations:
+                    sql_identifier: trc_reverse_materials
+
+            materials_recovered_value:
+                range: string
+                description: Value holder for materials recovered
+
+            recovery_percentage:
+                range: float
+                description: Recovery rate as a percentage (0-100) for the recovery_operation, per WFD Annex II. Recovery is broader than recycling - distinct from the recycling-specific rate in circularity-and-eol (RecyclableMaterials.recycling_rate).
+                annotations:
+                    sql_identifier: trc_reverse_recovery_pct
+                    unit: "percent"
+                minimum_value: 0.0
+                maximum_value: 100.0
+
+            recovery_percentage_value:
+                range: string
+                description: Value holder for recovery percentage
+
+            recycling_uncertainty_statements:
+                range: UncertaintyStatement
+                description: Optional uncertainty statements for recovered material quantities, recovery percentages, or estimated recycling outputs
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: trc_reverse_recycle_uncertainty
+
+            recycling_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: Optional metrological traceability statements for recycling measurements, recovery calculations, methods, standards, calibrations, or reference materials
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: trc_reverse_recycle_metrological_traceability
+
+            recycling_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for recycling event data, recovery evidence, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: trc_reverse_recycle_data_quality
+
+    DisposalEvent:
+        description: Final disposal details
+        attributes:
+            disposal_date:
+                range: datetime
+                description: When disposal occurred
+                annotations:
+                    sql_identifier: trc_reverse_disposal_date
+                    references: "ESPR; CE-RISE Deliverable 1.1"
+
+            disposal_date_value:
+                range: string
+                description: Value holder for disposal date
+
+            disposal_method:
+                range: DisposalMethodEnum
+                description: Method of disposal
+                annotations:
+                    sql_identifier: trc_reverse_disposal_method
+                    references: "ESPR; CE-RISE Deliverable 1.1"
+
+            disposal_method_value:
+                range: string
+                description: Value holder for disposal method
+
+            disposal_facility:
+                range: string
+                description: GLN or identifier of disposal facility
+                annotations:
+                    sql_identifier: trc_reverse_disposal_facility
+                    owl.filler: gs1:GlobalLocationNumber
+                    references: "Koppelaar et al."
+
+            disposal_facility_value:
+                range: string
+                description: Value holder for disposal facility
+
+            disposal_certification:
+                range: uri
+                description: URI reference to disposal certification or compliance document
+                annotations:
+                    sql_identifier: trc_reverse_disposal_cert
+                    reference_type: "certification"
+                    references: "King et al."
+
+            disposal_certification_value:
+                range: string
+                description: Value holder for disposal certification
+
+    AggregationEvents:
+        description: Packaging hierarchy operations extending EPCIS AggregationEvent
+        attributes:
+            aggregation_event_id:
+                range: string
+                description: Unique identifier for aggregation operation - aligns with EPCIS eventID
+                annotations:
+                    sql_identifier: trc_agg_event_id
+                pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+
+            aggregation_event_id_value:
+                range: string
+                description: Value holder for aggregation event ID
+
+            aggregation_type:
+                range: string
+                description: ADD for packing DELETE for unpacking - uses EPCIS Action directly
+                annotations:
+                    sql_identifier: trc_agg_type
+                    owl.filler: epcis:Action
+
+            aggregation_type_value:
+                range: string
+                description: Value holder for aggregation type
+
+            parent_identifier:
+                range: string
+                description: Container pallet or case EPC being packed/unpacked - aligns with EPCIS parentID
+                annotations:
+                    sql_identifier: trc_agg_parent_id
+                pattern: "^(urn:epc:id:|[0-9]{14}:).*"
+
+            parent_identifier_value:
+                range: string
+                description: Value holder for parent identifier
+
+            child_identifiers:
+                range: string
+                multivalued: true
+                description: Child EPCs being aggregated/disaggregated using EPCIS childEPCs structure
+                annotations:
+                    sql_identifier: trc_agg_child_ids
+                    owl.filler: epcis:EPCList
+
+            child_identifiers_value:
+                range: string
+                description: Value holder for child identifiers
+
+            aggregation_location:
+                range: string
+                description: GLN where operation occurred - aligns with EPCIS bizLocation
+                annotations:
+                    sql_identifier: trc_agg_location
+                    owl.filler: gs1:GlobalLocationNumber
+                pattern: "^[0-9]{13}$"
+
+            aggregation_location_value:
+                range: string
+                description: Value holder for aggregation location
+
+            aggregation_timestamp:
+                range: datetime
+                description: When packing/unpacking happened - aligns with EPCIS eventTime
+                annotations:
+                    sql_identifier: trc_agg_timestamp
+
+            aggregation_timestamp_value:
+                range: string
+                description: Value holder for aggregation timestamp
+
+            packaging_level:
+                range: PackagingLevelEnum
+                description: Level in packaging hierarchy
+                annotations:
+                    sql_identifier: trc_agg_pack_level
+
+            packaging_level_value:
+                range: string
+                description: Value holder for packaging level
+
+            biz_step:
+                range: string
+                description: Business step like packing commissioning etc - uses CBV directly
+                annotations:
+                    sql_identifier: trc_agg_biz_step
+                    owl.filler: cbv:BizStep
+
+            biz_step_value:
+                range: string
+                description: Value holder for business step
+
+            disposition:
+                range: string
+                description: Business condition of aggregation - aligns with EPCIS disposition
+                annotations:
+                    sql_identifier: trc_agg_disposition
+
+            disposition_value:
+                range: string
+                description: Value holder for disposition
+
+            read_point:
+                range: string
+                description: Specific read point where aggregation occurred - EPCIS readPoint
+                annotations:
+                    sql_identifier: trc_agg_read_point
+                    owl.filler: gs1:GlobalLocationNumber
+
+            read_point_value:
+                range: string
+                description: Value holder for read point
+
+    SupplyChainIncidents:
+        description: Exception events and disruptions during supply chain operations
+        attributes:
+            incident_identifier:
+                range: string
+                description: Unique incident tracking ID
+                annotations:
+                    sql_identifier: trc_incident_id
+                pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+
+            incident_identifier_value:
+                range: string
+                description: Value holder for incident identifier
+
+            incident_type:
+                range: IncidentTypeEnum
+                description: Classification of incident type
+                annotations:
+                    sql_identifier: trc_incident_type
+
+            incident_type_value:
+                range: string
+                description: Value holder for incident type
+
+            incident_timestamp:
+                range: datetime
+                description: When incident occurred
+                annotations:
+                    sql_identifier: trc_incident_timestamp
+
+            incident_timestamp_value:
+                range: string
+                description: Value holder for incident timestamp
+
+            incident_location:
+                range: string
+                description: GLN or UN/LOCODE where incident happened
+                annotations:
+                    sql_identifier: trc_incident_location
+                    owl.filler: unece:UNLOCODE
+                pattern: "^([0-9]{13}|[A-Z]{2}[A-Z0-9]{3}).*"
+
+            incident_location_value:
+                range: string
+                description: Value holder for incident location
+
+            affected_entities:
+                range: string
+                multivalued: true
+                description: EPCs, GTINs, batch numbers, or lot identifiers of affected entities (products, materials, batches, commodities)
+                annotations:
+                    sql_identifier: trc_incident_affected_entities
+                    owl.filler: epcis:EPCList
+
+            affected_entities_value:
+                range: string
+                description: Value holder for affected entities
+
+            incident_severity:
+                range: SeverityLevelEnum
+                description: Severity level classification
+                annotations:
+                    sql_identifier: trc_incident_severity
+
+            incident_severity_value:
+                range: string
+                description: Value holder for incident severity
+
+            root_cause:
+                range: string
+                description: Identified cause of the incident
+                annotations:
+                    sql_identifier: trc_incident_root_cause
+
+            root_cause_value:
+                range: string
+                description: Value holder for root cause
+
+            corrective_actions:
+                range: string
+                multivalued: true
+                description: Actions taken to resolve or mitigate
+                annotations:
+                    sql_identifier: trc_incident_corrective_actions
+
+            corrective_actions_value:
+                range: string
+                description: Value holder for corrective actions
+
+            incident_documentation:
+                range: uri
+                multivalued: true
+                description: URI references to incident reports insurance claims photos
+                annotations:
+                    sql_identifier: trc_incident_documentation
+                    reference_type: "documentation"
+
+            incident_documentation_value:
+                range: string
+                description: Value holder for incident documentation
+
+            resolution_status:
+                range: ResolutionStatusEnum
+                description: Current status of incident resolution
+                annotations:
+                    sql_identifier: trc_incident_resolution_status
+
+            resolution_status_value:
+                range: string
+                description: Value holder for resolution status
+
+            linked_event_ids:
+                range: string
+                multivalued: true
+                description: IDs of related supply chain events
+                annotations:
+                    sql_identifier: trc_incident_linked_events
+                pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+
+            linked_event_ids_value:
+                range: string
+                description: Value holder for linked event IDs
+
+            estimated_impact:
+                range: string
+                description: Estimated financial impact using ISO monetary amount structure
+                annotations:
+                    sql_identifier: trc_incident_impact
+                    owl.filler: iso:MonetaryAmount
+
+            estimated_impact_value:
+                range: string
+                description: Value holder for estimated impact
+
+            reporter_identifier:
+                range: string
+                description: GLN or identifier of entity reporting the incident
+                annotations:
+                    sql_identifier: trc_incident_reporter
+                    owl.filler: gs1:PartyGlobalLocationNumber
+                pattern: "^[0-9]{13}$"
+
+            reporter_identifier_value:
+                range: string
+                description: Value holder for reporter identifier
+
+            incident_uncertainty_statements:
+                range: UncertaintyStatement
+                description: Optional uncertainty statements for incident impact estimates, affected-entity counts, timestamps, or other incident measurements
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: uq:uncertaintyStatement
+                    sql_identifier: trc_incident_uncertainty_statements
+
+            incident_metrological_traceability_statements:
+                range: TraceabilityStatement
+                description: Optional metrological traceability statements for incident measurements, inspection methods, standards, calibrations, or reference materials
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: mt:traceabilityStatement
+                    sql_identifier: trc_incident_metrological_traceability
+
+            incident_data_quality_assessments:
+                range: DataQualityAssessment
+                description: Optional data quality assessments for incident reports, evidence, provenance, completeness, or representativeness
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    owl.filler: dqf:dataQualityAssessment
+                    sql_identifier: trc_incident_data_quality_assessments
+
+# Enumerations aligned with EPCIS/CBV standards
+enums:
+    OwnershipStatusEnum:
+        description: Legal status of ownership - DPP extension beyond EPCIS standard
+        permissible_values:
+            FULL_OWNERSHIP:
+                description: Complete legal ownership
+            CONDITIONAL:
+                description: Conditional ownership pending payment
+            CONSIGNED:
+                description: Owned but consigned to another party
+            LEASED:
+                description: Under lease agreement
+            IN_TRANSIT:
+                description: Ownership during transportation
+            DISPUTED:
+                description: Ownership under dispute
+
+    ReturnReasonEnum:
+        description: Reasons for product return - DPP specific
+        permissible_values:
+            DEFECT:
+                description: Product defect or malfunction
+            WARRANTY_CLAIM:
+                description: Warranty claim
+            END_OF_LIFE:
+                description: Product reached end of life
+            PRODUCT_RECALL:
+                description: Manufacturer recall
+            CUSTOMER_DISSATISFACTION:
+                description: Customer not satisfied
+
+    ReturnMethodEnum:
+        description: How product was returned - DPP specific
+        permissible_values:
+            STORE_RETURN:
+                description: Returned to retail store
+            MAIL_RETURN:
+                description: Mailed back
+            PICKUP_SERVICE:
+                description: Pickup service collected
+            DROP_OFF_POINT:
+                description: Dropped at collection point
+
+    RecyclingStreamEnum:
+        description: Recycling pathways - DPP specific
+        permissible_values:
+            ELECTRONICS:
+                description: E-waste recycling
+            PLASTICS:
+                description: Plastic recycling
+            METALS:
+                description: Metal recycling
+            TEXTILES:
+                description: Textile recycling
+            BATTERIES:
+                description: Battery recycling
+            MIXED_MATERIALS:
+                description: Mixed material recycling
+
+    RecoveryOperationEnum:
+        description: Recovery operations aligned with EU Waste Framework Directive 2008/98/EC Annex II. Distinct from disposal operations (see DisposalMethodEnum).
+        permissible_values:
+            PREPARATION_FOR_REUSE:
+                description: Preparing for re-use (WFD waste hierarchy, top recovery tier)
+            RECYCLING:
+                description: Recycling - reprocessing into products, materials, or substances (WFD Annex II, R2-R11)
+            ENERGY_RECOVERY:
+                description: Energy recovery / waste-to-energy (WFD Annex II, R1)
+            BACKFILLING:
+                description: Backfilling - recovery operation using waste to substitute other materials
+            OTHER_RECOVERY:
+                description: Other recovery operation
+
+    DisposalMethodEnum:
+        description: Final disposal operations aligned with EU Waste Framework Directive 2008/98/EC Annex I. Recovery operations (incl. energy recovery) are NOT disposal - see RecoveryOperationEnum.
+        permissible_values:
+            LANDFILL:
+                description: Landfill disposal (WFD Annex I, D1/D5)
+            INCINERATION:
+                description: Incineration without energy recovery (WFD Annex I, D10). Incineration with energy recovery is a recovery operation (R1) - see RecoveryOperationEnum.
+            COMPOSTING:
+                description: Industrial composting
+            SPECIALIZED_TREATMENT:
+                description: Specialized hazardous treatment (WFD Annex I, e.g. D9)
+
+    IntakeConditionCategoryEnum:
+        description: Categories of condition findings recorded at intake
+        permissible_values:
+            MISSING_PARTS:
+                description: Parts or accessories missing from the received unit
+            VISIBLE_DAMAGE:
+                description: Visible physical or cosmetic damage
+            BATTERY_STATE:
+                description: Battery presence, health, or charge state
+            LOCKED_FIRMWARE:
+                description: Locked BIOS, firmware, account, or activation lock
+            DATA_BEARING_MEDIA:
+                description: Presence or status of data-bearing media
+            COSMETIC:
+                description: General cosmetic condition
+            FUNCTIONAL:
+                description: General functional condition
+            OTHER:
+                description: Other condition category
+
+    TriageDecisionEnum:
+        description: Triage decisions made at intake
+        permissible_values:
+            REFURBISH:
+                description: Route for refurbishment
+            REPAIR:
+                description: Route for repair
+            PARTS_HARVEST:
+                description: Harvest parts for reuse
+            RECYCLE:
+                description: Route for recycling
+            DISPOSE:
+                description: Route for disposal
+            RESELL_AS_IS:
+                description: Resell without further processing
+            REJECT:
+                description: Reject the unit
+            PENDING:
+                description: Triage decision pending
+
+    CustodyStageEnum:
+        description: Workshop stages for in-workshop physical custody
+        permissible_values:
+            INTAKE:
+                description: Received at intake
+            STORAGE:
+                description: Held in storage
+            BENCH:
+                description: At the repair or diagnostic bench
+            DATA_WIPE:
+                description: At secure data erasure / sanitization
+            QA:
+                description: At quality assurance / testing
+            PACKAGING:
+                description: At packaging
+            RESALE:
+                description: Ready for or in resale
+            SHIPPING:
+                description: Handed to shipping / dispatch
+            OTHER:
+                description: Other custody stage
+
+    SealStatusEnum:
+        description: Seal or tamper status of an entity or its packaging during custody
+        permissible_values:
+            SEALED:
+                description: Sealed
+            OPEN:
+                description: Open / unsealed
+            TAMPER_EVIDENT:
+                description: Tamper-evident seal applied
+            UNKNOWN:
+                description: Seal status unknown
+
+    PackagingLevelEnum:
+        description: Levels in packaging hierarchy - aligns with EPCIS packaging concepts
+        permissible_values:
+            ITEM:
+                description: Individual item or unit level
+            INNER_PACK:
+                description: Inner pack or bundle
+            CASE:
+                description: Case or carton level
+            PALLET:
+                description: Pallet level
+            CONTAINER:
+                description: Container or trailer level
+            TRANSPORT_UNIT:
+                description: Full transport unit
+
+    IncidentTypeEnum:
+        description: Types of supply chain incidents and exceptions
+        permissible_values:
+            DAMAGE:
+                description: Physical damage to products
+            THEFT:
+                description: Theft or loss of products
+            DELAY:
+                description: Transportation or processing delay
+            CONTAMINATION:
+                description: Product contamination
+            COLD_CHAIN_BREAK:
+                description: Temperature excursion in cold chain
+            SECURITY_BREACH:
+                description: Unauthorized access or tampering
+            NATURAL_DISASTER:
+                description: Impact from natural disaster
+            RECALL:
+                description: Product recall activation
+            QUARANTINE:
+                description: Products placed in quarantine
+            DOCUMENTATION_ERROR:
+                description: Documentation or labeling error
+            SYSTEM_FAILURE:
+                description: IT or equipment system failure
+            REGULATORY_HOLD:
+                description: Regulatory inspection or hold
+
+    SeverityLevelEnum:
+        description: Severity classification for incidents
+        permissible_values:
+            CRITICAL:
+                description: Critical severity requiring immediate action
+            HIGH:
+                description: High severity with significant impact
+            MEDIUM:
+                description: Medium severity with moderate impact
+            LOW:
+                description: Low severity with minimal impact
+            INFORMATIONAL:
+                description: Informational only no immediate action required
+
+    ResolutionStatusEnum:
+        description: Status of incident resolution
+        permissible_values:
+            OPEN:
+                description: Incident is open and unresolved
+            IN_PROGRESS:
+                description: Resolution in progress
+            PENDING_VERIFICATION:
+                description: Resolution pending verification
+            RESOLVED:
+                description: Incident resolved
+            CLOSED:
+                description: Incident closed
+            ESCALATED:
+                description: Escalated to higher authority

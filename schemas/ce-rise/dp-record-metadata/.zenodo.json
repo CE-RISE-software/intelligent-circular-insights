@@ -1,0 +1,36 @@
+{
+  "title": "CE-RISE DMP & DPP Record Metadata",
+  "description": "This model provides a universal metadata envelope that declares which data models and schemas compose a DMP/DPP record, regardless of their origin. The metadata acts as a \"table of contents\" that tells consumers which models to use for interpreting each part of the composite DMP/DPP record, promoting an open and extensible ecosystem rather than a closed system.",
+  "license": "CC-BY-NC-4.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Boero, Riccardo",
+      "affiliation": "NILU",
+      "orcid": "0000-0002-7468-9096"
+    }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Data Model",
+    "Ontology",
+    "Open Source",
+    "Open Science",
+    "Digital Material Passport",
+    "Digital Product Passport"
+  ],
+  "communities": [
+    { "identifier": "ce-rise" },
+    { "identifier": "impact" }
+  ],
+  "grants": [
+    { "id": "101092281" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE_models/dp-record-metadata",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

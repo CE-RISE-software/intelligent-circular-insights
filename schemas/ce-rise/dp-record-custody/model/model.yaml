@@ -1,0 +1,1537 @@
+id: https://ce-rise-models.codeberg.page/dp-record-custody/
+name: dp_record_custody
+title: CE-RISE DP Record Custody Data Model
+description: >
+    Chain of custody and governance history of DPP and DMP records, capturing who did what when.
+    Stage 1 focuses on Custody Events tracking with full audit trail capabilities.
+license: CC BY-NC 4.0
+version: 0.0.3
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    dprc: https://ce-rise-models.codeberg.page/dp-record-custody/
+    prov: http://www.w3.org/ns/prov#
+    dcterms: http://purl.org/dc/terms/
+    foaf: http://xmlns.com/foaf/0.1/
+    schema: http://schema.org/
+    time: http://www.w3.org/2006/time#
+    sec: https://w3id.org/security#
+    oidc: http://openid.net/specs/openid-connect-core-1_0#
+    oauth: https://www.w3.org/ns/auth/oauth#
+    cert: http://www.w3.org/ns/auth/cert#
+    did: https://www.w3.org/ns/did#
+    vc: https://www.w3.org/2018/credentials#
+    xsd: http://www.w3.org/2001/XMLSchema#
+    dcat: http://www.w3.org/ns/dcat#
+    odrl: http://www.w3.org/ns/odrl/2/
+    dpv: https://w3id.org/dpv#
+
+default_prefix: dprc
+default_range: string
+
+imports:
+    - linkml:types
+
+classes:
+    DPRecordCustody:
+        description: >
+            Root class for the chain of custody and governance history of DPP/DMP records.
+            Full implementation includes all five stages: Custody Events, Custodian History,
+            Transfer Records, Integrity Evidence, and Governance Actions.
+        class_uri: dprc:DPRecordCustody
+        attributes:
+            custody_events:
+                description: Chronological list of all custody-related events
+                multivalued: true
+                range: CustodyEvent
+                slot_uri: prov:hadActivity
+                annotations:
+                    sql_identifier: dprc_custody_events
+                    owl.filler: prov:hadActivity
+                    references: "CIRPASS; ESPR"
+            custodian_history:
+                description: Historical record of all custodians who have held the DPP/DMP record
+                multivalued: true
+                range: CustodianRecord
+                slot_uri: prov:hadDelegate
+                annotations:
+                    sql_identifier: dprc_custodian_history
+                    owl.filler: prov:hadDelegate
+                    references: "CIRPASS"
+            transfer_records:
+                description: Records of all authorized transfers between custodians
+                multivalued: true
+                range: TransferRecord
+                slot_uri: prov:wasInfluencedBy
+                annotations:
+                    sql_identifier: dprc_transfer_records
+                    owl.filler: prov:wasInfluencedBy
+                    references: "ESPR; CIRPASS"
+            integrity_evidence:
+                description: Cryptographic and external evidence of data integrity
+                range: IntegrityEvidence
+                slot_uri: sec:hasProof
+                annotations:
+                    sql_identifier: dprc_integrity_evidence
+                    owl.filler: sec:hasProof
+            governance_actions:
+                description: Validation, audit, and disposal records for governance
+                range: GovernanceActions
+                slot_uri: prov:qualifiedGeneration
+                annotations:
+                    sql_identifier: dprc_governance_actions
+                    owl.filler: prov:qualifiedGeneration
+
+    # Stage 1: Custody Events Classes
+
+    CustodyEvent:
+        description: >
+            A significant action or change in the DPP/DMP record's custody chain,
+            capturing who did what, when, and with what authority
+        class_uri: prov:Activity
+        attributes:
+            event_metadata:
+                description: Core metadata about the custody event
+                range: EventMetadata
+                slot_uri: prov:hadPlan
+                annotations:
+                    sql_identifier: dprc_event_metadata
+                    owl.filler: dprc:event_metadata
+            event_actor:
+                description: The agent who performed this custody event
+                range: EventActor
+                slot_uri: prov:wasAssociatedWith
+                annotations:
+                    sql_identifier: dprc_event_actor
+                    owl.filler: prov:wasAssociatedWith
+            event_integrity:
+                description: Cryptographic integrity information for the event
+                range: EventIntegrity
+                slot_uri: sec:proof
+                annotations:
+                    sql_identifier: dprc_event_integrity
+                    owl.filler: sec:proof
+            transformation_details:
+                description: Data-level transformation details linking passport records
+                range: RecordTransformationDetails
+                slot_uri: prov:wasDerivedFrom
+                annotations:
+                    sql_identifier: dprc_transformation_details
+                    owl.filler: dprc:transformation_details
+
+    EventMetadata:
+        description: Core identifying and descriptive information about a custody event
+        class_uri: prov:Plan
+        attributes:
+            event_id:
+                description: Unique identifier for this custody event
+                required: true
+                range: string
+                slot_uri: dcterms:identifier
+                annotations:
+                    sql_identifier: dprc_event_id
+                    owl.filler: dcterms:identifier
+                    references: "ESPR Art 9 1.; CIRPASS"
+            event_type:
+                description: Type of custody event
+                required: true
+                range: EventTypeEnum
+                slot_uri: dcterms:type
+                annotations:
+                    sql_identifier: dprc_event_type
+                    owl.filler: dcterms:type
+            event_timestamp:
+                description: When the event occurred (ISO 8601)
+                required: true
+                range: datetime
+                slot_uri: prov:atTime
+                annotations:
+                    sql_identifier: dprc_event_timestamp
+                    owl.filler: prov:atTime
+                    references: "CIRPASS"
+                    comment: "Product or material traceability information including date and time"
+            event_description:
+                description: Human-readable description of what happened
+                range: string
+                slot_uri: dcterms:description
+                annotations:
+                    sql_identifier: dprc_event_description
+                    owl.filler: dcterms:description
+            event_justification:
+                description: Reason or authorization for this event
+                range: string
+                slot_uri: prov:hadActivity
+                annotations:
+                    sql_identifier: dprc_event_justification
+                    owl.filler: dprc:event_justification
+            event_source_system:
+                description: System that generated this event
+                range: string
+                slot_uri: prov:wasGeneratedBy
+                annotations:
+                    sql_identifier: dprc_event_source_system
+                    owl.filler: prov:wasGeneratedBy
+
+    EventActor:
+        description: The authenticated agent who performed the custody event
+        class_uri: prov:Agent
+        attributes:
+            actor_id:
+                description: Unique identifier (OpenID sub claim, DID, or system ID)
+                required: true
+                range: string
+                slot_uri: oidc:sub
+                annotations:
+                    sql_identifier: dprc_actor_id
+                    owl.filler: oidc:sub
+                    references: "ESPR Art 11; CIRPASS"
+                    comment: "Unique operator identifier"
+            actor_name:
+                description: Name of the actor (from OIDC name/preferred_username claim)
+                range: string
+                slot_uri: foaf:name
+                annotations:
+                    sql_identifier: dprc_actor_name
+                    owl.filler: foaf:name
+            actor_email:
+                description: Email address (from OIDC email claim)
+                range: string
+                slot_uri: foaf:mbox
+                annotations:
+                    sql_identifier: dprc_actor_email
+                    owl.filler: foaf:mbox
+            actor_role:
+                description: Role of the actor in the custody chain
+                range: ActorRoleEnum
+                slot_uri: prov:hadRole
+                annotations:
+                    sql_identifier: dprc_actor_role
+                    owl.filler: prov:hadRole
+            actor_organization:
+                description: Organization the actor represents (from OIDC org claim or SAML)
+                range: string
+                slot_uri: foaf:member
+                annotations:
+                    sql_identifier: dprc_actor_organization
+                    references: "ESPR; CIRPASS; Berger et al."
+                    owl.filler: foaf:member
+            actor_authentication:
+                description: How the actor was authenticated
+                range: AuthenticationMethodEnum
+                slot_uri: sec:authenticationMethod
+                annotations:
+                    sql_identifier: dprc_actor_authentication
+                    owl.filler: sec:authenticationMethod
+            actor_session_id:
+                description: Session identifier (JWT jti claim or session ID)
+                range: string
+                slot_uri: oidc:jti
+                annotations:
+                    sql_identifier: dprc_actor_session_id
+                    owl.filler: oidc:jti
+            actor_ip_address:
+                description: IP address of the actor for audit purposes
+                range: string
+                slot_uri: dprc:ipAddress
+                annotations:
+                    sql_identifier: dprc_actor_ip_address
+                    owl.filler: dprc:actor_ip_address
+            actor_user_agent:
+                description: User agent string for forensic analysis
+                range: string
+                slot_uri: dprc:userAgent
+                annotations:
+                    sql_identifier: dprc_actor_user_agent
+                    owl.filler: dprc:actor_user_agent
+
+    EventIntegrity:
+        description: Cryptographic integrity and chaining information for custody events
+        class_uri: sec:Proof
+        attributes:
+            previous_hash:
+                description: Hash of the previous event for chain integrity
+                range: string
+                slot_uri: sec:previousProof
+                annotations:
+                    sql_identifier: dprc_previous_hash
+                    owl.filler: sec:previousProof
+            current_hash:
+                description: Hash of the current event data
+                required: true
+                range: string
+                slot_uri: sec:proofValue
+                annotations:
+                    sql_identifier: dprc_current_hash
+                    owl.filler: sec:proofValue
+            hash_algorithm:
+                description: Algorithm used for hashing
+                required: true
+                range: HashAlgorithmEnum
+                slot_uri: sec:digestAlgorithm
+                annotations:
+                    sql_identifier: dprc_hash_algorithm
+                    owl.filler: sec:digestAlgorithm
+            digital_signature:
+                description: Optional digital signature of the event
+                range: string
+                slot_uri: sec:signatureValue
+                annotations:
+                    sql_identifier: dprc_digital_signature
+                    owl.filler: sec:signatureValue
+            signature_algorithm:
+                description: Algorithm used for digital signature
+                range: SignatureAlgorithmEnum
+                slot_uri: sec:signatureAlgorithm
+                annotations:
+                    sql_identifier: dprc_signature_algorithm
+                    owl.filler: sec:signatureAlgorithm
+            signing_key_id:
+                description: Identifier of the key used for signing
+                range: string
+                slot_uri: sec:verificationMethod
+                annotations:
+                    sql_identifier: dprc_signing_key_id
+                    owl.filler: sec:verificationMethod
+            nonce:
+                description: Nonce value for preventing replay attacks
+                range: string
+                slot_uri: sec:nonce
+                annotations:
+                    sql_identifier: dprc_nonce
+                    owl.filler: sec:nonce
+            merkle_root:
+                description: Merkle tree root if event is part of batch
+                range: string
+                slot_uri: dprc:merkleRoot
+                annotations:
+                    sql_identifier: dprc_merkle_root
+                    owl.filler: dprc:merkle_root
+
+    RecordTransformationDetails:
+        description: >
+            Data-level lineage details describing how one or more passport records
+            are derived, aggregated, or reconciled to produce another passport record.
+        class_uri: prov:Derivation
+        attributes:
+            inputs:
+                description: Source passport record identifiers used as inputs
+                multivalued: true
+                range: string
+                slot_uri: prov:used
+                annotations:
+                    sql_identifier: dprc_transformation_inputs
+                    owl.filler: prov:used
+            outputs:
+                description: Resulting passport record identifiers produced as outputs
+                multivalued: true
+                range: string
+                slot_uri: prov:generated
+                annotations:
+                    sql_identifier: dprc_transformation_outputs
+                    owl.filler: prov:generated
+            operation_type:
+                description: Type of data-level transformation
+                required: true
+                range: RecordTransformationTypeEnum
+                slot_uri: dcterms:type
+                annotations:
+                    sql_identifier: dprc_transformation_operation_type
+                    owl.filler: dcterms:type
+            operation_method:
+                description: Method used for the data-level transformation
+                range: RecordTransformationMethodEnum
+                slot_uri: dprc:operationMethod
+                annotations:
+                    sql_identifier: dprc_transformation_operation_method
+                    owl.filler: dprc:operation_method
+            operation_ref:
+                description: Reference to an external workflow, job, or process record
+                range: string
+                slot_uri: dcterms:source
+                annotations:
+                    sql_identifier: dprc_transformation_operation_ref
+                    owl.filler: dcterms:source
+
+    # Stage 2: Custodian History Classes
+
+    CustodianRecord:
+        description: >
+            Record of a specific custodian's period of responsibility for the DPP/DMP record,
+            including their identity, custody period, and responsibilities
+        class_uri: prov:Delegation
+        attributes:
+            custodian_identity:
+                description: Full identification details of the custodian
+                range: CustodianIdentity
+                slot_uri: prov:agent
+                annotations:
+                    sql_identifier: dprc_custodian_identity
+                    owl.filler: prov:agent
+            custody_period:
+                description: Time period during which this custodian held the record
+                range: CustodyPeriod
+                slot_uri: prov:hadActivity
+                annotations:
+                    sql_identifier: dprc_custody_period
+                    owl.filler: dprc:custody_period
+            custody_responsibilities:
+                description: Responsibilities and permissions during custody
+                range: CustodyResponsibilities
+                slot_uri: odrl:hasPolicy
+                annotations:
+                    sql_identifier: dprc_custody_responsibilities
+                    owl.filler: odrl:hasPolicy
+
+    CustodianIdentity:
+        description: Complete identification of a custodian entity
+        class_uri: prov:Agent
+        attributes:
+            custodian_id:
+                description: Unique identifier (DID, OIDC sub, LEI for organizations)
+                required: true
+                range: string
+                slot_uri: dcterms:identifier
+                annotations:
+                    sql_identifier: dprc_custodian_id
+                    owl.filler: dcterms:identifier
+                    references: "ESPR Art 11; CIRPASS"
+            custodian_name:
+                description: Name of the custodian
+                required: true
+                range: string
+                slot_uri: foaf:name
+                annotations:
+                    sql_identifier: dprc_custodian_name
+                    owl.filler: foaf:name
+                    references: "ESPR Art 21 6.; CIRPASS"
+            custodian_type:
+                description: Type of custodian entity
+                range: CustodianTypeEnum
+                slot_uri: dcterms:type
+                annotations:
+                    sql_identifier: dprc_custodian_type
+                    owl.filler: dcterms:type
+            custodian_contact:
+                description: Contact information (vCard or Schema.org ContactPoint)
+                range: string
+                slot_uri: schema:contactPoint
+                annotations:
+                    sql_identifier: dprc_custodian_contact
+                    owl.filler: schema:contactPoint
+            custodian_jurisdiction:
+                description: Legal jurisdiction (ISO 3166 country code)
+                range: string
+                slot_uri: dpv:hasJurisdiction
+                annotations:
+                    sql_identifier: dprc_custodian_jurisdiction
+                    owl.filler: dpv:hasJurisdiction
+                    references: "ESPR Annex III g); CIRPASS"
+            custodian_certifications:
+                description: Security certifications held (ISO 27001, SOC2, etc.)
+                multivalued: true
+                range: string
+                slot_uri: cert:hasCertificate
+                annotations:
+                    sql_identifier: dprc_custodian_certifications
+                    owl.filler: cert:hasCertificate
+                    references: "ESPR; Battery Pass"
+            custodian_lei:
+                description: Legal Entity Identifier if applicable (ISO 17442)
+                range: string
+                slot_uri: dprc:legalEntityIdentifier
+                annotations:
+                    sql_identifier: dprc_custodian_lei
+                    owl.filler: dprc:legal_entity_identifier
+            custodian_did:
+                description: Decentralized Identifier if applicable
+                range: string
+                slot_uri: did:id
+                annotations:
+                    sql_identifier: dprc_custodian_did
+                    owl.filler: did:id
+
+    CustodyPeriod:
+        description: Time period during which custody was held
+        class_uri: time:Interval
+        attributes:
+            custody_start_time:
+                description: When custody began (ISO 8601)
+                required: true
+                range: datetime
+                slot_uri: time:hasBeginning
+                annotations:
+                    sql_identifier: dprc_custody_start_time
+                    owl.filler: time:hasBeginning
+                    references: "CIRPASS"
+            custody_end_time:
+                description: When custody ended (ISO 8601), null if current
+                range: datetime
+                slot_uri: time:hasEnd
+                annotations:
+                    sql_identifier: dprc_custody_end_time
+                    owl.filler: time:hasEnd
+            custody_duration_days:
+                description: Calculated duration of custody in days
+                range: integer
+                slot_uri: time:hasDurationDescription
+                annotations:
+                    sql_identifier: dprc_custody_duration_days
+                    owl.filler: time:hasDurationDescription
+            custody_active:
+                description: Whether this custodian is currently active
+                range: boolean
+                slot_uri: dprc:isActive
+                annotations:
+                    sql_identifier: dprc_custody_active
+                    owl.filler: dprc:custody_active
+
+    CustodyResponsibilities:
+        description: Responsibilities and permissions held during custody
+        class_uri: odrl:Policy
+        attributes:
+            data_stewardship:
+                description: What data the custodian was responsible for
+                multivalued: true
+                range: string
+                slot_uri: odrl:target
+                annotations:
+                    sql_identifier: dprc_data_stewardship
+                    owl.filler: odrl:target
+            access_granted:
+                description: Permissions and access rights during custody
+                multivalued: true
+                range: string
+                slot_uri: odrl:permission
+                annotations:
+                    sql_identifier: dprc_access_granted
+                    owl.filler: odrl:permission
+            compliance_obligations:
+                description: Regulatory and compliance requirements
+                multivalued: true
+                range: string
+                slot_uri: dpv:hasComplianceRequirement
+                annotations:
+                    sql_identifier: dprc_compliance_obligations
+                    owl.filler: dpv:hasComplianceRequirement
+                    references: "ESPR; REACH; ROHS; King et al."
+            delegation_allowed:
+                description: Whether custodian could delegate to others
+                range: boolean
+                slot_uri: odrl:delegation
+                annotations:
+                    sql_identifier: dprc_delegation_allowed
+                    owl.filler: odrl:delegation
+            modification_rights:
+                description: Rights to modify the record
+                range: string
+                slot_uri: odrl:modify
+                annotations:
+                    sql_identifier: dprc_modification_rights
+                    owl.filler: odrl:modify
+
+    # Stage 3: Transfer Records Classes
+
+    TransferRecord:
+        description: >
+            Complete record of a custody transfer between parties,
+            including authorization, details, and verification
+        class_uri: prov:Influence
+        attributes:
+            transfer_authorization:
+                description: Authorization details for the transfer
+                range: TransferAuthorization
+                slot_uri: prov:hadPlan
+                annotations:
+                    sql_identifier: dprc_transfer_authorization
+                    owl.filler: prov:hadPlan
+            transfer_details:
+                description: Specific details of the transfer execution
+                range: TransferDetails
+                slot_uri: prov:qualifiedInfluence
+                annotations:
+                    sql_identifier: dprc_transfer_details
+                    owl.filler: prov:qualifiedInfluence
+            transfer_verification:
+                description: Verification that transfer was completed successfully
+                range: TransferVerification
+                slot_uri: prov:qualifiedAssociation
+                annotations:
+                    sql_identifier: dprc_transfer_verification
+                    owl.filler: prov:qualifiedAssociation
+
+    TransferAuthorization:
+        description: Authorization and legal basis for custody transfer
+        class_uri: odrl:Agreement
+        attributes:
+            authorization_id:
+                description: Unique identifier for the authorization
+                required: true
+                range: string
+                slot_uri: dcterms:identifier
+                annotations:
+                    sql_identifier: dprc_authorization_id
+                    owl.filler: dcterms:identifier
+                    references: "ESPR; CIRPASS"
+            authorizing_party:
+                description: Party who authorized the transfer (DID or OIDC identifier)
+                required: true
+                range: string
+                slot_uri: odrl:assigner
+                annotations:
+                    sql_identifier: dprc_authorizing_party
+                    owl.filler: odrl:assigner
+                    references: "ESPR Art 11; CIRPASS"
+            authorization_token:
+                description: OAuth2 token or signed JWT for authorization
+                range: string
+                slot_uri: oauth:accessToken
+                annotations:
+                    sql_identifier: dprc_authorization_token
+                    owl.filler: oauth:accessToken
+            authorization_document:
+                description: URI reference to authorization document
+                range: uri
+                slot_uri: odrl:source
+                annotations:
+                    sql_identifier: dprc_authorization_document
+                    owl.filler: odrl:source
+            legal_basis:
+                description: Legal basis for transfer (GDPR Article 6/9, contract, consent)
+                range: string
+                slot_uri: dpv:hasLegalBasis
+                annotations:
+                    sql_identifier: dprc_legal_basis
+                    owl.filler: dpv:hasLegalBasis
+                    references: "ESPR; CIRPASS"
+            transfer_conditions:
+                description: Conditions or restrictions on the transfer
+                multivalued: true
+                range: string
+                slot_uri: odrl:constraint
+                annotations:
+                    sql_identifier: dprc_transfer_conditions
+                    owl.filler: odrl:constraint
+            authorization_expiry:
+                description: When the authorization expires
+                range: datetime
+                slot_uri: odrl:dateTime
+                annotations:
+                    sql_identifier: dprc_authorization_expiry
+                    owl.filler: odrl:dateTime
+
+    TransferDetails:
+        description: Execution details of the custody transfer
+        class_uri: prov:Activity
+        attributes:
+            transfer_id:
+                description: Unique identifier for the transfer
+                required: true
+                range: string
+                slot_uri: dcterms:identifier
+                annotations:
+                    sql_identifier: dprc_transfer_id
+                    owl.filler: dcterms:identifier
+                    references: "ESPR Art 9 1.; CIRPASS"
+            transfer_timestamp:
+                description: When the transfer occurred (ISO 8601)
+                required: true
+                range: datetime
+                slot_uri: prov:atTime
+                annotations:
+                    sql_identifier: dprc_transfer_timestamp
+                    owl.filler: prov:atTime
+                    references: "CIRPASS"
+                    comment: "Product or material traceability information"
+            from_custodian:
+                description: Custodian transferring custody
+                required: true
+                range: string
+                slot_uri: prov:wasStartedBy
+                annotations:
+                    sql_identifier: dprc_from_custodian
+                    owl.filler: prov:wasStartedBy
+                    references: "ESPR Art 11; CIRPASS"
+            to_custodian:
+                description: Custodian receiving custody
+                required: true
+                range: string
+                slot_uri: prov:wasEndedBy
+                annotations:
+                    sql_identifier: dprc_to_custodian
+                    owl.filler: prov:wasEndedBy
+                    references: "ESPR Art 11; CIRPASS"
+            transfer_method:
+                description: Method used for transfer
+                range: TransferMethodEnum
+                slot_uri: prov:used
+                annotations:
+                    sql_identifier: dprc_transfer_method
+                    owl.filler: prov:used
+            transfer_reason:
+                description: Reason for the transfer
+                range: string
+                slot_uri: prov:hadActivity
+                annotations:
+                    sql_identifier: dprc_transfer_reason
+                    owl.filler: dprc:transfer_reason
+            data_scope:
+                description: What data was transferred
+                multivalued: true
+                range: string
+                slot_uri: prov:entity
+                annotations:
+                    sql_identifier: dprc_data_scope
+                    owl.filler: prov:entity
+
+    TransferVerification:
+        description: Verification and confirmation of successful transfer
+        class_uri: prov:Validation
+        attributes:
+            verification_method:
+                description: Method used to verify the transfer
+                required: true
+                range: VerificationMethodEnum
+                slot_uri: prov:hadPlan
+                annotations:
+                    sql_identifier: dprc_verification_method
+                    owl.filler: prov:hadPlan
+            verification_timestamp:
+                description: When verification was completed
+                required: true
+                range: datetime
+                slot_uri: prov:atTime
+                annotations:
+                    sql_identifier: dprc_verification_timestamp
+                    owl.filler: prov:atTime
+            verification_result:
+                description: Result of the verification
+                required: true
+                range: VerificationResultEnum
+                slot_uri: prov:generatedAtTime
+                annotations:
+                    sql_identifier: dprc_verification_result
+                    owl.filler: dprc:verification_result
+            verification_evidence:
+                description: Evidence supporting the verification
+                range: string
+                slot_uri: prov:value
+                annotations:
+                    sql_identifier: dprc_verification_evidence
+                    owl.filler: prov:value
+            verifier_id:
+                description: Identity of the verifying party
+                range: string
+                slot_uri: prov:wasAssociatedWith
+                annotations:
+                    sql_identifier: dprc_verifier_id
+                    owl.filler: prov:wasAssociatedWith
+            verification_hash:
+                description: Hash of transferred data for integrity
+                range: string
+                slot_uri: sec:digestValue
+                annotations:
+                    sql_identifier: dprc_verification_hash
+                    owl.filler: sec:digestValue
+
+    # Stage 4: Integrity Evidence Classes
+
+    IntegrityEvidence:
+        description: >
+            Comprehensive cryptographic and external evidence maintaining
+            the integrity and authenticity of the DPP/DMP record
+        class_uri: sec:Proof
+        attributes:
+            data_fingerprint:
+                description: Cryptographic fingerprint of the data
+                range: DataFingerprint
+                slot_uri: sec:hasDigest
+                annotations:
+                    sql_identifier: dprc_data_fingerprint
+                    owl.filler: sec:hasDigest
+                    references: "Battery Pass; CIRPASS"
+            blockchain_anchoring:
+                description: Optional blockchain anchoring for immutability
+                range: BlockchainAnchoring
+                slot_uri: dprc:hasBlockchainAnchor
+                annotations:
+                    sql_identifier: dprc_blockchain_anchoring
+                    owl.filler: dprc:blockchain_anchoring
+            external_attestation:
+                description: Third-party attestation services
+                multivalued: true
+                range: ExternalAttestation
+                slot_uri: vc:hasCredential
+                annotations:
+                    sql_identifier: dprc_external_attestation
+                    owl.filler: vc:hasCredential
+
+    DataFingerprint:
+        description: Cryptographic fingerprint of DPP/DMP data at a specific point
+        class_uri: sec:Digest
+        attributes:
+            fingerprint_value:
+                description: The hash value of the data
+                required: true
+                range: string
+                slot_uri: sec:digestValue
+                annotations:
+                    sql_identifier: dprc_fingerprint_value
+                    owl.filler: sec:digestValue
+                    references: "Battery Pass; CIRPASS"
+            fingerprint_algorithm:
+                description: Algorithm used for fingerprinting
+                required: true
+                range: HashAlgorithmEnum
+                slot_uri: sec:digestAlgorithm
+                annotations:
+                    sql_identifier: dprc_fingerprint_algorithm
+                    owl.filler: sec:digestAlgorithm
+            fingerprint_scope:
+                description: What data is included in the fingerprint
+                multivalued: true
+                range: string
+                slot_uri: dprc:fingerprintScope
+                annotations:
+                    sql_identifier: dprc_fingerprint_scope
+                    owl.filler: dprc:fingerprint_scope
+            fingerprint_timestamp:
+                description: When the fingerprint was created (ISO 8601)
+                required: true
+                range: datetime
+                slot_uri: prov:atTime
+                annotations:
+                    sql_identifier: dprc_fingerprint_timestamp
+                    owl.filler: prov:atTime
+                    references: "CIRPASS"
+            canonical_form:
+                description: Canonical form used before hashing
+                range: string
+                slot_uri: dprc:canonicalForm
+                annotations:
+                    sql_identifier: dprc_canonical_form
+                    owl.filler: dprc:canonical_form
+
+    BlockchainAnchoring:
+        description: Blockchain-based immutability anchoring
+        class_uri: dprc:BlockchainAnchor
+        attributes:
+            blockchain_network:
+                description: Which blockchain network is used
+                required: true
+                range: BlockchainNetworkEnum
+                slot_uri: dprc:blockchainNetwork
+                annotations:
+                    sql_identifier: dprc_blockchain_network
+                    owl.filler: dprc:blockchain_network
+                    references: "Battery Pass"
+            transaction_hash:
+                description: Transaction hash on the blockchain
+                required: true
+                range: string
+                slot_uri: dprc:transactionHash
+                annotations:
+                    sql_identifier: dprc_transaction_hash
+                    owl.filler: dprc:transaction_hash
+            block_number:
+                description: Block number containing the transaction
+                range: integer
+                slot_uri: dprc:blockNumber
+                annotations:
+                    sql_identifier: dprc_block_number
+                    owl.filler: dprc:block_number
+            smart_contract_address:
+                description: Smart contract address if applicable
+                range: string
+                slot_uri: dprc:contractAddress
+                annotations:
+                    sql_identifier: dprc_smart_contract_address
+                    owl.filler: dprc:smart_contract_address
+            did_document:
+                description: W3C DID document for blockchain identity
+                range: string
+                slot_uri: did:didDocument
+                annotations:
+                    sql_identifier: dprc_did_document
+                    owl.filler: did:didDocument
+            anchor_timestamp:
+                description: When anchored to blockchain (ISO 8601)
+                required: true
+                range: datetime
+                slot_uri: prov:atTime
+                annotations:
+                    sql_identifier: dprc_anchor_timestamp
+                    owl.filler: prov:atTime
+            confirmation_count:
+                description: Number of blockchain confirmations
+                range: integer
+                slot_uri: dprc:confirmations
+                annotations:
+                    sql_identifier: dprc_confirmation_count
+                    owl.filler: dprc:confirmation_count
+
+    ExternalAttestation:
+        description: Third-party attestation or notarization service
+        class_uri: vc:VerifiableCredential
+        attributes:
+            attestation_provider:
+                description: Provider of attestation (TSA, notary service, CA)
+                required: true
+                range: string
+                slot_uri: vc:issuer
+                annotations:
+                    sql_identifier: dprc_attestation_provider
+                    owl.filler: vc:issuer
+            attestation_id:
+                description: Unique identifier for the attestation
+                required: true
+                range: string
+                slot_uri: dcterms:identifier
+                annotations:
+                    sql_identifier: dprc_attestation_id
+                    owl.filler: dcterms:identifier
+            attestation_timestamp:
+                description: RFC 3161 timestamp or attestation time
+                required: true
+                range: datetime
+                slot_uri: vc:issuanceDate
+                annotations:
+                    sql_identifier: dprc_attestation_timestamp
+                    owl.filler: vc:issuanceDate
+            attestation_proof:
+                description: X.509 cert, VC, or signed statement
+                range: string
+                slot_uri: vc:proof
+                annotations:
+                    sql_identifier: dprc_attestation_proof
+                    owl.filler: vc:proof
+            attestation_standard:
+                description: Standard used (eIDAS, ETSI, RFC 3161)
+                range: AttestationStandardEnum
+                slot_uri: dcterms:conformsTo
+                annotations:
+                    sql_identifier: dprc_attestation_standard
+                    owl.filler: dcterms:conformsTo
+            attestation_validity:
+                description: Validity period of the attestation
+                range: string
+                slot_uri: vc:expirationDate
+                annotations:
+                    sql_identifier: dprc_attestation_validity
+                    owl.filler: vc:expirationDate
+            attestation_revocable:
+                description: Whether attestation can be revoked
+                range: boolean
+                slot_uri: vc:credentialStatus
+                annotations:
+                    sql_identifier: dprc_attestation_revocable
+                    owl.filler: vc:credentialStatus
+
+    # Stage 5: Governance Actions Classes
+
+    GovernanceActions:
+        description: >
+            Governance activities including validations, audits, and disposal
+            actions taken on the DPP/DMP record
+        class_uri: prov:Generation
+        attributes:
+            validation_records:
+                description: Records of all validation activities
+                multivalued: true
+                range: ValidationRecord
+                slot_uri: prov:qualifiedValidation
+                annotations:
+                    sql_identifier: dprc_validation_records
+                    owl.filler: dprc:validation_records
+            audit_trail:
+                description: Complete audit trail of governance reviews
+                multivalued: true
+                range: AuditRecord
+                slot_uri: prov:qualifiedRevision
+                annotations:
+                    sql_identifier: dprc_audit_trail
+                    owl.filler: prov:qualifiedRevision
+            disposal_record:
+                description: Record of data disposal when applicable
+                range: DisposalRecord
+                slot_uri: prov:qualifiedInvalidation
+                annotations:
+                    sql_identifier: dprc_disposal_record
+                    owl.filler: prov:qualifiedInvalidation
+
+    ValidationRecord:
+        description: Record of a validation performed on the DPP/DMP data
+        class_uri: prov:Validation
+        attributes:
+            validation_id:
+                description: Unique identifier for the validation
+                required: true
+                range: string
+                slot_uri: dcterms:identifier
+                annotations:
+                    sql_identifier: dprc_validation_id
+                    owl.filler: dcterms:identifier
+            validation_type:
+                description: Type of validation performed
+                required: true
+                range: ValidationTypeEnum
+                slot_uri: dcterms:type
+                annotations:
+                    sql_identifier: dprc_validation_type
+                    owl.filler: dcterms:type
+            validation_timestamp:
+                description: When validation was performed (ISO 8601)
+                required: true
+                range: datetime
+                slot_uri: prov:atTime
+                annotations:
+                    sql_identifier: dprc_validation_timestamp
+                    owl.filler: prov:atTime
+            validator:
+                description: Person or system performing validation
+                required: true
+                range: string
+                slot_uri: prov:wasAssociatedWith
+                annotations:
+                    sql_identifier: dprc_validator
+                    owl.filler: prov:wasAssociatedWith
+            validation_outcome:
+                description: Result of the validation
+                required: true
+                range: ValidationOutcomeEnum
+                slot_uri: prov:generatedAtTime
+                annotations:
+                    sql_identifier: dprc_validation_outcome
+                    owl.filler: dprc:validation_outcome
+            validation_errors:
+                description: List of errors if validation failed
+                multivalued: true
+                range: string
+                slot_uri: dprc:validationErrors
+                annotations:
+                    sql_identifier: dprc_validation_errors
+                    owl.filler: dprc:validation_errors
+            validation_schema:
+                description: Schema or rules used for validation
+                range: string
+                slot_uri: dcterms:conformsTo
+                annotations:
+                    sql_identifier: dprc_validation_schema
+                    owl.filler: dcterms:conformsTo
+
+    AuditRecord:
+        description: Record of an audit performed on the DPP/DMP custody chain
+        class_uri: prov:Revision
+        attributes:
+            audit_id:
+                description: Unique identifier for the audit
+                required: true
+                range: string
+                slot_uri: dcterms:identifier
+                annotations:
+                    sql_identifier: dprc_audit_id
+                    owl.filler: dcterms:identifier
+            audit_type:
+                description: Type of audit performed
+                required: true
+                range: AuditTypeEnum
+                slot_uri: dcterms:type
+                annotations:
+                    sql_identifier: dprc_audit_type
+                    owl.filler: dcterms:type
+            audit_timestamp:
+                description: When audit was performed (ISO 8601)
+                required: true
+                range: datetime
+                slot_uri: prov:atTime
+                annotations:
+                    sql_identifier: dprc_audit_timestamp
+                    owl.filler: prov:atTime
+            auditor:
+                description: Auditor performing the review
+                required: true
+                range: string
+                slot_uri: prov:wasAssociatedWith
+                annotations:
+                    sql_identifier: dprc_auditor
+                    owl.filler: prov:wasAssociatedWith
+            audit_findings:
+                description: Findings from the audit
+                multivalued: true
+                range: string
+                slot_uri: prov:value
+                annotations:
+                    sql_identifier: dprc_audit_findings
+                    owl.filler: prov:value
+            audit_recommendations:
+                description: Recommendations from the audit
+                multivalued: true
+                range: string
+                slot_uri: dprc:auditRecommendations
+                annotations:
+                    sql_identifier: dprc_audit_recommendations
+                    owl.filler: dprc:audit_recommendations
+            compliance_status:
+                description: Compliance status determined by audit
+                range: string
+                slot_uri: dpv:hasComplianceStatus
+                annotations:
+                    sql_identifier: dprc_compliance_status
+                    owl.filler: dpv:hasComplianceStatus
+
+    DisposalRecord:
+        description: Record of DPP/DMP data disposal when applicable
+        class_uri: prov:Invalidation
+        attributes:
+            disposal_authorization:
+                description: Authorization for disposal
+                required: true
+                range: string
+                slot_uri: prov:hadPlan
+                annotations:
+                    sql_identifier: dprc_disposal_authorization
+                    owl.filler: prov:hadPlan
+            disposal_timestamp:
+                description: When disposal occurred (ISO 8601)
+                required: true
+                range: datetime
+                slot_uri: prov:atTime
+                annotations:
+                    sql_identifier: dprc_disposal_timestamp
+                    owl.filler: prov:atTime
+            disposal_method:
+                description: Method used for disposal
+                required: true
+                range: DisposalMethodEnum
+                slot_uri: prov:used
+                annotations:
+                    sql_identifier: dprc_disposal_method
+                    owl.filler: prov:used
+            disposal_verification:
+                description: Verification that disposal was complete
+                required: true
+                range: string
+                slot_uri: prov:value
+                annotations:
+                    sql_identifier: dprc_disposal_verification
+                    owl.filler: prov:value
+            retention_exception:
+                description: Any data retained despite disposal
+                multivalued: true
+                range: string
+                slot_uri: dprc:retentionException
+                annotations:
+                    sql_identifier: dprc_retention_exception
+                    owl.filler: dprc:retention_exception
+            disposal_reason:
+                description: Reason for disposal
+                range: string
+                slot_uri: dpv:hasPurpose
+                annotations:
+                    sql_identifier: dprc_disposal_reason
+                    owl.filler: dpv:hasPurpose
+            legal_hold_status:
+                description: Whether legal hold was checked
+                range: boolean
+                slot_uri: dpv:hasLegalBasis
+                annotations:
+                    sql_identifier: dprc_legal_hold_status
+                    owl.filler: dprc:legal_hold_status
+
+enums:
+    EventTypeEnum:
+        description: Types of custody events that can occur
+        permissible_values:
+            CREATION:
+                description: Initial creation of the DPP/DMP record
+                meaning: prov:Create
+            UPDATE:
+                description: Modification of DPP/DMP record content
+                meaning: prov:Modify
+            TRANSFORMATION:
+                description: Data-level transformation linking passport records
+                meaning: prov:Derivation
+            TRANSFER:
+                description: Transfer of custody to another party
+                meaning: prov:Delegation
+            VALIDATION:
+                description: Validation or verification of the record
+                meaning: prov:Validation
+            ACCESS:
+                description: Access to view the record
+                meaning: dcat:access
+            ARCHIVAL:
+                description: Archival of the record
+                meaning: prov:Archive
+            DISPOSAL:
+                description: Disposal or deletion of the record
+                meaning: prov:Invalidation
+            AUDIT:
+                description: Audit event on the record
+                meaning: prov:Audit
+            RESTORATION:
+                description: Restoration from archive or backup
+                meaning: prov:Restoration
+            MIGRATION:
+                description: Migration to new system or format
+                meaning: prov:Migration
+
+    RecordTransformationTypeEnum:
+        description: Types of data-level transformations between passport records
+        permissible_values:
+            DERIVED_FROM:
+                description: Record derived from one or more source records
+            AGGREGATED_FROM:
+                description: Record aggregated from multiple source records
+            MERGED_FROM:
+                description: Record merged from multiple source records
+            SPLIT_FROM:
+                description: Record split into multiple outputs
+            RECONCILED_WITH:
+                description: Record reconciled against other records
+            ENRICHED_WITH:
+                description: Record enriched using external or related records
+            VERSIONED_FROM:
+                description: Record versioned from a prior record
+            DISTILLED_FROM:
+                description: Record distilled or summarized from source records
+
+    RecordTransformationMethodEnum:
+        description: Methods used to perform data-level transformations
+        permissible_values:
+            RULE_BASED:
+                description: Rule-based transformation
+            MANUAL_CURATION:
+                description: Manual curation or editorial transformation
+            AUTOMATED_PIPELINE:
+                description: Automated pipeline transformation
+            EXTERNAL_SOURCE:
+                description: Transformation via external source or import
+
+    ActorRoleEnum:
+        description: Roles that actors can have in the custody chain
+        permissible_values:
+            CREATOR:
+                description: Original creator of the record
+                meaning: prov:Creator
+            EDITOR:
+                description: Editor with modification rights
+                meaning: prov:Editor
+            VALIDATOR:
+                description: Validator or verifier
+                meaning: prov:Validator
+            CUSTODIAN:
+                description: Current custodian of the record
+                meaning: prov:Custodian
+            AUDITOR:
+                description: Auditor reviewing the record
+                meaning: prov:Auditor
+            VIEWER:
+                description: Read-only viewer
+                meaning: prov:Observer
+            ADMINISTRATOR:
+                description: System administrator
+                meaning: prov:Administrator
+            REGULATOR:
+                description: Regulatory authority
+                meaning: dpv:Authority
+
+    AuthenticationMethodEnum:
+        description: Methods used to authenticate actors
+        permissible_values:
+            OIDC:
+                description: OpenID Connect authentication
+                meaning: oidc:Authentication
+            OAUTH2:
+                description: OAuth 2.0 authentication
+                meaning: oauth:OAuth2
+            SAML:
+                description: SAML 2.0 authentication
+                meaning: sec:SAML
+            X509:
+                description: X.509 certificate authentication
+                meaning: cert:X509Certificate
+            DID:
+                description: Decentralized Identifier authentication
+                meaning: did:Authentication
+            API_KEY:
+                description: API key authentication
+                meaning: sec:APIKey
+            JWT:
+                description: JSON Web Token authentication
+                meaning: sec:JsonWebToken
+            WEBAUTHN:
+                description: WebAuthn/FIDO2 authentication
+                meaning: sec:WebAuthn
+            KERBEROS:
+                description: Kerberos authentication
+                meaning: sec:Kerberos
+
+    HashAlgorithmEnum:
+        description: Cryptographic hash algorithms supported
+        permissible_values:
+            SHA256:
+                description: SHA-256 hash algorithm
+                meaning: sec:SHA256
+            SHA384:
+                description: SHA-384 hash algorithm
+                meaning: sec:SHA384
+            SHA512:
+                description: SHA-512 hash algorithm
+                meaning: sec:SHA512
+            SHA3_256:
+                description: SHA3-256 hash algorithm
+                meaning: sec:SHA3_256
+            SHA3_512:
+                description: SHA3-512 hash algorithm
+                meaning: sec:SHA3_512
+            BLAKE2B:
+                description: BLAKE2b hash algorithm
+                meaning: sec:BLAKE2b
+            BLAKE3:
+                description: BLAKE3 hash algorithm
+                meaning: sec:BLAKE3
+
+    SignatureAlgorithmEnum:
+        description: Digital signature algorithms supported
+        permissible_values:
+            RSA_SHA256:
+                description: RSA with SHA-256
+                meaning: sec:RsaSha256
+            RSA_SHA512:
+                description: RSA with SHA-512
+                meaning: sec:RsaSha512
+            ECDSA_SHA256:
+                description: ECDSA with SHA-256
+                meaning: sec:EcdsaSha256
+            ECDSA_SHA512:
+                description: ECDSA with SHA-512
+                meaning: sec:EcdsaSha512
+            ED25519:
+                description: EdDSA with Ed25519
+                meaning: sec:Ed25519
+            RSA_PSS:
+                description: RSA-PSS signature
+                meaning: sec:RsaPss
+
+    CustodianTypeEnum:
+        description: Types of custodian entities
+        permissible_values:
+            INDIVIDUAL:
+                description: Individual person
+                meaning: foaf:Person
+            ORGANIZATION:
+                description: Organization or company
+                meaning: foaf:Organization
+            SYSTEM:
+                description: Automated system or service
+                meaning: prov:SoftwareAgent
+            GOVERNMENT:
+                description: Government entity
+                meaning: dpv:Authority
+            PARTNER:
+                description: Business partner
+                meaning: dprc:Partner
+            VENDOR:
+                description: Third-party vendor
+                meaning: dprc:Vendor
+            REGULATOR:
+                description: Regulatory body
+                meaning: dpv:Regulator
+
+    TransferMethodEnum:
+        description: Methods used for custody transfer
+        permissible_values:
+            API:
+                description: API-based transfer
+                meaning: dcat:DataService
+            MANUAL:
+                description: Manual transfer process
+                meaning: prov:ManualActivity
+            MIGRATION:
+                description: System migration transfer
+                meaning: prov:Migration
+            BLOCKCHAIN:
+                description: Blockchain-based transfer
+                meaning: dprc:BlockchainTransfer
+            SMART_CONTRACT:
+                description: Smart contract execution
+                meaning: dprc:SmartContractTransfer
+            ESCROW:
+                description: Via escrow service
+                meaning: dprc:EscrowTransfer
+            DIRECT:
+                description: Direct peer-to-peer transfer
+                meaning: prov:DirectTransfer
+
+    VerificationMethodEnum:
+        description: Methods for verifying transfers
+        permissible_values:
+            CRYPTOGRAPHIC:
+                description: Cryptographic verification
+                meaning: sec:Verification
+            MANUAL_REVIEW:
+                description: Manual verification
+                meaning: prov:ManualValidation
+            AUTOMATED:
+                description: Automated system verification
+                meaning: prov:AutomatedValidation
+            BLOCKCHAIN:
+                description: Blockchain confirmation
+                meaning: dprc:BlockchainVerification
+            THIRD_PARTY:
+                description: Third-party verification service
+                meaning: prov:ExternalValidation
+            MULTI_PARTY:
+                description: Multi-party consensus
+                meaning: dprc:ConsensusVerification
+
+    VerificationResultEnum:
+        description: Possible verification results
+        permissible_values:
+            SUCCESS:
+                description: Transfer verified successfully
+                meaning: prov:Success
+            FAILURE:
+                description: Transfer verification failed
+                meaning: prov:Failure
+            PARTIAL:
+                description: Partial verification success
+                meaning: prov:PartialSuccess
+            PENDING:
+                description: Verification still pending
+                meaning: prov:Pending
+            TIMEOUT:
+                description: Verification timed out
+                meaning: prov:Timeout
+
+    BlockchainNetworkEnum:
+        description: Supported blockchain networks
+        permissible_values:
+            ETHEREUM:
+                description: Ethereum mainnet
+                meaning: dprc:Ethereum
+            POLYGON:
+                description: Polygon network
+                meaning: dprc:Polygon
+            HYPERLEDGER:
+                description: Hyperledger Fabric
+                meaning: dprc:Hyperledger
+            BITCOIN:
+                description: Bitcoin network
+                meaning: dprc:Bitcoin
+            AVALANCHE:
+                description: Avalanche network
+                meaning: dprc:Avalanche
+            HEDERA:
+                description: Hedera Hashgraph
+                meaning: dprc:Hedera
+            IPFS:
+                description: IPFS network
+                meaning: dprc:IPFS
+            ARWEAVE:
+                description: Arweave permanent storage
+                meaning: dprc:Arweave
+
+    AttestationStandardEnum:
+        description: Standards for external attestation
+        permissible_values:
+            RFC3161:
+                description: RFC 3161 Time-Stamp Protocol
+                meaning: dprc:RFC3161
+            EIDAS:
+                description: EU eIDAS regulation
+                meaning: dprc:eIDAS
+            ETSI:
+                description: ETSI standards
+                meaning: dprc:ETSI
+            X509:
+                description: X.509 certificate standard
+                meaning: cert:X509
+            ISO27001:
+                description: ISO 27001 certification
+                meaning: dprc:ISO27001
+            ANSI_X962:
+                description: ANSI X9.62 standard
+                meaning: dprc:ANSIX962
+            W3C_VC:
+                description: W3C Verifiable Credentials
+                meaning: vc:VerifiableCredential
+
+    ValidationTypeEnum:
+        description: Types of validation that can be performed
+        permissible_values:
+            SCHEMA:
+                description: Schema validation
+                meaning: prov:SchemaValidation
+            BUSINESS_RULES:
+                description: Business rules validation
+                meaning: prov:BusinessValidation
+            REGULATORY:
+                description: Regulatory compliance validation
+                meaning: dpv:ComplianceValidation
+            INTEGRITY:
+                description: Data integrity validation
+                meaning: sec:IntegrityValidation
+            COMPLETENESS:
+                description: Data completeness validation
+                meaning: prov:CompletenessValidation
+            CONSISTENCY:
+                description: Data consistency validation
+                meaning: prov:ConsistencyValidation
+
+    ValidationOutcomeEnum:
+        description: Possible validation outcomes
+        permissible_values:
+            PASS:
+                description: Validation passed
+                meaning: prov:Pass
+            FAIL:
+                description: Validation failed
+                meaning: prov:Fail
+            WARNING:
+                description: Validation passed with warnings
+                meaning: prov:Warning
+            SKIPPED:
+                description: Validation was skipped
+                meaning: prov:Skipped
+
+    AuditTypeEnum:
+        description: Types of audits performed
+        permissible_values:
+            INTERNAL:
+                description: Internal audit
+                meaning: prov:InternalAudit
+            EXTERNAL:
+                description: External third-party audit
+                meaning: prov:ExternalAudit
+            REGULATORY:
+                description: Regulatory compliance audit
+                meaning: dpv:RegulatoryAudit
+            SECURITY:
+                description: Security audit
+                meaning: sec:SecurityAudit
+            PERFORMANCE:
+                description: Performance audit
+                meaning: prov:PerformanceAudit
+
+    DisposalMethodEnum:
+        description: Methods for data disposal
+        permissible_values:
+            DELETION:
+                description: Simple deletion from storage
+                meaning: prov:Deletion
+            SECURE_DELETION:
+                description: Cryptographic secure deletion
+                meaning: sec:SecureDeletion
+            ANONYMIZATION:
+                description: Remove identifying information
+                meaning: dpv:Anonymisation
+            PSEUDONYMIZATION:
+                description: Replace identifying information
+                meaning: dpv:Pseudonymisation
+            AGGREGATION:
+                description: Aggregate into summary statistics
+                meaning: dpv:DataAggregation
+            ARCHIVAL:
+                description: Move to long-term archive
+                meaning: prov:Archive

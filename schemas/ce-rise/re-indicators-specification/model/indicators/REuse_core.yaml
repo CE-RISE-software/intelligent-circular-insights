@@ -1,0 +1,739 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/indicators/REuse_core
+name: re_indicators_reuse_core
+title: REuse Core Parameters
+description: Core parameter definitions for REuse indicators - reusable across Laptop and Printer
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+
+classes:
+    # ============================================
+    # P1: PRODUCT DIAGNOSIS - EVALUATION
+    # ============================================
+
+    ProductDiagnosis_Parameter:
+        is_a: ParameterSpecification
+        description: Product diagnosis and evaluation parameter - core definition
+        attributes:
+            id:
+                ifabsent: string(P1_product_diagnosis)
+            name:
+                ifabsent: string(Product's Diagnosis - Evaluation)
+            questions:
+                range: ProductDiagnosisQuestion
+                multivalued: true
+                inlined: true
+
+    ProductDiagnosisQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q1_1_ProductIdentification
+            - Q1_2_CoreFunctionality
+            - Q1_3_WearTear
+
+    # Q1.1: Product Identification
+    Q1_1_ProductIdentification:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.1)
+            text:
+                ifabsent: string(How much complete is the product identification related information (e.g., model, serial number, specifications)?)
+            weight:
+                ifabsent: float(0.069444444)
+            answer_options:
+                range: ProductIdentificationAnswerOption
+                multivalued: true
+                inlined: true
+
+    ProductIdentificationAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - ProductID_AllKeyInfo
+            - ProductID_Partial
+            - ProductID_Difficult
+            - ProductID_DataNotAvailable
+
+    ProductID_AllKeyInfo:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(product_id_all_key_info)
+            text:
+                ifabsent: string(All key identification info is clearly visible on the product or in the software.)
+            score:
+                ifabsent: float(3.0)
+
+    ProductID_Partial:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(product_id_partial)
+            text:
+                ifabsent: string(Partially, some information is visible, but not all (e.g., serial number missing).)
+            score:
+                ifabsent: float(1.0)
+
+    ProductID_Difficult:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(product_id_difficult)
+            text:
+                ifabsent: string(It is difficult or impossible to identify the product details.)
+            score:
+                ifabsent: float(0.0)
+
+    ProductID_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(product_id_data_not_available)
+            text:
+                ifabsent: string(Data not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Q1.2: Core Functionality Evaluation
+    Q1_2_CoreFunctionality:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.2)
+            text:
+                ifabsent: string(How easy is it to evaluate the product's core functionality (e.g., what works, what doesn't)?)
+            weight:
+                ifabsent: float(0.027777778)
+            answer_options:
+                range: CoreFunctionalityAnswerOption
+                multivalued: true
+                inlined: true
+
+    CoreFunctionalityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - CoreFunc_Easy
+            - CoreFunc_Moderate
+            - CoreFunc_Difficult
+            - CoreFunc_NotPossible
+            - CoreFunc_NotApplicable
+            - CoreFunc_DataNotAvailable
+
+    CoreFunc_Easy:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(core_func_easy)
+            text:
+                ifabsent: string(Easy — built-in diagnostics, indicators, or apps clearly show the status.)
+            score:
+                ifabsent: float(3.0)
+
+    CoreFunc_Moderate:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(core_func_moderate)
+            text:
+                ifabsent: string(Moderate — some testing needed, but feasible without special tools.)
+            score:
+                ifabsent: float(2.0)
+
+    CoreFunc_Difficult:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(core_func_difficult)
+            text:
+                ifabsent: string(Difficult — needs expert assessment or proprietary tools to evaluate.)
+            score:
+                ifabsent: float(1.0)
+
+    CoreFunc_NotPossible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(core_func_not_possible)
+            text:
+                ifabsent: string(Not possible — no way to assess functionality without dismantling or guessing.)
+            score:
+                ifabsent: float(0.0)
+
+    CoreFunc_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(core_func_not_applicable)
+            text:
+                ifabsent: string(Not applicable – No contracts or transferable ownership rights are associated)
+            score:
+                ifabsent: float(0.0)
+
+    CoreFunc_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(core_func_data_not_available)
+            text:
+                ifabsent: string(Data not available)
+            score:
+                ifabsent: float(0.0)
+
+    # Q1.3: Wear and Tear Evaluation
+    Q1_3_WearTear:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q1.3)
+            text:
+                ifabsent: string(How easy is it to evaluate the wear and tear of the product?)
+            weight:
+                ifabsent: float(0.027777778)
+            answer_options:
+                range: WearTearAnswerOption
+                multivalued: true
+                inlined: true
+
+    WearTearAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - WearTear_VeryEasy
+            - WearTear_SomewhatEasy
+            - WearTear_Difficult
+            - WearTear_NotPossible
+            - WearTear_NotApplicable
+            - WearTear_DataNotAvailable
+
+    WearTear_VeryEasy:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(wear_tear_very_easy)
+            text:
+                ifabsent: string(Very easy – Clear visual indicators or diagnostics available)
+            score:
+                ifabsent: float(3.0)
+
+    WearTear_SomewhatEasy:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(wear_tear_somewhat_easy)
+            text:
+                ifabsent: string(Somewhat easy – Can be assessed with some experience or tools)
+            score:
+                ifabsent: float(2.0)
+
+    WearTear_Difficult:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(wear_tear_difficult)
+            text:
+                ifabsent: string(Difficult – Requires expert knowledge or disassembly)
+            score:
+                ifabsent: float(1.0)
+
+    WearTear_NotPossible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(wear_tear_not_possible)
+            text:
+                ifabsent: string(Not possible – No visible signs or tools to assess condition)
+            score:
+                ifabsent: float(0.0)
+
+    WearTear_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(wear_tear_not_applicable)
+            text:
+                ifabsent: string(Not applicable – Product type doesn't show typical wear and tear)
+            score:
+                ifabsent: float(0.0)
+
+    WearTear_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(wear_tear_data_not_available)
+            text:
+                ifabsent: string(Data not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P2: WARRANTY RELATED INFORMATION
+    # ============================================
+
+    WarrantyInformation_Parameter:
+        is_a: ParameterSpecification
+        description: Warranty related information accessibility parameter - core definition
+        attributes:
+            id:
+                ifabsent: string(P2_warranty_information)
+            name:
+                ifabsent: string(Warranty Related Information)
+            questions:
+                range: WarrantyInformationQuestion
+                multivalued: true
+                inlined: true
+
+    WarrantyInformationQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q2_1_WarrantyAccessibility
+
+    # Q2.1: Warranty Accessibility
+    Q2_1_WarrantyAccessibility:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q2.1)
+            text:
+                ifabsent: string(Is warranty-related information easily accessible?)
+            weight:
+                ifabsent: float(0.013888889)
+            answer_options:
+                range: WarrantyAccessibilityAnswerOption
+                multivalued: true
+                inlined: true
+
+    WarrantyAccessibilityAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - Warranty_ClearlyIndicated
+            - Warranty_SomewhatAccessible
+            - Warranty_Missing
+            - Warranty_DataNotAvailable
+
+    Warranty_ClearlyIndicated:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(warranty_clearly_indicated)
+            text:
+                ifabsent: string(Yes, clearly indicated on the product, documentation, or online)
+            score:
+                ifabsent: float(3.0)
+
+    Warranty_SomewhatAccessible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(warranty_somewhat_accessible)
+            text:
+                ifabsent: string(Somewhat accessible — requires effort (e.g., searching by serial number))
+            score:
+                ifabsent: float(1.0)
+
+    Warranty_Missing:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(warranty_missing)
+            text:
+                ifabsent: string(No — warranty info is missing or unclear)
+            score:
+                ifabsent: float(0.0)
+
+    Warranty_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(warranty_data_not_available)
+            text:
+                ifabsent: string(Data not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P3: RESETTING THE PRODUCT
+    # ============================================
+
+    ResettingProduct_Parameter:
+        is_a: ParameterSpecification
+        description: Product reset capability parameter - core definition
+        attributes:
+            id:
+                ifabsent: string(P3_resetting_product)
+            name:
+                ifabsent: string(Resetting the Product)
+            questions:
+                range: ResettingProductQuestion
+                multivalued: true
+                inlined: true
+
+    ResettingProductQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q3_1_PhysicalFactoryReset
+            - Q3_2_SoftwareReset
+
+    # Q3.1: Physical Factory Reset
+    Q3_1_PhysicalFactoryReset:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.1)
+            text:
+                ifabsent: string(How easy is it to restore the device to physical factory settings?)
+            weight:
+                ifabsent: float(0.041666667)
+            answer_options:
+                range: PhysicalResetAnswerOption
+                multivalued: true
+                inlined: true
+
+    PhysicalResetAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - PhysicalReset_OneClick
+            - PhysicalReset_FollowManual
+            - PhysicalReset_SoftwareUpdate
+            - PhysicalReset_NotPossible
+            - PhysicalReset_DataUnavailable
+            - PhysicalReset_Irrelevant
+
+    PhysicalReset_OneClick:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(physical_reset_one_click)
+            text:
+                ifabsent: string(One-click reset button available)
+            score:
+                ifabsent: float(4.0)
+
+    PhysicalReset_FollowManual:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(physical_reset_follow_manual)
+            text:
+                ifabsent: string(Requires following instructions from a manual (multi-step process but user-doable))
+            score:
+                ifabsent: float(3.0)
+
+    PhysicalReset_SoftwareUpdate:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(physical_reset_software_update)
+            text:
+                ifabsent: string(Requires a software update or special process (may need external tools or codes))
+            score:
+                ifabsent: float(2.0)
+
+    PhysicalReset_NotPossible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(physical_reset_not_possible)
+            text:
+                ifabsent: string(Not possible without manufacturer support)
+            score:
+                ifabsent: float(0.0)
+
+    PhysicalReset_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(physical_reset_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    PhysicalReset_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(physical_reset_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # Q3.2: Software Reset
+    Q3_2_SoftwareReset:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q3.2)
+            text:
+                ifabsent: string(How easy is it to reset the software?)
+            weight:
+                ifabsent: float(0.041666667)
+            answer_options:
+                range: SoftwareResetAnswerOption
+                multivalued: true
+                inlined: true
+
+    SoftwareResetAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - SoftwareReset_VeryEasy
+            - SoftwareReset_Moderate
+            - SoftwareReset_Difficult
+            - SoftwareReset_NotPossible
+            - SoftwareReset_DataUnavailable
+            - SoftwareReset_Irrelevant
+
+    SoftwareReset_VeryEasy:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(software_reset_very_easy)
+            text:
+                ifabsent: string(Very easy (One-step reset in settings))
+            score:
+                ifabsent: float(3.0)
+
+    SoftwareReset_Moderate:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(software_reset_moderate)
+            text:
+                ifabsent: string(Moderate (Requires a specific sequence of actions))
+            score:
+                ifabsent: float(2.0)
+
+    SoftwareReset_Difficult:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(software_reset_difficult)
+            text:
+                ifabsent: string(Difficult (Needs manufacturer intervention))
+            score:
+                ifabsent: float(0.0)
+
+    SoftwareReset_NotPossible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(software_reset_not_possible)
+            text:
+                ifabsent: string(Not possible)
+            score:
+                ifabsent: float(0.0)
+
+    SoftwareReset_DataUnavailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(software_reset_data_unavailable)
+            text:
+                ifabsent: string(Data unavailable)
+            score:
+                ifabsent: float(0.0)
+
+    SoftwareReset_Irrelevant:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(software_reset_irrelevant)
+            text:
+                ifabsent: string(Irrelevant)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P4: DATA CONFIDENTIALITY
+    # ============================================
+
+    DataConfidentiality_Parameter:
+        is_a: ParameterSpecification
+        description: Data confidentiality and user data protection parameter - core definition
+        attributes:
+            id:
+                ifabsent: string(P4_data_confidentiality)
+            name:
+                ifabsent: string(Data confidentiality)
+            questions:
+                range: DataConfidentialityQuestion
+                multivalued: true
+                inlined: true
+
+    DataConfidentialityQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q4_1_DataDeletion
+
+    # Q4.1: Data Deletion and Protection
+    Q4_1_DataDeletion:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q4.1)
+            text:
+                ifabsent: string(Can the product be reset or prepared in a way that ensures the previous user's personal data is fully deleted and protected before transferring ownership?)
+            weight:
+                ifabsent: float(0.069444444)
+            answer_options:
+                range: DataDeletionAnswerOption
+                multivalued: true
+                inlined: true
+
+    DataDeletionAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - DataDeletion_SecureAndEasy
+            - DataDeletion_Partial
+            - DataDeletion_NoClearWay
+            - DataDeletion_NotApplicable
+            - DataDeletion_DataNotAvailable
+
+    DataDeletion_SecureAndEasy:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_deletion_secure_easy)
+            text:
+                ifabsent: string(Yes – There is a secure and easy way to reset or wipe all personal data)
+            score:
+                ifabsent: float(3.0)
+
+    DataDeletion_Partial:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_deletion_partial)
+            text:
+                ifabsent: string(Partially – Some data can be removed, but not all, or the process is complicated)
+            score:
+                ifabsent: float(1.0)
+
+    DataDeletion_NoClearWay:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_deletion_no_clear_way)
+            text:
+                ifabsent: string(No – There is no clear or secure way to protect previous user data)
+            score:
+                ifabsent: float(0.0)
+
+    DataDeletion_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_deletion_not_applicable)
+            text:
+                ifabsent: string(Not applicable – Product does not store personal data)
+            score:
+                ifabsent: float(0.0)
+
+    DataDeletion_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(data_deletion_data_not_available)
+            text:
+                ifabsent: string(Data not available)
+            score:
+                ifabsent: float(0.0)
+
+    # ============================================
+    # P5: NEW OWNERSHIP
+    # ============================================
+
+    NewOwnership_Parameter:
+        is_a: ParameterSpecification
+        description: New ownership transfer capability parameter - core definition
+        attributes:
+            id:
+                ifabsent: string(P5_new_ownership)
+            name:
+                ifabsent: string(New Ownership)
+            questions:
+                range: NewOwnershipQuestion
+                multivalued: true
+                inlined: true
+
+    NewOwnershipQuestion:
+        is_a: QuestionSpecification
+        union_of:
+            - Q5_1_OwnershipTransfer
+
+    # Q5.1: Ownership Transfer
+    Q5_1_OwnershipTransfer:
+        is_a: QuestionSpecification
+        attributes:
+            id:
+                ifabsent: string(Q5.1)
+            text:
+                ifabsent: string(Can ownership of the product, including any associated contracts (e.g. service agreements, warranties), be officially and easily transferred to a new user?)
+            weight:
+                ifabsent: float(0.027777778)
+            answer_options:
+                range: OwnershipTransferAnswerOption
+                multivalued: true
+                inlined: true
+
+    OwnershipTransferAnswerOption:
+        is_a: AnswerOption
+        union_of:
+            - OwnershipTransfer_Full
+            - OwnershipTransfer_Partial
+            - OwnershipTransfer_NotPossible
+            - OwnershipTransfer_NotApplicable
+            - OwnershipTransfer_DataNotAvailable
+
+    OwnershipTransfer_Full:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(ownership_transfer_full)
+            text:
+                ifabsent: string(Yes – Ownership and contracts/warranties can be transferred without issue)
+            score:
+                ifabsent: float(3.0)
+
+    OwnershipTransfer_Partial:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(ownership_transfer_partial)
+            text:
+                ifabsent: string(Partially – Ownership can be transferred, but contracts or warranties are not transferable)
+            score:
+                ifabsent: float(2.0)
+
+    OwnershipTransfer_NotPossible:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(ownership_transfer_not_possible)
+            text:
+                ifabsent: string(No – Ownership or contractual rights cannot be transferred)
+            score:
+                ifabsent: float(0.0)
+
+    OwnershipTransfer_NotApplicable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(ownership_transfer_not_applicable)
+            text:
+                ifabsent: string(Not applicable – No contracts or transferable ownership rights are associated)
+            score:
+                ifabsent: float(0.0)
+
+    OwnershipTransfer_DataNotAvailable:
+        is_a: AnswerOption
+        attributes:
+            id:
+                ifabsent: string(ownership_transfer_data_not_available)
+            text:
+                ifabsent: string(Data not available)
+            score:
+                ifabsent: float(0.0)

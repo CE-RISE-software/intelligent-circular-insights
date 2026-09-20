@@ -1,0 +1,2148 @@
+id: https://ce-rise-models.codeberg.page/compliance-and-standards/
+name: compliance_and_standards
+title: CE-RISE Compliance and Standards Data Model
+description: >-
+    Data model for regulatory compliance, standards, and conformity-related information
+    for products and materials, including applicable regulations and standards, commitments,
+    documentary evidence, process evidence, and structured regulatory information sheets.
+    Supports both Digital Product Passports (DPP) and Digital Material Passports (DMP).
+
+license: https://creativecommons.org/licenses/by-nc/4.0/
+version: 0.1.0
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    comp: https://ce-rise-models.codeberg.page/compliance-and-standards/
+    dcterms: http://purl.org/dc/terms/
+    prov: http://www.w3.org/ns/prov#
+    schema: http://schema.org/
+    qudt: http://qudt.org/schema/qudt/
+    chebi: http://purl.obolibrary.org/obo/CHEBI_
+    envo: http://purl.obolibrary.org/obo/ENVO_
+    bfo: http://purl.obolibrary.org/obo/BFO_
+    ecoinvent: http://www.ecoinvent.org/ecospold/
+    foaf: http://xmlns.com/foaf/0.1/
+    org: http://www.w3.org/ns/org#
+    vcard: http://www.w3.org/2006/vcard/ns#
+    time: http://www.w3.org/2006/time#
+    dcat: http://www.w3.org/ns/dcat#
+    void: http://rdfs.org/ns/void#
+    gs1: https://www.gs1.org/voc/
+    iso: http://iso.org/tc184/sc4/
+    uq: https://ce-rise-models.codeberg.page/uncertainty-quantification/
+    mt: https://ce-rise-models.codeberg.page/metrological-traceability/
+    dqf: https://ce-rise-models.codeberg.page/data-quality-framework/
+
+imports:
+    - linkml:types
+    - https://codeberg.org/CE-RISE-models/uncertainty-quantification/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/metrological-traceability/raw/tag/pages-v0.0.3/generated/schema
+    - https://codeberg.org/CE-RISE-models/data-quality-framework/raw/tag/pages-v0.0.3/generated/schema
+
+default_prefix: comp
+default_range: string
+
+# ================================================================================
+# CLASSES
+# ================================================================================
+
+classes:
+    # Root Container Class
+    ComplianceAndStandards:
+        description: >-
+            Root container for all compliance and standards related information for products and materials,
+            encompassing commitments, requirements, evidence, and regulatory data.
+        annotations:
+            sql_identifier: comp_root
+        attributes:
+            entity_commitments:
+                description: All commitments for products or materials (regulatory, voluntary, contractual)
+                range: EntityCommitments
+                annotations:
+                    sql_identifier: comp_entity_commitments
+            applicable_regulation_standards:
+                description: Applicable regulations, standards, and specifications
+                range: ApplicableRegulationStandards
+                annotations:
+                    sql_identifier: comp_applicable_regulations
+            entity_evidence:
+                description: Documentary evidence supporting compliance claims for products or materials
+                range: EntityEvidence
+                annotations:
+                    sql_identifier: comp_root_entity_evidence
+            process_evidence:
+                description: Management system and process-related evidence
+                range: ProcessEvidence
+                annotations:
+                    sql_identifier: comp_root_process_evidence
+            regulatory_information:
+                description: Structured regulatory information including safety, instructions, and identifiers
+                range: RegulatoryInformation
+                annotations:
+                    sql_identifier: comp_regulatory_info
+
+    # ================================================================================
+    # STAGE 1: ENTITY COMMITMENTS (Products and Materials)
+    # ================================================================================
+
+    EntityCommitments:
+        description: >-
+            Container for all commitments related to products or materials, providing a flexible framework
+            for regulatory, voluntary, and contractual obligations that can evolve over time
+            and vary by jurisdiction.
+        annotations:
+            sql_identifier: comp_commitments_container
+            owl.filler: schema:commitmentTo
+        attributes:
+            commitments:
+                description: List of individual commitments for products or materials
+                multivalued: true
+                range: Commitment
+                annotations:
+                    sql_identifier: comp_commit_list
+
+    Commitment:
+        description: >-
+            A single commitment representing any type of obligation for a product or material,
+            including compliance requirements with flexible categorization and
+            jurisdiction-specific status tracking.
+        annotations:
+            sql_identifier: comp_commitment
+            owl.filler: schema:AgreeAction
+        attributes:
+            commitment_identifier:
+                description: Unique identifier for this commitment
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_commit_id
+                    owl.filler: dcterms:identifier
+                    references: "ESPR Art 7; CIRPASS"
+            commitment_statement_value:
+                description: The actual commitment statement or text
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_commit_statement
+                    owl.filler: dcterms:description
+                    references: "King et al.; ESPR"
+            commitment_description:
+                description: Detailed description or context of the commitment
+                range: string
+                annotations:
+                    sql_identifier: comp_commit_description
+                    owl.filler: dcterms:abstract
+            commitment_categories:
+                description: Categories this commitment belongs to (can be multiple)
+                multivalued: true
+                range: CommitmentCategory
+                annotations:
+                    sql_identifier: comp_commit_categories
+            compliance_statuses:
+                description: Status of this commitment in different jurisdictions
+                multivalued: true
+                range: ComplianceStatus
+                annotations:
+                    sql_identifier: comp_commit_statuses
+            validity_period:
+                description: Period during which this commitment is valid
+                range: ValidityPeriod
+                annotations:
+                    sql_identifier: comp_commit_validity
+            stakeholder_scope:
+                description: Scope of applicability for this commitment
+                range: StakeholderScope
+                annotations:
+                    sql_identifier: comp_commit_scope
+            evidence_references:
+                description: References to supporting evidence for this commitment
+                range: EvidenceReferences
+                annotations:
+                    sql_identifier: comp_commit_evidence_refs
+            commitment_data_quality_assessments:
+                description: Optional data quality assessments for commitment evidence, provenance, legal-source mapping, or completeness
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_commit_data_quality_assessments
+                    owl.filler: dqf:dataQualityAssessment
+            version_info:
+                description: Version tracking for this commitment
+                range: string
+                annotations:
+                    sql_identifier: comp_commit_version
+                    owl.filler: prov:generatedAtTime
+            last_updated:
+                description: Last update timestamp for this commitment
+                range: datetime
+                annotations:
+                    sql_identifier: comp_commit_updated
+                    owl.filler: dcterms:modified
+
+    CommitmentCategory:
+        description: Category or type of commitment with external standard references
+        annotations:
+            sql_identifier: comp_commit_category
+            owl.filler: schema:category
+        attributes:
+            category_type:
+                description: Type of commitment category
+                range: CommitmentCategoryType
+                required: true
+                annotations:
+                    sql_identifier: comp_commit_cat_type
+            category_reference:
+                description: External ontology or standard reference for this category
+                range: string
+                annotations:
+                    sql_identifier: comp_commit_cat_ref
+                    owl.filler: dcterms:conformsTo
+            priority_level:
+                description: Priority or importance level of this category
+                range: integer
+                annotations:
+                    sql_identifier: comp_commit_cat_priority
+                    owl.filler: schema:position
+
+    ComplianceStatus:
+        description: >-
+            Jurisdiction-specific compliance status for a commitment, allowing the same
+            commitment to have different statuses in different markets.
+        annotations:
+            sql_identifier: comp_compliance_status
+            owl.filler: schema:GovernmentPermit
+        attributes:
+            status_value:
+                description: Current status in this jurisdiction
+                range: ComplianceStatusType
+                required: true
+                annotations:
+                    sql_identifier: comp_status_value
+            jurisdiction:
+                description: Jurisdiction or market where this status applies
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_status_jurisdiction
+                    owl.filler: schema:addressCountry
+            effective_date:
+                description: Date when this status became effective
+                range: date
+                annotations:
+                    sql_identifier: comp_status_effective
+                    owl.filler: schema:validFrom
+            expiry_date:
+                description: Date when this status expires or changes
+                range: date
+                annotations:
+                    sql_identifier: comp_status_expiry
+                    owl.filler: schema:validThrough
+            status_notes:
+                description: Additional notes or context about this status
+                range: string
+                annotations:
+                    sql_identifier: comp_status_notes
+                    owl.filler: schema:comment
+            issuing_authority:
+                description: Authority that determined this status
+                range: string
+                annotations:
+                    sql_identifier: comp_status_authority
+                    owl.filler: schema:provider
+            compliance_status_data_quality_assessments:
+                description: Optional data quality assessments for jurisdiction-specific status determinations, authority references, effective dates, or applicability evidence
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_status_data_quality_assessments
+                    owl.filler: dqf:dataQualityAssessment
+
+    ValidityPeriod:
+        description: Time period during which something is valid
+        annotations:
+            sql_identifier: comp_validity_period
+            owl.filler: time:Interval
+        attributes:
+            start_date:
+                description: Start date of validity
+                range: date
+                required: true
+                annotations:
+                    sql_identifier: comp_valid_start
+                    owl.filler: time:hasBeginning
+            end_date:
+                description: End date of validity
+                range: date
+                annotations:
+                    sql_identifier: comp_valid_end
+                    owl.filler: time:hasEnd
+            is_perpetual:
+                description: Whether this has no defined end date
+                range: boolean
+                annotations:
+                    sql_identifier: comp_valid_perpetual
+
+    StakeholderScope:
+        description: >-
+            Defines the scope of applicability for a commitment including markets,
+            customer segments, and entity variants (products or materials).
+        annotations:
+            sql_identifier: comp_stakeholder_scope
+            owl.filler: org:scope
+        attributes:
+            applicable_markets:
+                description: Markets or regions where this commitment applies
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_markets
+                    owl.filler: schema:areaServed
+            customer_segments:
+                description: Customer segments this commitment applies to
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_customers
+                    owl.filler: schema:audience
+            entity_variants:
+                description: Entity variants (product models, material grades, batches) covered by this commitment
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_variants
+                    owl.filler: schema:model
+            exclusions:
+                description: Specific exclusions from scope
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_stakeholder_scope_exclusions
+                    owl.filler: schema:exceptDate
+
+    EvidenceReferences:
+        description: References to evidence supporting a commitment
+        annotations:
+            sql_identifier: comp_evidence_refs
+            owl.filler: prov:wasGeneratedBy
+        attributes:
+            supporting_documents:
+                description: URIs or identifiers of supporting documents
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_evid_ref_docs
+                    owl.filler: dcterms:references
+            certification_links:
+                description: Links to relevant certifications
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_evid_ref_certs
+                    owl.filler: schema:hasCertification
+            audit_records:
+                description: References to audit records
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_evid_ref_audits
+                    owl.filler: prov:wasInfluencedBy
+            test_reports:
+                description: References to test reports
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_evid_ref_tests
+                    owl.filler: schema:measuredValue
+
+    # ================================================================================
+    # PLACEHOLDER CLASSES FOR OTHER STAGES (to be implemented)
+    # ================================================================================
+
+    ApplicableRegulationStandards:
+        description: >-
+            Container for all applicable regulations, standards, and specifications
+            with jurisdiction-aware requirements tracking and version management.
+        annotations:
+            sql_identifier: comp_applicable_regs
+            owl.filler: schema:Legislation
+        attributes:
+            requirement_entries:
+                description: List of applicable requirements (regulations, standards, specifications)
+                multivalued: true
+                range: RequirementEntry
+                annotations:
+                    sql_identifier: comp_req_entries
+
+    RequirementEntry:
+        description: >-
+            A single regulation, standard, or specification requirement with
+            multi-jurisdictional applicability and version tracking.
+        annotations:
+            sql_identifier: comp_requirement_entry
+            owl.filler: dcterms:Standard
+        attributes:
+            requirement_identifier:
+                description: Unique identifier for this requirement
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_req_id
+                    owl.filler: dcterms:identifier
+                    references: "ESPR Art 9 1.; ESPR Art 11; ESPR Art 21 6."
+            requirement_type:
+                description: Type of requirement (regulation, standard, specification)
+                range: RequirementType
+                required: true
+                annotations:
+                    sql_identifier: comp_req_type
+            title_value:
+                description: Official title of the requirement
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_req_title
+                    owl.filler: dcterms:title
+                    references: "ESPR; CIRPASS"
+            issuing_authority:
+                description: Authority that issued this requirement
+                range: string
+                annotations:
+                    sql_identifier: comp_req_authority
+                    owl.filler: dcterms:publisher
+                    references: "ESPR Art 11; CIRPASS"
+            version_value:
+                description: Version or revision of the requirement
+                range: string
+                annotations:
+                    sql_identifier: comp_req_version
+                    owl.filler: dcterms:hasVersion
+            publication_date:
+                description: Date when this requirement was published
+                range: date
+                annotations:
+                    sql_identifier: comp_req_pub_date
+                    owl.filler: dcterms:issued
+            applicability_statuses:
+                description: Status of this requirement in different jurisdictions
+                multivalued: true
+                range: ApplicabilityStatus
+                annotations:
+                    sql_identifier: comp_req_app_statuses
+            successor_reference:
+                description: Reference to newer requirement if this is superseded
+                range: string
+                annotations:
+                    sql_identifier: comp_req_successor
+                    owl.filler: dcterms:isReplacedBy
+            commitment_links:
+                description: References to related commitments
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_req_commit_links
+                    owl.filler: dcterms:relation
+            compliance_evidence_links:
+                description: References to supporting evidence
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_req_evidence_links
+                    owl.filler: prov:hadPrimarySource
+            requirement_scope:
+                description: Scope and applicability details
+                range: RequirementScope
+                annotations:
+                    sql_identifier: comp_req_scope
+            harmonized_standards:
+                description: List of harmonized or equivalent standards
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_req_harmonized
+                    owl.filler: dcterms:conformsTo
+            amendment_history:
+                description: History of amendments to this requirement
+                multivalued: true
+                range: Amendment
+                annotations:
+                    sql_identifier: comp_req_amendments
+            requirement_data_quality_assessments:
+                description: Optional data quality assessments for regulatory source metadata, version tracking, jurisdictional applicability, or standards mapping
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_req_data_quality_assessments
+                    owl.filler: dqf:dataQualityAssessment
+
+    ApplicabilityStatus:
+        description: >-
+            Jurisdiction-specific applicability status for a requirement,
+            allowing tracking of how requirements apply differently across markets.
+        annotations:
+            sql_identifier: comp_applicability_status
+            owl.filler: schema:GovernmentService
+        attributes:
+            jurisdiction:
+                description: Jurisdiction where this status applies
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_app_jurisdiction
+                    owl.filler: schema:addressCountry
+            status:
+                description: Status in this jurisdiction
+                range: RequirementStatusType
+                required: true
+                annotations:
+                    sql_identifier: comp_app_status
+            effective_date:
+                description: Date when this status becomes effective
+                range: date
+                annotations:
+                    sql_identifier: comp_app_effective
+                    owl.filler: schema:validFrom
+            end_date:
+                description: Date when this status ends or changes
+                range: date
+                annotations:
+                    sql_identifier: comp_app_end
+                    owl.filler: schema:validThrough
+            transition_period:
+                description: Transition period details if applicable
+                range: string
+                annotations:
+                    sql_identifier: comp_app_transition
+                    owl.filler: time:hasDurationDescription
+            enforcement_level:
+                description: Level of enforcement in this jurisdiction
+                range: string
+                annotations:
+                    sql_identifier: comp_app_enforcement
+                    owl.filler: schema:enforceability
+            derogations:
+                description: Any derogations or exemptions
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_app_derogations
+                    owl.filler: schema:exceptDate
+
+    RequirementScope:
+        description: Defines the scope and applicability of a requirement
+        annotations:
+            sql_identifier: comp_requirement_scope
+            owl.filler: dcterms:coverage
+        attributes:
+            entity_categories:
+                description: Entity categories (product categories, material types) covered by this requirement
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_entities
+                    owl.filler: schema:category
+            industry_sectors:
+                description: Industry sectors where this applies
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_sectors
+                    owl.filler: schema:industry
+            technical_domains:
+                description: Technical domains covered (EMC, safety, environmental, etc.)
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_domains
+                    owl.filler: dcterms:subject
+            exclusions:
+                description: Specific exclusions from scope
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_exclusions
+                    owl.filler: schema:excludeDate
+            special_conditions:
+                description: Special conditions or limitations
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_conditions
+                    owl.filler: schema:conditionsOfAccess
+
+    Amendment:
+        description: Record of an amendment to a requirement
+        annotations:
+            sql_identifier: comp_amendment
+            owl.filler: prov:Revision
+        attributes:
+            amendment_id:
+                description: Amendment identifier
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_amend_id
+                    owl.filler: dcterms:identifier
+            amendment_date:
+                description: Date of amendment
+                range: date
+                required: true
+                annotations:
+                    sql_identifier: comp_amend_date
+                    owl.filler: dcterms:dateSubmitted
+            amendment_description:
+                description: Description of changes
+                range: string
+                annotations:
+                    sql_identifier: comp_amend_description
+                    owl.filler: dcterms:description
+            amendment_type:
+                description: Type of amendment (correction, supplement, revision)
+                range: string
+                annotations:
+                    sql_identifier: comp_amend_type
+                    owl.filler: prov:qualifiedRevision
+
+    EntityEvidence:
+        description: >-
+            Container for all documentary evidence supporting compliance claims for products or materials,
+            including declarations, certificates, test reports, and markings.
+        annotations:
+            sql_identifier: comp_entity_evidence
+            owl.filler: prov:Entity
+        attributes:
+            evidence_documents:
+                description: List of evidence documents
+                multivalued: true
+                range: EvidenceDocument
+                annotations:
+                    sql_identifier: comp_evid_documents
+
+    EvidenceDocument:
+        description: >-
+            A single piece of documentary evidence supporting compliance claims,
+            with version tracking, digital signatures, and scope definition.
+        annotations:
+            sql_identifier: comp_evidence_document
+            owl.filler: foaf:Document
+        attributes:
+            evidence_type:
+                description: Type of evidence document
+                range: EvidenceType
+                required: true
+                annotations:
+                    sql_identifier: comp_evid_type
+            document_identifier:
+                description: Unique identifier for this document
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_evid_doc_id
+                    owl.filler: dcterms:identifier
+                    references: "ESPR Art 9 1.; Battery Pass"
+            document_title:
+                description: Title of the document
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_evid_doc_title
+                    owl.filler: dcterms:title
+            issue_date:
+                description: Date when document was issued
+                range: date
+                required: true
+                annotations:
+                    sql_identifier: comp_evid_issue_date
+                    owl.filler: dcterms:issued
+                    references: "CIRPASS; Battery Pass"
+            validity_period:
+                description: Validity period of this evidence
+                range: ValidityPeriod
+                annotations:
+                    sql_identifier: comp_evid_validity
+            issuing_authority_details:
+                description: Details about the issuing authority
+                range: IssuingAuthority
+                annotations:
+                    sql_identifier: comp_evid_authority
+            scope_of_evidence:
+                description: Scope covered by this evidence
+                range: ScopeOfEvidence
+                annotations:
+                    sql_identifier: comp_evid_scope
+            commitment_support:
+                description: Commitments that this evidence supports
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_evid_commit_support
+                    owl.filler: prov:wasUsedBy
+            digital_signature:
+                description: Digital signature information
+                range: DigitalSignature
+                annotations:
+                    sql_identifier: comp_evid_signature
+            document_access:
+                description: Document access and storage information
+                range: DocumentAccess
+                annotations:
+                    sql_identifier: comp_evid_access
+            conformity_assessment_procedure:
+                description: Conformity assessment procedure used
+                range: string
+                annotations:
+                    sql_identifier: comp_evid_ca_procedure
+                    owl.filler: schema:assessmentProcedure
+                    references: "ESPR; Battery Pass"
+            document_language:
+                description: Language(s) of the document
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_evid_languages
+                    owl.filler: dcterms:language
+            evidence_uncertainty_statements:
+                description: Optional uncertainty statements for measured, tested, calculated, or declared values reported by this evidence document
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_evid_uncertainty_statements
+                    owl.filler: uq:uncertaintyStatement
+            evidence_metrological_traceability_statements:
+                description: Optional metrological traceability statements for test methods, calibration chains, reference materials, measurement standards, or accredited procedures supporting this evidence document
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_evid_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            evidence_data_quality_assessments:
+                description: Optional data quality assessments for evidence provenance, completeness, representativeness, document integrity, or fitness for purpose
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_evid_data_quality_assessments
+                    owl.filler: dqf:dataQualityAssessment
+
+    IssuingAuthority:
+        description: Details about the authority issuing evidence
+        annotations:
+            sql_identifier: comp_issuing_authority
+            owl.filler: org:Organization
+        attributes:
+            authority_name:
+                description: Name of the issuing authority
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_auth_name
+                    owl.filler: foaf:name
+                    references: "ESPR; CIRPASS"
+            authority_type:
+                description: Type of authority
+                range: AuthorityType
+                annotations:
+                    sql_identifier: comp_auth_type
+            accreditation_details:
+                description: Accreditation information
+                range: string
+                annotations:
+                    sql_identifier: comp_auth_accreditation
+                    owl.filler: org:hasAccreditation
+            authority_identifier:
+                description: Unique identifier for the authority
+                range: string
+                annotations:
+                    sql_identifier: comp_auth_id
+                    owl.filler: org:identifier
+            authority_country:
+                description: Country of the authority
+                range: string
+                annotations:
+                    sql_identifier: comp_auth_country
+                    owl.filler: vcard:country-name
+            notified_body_number:
+                description: Notified body number if applicable
+                range: string
+                annotations:
+                    sql_identifier: comp_auth_nb_number
+                    owl.filler: schema:identifier
+                    references: "ESPR Annex III g)"
+
+    ScopeOfEvidence:
+        description: Defines what is covered by the evidence
+        annotations:
+            sql_identifier: comp_scope_evidence
+            owl.filler: dcterms:coverage
+        attributes:
+            entities_covered:
+                description: Products, materials, batches, or families covered
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_entities_covered
+                    owl.filler: schema:Product
+            batch_lot_identifiers:
+                description: Batch or lot numbers covered by this evidence (for materials tracked at batch level)
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_batch_lot
+                    owl.filler: bfo:BFO_0000040
+                    references: "ISO 22000 (traceability); GS1 GTIN allocation rules"
+                    comment: "Batch/lot tracking per ISO 22000 traceability requirements"
+            standards_versions:
+                description: Specific versions of standards covered
+                multivalued: true
+                range: StandardVersion
+                annotations:
+                    sql_identifier: comp_scope_standards
+            requirement_references:
+                description: References to specific requirements covered
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_requirements
+                    owl.filler: dcterms:conformsTo
+                    references: "ESPR Art 7 5.; ESPR Annex I"
+            technical_specifications:
+                description: Technical specifications covered
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_tech_specs
+                    owl.filler: schema:specification
+            modules_procedures:
+                description: Assessment modules or procedures applied
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_modules
+                    owl.filler: schema:procedure
+            exclusions:
+                description: What is explicitly excluded from scope
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_scope_evid_exclusions
+                    owl.filler: schema:exceptDate
+
+    StandardVersion:
+        description: Specific version of a standard
+        annotations:
+            sql_identifier: comp_standard_version
+            owl.filler: dcterms:Standard
+        attributes:
+            standard_identifier:
+                description: Standard identifier
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_std_id
+                    owl.filler: dcterms:identifier
+            version:
+                description: Version of the standard
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_std_version
+                    owl.filler: dcterms:hasVersion
+            year:
+                description: Year of the standard
+                range: integer
+                annotations:
+                    sql_identifier: comp_std_year
+                    owl.filler: dcterms:date
+
+    DigitalSignature:
+        description: Digital signature information for evidence authenticity
+        annotations:
+            sql_identifier: comp_digital_signature
+            owl.filler: schema:DigitalDocument
+        attributes:
+            signature_type:
+                description: Type of digital signature
+                range: string
+                annotations:
+                    sql_identifier: comp_sig_type
+                    owl.filler: schema:encodingFormat
+            signature_value:
+                description: Digital signature value or hash
+                range: string
+                annotations:
+                    sql_identifier: comp_sig_value
+                    owl.filler: schema:hash
+            signature_date:
+                description: Date of digital signature
+                range: datetime
+                annotations:
+                    sql_identifier: comp_sig_date
+                    owl.filler: dcterms:created
+            signatory:
+                description: Person or entity who signed
+                range: string
+                annotations:
+                    sql_identifier: comp_sig_signatory
+                    owl.filler: schema:creator
+            certificate_reference:
+                description: Reference to digital certificate
+                range: string
+                annotations:
+                    sql_identifier: comp_sig_cert_ref
+                    owl.filler: schema:hasCertification
+
+    DocumentAccess:
+        description: Information about document access and storage
+        annotations:
+            sql_identifier: comp_document_access
+            owl.filler: dcat:Distribution
+        attributes:
+            document_url:
+                description: URL where document can be accessed
+                range: string
+                annotations:
+                    sql_identifier: comp_doc_url
+                    owl.filler: dcat:accessURL
+            access_restrictions:
+                description: Any access restrictions
+                range: string
+                annotations:
+                    sql_identifier: comp_doc_restrictions
+                    owl.filler: dcterms:accessRights
+            retention_period:
+                description: How long document must be retained
+                range: string
+                annotations:
+                    sql_identifier: comp_doc_retention
+                    owl.filler: dcterms:extent
+            document_format:
+                description: Format of the document
+                range: string
+                annotations:
+                    sql_identifier: comp_doc_format
+                    owl.filler: dcterms:format
+            checksum:
+                description: Checksum for integrity verification
+                range: string
+                annotations:
+                    sql_identifier: comp_doc_checksum
+                    owl.filler: schema:contentHash
+            storage_location:
+                description: Where document is stored
+                range: string
+                annotations:
+                    sql_identifier: comp_doc_storage
+                    owl.filler: schema:contentLocation
+
+    ProcessEvidence:
+        description: >-
+            Container for management system and process-related evidence demonstrating
+            organizational compliance capabilities.
+        annotations:
+            sql_identifier: comp_process_evidence
+            owl.filler: org:OrganizationalProcess
+        attributes:
+            management_systems:
+                description: List of management systems
+                multivalued: true
+                range: ManagementSystem
+                annotations:
+                    sql_identifier: comp_proc_mgmt_systems
+
+    ManagementSystem:
+        description: >-
+            A management system certification or implementation with audit history
+            and performance tracking.
+        annotations:
+            sql_identifier: comp_management_system
+            owl.filler: org:OrganizationalSystem
+        attributes:
+            system_type:
+                description: Type of management system
+                range: ManagementSystemType
+                required: true
+                annotations:
+                    sql_identifier: comp_mgmt_type
+            standard_reference:
+                description: Reference to the standard
+                range: StandardReference
+                annotations:
+                    sql_identifier: comp_mgmt_standard_ref
+                    references: "King et al.; CIRPASS"
+            certification_details:
+                description: Certification information
+                range: CertificationDetails
+                annotations:
+                    sql_identifier: comp_mgmt_cert_details
+            audit_history:
+                description: Audit history records
+                multivalued: true
+                range: AuditRecord
+                annotations:
+                    sql_identifier: comp_mgmt_audits
+            performance_metrics:
+                description: Performance metrics and targets
+                range: PerformanceMetrics
+                annotations:
+                    sql_identifier: comp_mgmt_performance
+            commitment_alignment:
+                description: Links to related commitments
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_mgmt_commit_align
+                    owl.filler: dcterms:relation
+            evidence_documents:
+                description: References to certificates and reports
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_mgmt_evid_docs
+                    owl.filler: dcterms:references
+            scope_description:
+                description: Scope of the management system
+                range: string
+                annotations:
+                    sql_identifier: comp_mgmt_scope
+                    owl.filler: dcterms:coverage
+
+    StandardReference:
+        description: Reference to a management system standard
+        annotations:
+            sql_identifier: comp_standard_reference
+            owl.filler: dcterms:Standard
+        attributes:
+            standard_identifier:
+                description: Standard identifier (e.g., ISO 9001)
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_stdref_id
+                    owl.filler: dcterms:identifier
+            standard_version:
+                description: Version of the standard
+                range: string
+                annotations:
+                    sql_identifier: comp_stdref_version
+                    owl.filler: dcterms:hasVersion
+            standard_year:
+                description: Year of the standard
+                range: integer
+                annotations:
+                    sql_identifier: comp_stdref_year
+                    owl.filler: dcterms:date
+
+    CertificationDetails:
+        description: Details about management system certification
+        annotations:
+            sql_identifier: comp_certification_details
+            owl.filler: schema:Certification
+        attributes:
+            certification_status:
+                description: Current certification status
+                range: CertificationStatusType
+                annotations:
+                    sql_identifier: comp_cert_status
+            certification_body:
+                description: Name of certification body
+                range: string
+                annotations:
+                    sql_identifier: comp_cert_body
+                    owl.filler: org:Organization
+            certificate_number:
+                description: Certificate number
+                range: string
+                annotations:
+                    sql_identifier: comp_cert_number
+                    owl.filler: dcterms:identifier
+            validity_period:
+                description: Validity period of certification
+                range: ValidityPeriod
+                annotations:
+                    sql_identifier: comp_cert_validity
+            accreditation_details:
+                description: Accreditation details of certification body
+                range: string
+                annotations:
+                    sql_identifier: comp_cert_accreditation
+                    owl.filler: org:hasAccreditation
+            certification_data_quality_assessments:
+                description: Optional data quality assessments for certification status, certification body accreditation, certificate validity, or evidence completeness
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_cert_data_quality_assessments
+                    owl.filler: dqf:dataQualityAssessment
+
+    AuditRecord:
+        description: Record of an audit
+        annotations:
+            sql_identifier: comp_audit_record
+            owl.filler: prov:Activity
+        attributes:
+            audit_date:
+                description: Date of audit
+                range: date
+                required: true
+                annotations:
+                    sql_identifier: comp_audit_date
+                    owl.filler: prov:atTime
+            audit_type:
+                description: Type of audit
+                range: AuditType
+                annotations:
+                    sql_identifier: comp_audit_type
+            findings:
+                description: Audit findings
+                range: string
+                annotations:
+                    sql_identifier: comp_audit_findings
+                    owl.filler: schema:result
+            corrective_actions:
+                description: Corrective actions taken
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_audit_actions
+                    owl.filler: schema:potentialAction
+            audit_result:
+                description: Overall audit result
+                range: string
+                annotations:
+                    sql_identifier: comp_audit_result
+                    owl.filler: schema:outcome
+            auditor:
+                description: Auditor or audit organization
+                range: string
+                annotations:
+                    sql_identifier: comp_audit_auditor
+                    owl.filler: prov:wasAssociatedWith
+            audit_data_quality_assessments:
+                description: Optional data quality assessments for audit findings, corrective action evidence, audit scope, auditor provenance, or result reliability
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_audit_data_quality_assessments
+                    owl.filler: dqf:dataQualityAssessment
+
+    PerformanceMetrics:
+        description: Performance metrics and improvement targets
+        annotations:
+            sql_identifier: comp_performance_metrics
+            owl.filler: schema:QuantitativeValue
+        attributes:
+            kpis:
+                description: Key performance indicators
+                multivalued: true
+                range: KeyPerformanceIndicator
+                annotations:
+                    sql_identifier: comp_perf_kpis
+            improvement_targets:
+                description: Improvement targets
+                multivalued: true
+                range: ImprovementTarget
+                annotations:
+                    sql_identifier: comp_perf_targets
+
+    KeyPerformanceIndicator:
+        description: A key performance indicator
+        annotations:
+            sql_identifier: comp_kpi
+            owl.filler: schema:measuredValue
+        attributes:
+            kpi_name:
+                description: Name of the KPI
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_kpi_name
+                    owl.filler: schema:name
+            kpi_value:
+                description: Current value
+                range: float
+                annotations:
+                    sql_identifier: comp_kpi_value
+                    owl.filler: schema:value
+            kpi_unit:
+                description: Unit of measurement
+                range: string
+                annotations:
+                    sql_identifier: comp_kpi_unit
+                    owl.filler: qudt:unit
+            measurement_period:
+                description: Period of measurement
+                range: string
+                annotations:
+                    sql_identifier: comp_kpi_period
+                    owl.filler: time:hasTime
+            kpi_uncertainty_statements:
+                description: Optional uncertainty statements for KPI values, aggregation methods, assumptions, or measurement variability
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_kpi_uncertainty_statements
+                    owl.filler: uq:uncertaintyStatement
+            kpi_metrological_traceability_statements:
+                description: Optional metrological traceability statements for KPI measurements, data sources, calculation chains, standards, or boundary definitions
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_kpi_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            kpi_data_quality_assessments:
+                description: Optional data quality assessments for KPI data, provenance, completeness, representativeness, or fitness for compliance use
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_kpi_data_quality_assessments
+                    owl.filler: dqf:dataQualityAssessment
+
+    ImprovementTarget:
+        description: An improvement target
+        annotations:
+            sql_identifier: comp_improvement_target
+            owl.filler: schema:targetValue
+        attributes:
+            target_description:
+                description: Description of target
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_target_desc
+                    owl.filler: dcterms:description
+            target_value:
+                description: Target value
+                range: float
+                annotations:
+                    sql_identifier: comp_target_value
+                    owl.filler: schema:value
+            target_date:
+                description: Target achievement date
+                range: date
+                annotations:
+                    sql_identifier: comp_target_date
+                    owl.filler: schema:targetDate
+
+    RegulatoryInformation:
+        description: >-
+            Structured regulatory information including safety warnings, usage instructions,
+            compliance statements, responsible parties, and regulatory identifiers.
+        annotations:
+            sql_identifier: comp_regulatory_information
+            owl.filler: schema:RegulatoryInformation
+        attributes:
+            safety_information:
+                description: Safety warnings and instructions
+                range: SafetyInformation
+                annotations:
+                    sql_identifier: comp_reg_safety
+                    references: "ESPR Art 7 5. d); King et al.; CIRPASS"
+            usage_instructions:
+                description: Entity usage and maintenance instructions (for products or materials)
+                range: UsageInstructions
+                annotations:
+                    sql_identifier: comp_reg_usage
+                    references: "ESPR Art 7 (2) b); King et al.; Jensen et al."
+            compliance_statements:
+                description: Regulatory compliance statements
+                range: ComplianceStatements
+                annotations:
+                    sql_identifier: comp_reg_statements
+            responsible_parties:
+                description: Responsible parties by jurisdiction
+                range: ResponsibleParties
+                annotations:
+                    sql_identifier: comp_reg_parties
+            regulatory_identifiers:
+                description: Market-specific regulatory identifiers
+                range: RegulatoryIdentifiers
+                annotations:
+                    sql_identifier: comp_reg_identifiers
+
+    SafetyInformation:
+        description: Container for safety warnings and instructions
+        annotations:
+            sql_identifier: comp_safety_information
+            owl.filler: schema:SafetyInformation
+            references: "King et al.; CIRPASS; Jensen et al."
+        attributes:
+            safety_items:
+                description: Individual safety items
+                multivalued: true
+                range: SafetyItem
+                annotations:
+                    sql_identifier: comp_safety_items
+
+    SafetyItem:
+        description: A single safety warning, instruction, or prohibition
+        annotations:
+            sql_identifier: comp_safety_item
+            owl.filler: schema:Warning
+        attributes:
+            item_type:
+                description: Type of safety item
+                range: SafetyItemType
+                required: true
+                annotations:
+                    sql_identifier: comp_safety_type
+            content_value:
+                description: Content of the safety item
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_safety_content
+                    owl.filler: schema:text
+                    references: "ESPR Art 7 5. d); King et al."
+            severity_level:
+                description: Severity level if applicable
+                range: string
+                annotations:
+                    sql_identifier: comp_safety_severity
+                    owl.filler: schema:severityLevel
+            applicable_jurisdictions:
+                description: Jurisdictions where this applies
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_safety_jurisdictions
+                    owl.filler: schema:addressCountry
+                    references: "ESPR Annex III; CIRPASS"
+            languages:
+                description: Languages for this safety item
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_safety_languages
+                    owl.filler: dcterms:language
+            pictogram_reference:
+                description: Reference to safety pictogram
+                range: string
+                annotations:
+                    sql_identifier: comp_safety_pictogram
+                    owl.filler: schema:image
+
+    UsageInstructions:
+        description: Entity usage and maintenance instructions (for products or materials)
+        annotations:
+            sql_identifier: comp_usage_instructions
+            owl.filler: schema:instructions
+        attributes:
+            intended_use:
+                description: Intended use of the product or material
+                range: string
+                annotations:
+                    sql_identifier: comp_usage_intended
+                    owl.filler: schema:intendedUse
+                    references: "King et al.; ESPR"
+            operating_guidelines:
+                description: Operating guidelines
+                range: string
+                annotations:
+                    sql_identifier: comp_usage_operating
+                    owl.filler: schema:operatingGuidelines
+                    references: "King et al.; ESPR; CIRPASS; Jensen et al.; Deliverable 1.1"
+            maintenance_requirements:
+                description: Maintenance requirements
+                range: string
+                annotations:
+                    sql_identifier: comp_usage_maintenance
+                    owl.filler: schema:maintenanceSchedule
+                    references: "King et al.; ESPR Annex I"
+            disposal_instructions:
+                description: Disposal instructions
+                range: string
+                annotations:
+                    sql_identifier: comp_usage_disposal
+                    owl.filler: envo:disposal_process
+                    references: "ESPR Art 7 (2) b) ii); ESPR Art 7 (2) b) iii); King et al.; Jensen et al."
+            emergency_procedures:
+                description: Emergency procedures
+                range: string
+                annotations:
+                    sql_identifier: comp_usage_emergency
+                    owl.filler: schema:emergencyProcedure
+                    references: "King et al.; ESPR"
+            storage_conditions:
+                description: Storage conditions
+                range: string
+                annotations:
+                    sql_identifier: comp_usage_storage
+                    owl.filler: schema:storageRequirements
+                    references: "King et al."
+
+    ComplianceStatements:
+        description: Container for compliance statements
+        annotations:
+            sql_identifier: comp_compliance_statements
+            owl.filler: schema:ComplianceStatement
+        attributes:
+            statements:
+                description: Individual compliance statements
+                multivalued: true
+                range: ComplianceStatement
+                annotations:
+                    sql_identifier: comp_statements_list
+
+    ComplianceStatement:
+        description: A regulatory compliance statement
+        annotations:
+            sql_identifier: comp_compliance_statement
+            owl.filler: schema:Statement
+        attributes:
+            statement_type:
+                description: Type of statement
+                range: StatementType
+                required: true
+                annotations:
+                    sql_identifier: comp_statement_type
+            statement_content:
+                description: Content of the statement
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_statement_content
+                    owl.filler: schema:text
+            applicable_standards:
+                description: Standards this statement relates to
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_statement_standards
+                    owl.filler: dcterms:conformsTo
+            test_references:
+                description: References to supporting tests
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_statement_tests
+                    owl.filler: prov:wasInformedBy
+            valid_for_jurisdictions:
+                description: Jurisdictions where valid
+                multivalued: true
+                range: string
+                annotations:
+                    sql_identifier: comp_statement_jurisdictions
+                    owl.filler: schema:addressCountry
+            statement_uncertainty_statements:
+                description: Optional uncertainty statements for measured, tested, calculated, or declared values used in this compliance statement
+                range: UncertaintyStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_statement_uncertainty_statements
+                    owl.filler: uq:uncertaintyStatement
+            statement_metrological_traceability_statements:
+                description: Optional metrological traceability statements for tests, standards, methods, calibrations, or reference materials supporting this compliance statement
+                range: TraceabilityStatement
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_statement_metrological_traceability
+                    owl.filler: mt:traceabilityStatement
+            statement_data_quality_assessments:
+                description: Optional data quality assessments for statement evidence, provenance, completeness, jurisdictional validity, or fitness for purpose
+                range: DataQualityAssessment
+                multivalued: true
+                inlined: true
+                inlined_as_list: true
+                required: false
+                annotations:
+                    sql_identifier: comp_statement_data_quality_assessments
+                    owl.filler: dqf:dataQualityAssessment
+
+    ResponsibleParties:
+        description: Container for responsible parties
+        annotations:
+            sql_identifier: comp_responsible_parties
+            owl.filler: org:ResponsibleParty
+        attributes:
+            responsible_party_entries:
+                description: Individual responsible party entries
+                multivalued: true
+                range: ResponsibleParty
+                annotations:
+                    sql_identifier: comp_parties_list
+
+    ResponsibleParty:
+        description: A responsible party for a specific jurisdiction
+        annotations:
+            sql_identifier: comp_responsible_party
+            owl.filler: foaf:Agent
+        attributes:
+            jurisdiction:
+                description: Jurisdiction for this responsible party
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_party_jurisdiction
+                    owl.filler: schema:addressCountry
+            party_role:
+                description: Role of this party
+                range: PartyRoleType
+                required: true
+                annotations:
+                    sql_identifier: comp_party_role
+            legal_entity_name:
+                description: Legal name of the entity
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_party_name
+                    owl.filler: foaf:name
+                    references: "ESPR Art 21 6.; CIRPASS"
+            registered_address:
+                description: Registered address
+                range: string
+                annotations:
+                    sql_identifier: comp_party_address
+                    owl.filler: vcard:hasAddress
+                    references: "ESPR Art 21 6.; CIRPASS"
+            contact_details:
+                description: Contact information
+                range: string
+                annotations:
+                    sql_identifier: comp_party_contact
+                    owl.filler: schema:contactPoint
+            registration_numbers:
+                description: Registration numbers (EORI, FDA, etc.)
+                multivalued: true
+                range: RegistrationNumber
+                annotations:
+                    sql_identifier: comp_party_reg_numbers
+                    references: "ESPR Annex III g); CIRPASS"
+                    comment: "EORI number for EU import/export"
+
+    RegistrationNumber:
+        description: A registration number
+        annotations:
+            sql_identifier: comp_registration_number
+            owl.filler: org:identifier
+        attributes:
+            number_type:
+                description: Type of registration number
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_regnum_type
+                    owl.filler: dcterms:type
+                    references: "ESPR Annex III g); CIRPASS"
+                    comment: "EORI number for EU import/export"
+            number_value:
+                description: The registration number
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_regnum_value
+                    owl.filler: dcterms:identifier
+
+    RegulatoryIdentifiers:
+        description: Container for regulatory identifiers
+        annotations:
+            sql_identifier: comp_regulatory_identifiers
+            owl.filler: schema:identifier
+        attributes:
+            identifiers:
+                description: Individual regulatory identifiers
+                multivalued: true
+                range: RegulatoryIdentifier
+                annotations:
+                    sql_identifier: comp_identifiers_list
+
+    RegulatoryIdentifier:
+        description: A market-specific regulatory identifier
+        annotations:
+            sql_identifier: comp_regulatory_identifier
+            owl.filler: schema:PropertyValue
+        attributes:
+            identifier_type:
+                description: Type of identifier
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_id_type
+                    owl.filler: schema:propertyID
+                    references: "ESPR Art 9 1.; CIRPASS"
+                    comment: "GTIN-14, ISO/IEC 15459-6, TARIC code"
+            identifier_value:
+                description: Value of the identifier
+                range: string
+                required: true
+                annotations:
+                    sql_identifier: comp_id_value
+                    owl.filler: schema:value
+            issuing_authority:
+                description: Authority that issued this identifier
+                range: string
+                annotations:
+                    sql_identifier: comp_id_authority
+                    owl.filler: schema:provider
+                    references: "ESPR Art 11; CIRPASS"
+            validity_scope:
+                description: Scope where this identifier is valid
+                range: string
+                annotations:
+                    sql_identifier: comp_id_scope
+                    owl.filler: dcterms:spatial
+
+# ================================================================================
+# ENUMERATIONS
+# ================================================================================
+
+enums:
+    CommitmentCategoryType:
+        description: Types of commitment categories
+        permissible_values:
+            REGULATORY:
+                description: Legally required regulatory commitment
+                annotations:
+                    sql_identifier: comp_cat_regulatory
+                    owl.filler: schema:LegislationObject
+                    references: "ESPR; REACH Regulation (EC) No 1907/2006; RoHS Directive 2011/65/EU; Product Safety Directive; Ecodesign Directive 2009/125/EC; CLP Regulation (EC) No 1272/2008"
+            VOLUNTARY:
+                description: Voluntary commitment beyond legal requirements
+                annotations:
+                    sql_identifier: comp_cat_voluntary
+                    owl.filler: schema:voluntaryCommitment
+                    references: "King et al.; CIRPASS"
+            CONTRACTUAL:
+                description: Commitment arising from contractual obligations
+                annotations:
+                    sql_identifier: comp_cat_contractual
+                    owl.filler: schema:Contract
+            INDUSTRY_STANDARD:
+                description: Industry standard or best practice commitment
+                annotations:
+                    sql_identifier: comp_cat_industry
+                    owl.filler: schema:industry
+                    references: "King et al.; Jensen et al."
+            CUSTOMER_REQUIREMENT:
+                description: Specific customer requirement
+                annotations:
+                    sql_identifier: comp_cat_customer
+                    owl.filler: schema:customer
+            ENVIRONMENTAL:
+                description: Environmental commitment
+                annotations:
+                    sql_identifier: comp_cat_environmental
+                    owl.filler: envo:environmental_system
+                    references: "King et al.; Berger et al.; Battery Pass"
+            SOCIAL:
+                description: Social responsibility commitment
+                annotations:
+                    sql_identifier: comp_cat_social
+                    owl.filler: schema:socialResponsibility
+                    references: "King et al."
+            QUALITY:
+                description: Quality-related commitment
+                annotations:
+                    sql_identifier: comp_cat_quality
+                    owl.filler: schema:quality
+                    references: "King et al.; CIRPASS"
+
+    ComplianceStatusType:
+        description: Types of compliance status
+        permissible_values:
+            MANDATORY:
+                description: Mandatory requirement in this jurisdiction
+                annotations:
+                    sql_identifier: comp_stat_mandatory
+            VOLUNTARY:
+                description: Voluntary in this jurisdiction
+                annotations:
+                    sql_identifier: comp_stat_voluntary
+            RECOMMENDED:
+                description: Recommended but not required
+                annotations:
+                    sql_identifier: comp_stat_recommended
+            OPTIONAL:
+                description: Optional requirement
+                annotations:
+                    sql_identifier: comp_stat_optional
+            NOT_APPLICABLE:
+                description: Not applicable in this jurisdiction
+                annotations:
+                    sql_identifier: comp_stat_na
+            PENDING:
+                description: Pending regulatory decision
+                annotations:
+                    sql_identifier: comp_stat_pending
+            SUPERSEDED:
+                description: Superseded by newer requirement
+                annotations:
+                    sql_identifier: comp_stat_superseded
+            TRANSITIONAL:
+                description: In transitional period
+                annotations:
+                    sql_identifier: comp_stat_transitional
+
+    RequirementType:
+        description: Types of requirements
+        permissible_values:
+            REGULATION:
+                description: Legal regulation
+                annotations:
+                    sql_identifier: comp_reqtype_regulation
+                    owl.filler: schema:Legislation
+                    references: "ESPR; Product Safety Directive"
+            DIRECTIVE:
+                description: Legal directive
+                annotations:
+                    sql_identifier: comp_reqtype_directive
+                    owl.filler: schema:LegislationObject
+                    references: "Ecodesign Directive; Energy Labelling Directive"
+            STANDARD:
+                description: Technical standard
+                annotations:
+                    sql_identifier: comp_reqtype_standard
+                    owl.filler: dcterms:Standard
+                    references: "ISO standards; EN standards"
+            SPECIFICATION:
+                description: Technical specification
+                annotations:
+                    sql_identifier: comp_reqtype_specification
+                    owl.filler: schema:TechArticle
+            GUIDELINE:
+                description: Guideline or guidance document
+                annotations:
+                    sql_identifier: comp_reqtype_guideline
+                    owl.filler: schema:Guide
+            TECHNICAL_REPORT:
+                description: Technical report
+                annotations:
+                    sql_identifier: comp_reqtype_tech_report
+                    owl.filler: schema:Report
+                    references: "King et al.; Battery Pass"
+            CODE_OF_PRACTICE:
+                description: Code of practice
+                annotations:
+                    sql_identifier: comp_reqtype_code
+                    owl.filler: schema:Code
+
+    RequirementStatusType:
+        description: Status types for requirements in different jurisdictions
+        permissible_values:
+            MANDATORY:
+                description: Mandatory requirement
+                annotations:
+                    sql_identifier: comp_reqstat_mandatory
+            PRESUMPTION_OF_CONFORMITY:
+                description: Provides presumption of conformity
+                annotations:
+                    sql_identifier: comp_reqstat_presumption
+            RECOMMENDED:
+                description: Recommended but not mandatory
+                annotations:
+                    sql_identifier: comp_reqstat_recommended
+            VOLUNTARY:
+                description: Voluntary standard
+                annotations:
+                    sql_identifier: comp_reqstat_voluntary
+            SUPERSEDED:
+                description: Superseded by newer requirement
+                annotations:
+                    sql_identifier: comp_reqstat_superseded
+            WITHDRAWN:
+                description: Withdrawn requirement
+                annotations:
+                    sql_identifier: comp_reqstat_withdrawn
+            DRAFT:
+                description: Draft status
+                annotations:
+                    sql_identifier: comp_reqstat_draft
+            UNDER_REVIEW:
+                description: Under review or revision
+                annotations:
+                    sql_identifier: comp_reqstat_review
+
+    EvidenceType:
+        description: Types of evidence documents
+        permissible_values:
+            DECLARATION_OF_CONFORMITY:
+                description: Declaration of Conformity (DoC)
+                annotations:
+                    sql_identifier: comp_evidtype_doc
+                    owl.filler: schema:ConformityDeclaration
+                    references: "ESPR; EU Declaration of Conformity per Decision No 768/2008/EC"
+            CERTIFICATE:
+                description: Certificate from third party
+                annotations:
+                    sql_identifier: comp_evidtype_cert
+                    owl.filler: schema:Certificate
+                    references: "ESPR; Regulation (EC) No 765/2008 for Notified Body accreditation"
+            TEST_REPORT:
+                description: Test report
+                annotations:
+                    sql_identifier: comp_evidtype_test
+                    owl.filler: schema:Report
+                    references: "ESPR; Battery Pass"
+            INSPECTION_REPORT:
+                description: Inspection report
+                annotations:
+                    sql_identifier: comp_evidtype_inspection
+                    owl.filler: schema:InspectionReport
+            MARKING:
+                description: Conformity marking (CE, UKCA, etc.)
+                annotations:
+                    sql_identifier: comp_evidtype_marking
+                    owl.filler: schema:ConformityMark
+                    references: "CIRPASS; ESPR"
+                    comment: "Mandatory: current mandatory information"
+            ATTESTATION:
+                description: Attestation of conformity
+                annotations:
+                    sql_identifier: comp_evidtype_attestation
+                    owl.filler: schema:Attestation
+            TYPE_EXAMINATION:
+                description: Type examination certificate
+                annotations:
+                    sql_identifier: comp_evidtype_type_exam
+                    owl.filler: schema:TypeExamination
+            APPROVAL:
+                description: Type, product, or material approval
+                annotations:
+                    sql_identifier: comp_evidtype_approval
+                    owl.filler: schema:Approval
+            TECHNICAL_FILE:
+                description: Technical documentation file
+                annotations:
+                    sql_identifier: comp_evidtype_tech_file
+                    owl.filler: schema:TechnicalSpecification
+                    references: "King et al.; ESPR"
+            VERIFICATION:
+                description: Verification document
+                annotations:
+                    sql_identifier: comp_evidtype_verification
+                    owl.filler: prov:qualifiedVerification
+            MATERIAL_CERTIFICATE:
+                description: Material certificate or mill test report (e.g., EN 10204 3.1, 3.2 certificates)
+                annotations:
+                    sql_identifier: comp_evidtype_material_cert
+                    owl.filler: bfo:BFO_0000030
+                    references: "EN 10204:2004; ASTM E2819; ISO 10474"
+                    comment: "Material certificates per EN 10204 types 2.1, 2.2, 3.1, 3.2"
+            MATERIAL_DATASHEET:
+                description: Technical material datasheet or material specification sheet
+                annotations:
+                    sql_identifier: comp_evidtype_material_datasheet
+                    owl.filler: dcat:Dataset
+                    references: "ISO 10303 (STEP); IPC-4101 (material datasheets)"
+                    comment: "Technical data sheets following industry standards"
+            SAFETY_DATA_SHEET:
+                description: Safety Data Sheet (SDS/MSDS) for hazardous materials
+                annotations:
+                    sql_identifier: comp_evidtype_sds
+                    owl.filler: chebi:CHEBI_33250
+                    references: "REACH Regulation (EC) No 1907/2006 Annex II; UN GHS Rev.9; ISO 11014; OSHA HCS 29 CFR 1910.1200"
+                    comment: "SDS following GHS 16-section format"
+            GRADE_CERTIFICATE:
+                description: Material grade verification certificate
+                annotations:
+                    sql_identifier: comp_evidtype_grade_cert
+                    owl.filler: bfo:BFO_0000030
+                    references: "ASTM A1058; ISO 10474; EN 10168"
+                    comment: "Material grade certificates per ISO/ASTM/EN standards"
+            CHEMICAL_ANALYSIS:
+                description: Chemical composition analysis report
+                annotations:
+                    sql_identifier: comp_evidtype_chemical_analysis
+                    owl.filler: chebi:CHEBI_33893
+                    references: "ISO/IEC 17025; ASTM E1019 (carbon/sulfur); ASTM E1479 (spectrometry)"
+                    comment: "Chemical analysis per ISO/IEC 17025 accredited laboratories"
+            ORIGIN_CERTIFICATE:
+                description: Certificate of origin for materials (conflict minerals, sustainable sourcing)
+                annotations:
+                    sql_identifier: comp_evidtype_origin_cert
+                    owl.filler: prov:Entity
+                    references: "EU Conflict Minerals Regulation 2017/821; EUTR 995/2010; OECD Due Diligence Guidance; Dodd-Frank Act Section 1502"
+                    comment: "Certificates for conflict minerals (3TG) and sustainable sourcing verification"
+            MATERIAL_PROPERTIES_TEST:
+                description: Material properties test report (tensile strength, hardness, purity, etc.)
+                annotations:
+                    sql_identifier: comp_evidtype_properties_test
+                    owl.filler: bfo:BFO_0000015
+                    references: "ASTM E8 (tensile); ASTM E18 (hardness); ISO 6892 (tensile); ISO 6508 (Rockwell); EN 10002"
+                    comment: "Mechanical and physical property testing per ISO/ASTM/EN standards"
+
+    AuthorityType:
+        description: Types of issuing authorities
+        permissible_values:
+            NOTIFIED_BODY:
+                description: Notified Body
+                annotations:
+                    sql_identifier: comp_authtype_nb
+            CERTIFICATION_BODY:
+                description: Certification Body
+                annotations:
+                    sql_identifier: comp_authtype_cb
+                    references: "ESPR; CIRPASS; Battery Pass"
+            TEST_LABORATORY:
+                description: Test Laboratory
+                annotations:
+                    sql_identifier: comp_authtype_lab
+                    references: "King et al.; Battery Pass"
+            INSPECTION_BODY:
+                description: Inspection Body
+                annotations:
+                    sql_identifier: comp_authtype_inspection
+            MANUFACTURER:
+                description: Manufacturer (self-declaration)
+                annotations:
+                    sql_identifier: comp_authtype_manufacturer
+            AUTHORIZED_REPRESENTATIVE:
+                description: Authorized Representative
+                annotations:
+                    sql_identifier: comp_authtype_auth_rep
+            COMPETENT_AUTHORITY:
+                description: Competent Authority
+                annotations:
+                    sql_identifier: comp_authtype_competent
+                    references: "ESPR; CIRPASS"
+            ACCREDITATION_BODY:
+                description: Accreditation Body
+                annotations:
+                    sql_identifier: comp_authtype_accreditation
+
+    ManagementSystemType:
+        description: Types of management systems
+        permissible_values:
+            QMS:
+                description: Quality Management System
+                annotations:
+                    sql_identifier: comp_mstype_qms
+                    owl.filler: schema:QualityManagement
+                    references: "CIRPASS; King et al."
+            EMS:
+                description: Environmental Management System
+                annotations:
+                    sql_identifier: comp_mstype_ems
+                    owl.filler: envo:environmental_management
+                    references: "Berger et al.; King et al."
+            OHS:
+                description: Occupational Health and Safety
+                annotations:
+                    sql_identifier: comp_mstype_ohs
+                    owl.filler: schema:OccupationalHealth
+            ISMS:
+                description: Information Security Management System
+                annotations:
+                    sql_identifier: comp_mstype_isms
+                    owl.filler: schema:InformationSecurity
+            ENERGY:
+                description: Energy Management System
+                annotations:
+                    sql_identifier: comp_mstype_energy
+                    owl.filler: schema:EnergyManagement
+            CSR:
+                description: Corporate Social Responsibility
+                annotations:
+                    sql_identifier: comp_mstype_csr
+                    owl.filler: schema:SocialResponsibility
+                    references: "King et al.; Battery Pass"
+            FSMS:
+                description: Food Safety Management System
+                annotations:
+                    sql_identifier: comp_mstype_fsms
+                    owl.filler: schema:FoodSafety
+            BCM:
+                description: Business Continuity Management
+                annotations:
+                    sql_identifier: comp_mstype_bcm
+                    owl.filler: schema:BusinessContinuity
+
+    CertificationStatusType:
+        description: Status of certification
+        permissible_values:
+            CERTIFIED:
+                description: Currently certified
+                annotations:
+                    sql_identifier: comp_certstat_certified
+            PENDING:
+                description: Certification pending
+                annotations:
+                    sql_identifier: comp_certstat_pending
+            EXPIRED:
+                description: Certification expired
+                annotations:
+                    sql_identifier: comp_certstat_expired
+            SUSPENDED:
+                description: Certification suspended
+                annotations:
+                    sql_identifier: comp_certstat_suspended
+            WITHDRAWN:
+                description: Certification withdrawn
+                annotations:
+                    sql_identifier: comp_certstat_withdrawn
+            IN_PROGRESS:
+                description: Certification in progress
+                annotations:
+                    sql_identifier: comp_certstat_inprogress
+
+    AuditType:
+        description: Types of audits
+        permissible_values:
+            INITIAL:
+                description: Initial certification audit
+                annotations:
+                    sql_identifier: comp_audittype_initial
+            SURVEILLANCE:
+                description: Surveillance audit
+                annotations:
+                    sql_identifier: comp_audittype_surveillance
+            RECERTIFICATION:
+                description: Recertification audit
+                annotations:
+                    sql_identifier: comp_audittype_recert
+            SPECIAL:
+                description: Special or unscheduled audit
+                annotations:
+                    sql_identifier: comp_audittype_special
+            INTERNAL:
+                description: Internal audit
+                annotations:
+                    sql_identifier: comp_audittype_internal
+            CUSTOMER:
+                description: Customer audit
+                annotations:
+                    sql_identifier: comp_audittype_customer
+
+    SafetyItemType:
+        description: Types of safety items
+        permissible_values:
+            WARNING:
+                description: Safety warning
+                annotations:
+                    sql_identifier: comp_safetytype_warning
+            INSTRUCTION:
+                description: Safety instruction
+                annotations:
+                    sql_identifier: comp_safetytype_instruction
+            PROHIBITION:
+                description: Prohibition or restriction
+                annotations:
+                    sql_identifier: comp_safetytype_prohibition
+            CAUTION:
+                description: Caution notice
+                annotations:
+                    sql_identifier: comp_safetytype_caution
+            DANGER:
+                description: Danger notice
+                annotations:
+                    sql_identifier: comp_safetytype_danger
+            NOTICE:
+                description: General safety notice
+                annotations:
+                    sql_identifier: comp_safetytype_notice
+
+    StatementType:
+        description: Types of compliance statements
+        permissible_values:
+            EMC:
+                description: Electromagnetic compatibility statement
+                annotations:
+                    sql_identifier: comp_stmttype_emc
+                    references: "King et al."
+            SAFETY:
+                description: Safety statement
+                annotations:
+                    sql_identifier: comp_stmttype_safety
+                    references: "King et al.; CIRPASS; Jensen et al."
+            ENVIRONMENTAL:
+                description: Environmental statement
+                annotations:
+                    sql_identifier: comp_stmttype_environmental
+                    references: "King et al.; Berger et al."
+            RADIO:
+                description: Radio equipment statement
+                annotations:
+                    sql_identifier: comp_stmttype_radio
+            CHEMICAL:
+                description: Chemical compliance statement
+                annotations:
+                    sql_identifier: comp_stmttype_chemical
+                    references: "REACH; ROHS; King et al."
+                    comment: "Includes REACH and RoHS compliance; substances of concern above 0.1% weight by weight per SCIP database requirements"
+            ENERGY:
+                description: Energy efficiency statement
+                annotations:
+                    sql_identifier: comp_stmttype_energy
+                    references: "King et al.; Energy Labelling Directive"
+            PRIVACY:
+                description: Privacy and data protection statement
+                annotations:
+                    sql_identifier: comp_stmttype_privacy
+            ACCESSIBILITY:
+                description: Accessibility statement
+                annotations:
+                    sql_identifier: comp_stmttype_accessibility
+
+    PartyRoleType:
+        description: Types of party roles
+        permissible_values:
+            MANUFACTURER:
+                description: Manufacturer
+                annotations:
+                    sql_identifier: comp_roletype_manufacturer
+                    references: "ESPR Art 21 6.; CIRPASS; Battery Pass"
+            IMPORTER:
+                description: Importer
+                annotations:
+                    sql_identifier: comp_roletype_importer
+                    references: "ESPR Annex III g); CIRPASS"
+            AUTHORIZED_REPRESENTATIVE:
+                description: Authorized Representative
+                annotations:
+                    sql_identifier: comp_roletype_auth_rep
+                    references: "ESPR; CIRPASS"
+            DISTRIBUTOR:
+                description: Distributor
+                annotations:
+                    sql_identifier: comp_roletype_distributor
+            FULFILMENT_SERVICE_PROVIDER:
+                description: Fulfilment service provider
+                annotations:
+                    sql_identifier: comp_roletype_fulfilment
+            ECONOMIC_OPERATOR:
+                description: Economic operator
+                annotations:
+                    sql_identifier: comp_roletype_economic
+                    references: "ESPR Art 11; CIRPASS"
+            RESPONSIBLE_PERSON:
+                description: Responsible person
+                annotations:
+                    sql_identifier: comp_roletype_responsible
+                    references: "ESPR; CIRPASS; Battery Pass"

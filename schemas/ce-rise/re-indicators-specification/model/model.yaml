@@ -1,0 +1,270 @@
+id: https://ce-rise-models.codeberg.page/re-indicators-specification/
+name: re_indicators
+title: CE-RISE RE-Indicators Data Model
+description: Core data model for RE indicators specification and assessment
+license: https://creativecommons.org/licenses/by-nc/4.0/
+version: 0.0.5
+
+prefixes:
+    linkml: https://w3id.org/linkml/
+    re_ind: https://ce-rise-models.codeberg.page/re-indicators-specification/
+
+imports:
+    - linkml:types
+    # Import core parameter definitions and product-specific configurations
+    - ./indicators/REcycle_core
+    - ./indicators/REcycle_PV
+    - ./indicators/REcycle_Printer
+    - ./indicators/REcycle_Battery
+    - ./indicators/REcycle_Laptop
+    - ./indicators/REcycle_Heatpump
+    - ./indicators/REuse_core
+    - ./indicators/REuse_Laptop
+    - ./indicators/REuse_Printer
+    - ./indicators/REpair_core
+    - ./indicators/REpair_Laptop
+    - ./indicators/REmanufacture_core
+    - ./indicators/REmanufacture_Laptop
+    - ./indicators/REmanufacture_Printer
+    - ./indicators/REfurbish_core
+    - ./indicators/REfurbish_Laptop
+    # Future specifications can be added here:
+    # - ./indicators/REfurbish_Printer
+
+default_range: string
+
+classes:
+    # ============================================
+    # CORE SPECIFICATION CLASSES
+    # These define the structure of indicators
+    # ============================================
+
+    IndicatorProductConfiguration:
+        description: Configuration linking an indicator to a product with specific parameters
+        attributes:
+            id:
+                range: string
+                required: true
+                identifier: true
+                description: Unique ID like "REcycle_PV"
+            indicator_type:
+                range: IndicatorType
+                required: true
+                description: Type of indicator (REcycle, REuse, etc.)
+            product_category:
+                range: ProductCategoryType
+                required: true
+                description: Product category this applies to
+            name:
+                range: string
+                required: true
+            description:
+                range: string
+            parameter_applications:
+                range: ParameterApplication
+                multivalued: true
+                inlined: true
+                description: Parameters with their weights for this product
+
+    ParameterApplication:
+        description: Application of a parameter to a specific product with its weight
+        attributes:
+            parameter_ref:
+                range: string
+                required: true
+                description: Reference to a ParameterSpecification
+            weight:
+                range: float
+                required: true
+                minimum_value: 0.0
+                maximum_value: 1.0
+                description: Weight of this parameter for this product
+            applicable_questions:
+                range: string
+                multivalued: true
+                description: IDs of questions from the parameter that apply to this product
+
+    ParameterSpecification:
+        description: A parameter within an indicator with its questions
+        abstract: true
+        attributes:
+            id:
+                range: string
+                required: true
+                identifier: true
+            name:
+                range: string
+                required: true
+                description: e.g., "Documentation availability"
+            description:
+                range: string
+            weight:
+                range: float
+                required: true
+                minimum_value: 0.0
+                maximum_value: 1.0
+                description: Weight in the overall indicator score
+            is_bonus:
+                range: boolean
+                ifabsent: false
+                description: Whether this is a bonus parameter
+            questions:
+                range: QuestionSpecification
+                multivalued: true
+                inlined: true
+
+    QuestionSpecification:
+        description: A question with its possible answers and weight
+        abstract: true
+        attributes:
+            id:
+                range: string
+                required: true
+                identifier: true
+                description: e.g., "Q1.1"
+            text:
+                range: string
+                required: true
+                description: The question text
+            weight:
+                range: float
+                required: true
+                minimum_value: 0.0
+                maximum_value: 1.0
+                description: Weight within the parameter
+            answer_options:
+                range: AnswerOption
+                multivalued: true
+                inlined: true
+                required: true
+
+    AnswerOption:
+        description: A possible answer with its score
+        abstract: true
+        attributes:
+            id:
+                range: string
+                identifier: true
+            text:
+                range: string
+                required: true
+                description: Answer text
+            score:
+                range: float
+                required: true
+                minimum_value: 0.0
+                maximum_value: 5.0
+                description: Score value for this answer
+
+    # ============================================
+    # ASSESSMENT CLASSES
+    # These capture actual assessments
+    # ============================================
+
+    Assessment:
+        description: An actual assessment of a product
+        attributes:
+            id:
+                range: string
+                required: true
+                identifier: true
+            timestamp:
+                range: datetime
+                required: true
+                description: When assessment was performed
+            model_version:
+                range: string
+                required: true
+                description: Version of the model used for this assessment
+            product_info:
+                range: ProductInfo
+                required: true
+                inlined: true
+            indicator_specification_id:
+                range: string
+                required: true
+                description: Reference to IndicatorSpecification used (e.g., REcycle_PV)
+            parameter_assessments:
+                range: ParameterAssessment
+                multivalued: true
+                inlined: true
+                description: Assessment results for each parameter
+            total_score:
+                range: float
+                description: Overall computed score
+
+    ProductInfo:
+        description: Information about the assessed product
+        attributes:
+            manufacturer:
+                range: string
+            model:
+                range: string
+            serial_number:
+                range: string
+            product_category:
+                range: ProductCategoryType
+                required: true
+
+    ParameterAssessment:
+        description: Assessment results for a single parameter
+        attributes:
+            parameter_id:
+                range: string
+                required: true
+                description: Reference to ParameterSpecification
+            question_answers:
+                range: QuestionAnswer
+                multivalued: true
+                inlined: true
+            computed_score:
+                range: float
+                required: true
+                description: Computed score for this parameter
+
+    QuestionAnswer:
+        description: Answer given to a specific question
+        attributes:
+            question_id:
+                range: string
+                required: true
+                description: Reference to QuestionSpecification
+            selected_answer_id:
+                range: string
+                description: ID of selected AnswerOption
+            answer_score:
+                range: float
+                required: true
+                description: Score obtained for this answer
+            notes:
+                range: string
+                description: Optional notes or evidence
+
+enums:
+    IndicatorType:
+        permissible_values:
+            REuse:
+                description: Reuse indicator
+            REpair:
+                description: Repair indicator
+            REmanufacture:
+                description: Remanufacture indicator
+            REfurbish:
+                description: Refurbish indicator
+            REcycle:
+                description: Recycle indicator
+
+    ProductCategoryType:
+        permissible_values:
+            PV:
+                description: Photovoltaic panels
+            Battery:
+                description: Batteries
+            Laptop:
+                description: Laptop computers
+            Printer:
+                description: Printers
+            HVAC:
+                description: Heating, ventilation, and air conditioning
+            Heatpump:
+                description: Heat pumps

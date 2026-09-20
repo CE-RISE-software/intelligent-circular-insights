@@ -1,0 +1,36 @@
+{
+  "title": "CE-RISE DP Access and Governance",
+  "description": "Operational and access-related metadata model that governs how DPP and DMP records are stored, exposed, shared, and maintained across systems. Defines access levels, security settings, data carrier characteristics, longevity policies, interoperability configurations, and system integration parameters for the CE-RISE digital product passport and digital material passport architecture.",
+  "license": "CC-BY-NC-4.0",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Boero, Riccardo",
+      "affiliation": "NILU",
+      "orcid": "0000-0002-7468-9096"
+    }
+  ],
+  "keywords": [
+    "CE-RISE",
+    "Data Model",
+    "Ontology",
+    "Open Source",
+    "Open Science",
+    "Digital Product Passport",
+    "Digital Material Passport"
+  ],
+  "communities": [
+    { "identifier": "ce-rise" },
+    { "identifier": "impact" }
+  ],
+  "grants": [
+    { "id": "101092281" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://codeberg.org/CE-RISE-models/dp-access-and-governance",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}
