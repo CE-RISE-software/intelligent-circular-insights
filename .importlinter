@@ -1,0 +1,24 @@
+[importlinter]
+root_packages =
+    ici_core
+    ici_evidence
+    ici_symbolic
+    ici_substrates
+    ici_reliability
+    ici_datatrust
+    ici_llm
+    ici_policy
+    ici_eval
+
+[importlinter:contract:core-is-independent]
+name = ici_core depends on nothing in this project
+type = independence
+modules =
+    ici_core
+
+[importlinter:contract:layers]
+name = Adapters depend on the domain, never the reverse
+type = layers
+layers =
+    ici_evidence | ici_symbolic | ici_substrates | ici_reliability | ici_datatrust | ici_llm | ici_policy | ici_eval
+    ici_core

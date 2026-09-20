@@ -1,0 +1,136 @@
+[project]
+name = "intelligent-circular-insights"
+version = "0.1.0"
+description = "Neuro-symbolic DPP workbench with interchangeable Normal and CE-RISE backends"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = { text = "MIT" }
+dependencies = [
+    "ici-core",
+    "ici-evidence",
+    "ici-symbolic",
+    "ici-substrates",
+    "ici-reliability",
+    "ici-datatrust",
+    "ici-llm",
+    "ici-policy",
+    "ici-eval",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "structlog>=24.4",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "hypothesis>=6.115",
+    "httpx>=0.28",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "import-linter>=2.1",
+    "types-requests",
+    "types-PyYAML",
+    "types-jsonschema",
+]
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+ici-core        = { workspace = true }
+ici-evidence    = { workspace = true }
+ici-symbolic    = { workspace = true }
+ici-substrates  = { workspace = true }
+ici-reliability = { workspace = true }
+ici-datatrust   = { workspace = true }
+ici-llm         = { workspace = true }
+ici-policy      = { workspace = true }
+ici-eval        = { workspace = true }
+
+# ---------------------------------------------------------------- ruff
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["packages", "apps", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "RUF", "ANN", "TID"]
+ignore = [
+    "ANN401",  # Any is sometimes the honest type at an adapter boundary
+    "B008",    # FastAPI Depends() in defaults is the framework idiom
+    "N818",    # Every domain exception subclasses IciError, which carries the suffix.
+               # Repeating it gives BudgetExceededError and SubstrateUnavailableError,
+               # which read worse at the raise site for no added clarity.
+    "RUF009",  # NewType calls in dataclass defaults are identity functions at runtime,
+               # not shared mutable state. The rule is guarding against a real hazard
+               # that these specific calls do not have.
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["ANN", "N802", "N803"]
+# Carried over verbatim from the demo, not rewritten: 1,300 lines of verified
+# arithmetic covered by a golden oracle. Reformatting it to satisfy style rules
+# would put the numbers at risk for no functional gain, so the file keeps its
+# original shape and its exemption is recorded here rather than sprinkled as
+# noqa comments through the source. See the module docstring.
+"packages/ici_substrates/src/ici_substrates/carbon/engine.py" = [
+    "E501",    # long lines in factor tables and trace strings
+    "ANN204",  # untyped __init__ in the original
+    "RUF001",  # the multiplication sign in human-readable trace text is intended
+    "RUF005",  # list concatenation the original uses throughout
+]
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "ici_core", "ici_evidence", "ici_symbolic", "ici_substrates",
+    "ici_reliability", "ici_datatrust", "ici_llm", "ici_policy", "ici_eval",
+]
+
+# ---------------------------------------------------------------- mypy
+[tool.mypy]
+python_version = "3.10"
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+no_implicit_optional = true
+strict_equality = true
+
+# ici_core is the domain: nothing untyped may cross a port (ARCHITECTURE.md §12)
+[[tool.mypy.overrides]]
+module = ["ici_core.*", "ici_llm.*"]
+disallow_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+warn_return_any = true
+no_implicit_reexport = true
+
+# ---------------------------------------------------------------- pytest
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["packages/ici_core/src", "packages/ici_evidence/src", "packages/ici_symbolic/src",
+              "packages/ici_substrates/src", "packages/ici_reliability/src",
+              "packages/ici_datatrust/src", "packages/ici_llm/src",
+              "packages/ici_policy/src", "packages/ici_eval/src", "apps", "."]
+addopts = "-q --strict-markers"
+markers = [
+    "contract: one suite, run against every implementation of a port",
+    "cassette: replays a recorded LLM interaction; never makes a live call",
+    "live: makes real OpenAI calls. Run by hand. Never in CI, never in a hook.",
+    "slow: takes more than a couple of seconds",
+]
+
+[tool.coverage.run]
+source = ["packages"]
+omit = ["*/tests/*", "*/__init__.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "\\.\\.\\.",
+]

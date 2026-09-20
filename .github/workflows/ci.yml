@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push: { branches: [main] }
+  pull_request:
+
+# No OPENAI_API_KEY is provided to this workflow, on purpose. Every LLM
+# interaction replays from a cassette; a cache miss fails the build rather than
+# making a live call. Nobody can spend money by opening a pull request.
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - run: uv python install ${{ matrix.python }}
+      - run: uv sync --all-packages --dev
+      - run: make lint
+      - run: make typecheck
+      - run: make layering
+      - run: uv run pytest --cov=packages --cov-report=term-missing
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

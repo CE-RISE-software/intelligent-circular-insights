@@ -1,0 +1,12 @@
+# Codeberg CI. Mirrors .github/workflows/ci.yml.
+# No OPENAI_API_KEY here either — cassettes replay, nothing calls out.
+steps:
+  check:
+    image: ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+    commands:
+      - uv sync --all-packages --dev
+      - uv run ruff check packages apps tests
+      - uv run ruff format --check packages apps tests
+      - uv run mypy packages/ici_core/src packages/ici_llm/src apps
+      - uv run lint-imports --config .importlinter
+      - uv run pytest --cov=packages --cov-report=term-missing
