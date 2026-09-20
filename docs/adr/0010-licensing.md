@@ -54,6 +54,51 @@ correct handling either way.
   it plainly is more useful than burying it.
 − `reuse` becomes a dev dependency and a CI step.
 
+## Addendum — "pick something open to everyone" (asked 20 Sep)
+
+The ask was for a licence open to all. **EUPL-1.2 already is one**, and this is worth
+stating plainly because the name is less familiar than MIT:
+
+- **OSI-approved.** It is on the Open Source Initiative's list.
+- **Commercial use is permitted.** Nothing in it restricts who may use the software or
+  what for.
+- **Permissive dependencies work.** MIT, BSD and Apache-2.0 libraries can be
+  incorporated, statically linked and dynamically linked inside an EUPL project. Our
+  stack — FastAPI, rdflib, owlrl, numpy, jsonschema — is entirely permissive, so there
+  is no inbound problem.
+- **It is reciprocal, not viral-by-surprise.** The one obligation is that if you
+  *distribute* a modified version, its source stays under EUPL or one of the licences
+  in its Appendix (GPL-2.0/3.0, AGPL-3.0, LGPL, MPL, OSL, EPL, CPL, CeCILL, LiLiQ).
+  Using it, running it, querying it or building on it internally triggers nothing.
+
+**Decision: keep EUPL-1.2.** Three reasons.
+
+1. It meets the "open to all" bar already, so swapping to MIT or Apache-2.0 would buy
+   permissiveness we do not lack, at the cost of the one thing EUPL adds — a guarantee
+   that a downstream fork of publicly funded software stays public.
+2. **It is not ours to change.** The repository lives in the `CE-RISE-software`
+   organisation, was created from the consortium template, and is funded under Grant
+   Agreement No. 101092281. Relicensing a consortium deliverable is a consortium
+   decision, not a maintainer's.
+3. Deviating in one repository makes this project the odd one out in an organisation
+   where every other repository is EUPL, for no gain anyone benefits from.
+
+**Where openness is actually constrained is upstream, not here.** The 17 CE-RISE data
+models are CC-BY-NC-4.0, and **NC is not open source** — it bars commercial use, which
+is exactly the restriction "open to all" is meant to avoid. That is a real limitation on
+anyone wanting to build a product on these models, and it is Riccardo's to resolve
+rather than ours to route around.
+
+**So the one thing worth asking him:** was NC deliberate on the data models, or inherited
+from a template? If a consortium partner ever wants to commercialise on top of them,
+CC-BY-4.0 without the NC would remove the blocker while keeping attribution. Until that
+is answered the segregated subtree stands, which is correct under either outcome.
+
+**If you want a permissive licence for your own separate work** — `llmmain`, the paper
+artefacts, anything outside the CE-RISE organisation — **Apache-2.0** is the pick, not
+MIT: same permissiveness, plus an explicit patent grant and a contribution clause, which
+matters for research code that institutions may later want to build on.
+
 ## Not legal advice
 
 This records what the repositories say and how we are handling it. It is not a legal
