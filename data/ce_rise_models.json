@@ -1,0 +1,697 @@
+[
+  {
+    "feature_use": "Use as the system-level map that decides which model modules should be consulted for a user task.",
+    "id": "dp-architecture",
+    "keywords": [
+      "architecture",
+      "profile",
+      "passport",
+      "composition",
+      "module"
+    ],
+    "layer": "Architecture",
+    "neuro_symbolic_value": "The LLM interprets the user intent; symbolic routing maps the intent to the correct model layer before retrieval or calculation.",
+    "signals": [
+      {
+        "keywords": [
+          "schema",
+          "profile",
+          "passport"
+        ],
+        "label": "record composition",
+        "paths": [
+          "applied_schemas",
+          "schema_version"
+        ]
+      }
+    ],
+    "summary": "Overall CE-RISE DPP/DMP model architecture and composition strategy.",
+    "title": "DP Architecture",
+    "url": "https://codeberg.org/CE-RISE-models/dp-architecture"
+  },
+  {
+    "feature_use": "Strengthens Validate & Repair by checking whether a DPP declares which model/schema versions it follows.",
+    "id": "dp-record-metadata",
+    "keywords": [
+      "metadata",
+      "schema",
+      "version",
+      "related passport",
+      "scope",
+      "record"
+    ],
+    "layer": "Metadata",
+    "neuro_symbolic_value": "Rules verify schema/version presence while the LLM explains missing metadata to non-technical users.",
+    "signals": [
+      {
+        "keywords": [
+          "dpp",
+          "passport",
+          "record"
+        ],
+        "label": "DPP identifier",
+        "paths": [
+          "dpp_id",
+          "id"
+        ]
+      },
+      {
+        "keywords": [
+          "schema",
+          "version"
+        ],
+        "label": "schema version",
+        "paths": [
+          "schema_version",
+          "applied_schemas"
+        ]
+      }
+    ],
+    "summary": "Universal metadata envelope declaring applied schemas, scope, related passports, and versioning.",
+    "title": "DP Record Metadata",
+    "url": "https://codeberg.org/CE-RISE-models/dp-record-metadata"
+  },
+  {
+    "feature_use": "Adds production readiness checks for who can read/write each DPP field and how data carriers expose it.",
+    "id": "dp-access-and-governance",
+    "keywords": [
+      "access",
+      "governance",
+      "role",
+      "permission",
+      "consent",
+      "public",
+      "restricted",
+      "carrier"
+    ],
+    "layer": "Metadata",
+    "neuro_symbolic_value": "Symbolic access rules can block unsupported answers; the LLM can summarize policy in human terms.",
+    "signals": [
+      {
+        "keywords": [
+          "access",
+          "role",
+          "permission",
+          "restricted",
+          "public"
+        ],
+        "label": "access policy",
+        "paths": [
+          "access",
+          "governance",
+          "permissions"
+        ]
+      },
+      {
+        "keywords": [
+          "carrier",
+          "qr",
+          "nfc",
+          "data carrier"
+        ],
+        "label": "data carrier",
+        "paths": [
+          "carrier",
+          "qr",
+          "nfc"
+        ]
+      }
+    ],
+    "summary": "Operational access metadata for public, authenticated, restricted, consent, carrier, and logging rules.",
+    "title": "DP Access and Governance",
+    "url": "https://codeberg.org/CE-RISE-models/dp-access-and-governance"
+  },
+  {
+    "feature_use": "Supports audit trails for accepted repairs, generated DPP drafts, and provider writeback history.",
+    "id": "dp-record-custody",
+    "keywords": [
+      "custody",
+      "transfer",
+      "history",
+      "integrity",
+      "custodian",
+      "governance"
+    ],
+    "layer": "Metadata",
+    "neuro_symbolic_value": "The system can derive provenance chains symbolically and let the LLM narrate who changed what and why.",
+    "signals": [
+      {
+        "keywords": [
+          "custody",
+          "transfer",
+          "custodian",
+          "integrity"
+        ],
+        "label": "custody event",
+        "paths": [
+          "custody",
+          "history",
+          "events"
+        ]
+      }
+    ],
+    "summary": "Chain of custody and governance history for DPP/DMP records, including transfer and integrity evidence.",
+    "title": "DP Record Custody",
+    "url": "https://codeberg.org/CE-RISE-models/dp-record-custody"
+  },
+  {
+    "feature_use": "Anchors Search, Single DPP, Validate, and Synthesize around stable product identity.",
+    "id": "product-profile",
+    "keywords": [
+      "product",
+      "brand",
+      "model",
+      "gtin",
+      "serial",
+      "manufacturer",
+      "origin",
+      "category"
+    ],
+    "layer": "Core profile",
+    "neuro_symbolic_value": "The LLM normalizes messy product mentions; symbolic checks prevent mixing evidence from different products.",
+    "signals": [
+      {
+        "keywords": [
+          "product",
+          "brand",
+          "model",
+          "category"
+        ],
+        "label": "product identity",
+        "paths": [
+          "product.id",
+          "product.brand",
+          "product.model",
+          "product.category"
+        ]
+      },
+      {
+        "keywords": [
+          "gtin",
+          "serial",
+          "lot",
+          "identifier"
+        ],
+        "label": "product identifiers",
+        "paths": [
+          "gtin",
+          "serial",
+          "lot",
+          "dpp_id"
+        ]
+      }
+    ],
+    "summary": "Mandatory product identity, attributes, origin, and compliance context for Digital Product Passports.",
+    "title": "Product Profile",
+    "url": "https://codeberg.org/CE-RISE-models/product-profile"
+  },
+  {
+    "feature_use": "Improves Carbon and Synthesize by turning material lists into model-aligned material passport fields.",
+    "id": "material-profile",
+    "keywords": [
+      "material",
+      "composition",
+      "grade",
+      "supplier",
+      "origin",
+      "batch",
+      "chemical",
+      "recycled"
+    ],
+    "layer": "Core profile",
+    "neuro_symbolic_value": "Symbolic mass-balance checks validate material shares while the LLM extracts material names from free text.",
+    "signals": [
+      {
+        "keywords": [
+          "material",
+          "composition",
+          "share",
+          "mass"
+        ],
+        "label": "material composition",
+        "paths": [
+          "materials",
+          "composition"
+        ]
+      },
+      {
+        "keywords": [
+          "supplier",
+          "origin",
+          "batch",
+          "region"
+        ],
+        "label": "supplier/origin",
+        "paths": [
+          "supplier",
+          "origin",
+          "source_region"
+        ]
+      }
+    ],
+    "summary": "Mandatory material identity, composition, origin, supplier, and compliance context for Digital Material Passports.",
+    "title": "Material Profile",
+    "url": "https://codeberg.org/CE-RISE-models/material-profile"
+  },
+  {
+    "feature_use": "Adds lifecycle-event evidence to Search and enables route-specific carbon/repair/custody questions.",
+    "id": "traceability-and-life-cycle-events",
+    "keywords": [
+      "traceability",
+      "event",
+      "ownership",
+      "logistics",
+      "location",
+      "reverse logistics",
+      "return",
+      "batch"
+    ],
+    "layer": "Lifecycle events",
+    "neuro_symbolic_value": "LLM extraction can turn event narratives into candidate events; symbolic ordering checks timestamps and custody chains.",
+    "signals": [
+      {
+        "keywords": [
+          "event",
+          "logistics",
+          "ownership",
+          "location",
+          "return"
+        ],
+        "label": "lifecycle events",
+        "paths": [
+          "events",
+          "traceability",
+          "logistics"
+        ]
+      }
+    ],
+    "summary": "Dynamic lifecycle events for products/materials: ownership, logistics, value-adding activities, and reverse flows.",
+    "title": "Traceability and Life Cycle Events",
+    "url": "https://codeberg.org/CE-RISE-models/traceability-and-life-cycle-events"
+  },
+  {
+    "feature_use": "Powers practical technician questions and session-memory demonstrations around repair instructions.",
+    "id": "usage-and-maintenance",
+    "keywords": [
+      "usage",
+      "maintenance",
+      "manual",
+      "spare",
+      "service",
+      "repair",
+      "schedule",
+      "operating"
+    ],
+    "layer": "Lifecycle operations",
+    "neuro_symbolic_value": "The LLM answers technician language; symbolic filters require the answer to cite an instruction, schedule, or spare part.",
+    "signals": [
+      {
+        "keywords": [
+          "maintenance",
+          "repair",
+          "spare",
+          "service"
+        ],
+        "label": "maintenance instructions",
+        "paths": [
+          "maintenance",
+          "repair",
+          "spare_parts"
+        ]
+      },
+      {
+        "keywords": [
+          "usage",
+          "manual",
+          "operating",
+          "instruction"
+        ],
+        "label": "use instructions",
+        "paths": [
+          "usage",
+          "manual",
+          "instructions"
+        ]
+      }
+    ],
+    "summary": "Operational lifecycle model for use instructions, schedules, spare parts, usage metrics, and maintenance records.",
+    "title": "Usage and Maintenance",
+    "url": "https://codeberg.org/CE-RISE-models/usage-and-maintenance"
+  },
+  {
+    "feature_use": "Adds a new demo path for broken-product questions and repair evidence.",
+    "id": "diagnostic-results",
+    "keywords": [
+      "diagnostic",
+      "test",
+      "condition",
+      "fault",
+      "error",
+      "certificate",
+      "measurement",
+      "technician"
+    ],
+    "layer": "Lifecycle operations",
+    "neuro_symbolic_value": "LLM maps user symptom descriptions to diagnostics; symbolic rules compare measured values to pass/fail criteria.",
+    "signals": [
+      {
+        "keywords": [
+          "diagnostic",
+          "test",
+          "fault",
+          "error",
+          "condition"
+        ],
+        "label": "diagnostic event",
+        "paths": [
+          "diagnostic",
+          "tests",
+          "condition"
+        ]
+      }
+    ],
+    "summary": "Structured outputs from diagnostics, repair, service, predictive maintenance, and condition assessment.",
+    "title": "Diagnostic Results",
+    "url": "https://codeberg.org/CE-RISE-models/diagnostic-results"
+  },
+  {
+    "feature_use": "Formalizes the Carbon feature as an LCA evidence object instead of only a demo calculator output.",
+    "id": "integrated-lca",
+    "keywords": [
+      "lca",
+      "carbon",
+      "co2",
+      "co2e",
+      "footprint",
+      "impact",
+      "functional unit",
+      "gwp"
+    ],
+    "layer": "Impact assessment",
+    "neuro_symbolic_value": "Rules compute totals and uncertainty; the LLM explains methodology, boundaries, and caveats.",
+    "signals": [
+      {
+        "keywords": [
+          "carbon",
+          "co2e",
+          "footprint",
+          "impact",
+          "gwp"
+        ],
+        "label": "impact result",
+        "paths": [
+          "carbon",
+          "lca",
+          "environmental"
+        ]
+      },
+      {
+        "keywords": [
+          "method",
+          "functional unit",
+          "boundary",
+          "scope"
+        ],
+        "label": "method boundary",
+        "paths": [
+          "methodology",
+          "functional_unit",
+          "boundary"
+        ]
+      }
+    ],
+    "summary": "Integrated life-cycle assessment results, impact indicators, methods, characterization choices, and settings.",
+    "title": "Integrated LCA",
+    "url": "https://codeberg.org/CE-RISE-models/integrated-lca"
+  },
+  {
+    "feature_use": "Connects Carbon, Validate, and Synthesize to formal circular economy/EOL indicators.",
+    "id": "circularity-and-eol",
+    "keywords": [
+      "circularity",
+      "end of life",
+      "recycling",
+      "repairability",
+      "recyclability",
+      "crm",
+      "disassembly",
+      "reuse"
+    ],
+    "layer": "Circularity",
+    "neuro_symbolic_value": "The LLM extracts circularity claims; symbolic rules check score ranges, mass balance, and EOL route consistency.",
+    "signals": [
+      {
+        "keywords": [
+          "circularity",
+          "repairability",
+          "recyclability",
+          "reuse"
+        ],
+        "label": "circularity metrics",
+        "paths": [
+          "circularity",
+          "repairability",
+          "recyclability"
+        ]
+      },
+      {
+        "keywords": [
+          "end of life",
+          "eol",
+          "recycling",
+          "crm",
+          "disassembly"
+        ],
+        "label": "EOL pathways",
+        "paths": [
+          "end_of_life",
+          "eol"
+        ]
+      }
+    ],
+    "summary": "Circularity and EOL information including design-for-circularity, performance factors, scores, and EOL pathways.",
+    "title": "Circularity and End-of-Life",
+    "url": "https://codeberg.org/CE-RISE-models/circularity-and-eol"
+  },
+  {
+    "feature_use": "Provides a formal target for future circularity scoring beyond the current simple dashboard values.",
+    "id": "re-indicators-specification",
+    "keywords": [
+      "re indicator",
+      "resource efficiency",
+      "recycle",
+      "reuse",
+      "remanufacture",
+      "assessment",
+      "score"
+    ],
+    "layer": "Circularity",
+    "neuro_symbolic_value": "LLM reads product evidence; symbolic indicator formulas compute repeatable RE scores.",
+    "signals": [
+      {
+        "keywords": [
+          "indicator",
+          "recycle",
+          "reuse",
+          "assessment",
+          "score"
+        ],
+        "label": "RE indicator inputs",
+        "paths": [
+          "circularity",
+          "assessment",
+          "indicators"
+        ]
+      }
+    ],
+    "summary": "Data representation and computation of CE-RISE resource-efficiency indicators.",
+    "title": "RE-Indicators Specification",
+    "url": "https://codeberg.org/CE-RISE-models/re-indicators-specification"
+  },
+  {
+    "feature_use": "Directly strengthens the existing compliance search and Validate & Repair feature.",
+    "id": "compliance-and-standards",
+    "keywords": [
+      "compliance",
+      "standard",
+      "regulation",
+      "certificate",
+      "declaration",
+      "ce",
+      "rohs",
+      "reach",
+      "weee"
+    ],
+    "layer": "Compliance",
+    "neuro_symbolic_value": "LLM extracts compliance clauses; symbolic checks enforce required evidence types and market applicability.",
+    "signals": [
+      {
+        "keywords": [
+          "standard",
+          "regulation",
+          "directive",
+          "rohs",
+          "reach",
+          "weee"
+        ],
+        "label": "applicable standards",
+        "paths": [
+          "compliance.standards",
+          "compliance"
+        ]
+      },
+      {
+        "keywords": [
+          "certificate",
+          "declaration",
+          "doc",
+          "evidence"
+        ],
+        "label": "documentary evidence",
+        "paths": [
+          "certificates",
+          "declaration",
+          "sources"
+        ]
+      }
+    ],
+    "summary": "Regulations, standards, conformity evidence, commitments, declarations, certificates, and safe-use information.",
+    "title": "Compliance and Standards",
+    "url": "https://codeberg.org/CE-RISE-models/compliance-and-standards"
+  },
+  {
+    "feature_use": "Upgrades confidence displays from route heuristics to explicit uncertainty objects.",
+    "id": "uncertainty-quantification",
+    "keywords": [
+      "uncertainty",
+      "confidence",
+      "interval",
+      "range",
+      "distribution",
+      "budget",
+      "propagation"
+    ],
+    "layer": "Cross-cutting",
+    "neuro_symbolic_value": "Rules propagate numeric uncertainty; the LLM explains what confidence and uncertainty mean to end users.",
+    "signals": [
+      {
+        "keywords": [
+          "uncertainty",
+          "confidence",
+          "interval",
+          "range"
+        ],
+        "label": "uncertainty statement",
+        "paths": [
+          "uncertainty",
+          "confidence",
+          "range"
+        ]
+      }
+    ],
+    "summary": "Reusable structures for uncertainty statements, distributions, coverage intervals, budgets, and propagation.",
+    "title": "Uncertainty Quantification",
+    "url": "https://codeberg.org/CE-RISE-models/uncertainty-quantification"
+  },
+  {
+    "feature_use": "Gives Validate & Repair and Search abstention a formal quality explanation layer.",
+    "id": "data-quality-framework",
+    "keywords": [
+      "data quality",
+      "provenance",
+      "completeness",
+      "validity",
+      "accuracy",
+      "consistency",
+      "timeliness",
+      "pedigree"
+    ],
+    "layer": "Cross-cutting",
+    "neuro_symbolic_value": "Symbolic quality checks decide when to abstain; the LLM explains missingness and remediation steps.",
+    "signals": [
+      {
+        "keywords": [
+          "quality",
+          "completeness",
+          "validity",
+          "accuracy",
+          "pedigree"
+        ],
+        "label": "quality metadata",
+        "paths": [
+          "data_quality",
+          "quality",
+          "completeness"
+        ]
+      }
+    ],
+    "summary": "Fitness-for-purpose model for provenance, representativeness, validity, accuracy, consistency, timeliness, and completeness.",
+    "title": "Data Quality Framework",
+    "url": "https://codeberg.org/CE-RISE-models/data-quality-framework"
+  },
+  {
+    "feature_use": "Turns carbon factors, diagnostic measurements, and repair thresholds into traceable measured values.",
+    "id": "metrological-traceability",
+    "keywords": [
+      "metrological",
+      "traceability",
+      "calibration",
+      "measurement",
+      "unit",
+      "reference",
+      "procedure",
+      "standard"
+    ],
+    "layer": "Cross-cutting",
+    "neuro_symbolic_value": "Rules verify units and reference chains; the LLM translates technical measurement provenance.",
+    "signals": [
+      {
+        "keywords": [
+          "measurement",
+          "unit",
+          "reference",
+          "calibration",
+          "procedure"
+        ],
+        "label": "measurement basis",
+        "paths": [
+          "measurement",
+          "unit",
+          "methodology"
+        ]
+      }
+    ],
+    "summary": "Reference basis for measured, calculated, or method-defined values: units, standards, calibration chains, and procedures.",
+    "title": "Metrological Traceability",
+    "url": "https://codeberg.org/CE-RISE-models/metrological-traceability"
+  },
+  {
+    "feature_use": "Useful for developers adding new model-backed modules to the Workbench.",
+    "id": "template-data-model",
+    "keywords": [
+      "template",
+      "linkml",
+      "schema",
+      "workflow",
+      "ontology"
+    ],
+    "layer": "Tooling",
+    "neuro_symbolic_value": "The architecture can generate model-aware validators and UI forms from LinkML/JSON Schema artifacts.",
+    "signals": [
+      {
+        "keywords": [
+          "template",
+          "linkml",
+          "schema"
+        ],
+        "label": "model tooling",
+        "paths": [
+          "schema_version"
+        ]
+      }
+    ],
+    "summary": "Repository template and workflow used to create CE-RISE data model projects.",
+    "title": "Template Data Model",
+    "url": "https://codeberg.org/CE-RISE-models/template-data-model"
+  }
+]

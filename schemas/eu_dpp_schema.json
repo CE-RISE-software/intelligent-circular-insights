@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ce-rise.example.eu/dpp/eu_dpp_schema_v0_1.json",
+  "title": "EU Digital Product Passport (CE-RISE demo, CIRPASS-2-aligned)",
+  "description": "Demo JSON Schema synthesized from the CIRPASS-2 EU DPP Core Ontology Proposal (Maigre et al., 2025; DOI 10.5281/zenodo.14892666). Intended for the CE-RISE workbench demo — not a final regulatory schema.",
+  "type": "object",
+  "required": ["schema_version", "dpp_id", "product", "materials", "compliance"],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Version tag of this DPP schema (free-form, e.g. ce-rise-demo-0.1)."
+    },
+    "dpp_id": {
+      "type": "string",
+      "minLength": 4,
+      "description": "Globally unique DPP identifier (e.g. UUID, GS1 Digital Link)."
+    },
+    "issued_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of issuance."
+    },
+    "product": {
+      "type": "object",
+      "required": ["id", "brand", "model", "category"],
+      "additionalProperties": true,
+      "properties": {
+        "id":            { "type": "string", "description": "Product identifier (GTIN, serial, or internal id)." },
+        "brand":         { "type": "string", "minLength": 1 },
+        "model":         { "type": "string", "minLength": 1 },
+        "category":      { "type": "string", "enum": [
+          "battery", "ev_battery", "smartphone", "laptop", "display",
+          "printer", "heat_pump", "appliance", "textile", "other"
+        ] },
+        "display_name":  { "type": "string" },
+        "geography":     { "type": "string", "description": "Market/use geography (e.g. EU, DE, UK)." },
+        "image_url":     { "type": "string", "format": "uri" }
+      }
+    },
+    "materials": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Material composition by mass share or absolute mass.",
+      "items": {
+        "type": "object",
+        "required": ["name", "share_pct"],
+        "additionalProperties": true,
+        "properties": {
+          "name":         { "type": "string", "minLength": 1 },
+          "share_pct":    { "type": "number", "minimum": 0, "maximum": 100 },
+          "mass_kg":      { "type": "number", "minimum": 0 },
+          "recycled_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+          "substance_of_concern": { "type": "boolean" }
+        }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "required": ["standards"],
+      "additionalProperties": true,
+      "properties": {
+        "standards": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 2 },
+          "description": "Compliance standards or regulations the product conforms to."
+        },
+        "ce_marking":     { "type": "boolean" },
+        "evidence_urls":  { "type": "array", "items": { "type": "string", "format": "uri" } }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "manufacture_country": { "type": "string" },
+        "use_phase": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "lifetime_years":      { "type": "number", "minimum": 0 },
+            "annual_energy_kwh":   { "type": "number", "minimum": 0 },
+            "use_country":         { "type": "string" }
+          }
+        },
+        "transport_legs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "mode":        { "type": "string", "enum": ["ship", "truck", "rail", "air"] },
+              "distance_km": { "type": "number", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "carbon": {
+      "type": "object",
+      "description": "Optional carbon disclosure aligned with EN 15804 / ISO 14067.",
+      "additionalProperties": true,
+      "properties": {
+        "functional_unit":   { "type": "string" },
+        "total_kg_co2e":     { "type": "number", "minimum": 0 },
+        "uncertainty_pct":   { "type": "number", "minimum": 0, "maximum": 100 },
+        "stage_split":       {
+          "type": "object",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 },
+          "properties": {
+            "materials":   { "type": "number", "minimum": 0, "maximum": 1 },
+            "transport":   { "type": "number", "minimum": 0, "maximum": 1 },
+            "use_phase":   { "type": "number", "minimum": 0, "maximum": 1 },
+            "end_of_life": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "methodology":       { "type": "string" }
+      }
+    },
+    "circularity": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "recyclability_pct":      { "type": "number", "minimum": 0, "maximum": 100 },
+        "recycled_content_pct":   { "type": "number", "minimum": 0, "maximum": 100 },
+        "repairability_index":    { "type": "number", "minimum": 0, "maximum": 10 },
+        "spare_parts_availability_years": { "type": "number", "minimum": 0 }
+      }
+    },
+    "end_of_life": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "recycling_rate_pct":    { "type": "number", "minimum": 0, "maximum": 100 },
+        "incineration_rate_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "landfill_rate_pct":     { "type": "number", "minimum": 0, "maximum": 100 },
+        "take_back_url":         { "type": "string", "format": "uri" }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind"],
+        "additionalProperties": true,
+        "properties": {
+          "id":   { "type": "string" },
+          "kind": { "type": "string" },
+          "url":  { "type": "string", "format": "uri" }
+        }
+      }
+    },
+    "notes": { "type": "string" }
+  }
+}
