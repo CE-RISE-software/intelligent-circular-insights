@@ -9,6 +9,7 @@ an adapter package, so this file is where the arrows finally meet.
 
 from __future__ import annotations
 
+from dataclasses import replace
 from typing import Annotated
 
 from fastapi import Depends, Header, Request
@@ -18,6 +19,7 @@ from apps.api.middleware.mode import ModeResolution, ModeResolver
 from apps.api.settings import Settings, get_settings
 from ici_core.domain.errors import CapabilityError
 from ici_core.domain.modes import BackendMode
+from ici_core.ledger import InMemoryLedger
 from ici_core.usecases.deps import ProviderBundle
 from ici_llm.provider import OpenAIProvider
 from ici_llm.runtime import LLMRequest, LLMRuntime
@@ -55,7 +57,7 @@ def get_bundle(
     resolution: Annotated[ModeResolution, Depends(resolve_mode)],
 ) -> ProviderBundle:
     """The adapter set for this request. Raises CapabilityError → 422 if absent."""
-    return registry.for_mode(resolution.mode)
+    return replace(registry.for_mode(resolution.mode), ledger=InMemoryLedger(mode=resolution.mode))
 
 
 def get_llm_request(

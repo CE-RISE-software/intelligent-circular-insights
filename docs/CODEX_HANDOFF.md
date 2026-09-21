@@ -1,4 +1,86 @@
-# Codex → Claude: Sprint 3 handoff
+# Codex → Claude: Sprint 3.1 takeover completed
+
+Updated 2026-09-21 after taking over Claude's latest commit `e28278f`. **This section
+supersedes the historical Sprint 3/1 notes below.** Claude had already added the
+repair/synthesis routes and UI and implemented the four missing use cases. They
+were not still absent; the remaining task was to make the real route path work and
+record it. The initial tree was clean. No push, release or tag was performed.
+
+## What was completed
+
+- Fixed the recording/test seed mismatch and the underlying evidence gap: prose
+  fragments cannot satisfy the composer's exact-JSON-pointer grounding contract.
+  Both modes now load complete operator-provisioned JSON records from
+  `RECORD_EVIDENCE_DIR` (default `data/records`) and gather only matching products.
+- Added a clearly labeled synthetic battery reference and matching UI example.
+  This is not fabricated real-product compliance data. The original Generic BEV
+  seed still cannot be synthesized without its own structured sources. Do not
+  relax grounding to make that example succeed.
+- Repair permits training-only suggestions when evidence is empty, as the user
+  requested. Scores are capped at 0.30, uncalibrated, unverified and review-only.
+  They never enter grounded fills or the repaired preview. Turning suggestions
+  off with no sources makes no model call.
+- Synthesis rejects an incomplete seed without same-product structured evidence
+  before spending, preserves all caller-supplied seed facts, and returns every
+  field's supporting evidence ID/reference/pointer. It never adds training guesses.
+- Record routes return model, prompt hashes, cost and request-local trace steps.
+  Reusing a correlation ID no longer mixes users' traces. Provider refusal,
+  truncation, invalid output and grounding failures produce typed 422s, not 500s.
+- Validate and repair now agree on date/URI format checks and material-share
+  totals. Non-finite JSON numbers are handled without a model call or server error.
+- Both editors invalidate old results when inputs change and ignore late replies
+  for older input. The UI exposes repaired JSON, synthesis provenance and audit.
+- Updated Vite to 6.4.3 and React Router DOM to 7.18.4 after the install reported
+  four dependency advisories. Node **20+** is now explicit. `npm audit` reports
+  zero vulnerabilities; the build and all browser smoke tests pass.
+
+The OpenAI documentation skill informed the API failure checks: JSON mode is not
+schema validation, so all schema/grounding checks and refusal/truncation handling
+remain. Existing model choices and prompts were preserved. Reference:
+https://developers.openai.com/api/docs/guides/structured-outputs
+Dependency references: https://github.com/vitejs/vite/security/advisories/GHSA-fx2h-pf6j-xcff
+and https://reactrouter.com/7.18.4/upgrading/v6 .
+
+## Recording and verification
+
+`make record` added two real `gpt-4o-mini` responses, one per new route case, with
+no retries. All 12 pre-existing golden cases are semantically unchanged. Repair
+returned **3 grounded fills** and synthesis **11 supported leaf fields**. The
+five parameterized HTTP happy-path tests are now mandatory, never skipped.
+
+- Ledger: **23 → 25 cumulative attempts** (+2); cumulative cost reservation
+  **$0.11865650** of the $1 / 40-call ceiling. The new calls reserve $0.00972645;
+  their usage-based estimate is **$0.00123135**, not a billing guarantee.
+- Full offline suite: **557 passed**, no skipped route tests; package statement
+  coverage **90%**. Existing Starlette/anyio deprecation warning remains.
+- `make check`: ruff/format, mypy (61 files), 2/2 layering contracts clean.
+- Frontend TypeScript/production build and **35 browser smoke tests** pass.
+- **27 cassette-marked tests** pass offline. Recorder extension tests preserve
+  retired goldens and historical manifest notes and reject changed old outputs.
+- `.env` remains ignored and untracked; no credential was included in cassettes.
+
+The default replay directory is now `tests/cassettes/recorded`, matching the
+recorder, the UI demo and the HTTP tests. Normal test runs block network access.
+The recorder explicitly uses the demo record directory, not a private override.
+The pre-existing ledger included one failed `Unavailable` attempt; 25 cumulative
+attempts means 24 recorded responses and that one failure, not 25 successes.
+
+Frontend dependencies are outside the synced folder under `/tmp/ici-record-web.*`,
+linked by `apps/web/node_modules`. Reinstall if temporary files are cleaned up.
+Browser checks used the already-installed Chrome via `ICI_CHROMIUM`.
+
+## Next work — not silently claimed complete
+
+Sprint 3.1 integration/recording is complete. **X8 remains deferred** pending a
+parameterized, read-only query-template contract. **X9/Sprint 4** production
+retry/backoff and budget polish and **X10/Sprint 5** deliberate release live smoke
+are subsequent tasks. Full legacy parity, release/security/license gates, clean
+clone, Pages, mirror and Zenodo publication still require their own verification.
+No further credential or Claude action is needed to run the completed demo offline.
+
+---
+
+## Historical Sprint 3 handoff (superseded)
 
 Updated 2026-09-21 against Claude commit `c1ee0b2`. The working tree was clean
 before this work; Claude's commit is one ahead of `origin/main`. These changes

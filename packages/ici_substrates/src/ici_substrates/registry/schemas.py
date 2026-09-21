@@ -74,22 +74,59 @@ class JsonSchemaRegistry:
                 ),
             )
 
-        from jsonschema import Draft202012Validator
+        from jsonschema import Draft202012Validator, FormatChecker
+        from referencing import Registry
 
-        validator = Draft202012Validator(self.schema)
-        violations = tuple(
+        try:
+            json.dumps(dict(record.payload), allow_nan=False)
+        except (ValueError, TypeError):
+            return ConformanceReport(
+                profile=profile,
+                violations=(
+                    Violation(
+                        kind=ViolationKind.TYPE_MISMATCH,
+                        location="/",
+                        message="record contains a non-JSON or non-finite value",
+                        profile=profile,
+                    ),
+                ),
+            )
+        validator = Draft202012Validator(
+            self.schema, format_checker=FormatChecker(), registry=Registry()
+        )
+        violations = [
             _to_violation(error, profile)
             for error in sorted(validator.iter_errors(dict(record.payload)), key=str)
-        )
+        ]
+        materials = record.payload.get("materials")
+        if (
+            isinstance(materials, list)
+            and materials
+            and all(
+                isinstance(row, dict) and type(row.get("share_pct")) in (int, float)
+                for row in materials
+            )
+            and not 95 <= sum(row["share_pct"] for row in materials) <= 105
+        ):
+            violations.append(
+                Violation(
+                    kind=ViolationKind.SHAPE_VIOLATION,
+                    location="/materials",
+                    message="material shares must total 95 to 105 percent",
+                    profile=profile,
+                )
+            )
         return ConformanceReport(
             profile=profile,
-            violations=violations,
+            violations=tuple(violations),
             checked_paths=len(record.payload),
         )
 
 
 def _to_violation(error: Any, profile: ProfileId) -> Violation:
-    pointer = "/" + "/".join(str(part) for part in error.absolute_path)
+    pointer = "/" + "/".join(
+        str(part).replace("~", "~0").replace("/", "~1") for part in error.absolute_path
+    )
     return Violation(
         kind=_KIND_BY_VALIDATOR.get(error.validator, ViolationKind.SHAPE_VIOLATION),
         location=pointer if pointer != "/" else "/",

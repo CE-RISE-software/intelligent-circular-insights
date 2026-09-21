@@ -1,0 +1,13 @@
+{
+  "schema_version": "ce-rise-demo-0.1",
+  "dpp_id": "synthetic-demo-dpp-001",
+  "product": {
+    "id": "SYNTHETIC-BAT-001",
+    "brand": "Demo",
+    "model": "Example 1",
+    "category": "battery"
+  },
+  "materials": [{"name": "Steel", "share_pct": 100}],
+  "compliance": {"standards": ["DEMO-STANDARD-1"], "ce_marking": false},
+  "notes": "Synthetic test record, not a claim about any real product or regulatory conformity."
+}

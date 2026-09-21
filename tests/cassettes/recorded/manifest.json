@@ -10,15 +10,18 @@
     "repair:02_heatpump_malformed_numbers",
     "repair:03_laptop_minimal_skeleton",
     "synthesis:grounded",
+    "route-repair:battery",
+    "route-synthesis:battery",
     "compat:gpt5",
     "embeddings:openai"
   ],
-  "live_attempts": 22,
+  "live_attempts": 25,
   "max_calls": 40,
   "max_reserved_usd": 1,
   "origin": "Real OpenAI responses to synthetic/public demo inputs",
   "recorded_at": "2026-09-20T08:47:01.409994+00:00",
-  "reserved_usd": 0.10391389999999995,
+  "reserved_usd": 0.11865649999999994,
   "superseded_responses_retained": 8,
-  "note": "Prompt refinements were recorded within the original cumulative budget. The GPT-5 check was called once."
+  "note": "Prompt refinements were recorded within the original cumulative budget. The GPT-5 check was called once.",
+  "updated_at": "2026-09-21T15:40:04.115269+00:00"
 }

@@ -16,13 +16,43 @@ from fastapi.responses import JSONResponse
 from ici_core.domain.errors import (
     BudgetExceeded,
     CapabilityError,
+    GenerationError,
     InvariantViolation,
     SubstrateUnavailable,
 )
 from ici_llm.errors import CassetteCorrupt, CassetteMiss
+from ici_llm.records import RecordGenerationError
 
 
 def install(app: FastAPI) -> None:
+    @app.exception_handler(RecordGenerationError)
+    async def _record_generation(request: Request, exc: RecordGenerationError) -> JSONResponse:
+        return JSONResponse(
+            status_code=422,
+            content={
+                "error": "record_not_grounded",
+                "capability": "record synthesis",
+                "mode": request.state.mode_resolution.mode.value,
+                "reason": "The record cannot be grounded or does not conform: "
+                + "; ".join(f"{i.path or '(root)'}: {i.reason}" for i in exc.issues[:8]),
+                "issues": [{"path": i.path, "reason": i.reason} for i in exc.issues],
+            },
+        )
+
+    @app.exception_handler(GenerationError)
+    async def _generation(request: Request, exc: GenerationError) -> JSONResponse:
+        return JSONResponse(
+            status_code=422,
+            content={
+                "error": "model_unavailable",
+                "capability": "record assistance",
+                "mode": request.state.mode_resolution.mode.value,
+                "reason": (
+                    f"The model did not supply a complete usable result ({type(exc).__name__})."
+                ),
+            },
+        )
+
     @app.exception_handler(CapabilityError)
     async def _capability(_: Request, exc: CapabilityError) -> JSONResponse:
         return JSONResponse(

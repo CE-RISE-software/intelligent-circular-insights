@@ -146,3 +146,29 @@ def test_valid_record_costs_no_repair_call_and_invalid_json_numbers_are_rejected
 
     with pytest.raises(InvalidOutput):
         provider.structured("test", ContextPack(), {"type": "object"})
+
+
+def test_incomplete_synthesis_without_structured_support_does_not_call_model():
+    service, transport = composer()
+    with pytest.raises(RecordGenerationError, match="cannot be grounded"):
+        service.synthesize({"product": DEMO_RECORD["product"]}, ContextPack())
+    assert not transport.requests
+
+
+def test_synthesis_must_preserve_seed_values_even_when_another_source_disagrees():
+    seed = {"product": DEMO_RECORD["product"], "notes": "User-supplied observation"}
+    service, transport = composer({"record": DEMO_RECORD}, {"record": DEMO_RECORD})
+    with pytest.raises(RecordGenerationError) as exc:
+        service.synthesize(seed, record_pack())
+    assert len(transport.requests) == 2
+    assert any(
+        i.path == "/notes" and "seed value was changed" in i.reason for i in exc.value.issues
+    )
+
+
+@pytest.mark.parametrize("score", [-0.1, 0.31, float("nan"), float("inf")])
+def test_training_suggestion_type_enforces_low_score(score):
+    from ici_core.domain.assistance import UnverifiedSuggestion
+
+    with pytest.raises(ValueError):
+        UnverifiedSuggestion("/notes", "guess", "unverified", score)

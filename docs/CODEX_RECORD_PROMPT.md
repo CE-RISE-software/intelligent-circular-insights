@@ -1,5 +1,24 @@
 # Prompt for Codex — record the two route-level cassettes
 
+## Completed by Codex, 2026-09-21
+
+The request below is retained as history, **not a pending command**. The initial
+handoff's "everything is wired" assumption was incorrect: the test and recorder
+seeds differed, and retrieved prose did not meet the exact structured-evidence
+contract. The routes now gather complete same-product JSON reference records.
+The happy path uses an explicitly synthetic Demo / Example 1 battery, shared
+between the recorder, HTTP tests and browser examples. The original Generic BEV
+example still requires its own evidence; no real compliance facts were invented.
+
+Recorded the two cases with **2 new calls**, cumulative ledger **23 → 25**.
+Cumulative reserved estimate is **$0.11865650**; the two new calls' usage estimate
+is **$0.00123135**. All 12 existing golden cases stayed unchanged. Repair returned
+3 supported fills; synthesis returned 11 field support entries. Route replay tests
+now fail on missing recordings instead of skipping. Full status and remaining
+future-sprint work: [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md).
+
+## Original recording request (historical)
+
 Paste this into Codex, in the `llmmain/revamp` repository.
 
 ---

@@ -13,6 +13,7 @@ This module and ``deps.py`` are the only places that know both adapter sets exis
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
+from pathlib import Path
 
 from apps.api.settings import Settings, get_settings
 from ici_core.domain.errors import CapabilityError
@@ -159,7 +160,7 @@ def _build_normal(settings: Settings) -> ProviderBundle:
         symbolic=OwlRlValidator.for_domain("battery"),
         schemas=JsonSchemaRegistry(),
         impact=CsvFactorImpactEngine.from_data_root(),
-        records=InMemoryRepository(),
+        records=InMemoryRepository.from_directory(Path(settings.record_evidence_dir)),
         signals=EvidenceSignals(),
         calibrator=IsotonicCalibrator(),
         selective=ThresholdSelectivePolicy(),

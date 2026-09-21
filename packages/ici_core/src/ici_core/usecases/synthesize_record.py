@@ -10,11 +10,10 @@ The composer (``ici_llm.records.RecordComposer``) does the generating and the
 grounding; this use case decides what the system is willing to hand back. Three
 decisions live here rather than there:
 
-*Evidence is gathered first, and a seed with nothing behind it is refused.* The
-composer grounds every leaf it emits against the pack it is given, so an empty pack
-means every field would have to come from the model's priors. That is the failure
-mode this whole architecture exists to prevent, and it is cheaper to refuse before
-the call than to discard the output after paying for it.
+Evidence is gathered first. Synthesis requires complete field support; repair may
+also offer explicitly unverified training suggestions even without source evidence.
+The latter never modifies the record. Caller-supplied seed facts remain legitimate
+support, but an incomplete seed is not permission to invent its missing fields.
 
 *Repair and synthesis are one use case with two entry points, not two.* They share
 the gathering, the scope, the ledger stamp and the refusal rule; only the composer
@@ -28,13 +27,15 @@ the exact point where it stops being visible to the caller.
 
 from __future__ import annotations
 
+import json
 from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any, Protocol
 
+from ici_core.domain.assistance import RepairResult, SynthesisResult, same_product
 from ici_core.domain.errors import CapabilityError
-from ici_core.domain.evidence import ContextPack
-from ici_core.domain.ids import CorrelationId, DppId, ProfileId
+from ici_core.domain.evidence import ContextPack, Evidence, EvidenceKind
+from ici_core.domain.ids import CorrelationId, DppId, EvidenceId, ProductId, ProfileId
 from ici_core.domain.query import ProductScope, Query, RetrievalBudget
 from ici_core.domain.record import DPPRecord
 from ici_core.domain.trace import TraceStep
@@ -51,9 +52,9 @@ class RecordAssistant(Protocol):
 
     def repair(
         self, record: Mapping[str, Any], pack: ContextPack, *, suggest_from_training: bool = ...
-    ) -> Any: ...
+    ) -> RepairResult: ...
 
-    def synthesize(self, seed: Mapping[str, Any], pack: ContextPack) -> Any: ...
+    def synthesize(self, seed: Mapping[str, Any], pack: ContextPack) -> SynthesisResult: ...
 
 
 @dataclass(frozen=True)
@@ -71,6 +72,17 @@ class SynthesizeRecord:
         correlation_id: CorrelationId = CorrelationId(""),
     ) -> DPPRecord:
         """Synthesise a record, and return it only if it conforms to ``profile``."""
+        return self.detailed(seed, profile, correlation_id=correlation_id)[0]
+
+    def detailed(
+        self,
+        seed: Mapping[str, Any],
+        profile: ProfileId,
+        *,
+        correlation_id: CorrelationId = CorrelationId(""),
+    ) -> tuple[DPPRecord, SynthesisResult]:
+        """Keep per-field evidence alongside the record through the API boundary."""
+        self._check_profile(profile)
         pack = self._gather(seed, correlation_id, "synthesize")
         result = self.assistant.synthesize(seed, pack)
         record = DPPRecord(
@@ -101,7 +113,7 @@ class SynthesizeRecord:
                     )
                 ),
             )
-        return record
+        return record, result
 
     def repair(
         self,
@@ -110,7 +122,7 @@ class SynthesizeRecord:
         *,
         correlation_id: CorrelationId = CorrelationId(""),
         suggest_from_training: bool = True,
-    ) -> Any:
+    ) -> RepairResult:
         """Fill what evidence supports, and say plainly what it does not.
 
         Returns the composer's ``RepairResult`` unchanged — grounded fills, the
@@ -120,6 +132,7 @@ class SynthesizeRecord:
         the system was and was not willing to stand behind needs the rest, and
         flattening it here would take that choice away.
         """
+        self._check_profile(profile)
         pack = self._gather(record, correlation_id, "repair")
         result = self.assistant.repair(record, pack, suggest_from_training=suggest_from_training)
         self._stamp(
@@ -131,14 +144,21 @@ class SynthesizeRecord:
         return result
 
     # -- shared -------------------------------------------------------------
+    def _check_profile(self, profile: ProfileId) -> None:
+        if profile not in {p.id for p in self.bundle.schemas.profiles()}:
+            raise CapabilityError(
+                capability="record assistance",
+                mode=self.bundle.mode.value,
+                reason=f"no such profile {profile!r}; no model call was made",
+            )
+
     def _gather(
         self, payload: Mapping[str, Any], correlation_id: CorrelationId, what: str
     ) -> ContextPack:
         """Evidence for this product, scoped to it.
 
-        The scope matters as much as the retrieval: fact memory is product-scoped,
-        and an unscoped gather could ground one product's passport in another's
-        certificates — which would look entirely correct and be entirely wrong.
+        Structured records must match the supplied product identity; unrelated
+        certificates must never become support just because their prose matches.
         """
         product = _product_id(payload)
         query = Query(
@@ -146,33 +166,45 @@ class SynthesizeRecord:
             scope=ProductScope(product_id=product, session=str(correlation_id) or None),
             correlation_id=correlation_id,
         )
-        items = list(self.bundle.memory.recall(query.scope, query))
-        evidence = list(self.bundle.evidence.retrieve(query, RetrievalBudget(top_k_documents=8)))
-        pack = ContextPack(tuple(evidence))
+        evidence: list[Evidence] = []
+        for identity in self.bundle.records.list_ids():
+            record = self.bundle.records.get(identity)
+            if record is None or not same_product(payload, record.payload):
+                continue
+            evidence.append(
+                Evidence(
+                    id=EvidenceId(f"record:{identity}"),
+                    kind=EvidenceKind.SUBSTRATE_ROW,
+                    text=json.dumps(
+                        dict(record.payload),
+                        sort_keys=True,
+                        ensure_ascii=False,
+                        separators=(",", ":"),
+                        allow_nan=False,
+                    ),
+                    ref=f"repository:{identity}",
+                )
+            )
+        structured_count = len(evidence)
+        # Do not perform a broad "product passport" lookup for an unidentified seed.
+        if product is not None:
+            evidence.extend(
+                self.bundle.evidence.retrieve(query, RetrievalBudget(top_k_documents=8))
+            )
+        pack = ContextPack(tuple({e.id: e for e in evidence}.values()))
         self._stamp(
             correlation_id,
             f"{what}:gather",
-            f"{len(evidence)} passages, {len(items)} recalled facts",
+            f"{structured_count} same-product JSON records, "
+            f"{len(pack) - structured_count} other evidence items",
         )
-        if not pack:
-            raise CapabilityError(
-                capability=f"record {what}",
-                mode=self.bundle.mode.value,
-                reason=(
-                    "no evidence was found for this product, so every field would "
-                    "have to come from the model's priors rather than from a source "
-                    "anyone can check"
-                ),
-            )
         return pack
 
     def _stamp(self, correlation_id: CorrelationId, name: str, detail: str) -> None:
         self.bundle.ledger.record(correlation_id, TraceStep(name, detail))
 
 
-def _product_id(payload: Mapping[str, Any]) -> Any:
-    from ici_core.domain.ids import ProductId
-
+def _product_id(payload: Mapping[str, Any]) -> ProductId | None:
     product = payload.get("product")
     if isinstance(product, Mapping):
         for key in ("id", "model", "name"):

@@ -3,9 +3,11 @@
 Reliability-first question answering over product records: every output is an
 evidence-grounded answer with provenance, or an explicit abstention.
 
-> **Sprint 0 foundation and Codex Sprint 1 (X0–X6) are implemented.** Guarded
-> composition, record assistance, embeddings and real-response offline goldens
-> are available. Application adapter/feature-route integration remains separate. Begin with
+> **Implemented through the Sprint 3.1 integration checkpoint.** The two-mode
+> workbench includes guarded search, impact tools, validation, repair and synthesis.
+> Try **Synthetic demo battery** in Validate or Synthesize: saved real-model responses
+> work offline, with field provenance and separate review-only training suggestions.
+> Frontend requires Node 20+. Release gates and later sprint work remain. Begin with
 > [`docs/PLAN.md`](docs/PLAN.md); see [`docs/CODEX_HANDOFF.md`](docs/CODEX_HANDOFF.md)
 > for integration and verification details.
 

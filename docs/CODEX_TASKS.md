@@ -166,6 +166,12 @@ trace. `grep -rn 'You are' packages/ --include=*.py` returns nothing.
 
 ## X5 — Repair and synthesis · S1
 
+**Sprint 3.1 integration follow-through (21 Sep):** API and UI repair/synthesis now
+work in both modes with same-product structured reference evidence and two new
+real-response cassettes. User-requested training-only suggestions remain separate,
+review-only and capped at 0.30. Mandatory HTTP and browser replay gates pass;
+see `CODEX_HANDOFF.md`. This does not complete X8, X9 or X10 below.
+
 - [x] Validate & Repair proposes grounded fills; Synthesize produces a schema-valid DPP.
   Both through `structured()`, both refusing to invent.
 

@@ -389,5 +389,172 @@
     "count": 2,
     "dimensions": 1536,
     "hash": "a2a5e3cfedb266034daade05ad3cbac45645655bc0f056b0b94ba8a3fd64f622"
+  },
+  "route-repair:battery": {
+    "cannot_be_grounded": [],
+    "fills": [
+      {
+        "confidence": 1,
+        "path": "/compliance",
+        "support": {
+          "evidence_id": "record:synthetic-demo-dpp-001",
+          "evidence_ref": "repository:synthetic-demo-dpp-001",
+          "path": "/compliance",
+          "source_pointer": "/compliance"
+        },
+        "value": {
+          "ce_marking": false,
+          "standards": [
+            "DEMO-STANDARD-1"
+          ]
+        }
+      },
+      {
+        "confidence": 1,
+        "path": "/materials",
+        "support": {
+          "evidence_id": "record:synthetic-demo-dpp-001",
+          "evidence_ref": "repository:synthetic-demo-dpp-001",
+          "path": "/materials",
+          "source_pointer": "/materials"
+        },
+        "value": [
+          {
+            "name": "Steel",
+            "share_pct": 100
+          }
+        ]
+      },
+      {
+        "confidence": 1,
+        "path": "/schema_version",
+        "support": {
+          "evidence_id": "record:synthetic-demo-dpp-001",
+          "evidence_ref": "repository:synthetic-demo-dpp-001",
+          "path": "/schema_version",
+          "source_pointer": "/schema_version"
+        },
+        "value": "ce-rise-demo-0.1"
+      }
+    ],
+    "record": {
+      "compliance": {
+        "ce_marking": false,
+        "standards": [
+          "DEMO-STANDARD-1"
+        ]
+      },
+      "dpp_id": "synthetic-demo-dpp-001",
+      "materials": [
+        {
+          "name": "Steel",
+          "share_pct": 100
+        }
+      ],
+      "notes": "Synthetic test record, not a claim about any real product or regulatory conformity.",
+      "product": {
+        "brand": "Demo",
+        "category": "battery",
+        "id": "SYNTHETIC-BAT-001",
+        "model": "Example 1"
+      },
+      "schema_version": "ce-rise-demo-0.1"
+    },
+    "rejected": [],
+    "suggestions": []
+  },
+  "route-synthesis:battery": {
+    "dpp_id": "synthetic-demo-dpp-001",
+    "record": {
+      "compliance": {
+        "ce_marking": false,
+        "standards": [
+          "DEMO-STANDARD-1"
+        ]
+      },
+      "dpp_id": "synthetic-demo-dpp-001",
+      "materials": [
+        {
+          "name": "Steel",
+          "share_pct": 100
+        }
+      ],
+      "notes": "Synthetic test record, not a claim about any real product or regulatory conformity.",
+      "product": {
+        "brand": "Demo",
+        "category": "battery",
+        "id": "SYNTHETIC-BAT-001",
+        "model": "Example 1"
+      },
+      "schema_version": "ce-rise-demo-0.1"
+    },
+    "support": [
+      {
+        "evidence_id": "record:synthetic-demo-dpp-001",
+        "evidence_ref": "repository:synthetic-demo-dpp-001",
+        "path": "/dpp_id",
+        "source_pointer": "/dpp_id"
+      },
+      {
+        "evidence_id": "record:synthetic-demo-dpp-001",
+        "evidence_ref": "repository:synthetic-demo-dpp-001",
+        "path": "/notes",
+        "source_pointer": "/notes"
+      },
+      {
+        "evidence_id": "record:synthetic-demo-dpp-001",
+        "evidence_ref": "repository:synthetic-demo-dpp-001",
+        "path": "/product/brand",
+        "source_pointer": "/product/brand"
+      },
+      {
+        "evidence_id": "record:synthetic-demo-dpp-001",
+        "evidence_ref": "repository:synthetic-demo-dpp-001",
+        "path": "/product/category",
+        "source_pointer": "/product/category"
+      },
+      {
+        "evidence_id": "record:synthetic-demo-dpp-001",
+        "evidence_ref": "repository:synthetic-demo-dpp-001",
+        "path": "/product/id",
+        "source_pointer": "/product/id"
+      },
+      {
+        "evidence_id": "record:synthetic-demo-dpp-001",
+        "evidence_ref": "repository:synthetic-demo-dpp-001",
+        "path": "/product/model",
+        "source_pointer": "/product/model"
+      },
+      {
+        "evidence_id": "record:synthetic-demo-dpp-001",
+        "evidence_ref": "repository:synthetic-demo-dpp-001",
+        "path": "/materials/0/name",
+        "source_pointer": "/materials/0/name"
+      },
+      {
+        "evidence_id": "record:synthetic-demo-dpp-001",
+        "evidence_ref": "repository:synthetic-demo-dpp-001",
+        "path": "/materials/0/share_pct",
+        "source_pointer": "/materials/0/share_pct"
+      },
+      {
+        "evidence_id": "record:synthetic-demo-dpp-001",
+        "evidence_ref": "repository:synthetic-demo-dpp-001",
+        "path": "/compliance/ce_marking",
+        "source_pointer": "/compliance/ce_marking"
+      },
+      {
+        "evidence_id": "record:synthetic-demo-dpp-001",
+        "evidence_ref": "repository:synthetic-demo-dpp-001",
+        "path": "/compliance/standards/0",
+        "source_pointer": "/compliance/standards/0"
+      },
+      {
+        "evidence_id": "record:synthetic-demo-dpp-001",
+        "evidence_ref": "repository:synthetic-demo-dpp-001",
+        "path": "/schema_version",
+        "source_pointer": "/schema_version"
+      }
+    ]
   }
 }

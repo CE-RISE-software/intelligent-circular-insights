@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { RECORD_SEED } from "../lib/recordExamples";
 import { repairDpp, validateDpp, validationProfiles } from "../lib/api";
 import type { ApiResult } from "../lib/api";
 import type { RepairResult, ValidationReport } from "../lib/types";
@@ -9,6 +10,7 @@ import { ModeWarningBanner } from "../components/ModeBadge";
 import { useApi } from "../lib/useApi";
 
 const SAMPLES: Record<string, string> = {
+  "Synthetic demo battery": JSON.stringify(RECORD_SEED, null, 2),
   "Empty record": "{}",
   "Missing compliance": JSON.stringify(
     { dpp_id: "bat-001", product: { name: "Battery pack", category: "battery" }, materials: [] },
@@ -23,13 +25,23 @@ const SAMPLES: Record<string, string> = {
 export default function Validate() {
   const profiles = useApi(() => validationProfiles(), []);
   const [profile, setProfile] = useState("eu-dpp");
-  const [text, setText] = useState(SAMPLES["Missing compliance"] ?? "{}");
+  const [text, setText] = useState(SAMPLES["Synthetic demo battery"] ?? "{}");
   const [parseError, setParseError] = useState<string | null>(null);
   const [result, setResult] = useState<ApiResult<ValidationReport> | null>(null);
   const [pending, setPending] = useState(false);
   const [repair, setRepair] = useState<ApiResult<RepairResult> | null>(null);
   const [repairing, setRepairing] = useState(false);
   const [useSuggestions, setUseSuggestions] = useState(true);
+  const revision = useRef(0);
+
+  function invalidate() {
+    revision.current++;
+    setResult(null);
+    setRepair(null);
+    setPending(false);
+    setRepairing(false);
+    setParseError(null);
+  }
 
   async function run() {
     let parsed: unknown;
@@ -47,8 +59,13 @@ export default function Validate() {
     // an older record beside a newer report is how someone concludes a field was
     // fixed when it was not.
     setRepair(null);
-    setResult(await validateDpp(parsed, profile));
-    setPending(false);
+    setRepairing(false);
+    const ticket = ++revision.current;
+    const outcome = await validateDpp(parsed, profile);
+    if (ticket === revision.current) {
+      setResult(outcome);
+      setPending(false);
+    }
   }
 
   async function mend() {
@@ -59,8 +76,13 @@ export default function Validate() {
       return;
     }
     setRepairing(true);
-    setRepair(await repairDpp(parsed, profile, useSuggestions));
-    setRepairing(false);
+    setRepair(null);
+    const ticket = ++revision.current;
+    const outcome = await repairDpp(parsed, profile, useSuggestions);
+    if (ticket === revision.current) {
+      setRepair(outcome);
+      setRepairing(false);
+    }
   }
 
   return (
@@ -81,7 +103,7 @@ export default function Validate() {
                     key={p.id}
                     className={"pill " + (p.id === profile ? "teal" : "")}
                     data-testid={`profile-${p.id}`}
-                    onClick={() => setProfile(p.id)}
+                    onClick={() => { invalidate(); setProfile(p.id); }}
                     title={`${p.title} · ${p.layer}${p.version ? ` · ${p.version}` : ""}`}
                     style={{ cursor: "pointer", fontSize: 11.5 }}
                   >
@@ -97,7 +119,7 @@ export default function Validate() {
         <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: 9 }}>
           {Object.entries(SAMPLES).map(([name, body]) => (
             <button key={name} className="pill" style={{ cursor: "pointer", fontSize: 11.5 }}
-                    onClick={() => { setText(body); setParseError(null); }}>
+                    onClick={() => { invalidate(); setText(body); }}>
               {name}
             </button>
           ))}
@@ -106,7 +128,7 @@ export default function Validate() {
           className="field-control mono"
           data-testid="validate-input"
           value={text}
-          onChange={e => setText(e.target.value)}
+          onChange={e => { invalidate(); setText(e.target.value); }}
           spellCheck={false}
           style={{ width: "100%", minHeight: 210, fontSize: 12, lineHeight: 1.5, resize: "vertical" }}
         />
@@ -131,13 +153,13 @@ export default function Validate() {
             <GlassCard
               title="Mend it from evidence"
               testId="repair-offer"
-              subtitle="Searches this workspace for sources that state the missing values, fills only what a source supports, and says plainly what it could not find. This is the one step on this page that costs a model call."
+              subtitle="Fills only values supported by same-product structured records and reports unresolved gaps. Live assistance can cost a model call; replay uses saved responses without API spend."
             >
               <label style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14, cursor: "pointer" }}>
                 <input
                   type="checkbox"
                   checked={useSuggestions}
-                  onChange={e => setUseSuggestions(e.target.checked)}
+                  onChange={e => { revision.current++; setRepair(null); setRepairing(false); setUseSuggestions(e.target.checked); }}
                   data-testid="toggle-suggestions"
                   style={{ accentColor: "var(--cerise-purple)", width: 16, height: 16 }}
                 />

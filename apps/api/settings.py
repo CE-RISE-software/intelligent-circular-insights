@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     # -- cassettes: the reason the test suite costs nothing to run
     llm_cassette_mode: Literal["replay", "record", "live"] = "replay"
     """'replay' (default, no network), 'record', or 'live'."""
-    llm_cassette_dir: str = "tests/cassettes"
+    llm_cassette_dir: str = "tests/cassettes/recorded"
 
     # -- selective decision
     default_tau: float = Field(default=0.5, ge=0, le=1, allow_inf_nan=False)
@@ -45,6 +45,7 @@ class Settings(BaseSettings):
     # -- retrieval
     max_context_chars: int = 12_000
     max_passages: int = 6
+    record_evidence_dir: str = "data/records"
 
     @property
     def allowed_modes(self) -> tuple[str, ...]:

@@ -335,10 +335,11 @@ proposed and was rejected, and what it suggests for human review. Synthesis has 
 suggestions at all — repair mends a document somebody wrote and can review; synthesis
 writes one from nothing, where an unverified field has no author to answer for it.
 
-Both **refuse before spending**. If retrieval finds no evidence for the product, every
-field would have to come from the model's priors, so the request is declined with a reason
-and the composer is never called. A test asserts the composer receives nothing on that
-path — a refusal that fires after the call has already cost what it was meant to save.
+**Synthesis refuses before spending** when an incomplete seed lacks matching structured
+evidence. Repair may still call the model for the user-requested, low-score training
+suggestions, kept separate for review and never applied. With that option disabled and
+no evidence, repair returns gaps without a model call. Prose retrieval alone cannot
+ground fields: complete same-product JSON records are loaded from `RECORD_EVIDENCE_DIR`.
 
 ### In the workbench
 
@@ -352,15 +353,17 @@ against it. A new Synthesize window builds a passport, or declines and says why.
 ### Gate
 
 ```
-518 pytest (24 s, no API key)      +15 on the record routes
- 29 playwright smoke (55 s)        +4 on the two new windows
-clean                              ruff · mypy (59 files) · import-linter 2/2 · tsc · vite build
+557 pytest (no network)             90% package statement coverage
+ 35 playwright smoke                both modes, including recorded record assistance
+clean                              ruff · mypy (61 files) · import-linter 2/2 · tsc · vite build
 ```
 
-Route-level cassettes are **not** recorded. The composer's were recorded against a fixture
-context pack; these routes build theirs from live retrieval, so the hashes differ. The
-model-calling paths are driven by a stub and the refuse-before-spending paths run for real,
-which keeps the gate free. Recording them needs one deliberate run with a key.
+**Codex takeover completed, 21 Sep:** both route-level cassettes are recorded and
+strictly replayed through both HTTP modes. The seed/test mismatch and missing structured
+evidence path were fixed first, without weakening grounding. An explicitly synthetic
+battery produces 3 supported repair fills and 11 synthesis field references. Two new
+live calls raised the cumulative ledger from 23 to 25 attempts; $0.11865650 is reserved
+against the $1 ceiling. Existing 12 golden cases are unchanged. See `CODEX_HANDOFF.md`.
 
 ### What this says about the earlier gates
 

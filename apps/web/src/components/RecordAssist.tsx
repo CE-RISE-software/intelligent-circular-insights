@@ -1,5 +1,6 @@
 import type { GroundedFill, RecordIssue, RepairResult, UnverifiedSuggestion } from "../lib/types";
 import { GlassCard, Pill } from "./GlassCard";
+import { RecordTrace } from "./RecordTrace";
 
 /**
  * The result of an evidence-backed repair.
@@ -78,21 +79,10 @@ export function RecordAssist({ result }: { result: RepairResult }) {
         <SuggestionReview suggestions={result.unverified_suggestions} />
       )}
 
-      {result.trace.steps.length > 0 && (
-        <GlassCard title="How this was done" testId="repair-trace">
-          <div style={{ display: "grid", gap: 6 }}>
-            {result.trace.steps.map((s, i) => (
-              <div key={`${s.name}-${i}`} style={{ display: "grid", gridTemplateColumns: "22px 1fr", gap: 8 }}>
-                <span className="faint mono">{i + 1}</span>
-                <span style={{ fontSize: 12.5 }}>
-                  <strong>{s.name}</strong>
-                  {s.detail && <span className="muted"> — {s.detail}</span>}
-                </span>
-              </div>
-            ))}
-          </div>
-        </GlassCard>
-      )}
+      <GlassCard title="Repaired preview · suggestions not applied" testId="repair-preview">
+        <pre className="mono" style={{ overflowX: "auto" }}>{JSON.stringify(result.record, null, 2)}</pre>
+      </GlassCard>
+      <RecordTrace trace={result.trace} testId="repair-trace" />
     </>
   );
 }
@@ -157,6 +147,7 @@ function SuggestionReview({ suggestions }: { suggestions: UnverifiedSuggestion[]
         </tbody>
       </table>
       <footer>
+        Model scores are capped at 0.30 and are not calibrated probabilities.{" "}
         {suggestions.every(s => s.requires_review)
           ? "Every row above requires review."
           : "Some rows above require review."}{" "}

@@ -146,7 +146,10 @@ def main() -> None:
             added = sorted(set(results) - set(golden))
             retired = sorted(set(golden) - set(results))
             if added or retired:
-                expected_path.write_text(canonical({**golden, **results}) + "\n", encoding="utf-8")
+                extended = {**golden, **{name: results[name] for name in added}}
+                expected_path.write_text(
+                    json.dumps(extended, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+                )
                 if added:
                     print(f"golden output extended: {', '.join(added)}", flush=True)
                 if retired:
@@ -163,11 +166,14 @@ def main() -> None:
         manifest = directory / "manifest.json"
         now = datetime.now(timezone.utc).isoformat()
         first_recorded = now
+        previous_manifest: dict[str, Any] = {}
         if manifest.exists():
-            first_recorded = json.loads(manifest.read_text()).get("recorded_at", now)
+            previous_manifest = json.loads(manifest.read_text())
+            first_recorded = previous_manifest.get("recorded_at", now)
         manifest.write_text(
             canonical(
                 {
+                    **previous_manifest,
                     "origin": "Real OpenAI responses to synthetic/public demo inputs",
                     "recorded_at": first_recorded,
                     "updated_at": now,

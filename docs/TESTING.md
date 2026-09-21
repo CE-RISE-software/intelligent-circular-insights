@@ -1,5 +1,13 @@
 # Testing strategy
 
+**Current checkpoint — 21 Sep, Sprint 3.1 takeover:** 557 offline Python tests pass
+with 90% package statement coverage; 35 Playwright smoke tests pass. Both modes
+exercise real recorded repair/synthesis responses. The five HTTP happy-path cases
+are strict failures on missing cassettes, not skips. Training-only review, unrelated
+record exclusion, trace isolation, stale UI results and malformed model output are
+also covered. See `CODEX_HANDOFF.md` for the exact recording budget and limitations.
+The older Sprint 1 checkpoints and target matrix below are historical/design notes.
+
 **Scope note.** This is a CE-RISE software deliverable, not the evidence package behind a
 paper. Testing here exists to keep the software correct and to prove that nothing which
 worked before stopped working — not to reproduce experimental claims. Moderate end-to-end

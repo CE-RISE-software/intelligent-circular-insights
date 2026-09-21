@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import type { SearchResult } from "../src/lib/types";
+import type { RepairResult, SearchResult } from "../src/lib/types";
 
 /**
  * Six windows, two backends.
@@ -284,22 +284,23 @@ test.describe("smoke · record assistance", () => {
     await expect(page.getByTestId("toggle-suggestions")).toBeChecked();
   });
 
-  test("repair declines honestly when there is nothing to ground against", async ({ page }) => {
+  test("repair without evidence or training suggestions reports gaps without a model call", async ({ page }) => {
     await useMode(page, "normal");
     await goto(page, "/validate");
 
-    // A product no source in the workspace mentions. The system refuses *before*
-    // the model call rather than filling the gaps from its own priors.
+    // Without sources or permission for training suggestions, no model is called.
     await page
       .getByTestId("validate-input")
       .fill(JSON.stringify({ dpp_id: "zzz-000", product: { brand: "Qqzzx", model: "Wubbleflorp 9000" } }));
     await page.getByTestId("validate-submit").click();
     await expect(page.getByTestId("repair-offer")).toBeVisible({ timeout: 15_000 });
+    await page.getByTestId("toggle-suggestions").uncheck();
     await page.getByTestId("repair-submit").click();
 
-    const declined = page.getByTestId("declined");
-    await expect(declined).toBeVisible({ timeout: 25_000 });
-    await expect(declined).toContainText("no evidence was found");
+    await expect(page.getByTestId("no-fills")).toBeVisible();
+    await expect(page.getByTestId("cannot-ground")).toBeVisible();
+    await expect(page.getByTestId("repair-trace")).toContainText("not called");
+    await expect(page.getByTestId("unverified-suggestions")).not.toBeVisible();
   });
 
   test("the synthesize window loads and declines an ungroundable seed", async ({ page }) => {
@@ -314,7 +315,7 @@ test.describe("smoke · record assistance", () => {
 
     const declined = page.getByTestId("declined");
     await expect(declined).toBeVisible({ timeout: 25_000 });
-    await expect(declined).toContainText("no evidence was found");
+    await expect(declined).toContainText("no same-product structured evidence");
     await expectServedBy(page, "normal");
   });
 
@@ -326,5 +327,90 @@ test.describe("smoke · record assistance", () => {
       await page.getByTestId("nav-synthesize").click();
       await expect(page.getByTestId("page-synthesize")).toBeVisible({ timeout: 15_000 });
     }
+  });
+
+  for (const mode of ["normal", "ce-rise"] as const) {
+    test(`recorded repair shows grounded fills and a synthetic preview · ${mode}`, async ({ page }) => {
+      await useMode(page, mode);
+      await goto(page, "/validate");
+      await page.getByTestId("validate-submit").click();
+      await page.getByTestId("repair-submit").click();
+      await expect(page.getByTestId("grounded-fills")).toContainText("repository:synthetic-demo-dpp-001");
+      await expect(page.getByTestId("repair-preview")).toContainText("Synthetic test record");
+      await expect(page.getByTestId("repair-trace")).toContainText("live attempts 0");
+      await expect(page.getByTestId("repair-trace")).toContainText("prompt hash");
+      await expectServedBy(page, mode);
+      await page.getByTestId("validate-input").fill("{}");
+      await expect(page.getByTestId("repair-preview")).not.toBeVisible();
+      await expect(page.getByTestId("validate-result")).not.toBeVisible();
+    });
+
+    test(`recorded synthesis shows field provenance · ${mode}`, async ({ page }) => {
+      await useMode(page, mode);
+      await goto(page, "/synthesize");
+      await page.getByTestId("synth-submit").click();
+      await expect(page.getByTestId("synth-result")).toContainText("Synthetic test record");
+      await expect(page.getByTestId("synth-support")).toContainText("repository:synthetic-demo-dpp-001");
+      await expect(page.getByTestId("synth-trace")).toContainText("live attempts 0");
+      await expectServedBy(page, mode);
+      await page.getByTestId("synth-input").fill("{}");
+      await expect(page.getByTestId("synth-result")).not.toBeVisible();
+    });
+  }
+
+  test("editing a seed invalidates an in-flight synthesis result", async ({ page }) => {
+    await useMode(page, "normal");
+    let release!: () => void;
+    const held = new Promise<void>(resolve => { release = resolve; });
+    await page.route("**/api/synthesize", async route => {
+      await held;
+      await route.fulfill({ status: 422, contentType: "application/json",
+        body: JSON.stringify({ error: "record_not_grounded", mode: "normal", reason: "STALE RESULT" }) });
+    });
+    await goto(page, "/synthesize");
+    const request = page.waitForRequest("**/api/synthesize");
+    await page.getByTestId("synth-submit").click();
+    await request;
+    await page.getByTestId("synth-input").fill("{}");
+    const response = page.waitForResponse("**/api/synthesize");
+    release();
+    await response;
+    await expect(page.getByText("STALE RESULT")).not.toBeVisible();
+    await expect(page.getByTestId("synth-submit")).toBeEnabled();
+  });
+
+  test("training suggestions stay in review and out of the repaired preview", async ({ page }) => {
+    await useMode(page, "normal");
+    const result: RepairResult = {
+      mode: "normal", record: {}, conforms: false,
+      after: { profile: "eu-dpp", conforms: false, checked_paths: 0, violations: [
+        { kind: "required", location: "/compliance", message: "missing", expected: null, actual: null },
+      ] },
+      grounded_fills: [], rejected: [],
+      cannot_be_grounded: [{ path: "/compliance", reason: "No supporting source" }],
+      unverified_suggestions: [{ path: "/compliance", value: "UNVERIFIED-CANDIDATE",
+        rationale: "Check applicability with the manufacturer", model_score: 0.3,
+        source: "model_training", status: "unverified", requires_review: true }],
+      trace: { correlation_id: "synthetic-browser-test", model: "gpt-4o-mini", prompt_hashes: [],
+        cost: { llm_calls: 0, usd: 0, prompt_tokens: 0, completion_tokens: 0, reasoning_tokens: 0 },
+        steps: [] },
+    };
+    await page.route("**/api/validate/repair", route => route.fulfill({
+      status: 200, contentType: "application/json", headers: { "X-Backend-Mode-Used": "normal" },
+      body: JSON.stringify(result),
+    }));
+    await goto(page, "/validate");
+    await page.getByTestId("validate-input").fill("{}");
+    await page.getByTestId("validate-submit").click();
+    await page.getByTestId("repair-submit").click();
+    const review = page.getByTestId("unverified-suggestions");
+    await expect(review).toContainText("UNVERIFIED-CANDIDATE");
+    await expect(review).toContainText("0.30");
+    await expect(review).toContainText("not evidence");
+    await expect(review.getByRole("button")).toHaveCount(0);
+    await expect(page.getByTestId("repair-preview")).not.toContainText("UNVERIFIED-CANDIDATE");
+    await expect(page.getByTestId("grounded-fills")).not.toBeVisible();
+    await page.getByTestId("toggle-suggestions").uncheck();
+    await expect(review).not.toBeVisible();
   });
 });

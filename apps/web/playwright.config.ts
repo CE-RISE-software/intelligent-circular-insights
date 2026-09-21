@@ -49,7 +49,7 @@ export default defineConfig({
       url: `${API}/api/health`,
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
-      env: { LLM_CASSETTE_MODE: "replay" },
+      env: { LLM_CASSETTE_MODE: "replay", LLM_CASSETTE_DIR: "tests/cassettes/recorded" },
     },
     {
       command: "npm run dev -- --host 127.0.0.1 --port 5173 --strictPort",

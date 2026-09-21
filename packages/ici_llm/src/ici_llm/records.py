@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import copy
 from collections.abc import Iterator, Mapping
-from dataclasses import asdict, dataclass
+from dataclasses import asdict
 from importlib.resources import files
 from pathlib import Path
 from typing import Any
@@ -22,6 +22,27 @@ from typing import Any
 from jsonschema import Draft202012Validator, FormatChecker
 from referencing import Registry
 
+from ici_core.domain.assistance import (
+    GroundedFill as GroundedFill,
+)
+from ici_core.domain.assistance import (
+    RecordIssue as RecordIssue,
+)
+from ici_core.domain.assistance import (
+    RepairResult as RepairResult,
+)
+from ici_core.domain.assistance import (
+    SynthesisResult as SynthesisResult,
+)
+from ici_core.domain.assistance import (
+    UnverifiedSuggestion as UnverifiedSuggestion,
+)
+from ici_core.domain.assistance import (
+    ValueSupport as ValueSupport,
+)
+from ici_core.domain.assistance import (
+    same_product,
+)
 from ici_core.domain.evidence import ContextPack
 from ici_core.ports import LLMProvider
 from ici_llm.audit import AuditLog
@@ -91,6 +112,13 @@ def _escape(value: str) -> str:
     return value.replace("~", "~0").replace("/", "~1")
 
 
+def _require_json(record: Mapping[str, Any]) -> None:
+    try:
+        canonical(record)
+    except (ValueError, TypeError):
+        raise InvalidOutput("The record contains a non-JSON or non-finite value.") from None
+
+
 def _parts(pointer: str) -> list[str]:
     if not pointer.startswith("/"):
         raise ValueError("a non-root JSON Pointer is required")
@@ -125,75 +153,10 @@ def _leaves(value: Any, path: str = "") -> Iterator[tuple[str, Any]]:
         yield path, value
 
 
-@dataclass(frozen=True)
-class RecordIssue:
-    path: str
-    reason: str
-
-
-@dataclass(frozen=True)
-class ValueSupport:
-    path: str
-    evidence_id: str
-    evidence_ref: str
-    source_pointer: str
-
-
-@dataclass(frozen=True)
-class GroundedFill:
-    path: str
-    value: Any
-    support: ValueSupport
-    confidence: float  # Model feature only, never a calibrated output probability.
-
-
-@dataclass(frozen=True)
-class UnverifiedSuggestion:
-    """A model-prior candidate for human review, never evidence or an applied fill."""
-
-    path: str
-    value: Any
-    rationale: str
-    confidence: float
-    source: str = "model_training"
-    status: str = "unverified"
-    requires_review: bool = True
-
-
-@dataclass(frozen=True)
-class RepairResult:
-    record: dict[str, Any]
-    fills: tuple[GroundedFill, ...]
-    cannot_be_grounded: tuple[RecordIssue, ...]
-    rejected: tuple[RecordIssue, ...] = ()
-    suggestions: tuple[UnverifiedSuggestion, ...] = ()
-
-    @property
-    def conforms(self) -> bool:
-        return not self.cannot_be_grounded
-
-
-@dataclass(frozen=True)
-class SynthesisResult:
-    record: dict[str, Any]
-    support: tuple[ValueSupport, ...]
-
-
 class RecordGenerationError(InvalidOutput):
     def __init__(self, issues: tuple[RecordIssue, ...]) -> None:
         self.issues = issues
         super().__init__("The DPP cannot be grounded or does not conform after one repair retry.")
-
-
-def _same_product(seed: Mapping[str, Any], record: Mapping[str, Any]) -> bool:
-    left, right = seed.get("product"), record.get("product")
-    if not isinstance(left, dict) or not isinstance(right, dict):
-        return False
-    if left.get("id"):
-        return left["id"] == right.get("id") and all(
-            left[k] == right.get(k) for k in ("brand", "model") if left.get(k)
-        )
-    return all(left.get(k) and left[k] == right.get(k) for k in ("brand", "model"))
 
 
 class RecordComposer:
@@ -252,7 +215,7 @@ class RecordComposer:
                 record = _json_object(evidence.text)
             except InvalidOutput:
                 continue
-            if _same_product(seed, record):
+            if same_product(seed, record):
                 sources[str(evidence.id)] = (evidence.ref, record)
         return sources
 
@@ -276,6 +239,7 @@ class RecordComposer:
     def repair(
         self, record: Mapping[str, Any], pack: ContextPack, *, suggest_from_training: bool = True
     ) -> RepairResult:
+        _require_json(record)
         preview = copy.deepcopy(dict(record))
         issues = self.validate(preview)
         if not issues:
@@ -361,7 +325,17 @@ class RecordComposer:
         )
 
     def synthesize(self, seed: Mapping[str, Any], pack: ContextPack) -> SynthesisResult:
+        _require_json(seed)
         sources = self._sources(seed, pack)
+        if not sources and self.validate(seed):
+            self.audit.guard("synthesis_has_structured_evidence", False)
+            raise RecordGenerationError(
+                (
+                    RecordIssue(
+                        "", "no same-product structured evidence was found to complete this seed"
+                    ),
+                )
+            )
         # Caller-supplied values are explicit evidence, not a licence to invent defaults.
         seed_identity = "request:seed"
         while seed_identity in sources:
@@ -394,8 +368,15 @@ class RecordComposer:
                     problems.append(RecordIssue(path, "cannot be grounded"))
                 else:
                     support.append(match)
-            if not _same_product(seed, record):
+            if not same_product(seed, record):
                 problems.append(RecordIssue("/product", "product identity must match the seed"))
+            for path, value in _leaves(seed):
+                try:
+                    unchanged = canonical(at_pointer(record, path)) == canonical(value)
+                except (KeyError, IndexError, TypeError, ValueError):
+                    unchanged = False
+                if not unchanged:
+                    problems.append(RecordIssue(path, "caller-supplied seed value was changed"))
             issues = tuple(problems)
             self.audit.guard("synthesis_schema", not self.validate(record))
             self.audit.guard(

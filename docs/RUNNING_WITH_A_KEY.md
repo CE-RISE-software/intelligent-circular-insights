@@ -1,13 +1,13 @@
 # Running with a real API key
 
-Everything in this repository runs without a key. Retrieval, conformance checking,
+The offline demo and test suite run without a key. Retrieval, conformance checking,
 both impact engines, the WP3 graph, all 16 competency questions, the symbolic layer
 and the full test suite are deterministic and free. A key is needed for exactly two
 things: **recording cassettes**, and **running live**.
 
 ## Where the key lives
 
-`.env` at the repository root. It is not committed and cannot be.
+`.env` at the repository root. It must never be committed.
 
 ```
 OPENAI_API_KEY=sk-proj-…
@@ -76,16 +76,24 @@ record/synthesis cases drive `RecordComposer` against a **fixture** context pack
 the two new ones drive it through `SynthesizeRecord` with a pack built by **live
 retrieval**, exactly as `POST /api/validate/repair` and `POST /api/synthesize` do.
 
-That distinction is the reason those two endpoints shipped with no replayable
-cassette: a fixture pack and a retrieved pack produce different request hashes, so
-the composer's cassettes can never satisfy the routes. The cases use a fixed
-correlation id for the same reason — a varying one scopes memory recall differently
-and silently changes the prompt.
+Both route cases are now recorded and strictly tested in both modes. The example
+is **Synthetic demo battery** in Validate and Synthesize. Default replay reads
+`tests/cassettes/recorded`; a key is not needed to exercise those examples.
+Correlation IDs affect audit only, not model prompts or evidence selection.
 
-Until they are recorded, the happy path through those two endpoints has never run
-against a real model. Their *refusal* paths are covered and run for real: a product
-with no retrievable evidence is declined before the model is called at all, and a
-test asserts the composer receives nothing on that path.
+Grounded repair/synthesis requires complete matching JSON reference records in
+`RECORD_EVIDENCE_DIR` (default `data/records`). Prose search hits do not prove a
+missing field value. See that directory's README before providing real sources;
+private records should remain outside the tracked repository.
+
+Incomplete synthesis without structured evidence is declined before a model call.
+Repair can instead return **training-only suggestions** when enabled: review-only,
+score capped at 0.30, never applied. With suggestions off and no evidence, repair
+returns the unchanged record and gaps with no model call. Arbitrary requests without
+a matching recording decline in replay; they never fall through to the live API.
+
+As of 21 Sep: 25 cumulative attempts; $0.11865650 conservatively reserved of the
+$1 ceiling. The Sprint 3.1 takeover added two attempts from a baseline of 23.
 
 ## Running live
 
@@ -93,7 +101,8 @@ test asserts the composer receives nothing on that path.
 LLM_CASSETTE_MODE=live make demo
 ```
 
-Every request calls the model and nothing is recorded. Useful for a demo, wrong for
+Requests that pass their preflight guards may call the model; nothing is recorded.
+Useful for a demo, wrong for
 a test run — there is no budget ceiling on this path, only the per-request one in
 `RequestBudget` (8 calls, 100k reserved tokens).
 

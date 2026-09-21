@@ -3,9 +3,9 @@
 """Conformance checking, and evidence-backed repair.
 
 Two endpoints with a deliberate asymmetry. ``/validate`` is deterministic, free and
-always available. ``/validate/repair`` costs a model call and can therefore decline
-— when the deployment has language-model assistance off, or when no evidence exists
-for the product, in which case every fill would come from the model's priors.
+always available. ``/validate/repair`` can cost a model call and therefore decline
+when the deployment has language-model assistance off or replay has no response.
+Without source evidence, only separate review suggestions may use model priors.
 
 The repair response keeps four things apart that a single "repaired record" field
 would silently merge: what was filled from evidence, what could not be grounded,
@@ -19,10 +19,11 @@ from __future__ import annotations
 
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, Response
 from pydantic import BaseModel, Field
 
 from apps.api.deps import get_bundle, get_llm_request
+from apps.api.record_audit import record_trace
 from ici_core.domain.ids import CorrelationId, DppId, ProfileId
 from ici_core.domain.record import DPPRecord
 from ici_core.usecases.deps import ProviderBundle
@@ -90,6 +91,7 @@ def validate(
 @router.post("/repair")
 def repair(
     req: RepairRequest,
+    response: Response,
     bundle: Annotated[ProviderBundle, Depends(get_bundle)],
     llm: Annotated[LLMRequest, Depends(get_llm_request)],
     x_correlation_id: Annotated[str | None, Header()] = None,
@@ -145,7 +147,7 @@ def repair(
             }
             for s in result.suggestions
         ],
-        "trace": _trace(bundle, correlation_id),
+        "trace": record_trace(bundle, correlation_id, llm, response),
     }
 
 
@@ -159,12 +161,4 @@ def profiles(
             {"id": str(p.id), "title": p.title, "layer": p.layer, "version": p.version}
             for p in bundle.schemas.profiles()
         ],
-    }
-
-
-def _trace(bundle: ProviderBundle, correlation_id: CorrelationId) -> dict[str, Any]:
-    trace = bundle.ledger.trace(correlation_id)
-    return {
-        "correlation_id": str(trace.correlation_id),
-        "steps": [{"name": s.name, "detail": s.detail} for s in trace.steps],
     }

@@ -40,13 +40,13 @@ CASE_NAMES = (
     "embeddings:openai",
 )
 
-# Fixed, so the pack and therefore the request hash are identical at record time
-# and replay time. A varying correlation id would scope memory recall differently
-# and silently change the prompt.
+# The seed and structured evidence are shared with the API/browser replay tests.
+# Correlation identifiers affect audit only, never the model prompt.
 ROUTE_CORRELATION = "recording"
 ROUTE_SEED = {
-    "dpp_id": "synthetic-demo-dpp-001",
-    "product": {"brand": "Generic", "model": "BEV pack 60 kWh", "category": "battery"},
+    "dpp_id": DEMO_RECORD["dpp_id"],
+    "product": copy.deepcopy(DEMO_RECORD["product"]),
+    "notes": DEMO_RECORD["notes"],
 }
 
 
@@ -64,7 +64,7 @@ def _route_use_case(provider):
 
     from ici_core.usecases.synthesize_record import SynthesizeRecord
 
-    bundle = _build_normal(Settings(llm_cassette_mode="replay"))
+    bundle = _build_normal(Settings(llm_cassette_mode="replay", record_evidence_dir="data/records"))
     return SynthesizeRecord(bundle, RecordComposer(provider, audit=provider.audit))
 
 
@@ -111,12 +111,16 @@ def run_case(name, provider):
     if kind == "route-synthesis":
         from ici_core.domain.ids import CorrelationId, ProfileId
 
-        record = _route_use_case(provider)(
+        record, result = _route_use_case(provider).detailed(
             ROUTE_SEED,
             ProfileId("eu-dpp"),
             correlation_id=CorrelationId(ROUTE_CORRELATION),
         )
-        return {"dpp_id": str(record.dpp_id), "record": dict(record.payload)}
+        return {
+            "dpp_id": str(record.dpp_id),
+            "record": dict(record.payload),
+            "support": [asdict(s) for s in result.support],
+        }
     if kind == "compat":
         return dict(
             provider.structured(

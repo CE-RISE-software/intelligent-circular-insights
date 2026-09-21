@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { RECORD_SEED } from "../lib/recordExamples";
+import { RecordTrace } from "../components/RecordTrace";
 import { synthesizeDpp, validationProfiles } from "../lib/api";
 import type { ApiResult } from "../lib/api";
 import type { SynthesisResult } from "../lib/types";
@@ -21,10 +23,7 @@ import { useApi } from "../lib/useApi";
  * unverified field has no author to answer for it.
  */
 const EXAMPLES: Record<string, string> = {
-  "Battery pack": JSON.stringify(
-    { dpp_id: "bat-001", product: { brand: "Generic", model: "BEV pack 60 kWh" } },
-    null, 2,
-  ),
+  "Synthetic demo battery": JSON.stringify(RECORD_SEED, null, 2),
   "Nothing retrievable": JSON.stringify(
     { dpp_id: "zzz-000", product: { brand: "Qqzzx", model: "Wubbleflorp 9000" } },
     null, 2,
@@ -34,10 +33,18 @@ const EXAMPLES: Record<string, string> = {
 export default function Synthesize() {
   const profiles = useApi(() => validationProfiles(), []);
   const [profile, setProfile] = useState("eu-dpp");
-  const [text, setText] = useState(EXAMPLES["Battery pack"] ?? "{}");
+  const [text, setText] = useState(EXAMPLES["Synthetic demo battery"] ?? "{}");
   const [parseError, setParseError] = useState<string | null>(null);
   const [result, setResult] = useState<ApiResult<SynthesisResult> | null>(null);
   const [pending, setPending] = useState(false);
+  const revision = useRef(0);
+
+  function invalidate() {
+    revision.current++;
+    setResult(null);
+    setPending(false);
+    setParseError(null);
+  }
 
   async function run() {
     let seed: unknown;
@@ -49,8 +56,13 @@ export default function Synthesize() {
     }
     setParseError(null);
     setPending(true);
-    setResult(await synthesizeDpp(seed, profile));
-    setPending(false);
+    setResult(null);
+    const ticket = ++revision.current;
+    const outcome = await synthesizeDpp(seed, profile);
+    if (ticket === revision.current) {
+      setResult(outcome);
+      setPending(false);
+    }
   }
 
   return (
@@ -71,7 +83,7 @@ export default function Synthesize() {
                     key={p.id}
                     className={"pill " + (p.id === profile ? "teal" : "")}
                     data-testid={`synth-profile-${p.id}`}
-                    onClick={() => setProfile(p.id)}
+                    onClick={() => { invalidate(); setProfile(p.id); }}
                     style={{ cursor: "pointer", fontSize: 11.5 }}
                   >
                     {p.title}
@@ -86,7 +98,7 @@ export default function Synthesize() {
         <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: 9 }}>
           {Object.entries(EXAMPLES).map(([name, body]) => (
             <button key={name} className="pill" style={{ cursor: "pointer", fontSize: 11.5 }}
-                    onClick={() => { setText(body); setParseError(null); }}>
+                    onClick={() => { invalidate(); setText(body); }}>
               {name}
             </button>
           ))}
@@ -95,7 +107,7 @@ export default function Synthesize() {
           className="field-control mono"
           data-testid="synth-input"
           value={text}
-          onChange={e => setText(e.target.value)}
+          onChange={e => { invalidate(); setText(e.target.value); }}
           spellCheck={false}
           style={{ width: "100%", minHeight: 180, fontSize: 12, lineHeight: 1.5, resize: "vertical" }}
         />
@@ -109,8 +121,8 @@ export default function Synthesize() {
           {pending ? "Building…" : "Build the passport"}
         </button>
         <p className="faint" style={{ marginTop: 12, marginBottom: 0 }}>
-          This one costs a model call. Conformance checking on the Validate window does not,
-          and neither does either impact engine.
+          Live synthesis can cost a model call. Replay uses saved responses without API spend.
+          Conformance checking and both impact engines are deterministic.
         </p>
       </GlassCard>
 
@@ -129,7 +141,7 @@ function Passport({ result }: { result: SynthesisResult }) {
         title={result.dpp_id}
         testId="synth-result"
         actions={<Pill tone="green">conforms to {result.profile}</Pill>}
-        subtitle="Returned only because it conforms. The use case raises rather than handing back a record with a caveat attached."
+        subtitle="Schema-valid with field-level support. This is not certification of regulatory compliance; synthetic examples remain synthetic."
       >
         <div style={{ display: "flex", gap: 30, marginBottom: 16 }}>
           <Stat label="Passport id" value={result.dpp_id} />
@@ -142,21 +154,12 @@ function Passport({ result }: { result: SynthesisResult }) {
         }}>{JSON.stringify(result.record, null, 2)}</pre>
       </GlassCard>
 
-      {result.trace.steps.length > 0 && (
-        <GlassCard title="How this was built" testId="synth-trace">
-          <div style={{ display: "grid", gap: 6 }}>
-            {result.trace.steps.map((s, i) => (
-              <div key={`${s.name}-${i}`} style={{ display: "grid", gridTemplateColumns: "22px 1fr", gap: 8 }}>
-                <span className="faint mono">{i + 1}</span>
-                <span style={{ fontSize: 12.5 }}>
-                  <strong>{s.name}</strong>
-                  {s.detail && <span className="muted"> — {s.detail}</span>}
-                </span>
-              </div>
-            ))}
-          </div>
-        </GlassCard>
-      )}
+      <GlassCard title="Field-level support" testId="synth-support">
+        {result.support.map(s => <p key={s.path} className="faint mono">
+          {s.path} ← {s.evidence_ref} · {s.source_pointer}
+        </p>)}
+      </GlassCard>
+      <RecordTrace trace={result.trace} testId="synth-trace" />
     </>
   );
 }

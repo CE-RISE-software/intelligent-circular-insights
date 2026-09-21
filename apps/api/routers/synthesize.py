@@ -16,12 +16,14 @@ from nothing, where an unverified field has no author to answer for it.
 
 from __future__ import annotations
 
+from dataclasses import asdict
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, Response
 from pydantic import BaseModel, Field
 
 from apps.api.deps import get_bundle, get_llm_request
+from apps.api.record_audit import record_trace
 from ici_core.domain.ids import CorrelationId, ProfileId
 from ici_core.usecases.deps import ProviderBundle
 from ici_core.usecases.synthesize_record import SynthesizeRecord
@@ -43,17 +45,17 @@ class SynthesizeRequest(BaseModel):
 @router.post("")
 def synthesize(
     req: SynthesizeRequest,
+    response: Response,
     bundle: Annotated[ProviderBundle, Depends(get_bundle)],
     llm: Annotated[LLMRequest, Depends(get_llm_request)],
     x_correlation_id: Annotated[str | None, Header()] = None,
 ) -> dict[str, Any]:
     correlation_id = CorrelationId(x_correlation_id or "anonymous")
-    record = SynthesizeRecord(bundle, llm.records)(
+    record, result = SynthesizeRecord(bundle, llm.records).detailed(
         req.seed,
         ProfileId(req.profile),
         correlation_id=correlation_id,
     )
-    trace = bundle.ledger.trace(correlation_id)
     return {
         "mode": bundle.mode.value,
         "dpp_id": str(record.dpp_id),
@@ -64,8 +66,6 @@ def synthesize(
         # to know that to read the response.
         "conforms": True,
         "applied_schemas": list(record.applied_schemas),
-        "trace": {
-            "correlation_id": str(trace.correlation_id),
-            "steps": [{"name": s.name, "detail": s.detail} for s in trace.steps],
-        },
+        "support": [asdict(s) for s in result.support],
+        "trace": record_trace(bundle, correlation_id, llm, response),
     }

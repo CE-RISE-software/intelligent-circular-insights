@@ -263,7 +263,7 @@ export interface RepairResult {
   cannot_be_grounded: RecordIssue[];
   rejected: RecordIssue[];
   unverified_suggestions: UnverifiedSuggestion[];
-  trace: { correlation_id: string; steps: Array<{ name: string; detail: string }> };
+  trace: SearchResult["trace"];
 }
 
 export interface SynthesisResult {
@@ -273,5 +273,6 @@ export interface SynthesisResult {
   profile: string;
   conforms: boolean;
   applied_schemas: string[];
-  trace: { correlation_id: string; steps: Array<{ name: string; detail: string }> };
+  support: Array<{ path: string; evidence_id: string; evidence_ref: string; source_pointer: string }>;
+  trace: SearchResult["trace"];
 }
