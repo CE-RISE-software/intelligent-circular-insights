@@ -11,11 +11,10 @@ from __future__ import annotations
 
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, Header, Response
+from fastapi import APIRouter, Depends, Header
 from pydantic import BaseModel, Field
 
 from apps.api.deps import get_bundle
-from apps.api.middleware.mode import RESPONSE_HEADER
 from ici_core.domain.confidence import OperatingPoint
 from ici_core.domain.ids import CorrelationId, ProductId
 from ici_core.domain.query import ProductScope, Query, RetrievalBudget
@@ -38,7 +37,6 @@ class SearchRequest(BaseModel):
 @router.post("")
 def search(
     req: SearchRequest,
-    response: Response,
     bundle: Annotated[ProviderBundle, Depends(get_bundle)],
     x_correlation_id: Annotated[str | None, Header()] = None,
 ) -> dict[str, Any]:
@@ -56,8 +54,8 @@ def search(
         budget=RetrievalBudget(top_k_documents=req.top_k_documents, top_k_memory=req.top_k_memory),
         point=OperatingPoint(tau=req.tau if req.tau is not None else 0.5),
     )
-    # The UI must never be able to misreport which backend answered.
-    response.headers[RESPONSE_HEADER] = envelope.mode.value
+    # ModeMiddleware stamps X-Backend-Mode-Used on the way out, for every route
+    # and every status, so the UI cannot misreport which backend answered.
     return _serialise(envelope)
 
 

@@ -10,6 +10,7 @@ from ici_substrates.registry.catalog import (
     CeRiseModelRegistry,
     load_catalog,
 )
+from ici_substrates.registry.composite import CompositeSubstrateRegistry
 from ici_substrates.registry.schemas import EU_DPP, JsonSchemaRegistry
 
 __all__ = [
@@ -17,6 +18,7 @@ __all__ = [
     "EU_DPP",
     "CeRiseModel",
     "CeRiseModelRegistry",
+    "CompositeSubstrateRegistry",
     "JsonSchemaRegistry",
     "load_catalog",
 ]

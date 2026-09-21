@@ -56,6 +56,11 @@ class TestSharedFeaturesWorkInBothModes:
             ("GET", "/api/ce-rise-models/coverage", None),
             ("POST", "/api/carbon/calculate", {"product_id": "fairphone_4"}),
             ("GET", "/api/pef/overview", None),
+            ("GET", "/api/carbon/subjects", None),
+            # The gap that let a real 500 ship: /api/search was never in this list,
+            # and a cassette miss escaped as an unhandled exception — which also
+            # strips the mode header, because it propagates past the middleware.
+            ("POST", "/api/search", {"q": "a question with no recorded answer"}),
         ]:
             r = (
                 client.request(method, path, json=body, headers=headers)
@@ -140,3 +145,111 @@ class TestPefEndpoints:
         r = client.post("/api/pef/sparql", json={"query": hostile}, headers=CE_RISE)
         assert r.status_code == 422
         assert r.json()["error"] == "capability_unavailable"
+
+
+class TestTheResponseHeaderCannotLie:
+    """The badge in the UI reads one header. It has to be right on every path."""
+
+    @pytest.mark.parametrize("headers", [NORMAL, CE_RISE], ids=["normal", "ce-rise"])
+    def test_every_route_stamps_the_mode_that_served(self, client, headers) -> None:
+        for method, path, body in [
+            ("GET", "/api/health", None),
+            ("GET", "/api/settings", None),
+            ("GET", "/api/validate/profiles", None),
+            ("GET", "/api/carbon/subjects", None),
+            ("POST", "/api/validate", {"dpp": {}}),
+        ]:
+            r = client.request(method, path, json=body, headers=headers)
+            assert r.headers["X-Backend-Mode-Used"] == headers["X-Backend-Mode"], path
+
+    def test_a_decline_still_names_the_backend_that_declined(self, client) -> None:
+        # The 422 path is exactly where a badge is most likely to go stale, because
+        # the handler never ran. The header is set by middleware, so it survives.
+        r = client.get("/api/pef/overview", headers=NORMAL)
+        assert r.status_code == 422
+        assert r.headers["X-Backend-Mode-Used"] == "normal"
+
+    def test_an_unknown_mode_falls_back_and_says_so(self, client) -> None:
+        r = client.get("/api/health", headers={"X-Backend-Mode": "quantum"})
+        assert r.status_code == 200
+        assert r.headers["X-Backend-Mode-Used"] == "normal"
+        assert r.headers["X-Backend-Mode-Source"] == "default"
+        assert "quantum" in r.headers["X-Backend-Mode-Warning"]
+
+    def test_no_header_means_the_deployment_default(self, client) -> None:
+        r = client.get("/api/health")
+        assert r.headers["X-Backend-Mode-Used"] == "normal"
+        assert r.headers["X-Backend-Mode-Source"] == "default"
+
+    def test_the_header_the_handler_saw_matches_the_header_it_returned(self, client) -> None:
+        # Body and header are produced by different layers; this is the assertion
+        # that they were resolved once, not twice.
+        r = client.post("/api/validate", json={"dpp": {}}, headers=CE_RISE)
+        assert r.json()["mode"] == r.headers["X-Backend-Mode-Used"]
+
+
+class TestSubjectsAreDiscoverable:
+    def test_normal_lists_the_product_profiles_on_disk(self, client) -> None:
+        body = client.get("/api/carbon/subjects", headers=NORMAL).json()
+        ids = {s["id"] for s in body["subjects"]}
+        assert "fairphone_4" in ids
+        assert all(s["kind"] == "product" for s in body["subjects"])
+
+    def test_ce_rise_lists_the_studies_the_graph_declares(self, client) -> None:
+        body = client.get("/api/carbon/subjects", headers=CE_RISE).json()
+        # Same bundle key, different substrate: CE-RISE keeps the CSV engine, so the
+        # carbon window still works for products the graph has never heard of.
+        assert {s["id"] for s in body["subjects"]} == {
+            s["id"] for s in client.get("/api/carbon/subjects", headers=NORMAL).json()["subjects"]
+        }
+
+
+class TestTheModelBeingUnreachableIsNotAServerError:
+    """A deployment that cannot compose prose still has to answer honestly.
+
+    Replay mode never calls the network, so a question with no recorded response
+    has no answer available. That is a configuration fact, not a crash — and
+    reporting it as a 500 also loses the mode header, because an unhandled
+    exception propagates past ``ModeMiddleware`` before it can stamp one.
+    """
+
+    @pytest.mark.parametrize("headers", [NORMAL, CE_RISE], ids=["normal", "ce-rise"])
+    def test_a_cassette_miss_declines_with_a_reason(self, client, headers) -> None:
+        r = client.post(
+            "/api/search",
+            json={"q": "a question no cassette was ever recorded for"},
+            headers=headers,
+        )
+        assert r.status_code == 422
+        body = r.json()
+        assert body["error"] == "model_unavailable"
+        assert "replay mode" in body["reason"]
+        # Actionable, not just apologetic.
+        assert "LLM_CASSETTE_MODE=record" in body["reason"]
+
+    @pytest.mark.parametrize("headers", [NORMAL, CE_RISE], ids=["normal", "ce-rise"])
+    def test_the_badge_can_still_tell_who_declined(self, client, headers) -> None:
+        r = client.post(
+            "/api/search",
+            json={"q": "a question no cassette was ever recorded for"},
+            headers=headers,
+        )
+        assert r.headers["X-Backend-Mode-Used"] == headers["X-Backend-Mode"]
+
+    @pytest.mark.parametrize("headers", [NORMAL, CE_RISE], ids=["normal", "ce-rise"])
+    def test_a_question_with_no_evidence_abstains_without_reaching_the_model(
+        self, client, headers
+    ) -> None:
+        # The composition step is never entered when the pack is empty, so this
+        # path returns a full envelope with no model call and no spend. It is what
+        # the frontend smoke test exercises, for exactly that reason.
+        r = client.post(
+            "/api/search",
+            json={"q": "zzzqqq unmatchable gibberish token"},
+            headers=headers,
+        )
+        assert r.status_code == 200
+        body = r.json()
+        assert body["decision"] == "abstain"
+        assert body["abstain_reason"]
+        assert body["operating_point"]["tau"] == 0.5

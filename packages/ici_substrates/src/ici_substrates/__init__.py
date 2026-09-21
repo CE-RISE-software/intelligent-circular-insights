@@ -9,6 +9,7 @@ from ici_substrates.records import InMemoryRepository
 from ici_substrates.registry import (
     CeRiseModel,
     CeRiseModelRegistry,
+    CompositeSubstrateRegistry,
     JsonSchemaRegistry,
     load_catalog,
 )
@@ -17,6 +18,7 @@ __all__ = [
     "CarbonCalculationService",
     "CeRiseModel",
     "CeRiseModelRegistry",
+    "CompositeSubstrateRegistry",
     "CsvFactorImpactEngine",
     "InMemoryRepository",
     "JsonSchemaRegistry",

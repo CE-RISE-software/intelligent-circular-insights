@@ -185,28 +185,90 @@ a consortium reviewer would actually notice.
 
 ---
 
-## Sprint 3 — Mode switch and frontend · **C + X** · ~5h · **both modes live**
+## Sprint 3 — Mode switch and frontend · **C + X** · **DONE, 21 Sep** · both modes live
 
 **Goal.** Switch backends in Settings; every window works either way.
 
-**Backend (C).** `ModeMiddleware`, `X-Backend-Mode` / `X-Backend-Mode-Used`; both bundles
-built once and immutable; typed `CapabilityError` → 422 with a reason, never a 500.
+**Gate — green**
 
-**Frontend (C).** The existing frontend is good and mostly ports across. Changes: mode
-switch in Settings beside the model selection; mode badge reading the *response* header; the
-audit panel extended to show the named signal vector, the grounding verdict, and which
-signal was weak on an abstention. A compare view if time allows — it is the best demo
-moment, but it is not load-bearing.
-
-**Codex.** One mode-aware prompt variant: in CE-RISE mode, mounted substrates are
-authoritative and a claim that cannot attach to a substrate fact is abstained on.
-
-**Gate**
-
-```bash
-pytest tests/e2e/test_modes.py -q   # 6 windows × 2 modes, one model
-npx playwright test --grep smoke    # each window loads and answers in both modes
 ```
+448 passed, 29 skipped          pytest, no API key, 19 s
+22 passed                       playwright --grep smoke, 37 s, both modes
+clean                           ruff check · ruff format · mypy (58 files) · import-linter (2/2)
+48 modules, 216 kB / 68 kB gz   vite build
+```
+
+### Backend
+
+`ModeMiddleware` resolves the mode once per request, stashes the resolution on
+`request.state`, and stamps `X-Backend-Mode-Used` on **every** response — including the 422
+a mode returns when it cannot serve a feature, which is precisely where a badge is most
+likely to go stale, because the handler never ran. `get_bundle` reads the stash rather than
+re-resolving, so the handler and the header cannot disagree; a test asserts the body's
+`mode` equals the header. `X-Backend-Mode-Source` and `X-Backend-Mode-Warning` carry the
+rest of the resolution. ADR 0012.
+
+`ImpactEngine` gains `subjects()`, so the Carbon picker is read off the profile directory
+rather than hard-coded — which is how the demo's product list drifted from its data.
+
+### Frontend — `apps/web`, ~1,900 LoC
+
+Built fresh against the rewrite's API rather than ported line by line: the demo's pages
+call endpoints this rewrite deliberately does not have (`/api/pefdpp/*`, `/api/single-dpp/*`),
+and re-adding those to satisfy the old client would undo the rewrite. `tokens.css` carried
+across unchanged, so it is visibly the same product.
+
+Six windows — Search, Carbon, Validate, CE-RISE Models, PEF Studio (4 tabs), Compare — and
+three rules the pages cannot get wrong because one module enforces each:
+
+1. **The badge reads the response, never the preference.** `mode.ts` keeps *requested* and
+   *served* as separate values; amber when they differ.
+2. **A 422 is a value, not an exception.** `ApiResult<T>` = `ok | declined | failed`. A
+   decline renders the reason plus a button that performs the switch that would satisfy it.
+3. **The audit panel shows the whole envelope**: the named signal vector with the weak
+   signal highlighted, τ marked on the confidence track, the grounding verdict with claims
+   resolved of total, provenance, and the inference trace.
+
+The compare view made it in. It asks both backends at once and deliberately does **not**
+let those requests move the badge — asking a specific backend must not retitle the session's.
+
+### Three bugs the frontend found
+
+**The Sprint 2 mistake, in a second slot.** CE-RISE mode assigned the graph into the single
+`substrates` slot, and the CE-RISE Models window went **from 18 models to 0** the moment you
+switched to the *more rigorous* backend. `CompositeSubstrateRegistry` composes instead, and
+the invariant is now asserted directly rather than per feature — `normal_substrates <
+ce_rise_substrates`, so a mode that removes knowledge fails the suite. ADR 0013, refining 0002.
+
+**`/api/search` returned 500.** A `CassetteMiss` — correct behaviour, replay must never
+touch the network — escaped as an unhandled exception. It is now a typed 422
+(`model_unavailable`) with an actionable reason. Deliberately *not* folded into an
+abstention: an abstention says the system reasoned and declined on confidence grounds, and
+reporting a configuration problem that way would put it into the reliability statistics.
+The test gap that let it ship: `/api/search` was never in the never-500 matrix. It is now.
+
+**An unhandled exception loses the mode badge.** The 500 propagated past `ModeMiddleware`
+before it could stamp a header, so the badge went blank — which is honest (nothing is known)
+but made the root cause harder to see. Fixed by the fix above; the behaviour is now tested.
+
+### Cost
+
+No OpenAI spend. The smoke tests pick a question that matches nothing, so the pack is empty
+and composition is never entered: a full envelope, no model call. One further test asserts
+only that a question needing prose renders *an outcome* — answer or decline — never a blank
+window.
+
+### Running it
+
+`node_modules` installs outside the repository and is symlinked in
+(`ICI_WEB_MODULES`, default `~/.ici-web-modules`). Not a preference: installing 74 packages
+into a synced folder produced thousands of file events and repeatedly killed the connection
+to this machine. `ICI_CHROMIUM` points Playwright at a browser already on disk, for networks
+that refuse `cdn.playwright.dev`. `bash apps/web/finish-sprint3.sh` does all of it.
+
+**Codex.** X7, one mode-aware prompt variant, is still open and is not blocking: in CE-RISE
+mode, mounted substrates are authoritative and a claim that cannot attach to a substrate
+fact is abstained on.
 
 ---
 

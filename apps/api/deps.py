@@ -31,9 +31,19 @@ def get_resolver(request: Request) -> ModeResolver:
 
 
 def resolve_mode(
+    request: Request,
     resolver: Annotated[ModeResolver, Depends(get_resolver)],
     x_backend_mode: Annotated[str | None, Header()] = None,
 ) -> ModeResolution:
+    """One resolution per request, shared with the response header.
+
+    ``ModeMiddleware`` has already resolved and stashed it; this reads that value
+    so the handler and the ``X-Backend-Mode-Used`` header can never disagree. The
+    fallback path exists for tests that mount a router without the middleware.
+    """
+    stashed: ModeResolution | None = getattr(request.state, "mode_resolution", None)
+    if stashed is not None:
+        return stashed
     return resolver.resolve(header=x_backend_mode)
 
 

@@ -1,0 +1,10 @@
+# No trailing slashes. node_modules is a *symlink* in this setup — installed
+# outside the repository and linked in, because installing it here produces
+# thousands of file events in a synced folder. A pattern with a trailing slash
+# matches only a real directory and would happily commit the link.
+node_modules
+dist
+test-results
+playwright-report
+.playwright
+*.tsbuildinfo

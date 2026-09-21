@@ -19,7 +19,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from apps.api import errors
 from apps.api.bundles import build_registry
-from apps.api.middleware.mode import RESPONSE_HEADER, ModeResolver
+from apps.api.middleware.mode import (
+    RESPONSE_HEADER,
+    SOURCE_HEADER,
+    WARNING_HEADER,
+    ModeMiddleware,
+    ModeResolver,
+)
 from apps.api.settings import Settings, get_settings
 from ici_core.domain.modes import DEFAULT_MODE, BackendMode
 
@@ -63,13 +69,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     for module in (search, carbon, validate, models, pef):
         app.include_router(module.router, prefix="/api")
 
+    # Order matters: CORS is added last so it wraps outermost and the exposed
+    # headers survive a preflight.
+    app.add_middleware(ModeMiddleware)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*", "X-Model", "X-Backend-Mode"],
-        expose_headers=["X-Model-Used", RESPONSE_HEADER],
+        expose_headers=["X-Model-Used", RESPONSE_HEADER, SOURCE_HEADER, WARNING_HEADER],
     )
     errors.install(app)
 

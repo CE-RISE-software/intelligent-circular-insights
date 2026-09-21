@@ -186,6 +186,9 @@ class FakeImpactEngine:
     def assess(self, subject: SubjectRef, req: ImpactRequest) -> ImpactResult:
         return ImpactResult(subject=subject, indicator=req.indicator, total=1.0, unit="kg CO2e")
 
+    def subjects(self) -> Sequence[SubjectRef]:
+        return (SubjectRef(id="fake_product"),)
+
     def explain(self, result: ImpactResult, target: str) -> Provenance:
         return Provenance(target=target)
 

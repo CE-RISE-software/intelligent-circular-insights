@@ -28,6 +28,20 @@ class CarbonRequest(BaseModel):
     include_trace: bool = True
 
 
+@router.get("/subjects")
+def subjects(bundle: Annotated[ProviderBundle, Depends(get_bundle)]) -> dict[str, Any]:
+    """What this mode can assess.
+
+    The window asks rather than hard-coding, so switching backends changes the
+    picker as well as the arithmetic — Normal lists product profiles, CE-RISE the
+    studies the graph declares.
+    """
+    return {
+        "mode": bundle.mode.value,
+        "subjects": [{"id": s.id, "kind": s.kind} for s in bundle.impact.subjects()],
+    }
+
+
 @router.post("/calculate")
 def calculate(
     req: CarbonRequest,

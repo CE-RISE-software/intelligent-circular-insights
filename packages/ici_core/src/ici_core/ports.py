@@ -147,6 +147,15 @@ class ImpactEngine(Protocol):
         """The derivation of one number: sources, factors, scaling, arithmetic."""
         ...
 
+    def subjects(self) -> Sequence[SubjectRef]:
+        """What this engine can assess.
+
+        On the port because a caller that cannot discover the subjects has to
+        hard-code them, which is how the demo ended up shipping a product list
+        that had drifted from the data directory.
+        """
+        ...
+
 
 @runtime_checkable
 class DPPRepository(Protocol):

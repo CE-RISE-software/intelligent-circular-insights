@@ -9,6 +9,7 @@ mounts. Both answer the same question, so the core sees one shape.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -88,6 +89,15 @@ class CsvFactorImpactEngine:
             data_quality=payload.get("uncertainty_pct"),
             diagnostics=tuple(diagnostics),
             uses_proxy_factors=bool(payload.get("used_bootstrap_estimates")),
+        )
+
+    def subjects(self) -> Sequence[SubjectRef]:
+        """Read off the profile directory, never a hard-coded list."""
+        root = self.service.products_dir
+        if not root.is_dir():
+            return ()
+        return tuple(
+            SubjectRef(id=path.stem, kind="product") for path in sorted(root.glob("*.json"))
         )
 
     def explain(self, result: ImpactResult, target: str) -> Provenance:

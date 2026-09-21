@@ -1,0 +1,744 @@
+/* CE-RISE design tokens — premium frosted-glass system over a warm brand
+   canvas. The surfaces keep enough opacity for readability but preserve
+   reflected color, edge highlights and depth. */
+:root {
+  /* Brand palette */
+  --cerise-indigo:   #3D2BBA;
+  --cerise-purple:   #6E2DC8;
+  --cerise-magenta:  #C5358A;
+  --cerise-coral:    #ED7B47;
+  --cerise-amber:    #F2A93D;
+  --cerise-navy:     #1B1252;   /* dark accent (used sparingly) */
+  --cerise-ink:      #2A1B6B;
+
+  --cerise-green:    #2FBE9A;
+  --cerise-warn:     #F5C152;
+  --cerise-red:      #FF6B6B;
+  --cerise-teal:     #74C2FF;
+
+  /* Surfaces — text. The frosted cards are milky-white now, so dark text
+     reads beautifully on them. We keep a few "soft" tones for meta info. */
+  --on-glass:        #1B1252;                       /* default text on glass */
+  --on-glass-soft:   rgba(27, 18, 82, 0.72);        /* meta, labels */
+  --on-glass-faint:  rgba(27, 18, 82, 0.55);        /* hints, placeholders */
+  --on-input:        #1B1252;                       /* dark text inside inputs */
+
+  /* Brand gradient bg */
+  --bg-gradient:
+      linear-gradient(115deg, rgba(61,43,186,0.98) 0%, rgba(110,45,200,0.96) 30%, rgba(197,53,138,0.94) 63%, rgba(237,123,71,0.96) 100%),
+      linear-gradient(25deg, rgba(242,169,61,0.95), rgba(255,255,255,0) 54%);
+  --bg-luminance:
+      linear-gradient(100deg, rgba(255,255,255,0.00) 0%, rgba(255,255,255,0.16) 48%, rgba(255,255,255,0.03) 100%),
+      linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.00) 42%);
+
+  /* Premium glass primitives. */
+  --glass-fill:        rgba(255, 255, 255, 0.58);
+  --glass-fill-hi:     rgba(255, 255, 255, 0.66);
+  --glass-fill-input:  rgba(255, 255, 255, 0.72);
+  --glass-fill-deep:   rgba(255, 255, 255, 0.48);
+  --glass-blur:        34px;
+  --glass-saturation:  175%;
+
+  --glass-border:      1px solid rgba(255, 255, 255, 0.62);
+  --glass-border-soft: 1px solid rgba(255, 255, 255, 0.42);
+
+  --glass-shadow:      0 28px 72px rgba(27, 18, 82, 0.28),
+                       0 10px 26px rgba(197, 53, 138, 0.16),
+                       inset 0 1px 0 rgba(255, 255, 255, 0.96),
+                       inset 0 -1px 0 rgba(255, 255, 255, 0.28);
+  --glass-shadow-hi:   0 34px 86px rgba(27, 18, 82, 0.34),
+                       0 14px 32px rgba(197, 53, 138, 0.20),
+                       inset 0 1px 0 rgba(255, 255, 255, 1.00),
+                       inset 0 -1px 0 rgba(255, 255, 255, 0.32);
+  --field-shadow:      0 12px 28px rgba(27, 18, 82, 0.10),
+                       inset 0 1px 0 rgba(255, 255, 255, 0.88);
+
+  /* Geometry */
+  --r-card:    18px;
+  --r-input:   12px;
+  --r-pill:    999px;
+
+  /* Type */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
+  /* Motion */
+  --easing: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --t-fast: 160ms;
+  --t-med:  260ms;
+
+  /* Primary action gradient — used for buttons + active tabs */
+  --grad-primary:       linear-gradient(135deg, #3D2BBA 0%, #6E2DC8 55%, #C5358A 100%);
+  --grad-primary-hover: linear-gradient(135deg, #4A36D0 0%, #7E33D6 55%, #D2479B 100%);
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  height: 100%;
+  font-family: var(--font-sans);
+  color: var(--on-glass);
+  background: var(--bg-gradient) fixed;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  position: relative;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: var(--bg-luminance);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.16;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.38'/%3E%3C/svg%3E");
+}
+
+button { font-family: inherit; }
+
+/* ---------------- Glass surface primitive ---------------- */
+.glass {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.42) 42%, rgba(255,255,255,0.22) 100%),
+    var(--glass-fill);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  backdrop-filter:         blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  border: var(--glass-border);
+  border-radius: var(--r-card);
+  box-shadow: var(--glass-shadow);
+  color: var(--on-glass);
+  transition: box-shadow var(--t-med) var(--easing),
+              transform   var(--t-fast) var(--easing),
+              background  var(--t-med) var(--easing);
+}
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 58%;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,0.78) 0%,
+      rgba(255,255,255,0.34) 48%,
+      rgba(255,255,255,0.00) 100%);
+}
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: calc(var(--r-card) - 1px);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.58), rgba(255,255,255,0.00) 28%),
+    linear-gradient(315deg, rgba(255,255,255,0.22), rgba(255,255,255,0.00) 34%);
+  opacity: 0.82;
+}
+.glass:hover { box-shadow: var(--glass-shadow-hi); }
+.glass.solid {
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.54) 48%, rgba(255,255,255,0.34) 100%),
+    var(--glass-fill-hi);
+}
+.glass > * {
+  position: relative;
+  z-index: 1;
+}
+
+.glass.panel-hero {
+  box-shadow: 0 24px 62px rgba(27,18,82,0.22),
+              0 10px 30px rgba(237,123,71,0.12),
+              inset 0 1px 0 rgba(255,255,255,0.96);
+}
+
+.glass.answer-surface {
+  min-height: 100%;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.82), rgba(255,255,255,0.48) 52%, rgba(255,245,252,0.34)),
+    linear-gradient(22deg, rgba(116,194,255,0.11), rgba(255,255,255,0.00) 48%, rgba(237,123,71,0.11));
+}
+
+.glass.audit-surface {
+  background:
+    linear-gradient(155deg, rgba(255,255,255,0.72), rgba(255,235,246,0.48) 44%, rgba(255,225,178,0.40)),
+    var(--glass-fill);
+}
+
+/* Headings inside cards inherit white-on-glass styling. */
+.glass h1, .glass h2, .glass h3, .glass header { color: var(--on-glass); }
+
+/* Inline styles in pages still reference --cerise-navy; keep it dark inside
+   glass so existing text stays readable on the milky-frost surface. */
+.glass {
+  --cerise-navy: var(--on-glass);
+  --cerise-ink:  var(--on-glass-soft);
+}
+
+/* ---------------- Inputs ---------------- */
+/* When the consumer applies inline styles on inputs we still want consistent
+   "frosted input" defaults: use these class names where possible. */
+input, select, textarea {
+  color: var(--on-input);
+  font-family: inherit;
+}
+input[type="text"], input:not([type]), input[type="email"], input[type="search"],
+select, textarea {
+  background: var(--glass-fill-input) !important;
+  border: 1px solid rgba(255,255,255,0.74) !important;
+  color: var(--on-input);
+  border-radius: var(--r-input);
+  --cerise-navy: var(--on-input);
+  box-shadow: var(--field-shadow) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+}
+input::placeholder, textarea::placeholder { color: var(--on-glass-faint); }
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid rgba(255,255,255,0.72);
+  outline-offset: 1px;
+  border-color: rgba(255,255,255,0.92);
+  box-shadow: 0 14px 34px rgba(61,43,186,0.14),
+              inset 0 1px 0 rgba(255,255,255,0.95);
+}
+
+.field-control {
+  background: rgba(255,255,255,0.72) !important;
+  border: 1px solid rgba(255,255,255,0.72) !important;
+  box-shadow: var(--field-shadow) !important;
+}
+
+/* Code / JSON viewers: white card with dark text. */
+pre, code {
+  color: #1B1252;
+}
+pre {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(255,255,255,0.95);
+  border-radius: 12px;
+  --cerise-navy: #1B1252;
+}
+
+/* ---------------- Pills ---------------- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(255,255,255,0.72);
+  font-size: 12px;
+  font-weight: 500;
+  color: #1B1252;
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  box-shadow: 0 8px 18px rgba(27,18,82,0.08),
+              inset 0 1px 0 rgba(255,255,255,0.82);
+}
+.pill.green  { background: rgba(42,157,143,0.18); border-color: rgba(42,157,143,0.50); color: #1f6e64; }
+.pill.amber  { background: rgba(240,169, 61,0.20); border-color: rgba(240,169, 61,0.55); color: #7a5511; }
+.pill.coral  { background: rgba(233, 75, 75,0.18); border-color: rgba(233, 75, 75,0.50); color: #8f2222; }
+.pill.teal   { background: rgba(110, 45,200,0.14); border-color: rgba(110, 45,200,0.45); color: #4a1ba0; }
+
+/* ---------------- Buttons ---------------- */
+.btn {
+  appearance: none;
+  border: none;
+  border-radius: var(--r-pill);
+  padding: 10px 22px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--grad-primary);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(61, 43, 186, 0.42),
+              inset 0 1px 0 rgba(255,255,255,0.30);
+  transition: transform var(--t-fast) var(--easing),
+              box-shadow var(--t-med) var(--easing),
+              background var(--t-med) var(--easing);
+}
+.btn:hover {
+  transform: translateY(-1px);
+  background: var(--grad-primary-hover);
+  box-shadow: 0 16px 34px rgba(61, 43, 186, 0.52),
+              inset 0 1px 0 rgba(255,255,255,0.40);
+}
+.btn:active { transform: translateY(0); }
+.btn:disabled {
+  opacity: 0.50;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 6px 14px rgba(61, 43, 186, 0.24);
+}
+.btn.secondary {
+  background: rgba(255,255,255,0.66);
+  color: #1B1252;
+  border: 1px solid rgba(255,255,255,0.76);
+  box-shadow: 0 8px 22px rgba(27,18,82,0.18),
+              inset 0 1px 0 rgba(255,255,255,1.00);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.btn.secondary:hover {
+  background: rgba(255,255,255,0.82);
+  box-shadow: 0 12px 28px rgba(27,18,82,0.22),
+              inset 0 1px 0 rgba(255,255,255,1.00);
+}
+
+.nav-link-glass {
+  position: relative;
+}
+
+.nav-link-glass:not(.active):hover {
+  background: rgba(255,255,255,0.34) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.48);
+}
+
+.evidence-card {
+  background: rgba(255,255,255,0.42) !important;
+  border: 1px solid rgba(255,255,255,0.56);
+  box-shadow: 0 10px 24px rgba(27,18,82,0.10),
+              inset 0 1px 0 rgba(255,255,255,0.74);
+}
+
+.audit-source-button {
+  margin-top: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 5px 10px;
+}
+
+.source-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background:
+    radial-gradient(circle at 28% 18%, rgba(255,255,255,0.34), rgba(255,255,255,0.00) 32%),
+    rgba(27, 18, 82, 0.30);
+  -webkit-backdrop-filter: blur(12px) saturate(145%);
+  backdrop-filter: blur(12px) saturate(145%);
+}
+
+.source-modal {
+  width: min(1080px, 94vw);
+  max-height: min(820px, 88vh);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 0;
+  min-width: 0;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.86), rgba(255,255,255,0.58) 45%, rgba(255,244,250,0.42)),
+    rgba(255,255,255,0.62);
+}
+
+.source-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 22px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.58);
+}
+
+.source-modal-header h3 {
+  margin: 3px 0 0;
+  font-size: 20px;
+  line-height: 1.2;
+  color: #1B1252;
+}
+
+.source-modal-kicker {
+  color: rgba(27,18,82,0.58);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.source-modal-close {
+  padding: 8px 14px;
+  flex: 0 0 auto;
+}
+
+.source-modal-body {
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  padding: 16px 22px 22px;
+}
+
+.source-section + .source-section {
+  margin-top: 18px;
+}
+
+.source-section h4 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #1B1252;
+}
+
+.source-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.source-field,
+.source-ref-card {
+  min-width: 0;
+  max-width: 100%;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.58);
+  border: 1px solid rgba(255,255,255,0.70);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.78),
+              0 10px 20px rgba(27,18,82,0.08);
+}
+
+.source-field {
+  padding: 10px 12px;
+  min-width: 0;
+}
+
+.source-field span {
+  display: block;
+  color: rgba(27,18,82,0.56);
+  font-size: 11px;
+  margin-bottom: 3px;
+}
+
+.source-field strong {
+  display: block;
+  max-width: 100%;
+  max-height: 64px;
+  color: #1B1252;
+  font-size: 12px;
+  overflow: auto;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  scrollbar-width: thin;
+  padding: 1px 2px 3px 0;
+}
+
+.source-ref-list {
+  display: grid;
+  gap: 10px;
+}
+
+.source-ref-card {
+  padding: 12px;
+  overflow: hidden;
+}
+
+.source-ref-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  color: #1B1252;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.source-ref-title > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.source-ref-title .pill {
+  flex: 0 1 auto;
+  max-width: 44%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.source-ref-line {
+  display: block;
+  max-width: 100%;
+  max-height: 54px;
+  margin-top: 6px;
+  color: rgba(27,18,82,0.74);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  overflow: auto;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  scrollbar-width: thin;
+  padding: 1px 2px 3px 0;
+}
+
+.source-open-link {
+  display: inline-flex;
+  margin-top: 10px;
+  padding: 7px 12px;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.source-json {
+  max-height: 340px;
+  overflow: auto;
+  margin: 0;
+  padding: 14px;
+  font-size: 11px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .source-modal-backdrop {
+    padding: 14px;
+  }
+  .source-grid {
+    grid-template-columns: 1fr;
+  }
+  .source-modal-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+.answer-copy {
+  color: rgba(27,18,82,0.82);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.56);
+}
+
+.confidence-track {
+  background: rgba(255,255,255,0.44) !important;
+  box-shadow: inset 0 1px 3px rgba(27,18,82,0.08),
+              0 1px 0 rgba(255,255,255,0.52);
+}
+
+/* ============================================================================
+   Sprint 3 additions — the reliability envelope made visible.
+
+   Everything above this line is the workbench's existing design language, ported
+   unchanged. Everything below exists because the rewrite surfaces things the demo
+   never showed: which backend served a request, the named signal vector behind a
+   confidence number, and the difference between a failure and an honest decline.
+   ========================================================================== */
+
+/* ---- mode badge: reads the response header, never the local preference ---- */
+.mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px 5px 9px;
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+  border: 1px solid rgba(110, 45, 200, 0.42);
+  background: rgba(255, 255, 255, 0.62);
+  color: var(--cerise-ink);
+  transition: background var(--t-med) var(--easing), border-color var(--t-med) var(--easing);
+}
+.mode-badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cerise-purple);
+  box-shadow: 0 0 0 3px rgba(110, 45, 200, 0.16);
+}
+.mode-badge.ce-rise {
+  border-color: rgba(47, 190, 154, 0.55);
+  background: rgba(47, 190, 154, 0.16);
+  color: #126d59;
+}
+.mode-badge.ce-rise .dot {
+  background: var(--cerise-green);
+  box-shadow: 0 0 0 3px rgba(47, 190, 154, 0.18);
+}
+/* The backend served something other than what was asked for. */
+.mode-badge.mismatch {
+  border-color: rgba(240, 169, 61, 0.70);
+  background: rgba(240, 169, 61, 0.22);
+  color: #7a5511;
+}
+.mode-badge.unknown {
+  border-color: rgba(27, 18, 82, 0.20);
+  background: rgba(255, 255, 255, 0.40);
+  color: var(--on-glass-faint);
+}
+.mode-badge.unknown .dot { background: rgba(27, 18, 82, 0.28); box-shadow: none; }
+
+/* ---- mode switch ---------------------------------------------------------- */
+.mode-switch { display: grid; gap: 10px; }
+.mode-option {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 13px 15px;
+  border-radius: var(--r-input);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.42);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--t-fast) var(--easing), background var(--t-fast) var(--easing);
+}
+.mode-option:hover { background: rgba(255, 255, 255, 0.58); }
+.mode-option.selected {
+  border-color: var(--cerise-purple);
+  background: rgba(110, 45, 200, 0.12);
+  box-shadow: 0 8px 22px rgba(61, 43, 186, 0.14);
+}
+.mode-option .radio {
+  width: 18px; height: 18px; margin-top: 2px;
+  border-radius: 50%;
+  border: 2px solid rgba(27, 18, 82, 0.35);
+  display: grid; place-items: center;
+}
+.mode-option.selected .radio { border-color: var(--cerise-purple); }
+.mode-option.selected .radio::after {
+  content: ""; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--cerise-purple);
+}
+.mode-option .name { font-weight: 700; font-size: 14px; color: var(--cerise-navy); }
+.mode-option .blurb { font-size: 12px; line-height: 1.45; color: var(--on-glass-soft); margin-top: 3px; }
+
+/* ---- an honest decline is not an error ------------------------------------ */
+.declined {
+  display: grid;
+  gap: 10px;
+  padding: 18px 20px;
+  border-radius: var(--r-card);
+  border: 1px solid rgba(240, 169, 61, 0.55);
+  background: rgba(240, 169, 61, 0.14);
+}
+.declined .head { display: flex; align-items: center; gap: 9px; font-weight: 700; color: #7a5511; }
+.declined .reason { font-size: 13px; line-height: 1.5; color: var(--on-glass); }
+.failed {
+  padding: 16px 18px;
+  border-radius: var(--r-card);
+  border: 1px solid rgba(233, 75, 75, 0.45);
+  background: rgba(233, 75, 75, 0.12);
+  font-size: 13px;
+  color: #8f2222;
+}
+
+/* ---- signal vector -------------------------------------------------------- */
+.signal-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 54px;
+  gap: 10px;
+  align-items: center;
+  padding: 5px 0;
+  font-size: 12px;
+}
+.signal-row .name { color: var(--on-glass-soft); font-weight: 600; }
+.signal-row .track {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(27, 18, 82, 0.10);
+  overflow: hidden;
+}
+.signal-row .fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--grad-primary);
+  transition: width var(--t-med) var(--easing);
+}
+.signal-row .value { font-family: var(--font-mono); text-align: right; color: var(--on-glass); }
+/* The signal that dragged the decision below tau. */
+.signal-row.weak .name { color: #8f2222; font-weight: 750; }
+.signal-row.weak .fill { background: linear-gradient(90deg, #E94B4B, #F0A93D); }
+.signal-row.weak .value { color: #8f2222; font-weight: 700; }
+
+/* ---- tau marker on the confidence track ----------------------------------- */
+.tau-track { position: relative; height: 10px; border-radius: 999px; background: rgba(27,18,82,0.10); overflow: visible; }
+.tau-track .fill { height: 100%; border-radius: 999px; background: var(--grad-primary); }
+.tau-track .marker {
+  position: absolute; top: -5px; width: 2px; height: 20px;
+  background: var(--cerise-navy); border-radius: 1px;
+}
+.tau-track .marker::after {
+  content: "τ"; position: absolute; top: -16px; left: -4px;
+  font-size: 10px; font-weight: 700; color: var(--cerise-navy);
+}
+
+/* ---- data tables ---------------------------------------------------------- */
+.data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.data-table th {
+  text-align: left; padding: 8px 10px;
+  font-size: 10.5px; letter-spacing: 0.6px; text-transform: uppercase;
+  color: var(--on-glass-soft); font-weight: 700;
+  border-bottom: 1px solid rgba(27, 18, 82, 0.14);
+}
+.data-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(27, 18, 82, 0.07);
+  color: var(--on-glass);
+  vertical-align: top;
+}
+.data-table tbody tr:hover { background: rgba(255, 255, 255, 0.34); }
+.data-table .num { font-family: var(--font-mono); text-align: right; white-space: nowrap; }
+
+/* ---- compare view --------------------------------------------------------- */
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+@media (max-width: 1100px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-col { display: grid; gap: 12px; }
+.compare-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 8px; border-bottom: 1px solid rgba(27, 18, 82, 0.12);
+}
+.diff-marker { font-family: var(--font-mono); font-size: 11px; color: var(--cerise-magenta); font-weight: 700; }
+
+/* ---- misc ----------------------------------------------------------------- */
+.label {
+  display: block; font-size: 10.5px; font-weight: 700;
+  letter-spacing: 0.6px; text-transform: uppercase;
+  color: var(--on-glass-soft); margin-bottom: 7px;
+}
+.muted { color: var(--on-glass-soft); font-size: 12.5px; line-height: 1.5; }
+.faint { color: var(--on-glass-faint); font-size: 12px; }
+.mono  { font-family: var(--font-mono); }
+.scroll-y { overflow-y: auto; min-height: 0; }
+.page {
+  display: grid; gap: 14px; height: 100%; min-height: 0;
+  overflow-y: auto; padding-right: 4px; align-content: start;
+}
+.spin {
+  width: 15px; height: 15px; border-radius: 50%;
+  border: 2px solid rgba(110, 45, 200, 0.25);
+  border-top-color: var(--cerise-purple);
+  animation: spin 720ms linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } }

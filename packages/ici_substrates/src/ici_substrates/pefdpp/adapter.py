@@ -104,6 +104,11 @@ class PefdppImpactEngine:
             uses_proxy_factors=True,
         )
 
+    def subjects(self) -> Sequence[SubjectRef]:
+        """The studies declared in the graph. A study, not a product: this engine
+        solves a product system, and the system is what the graph names."""
+        return tuple(SubjectRef(id=study, kind="study") for study in self.graph.studies())
+
     def explain(self, result: ImpactResult, target: str) -> Provenance:
         """The derivation of one number, down to the triple it came from.
 
