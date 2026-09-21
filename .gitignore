@@ -27,3 +27,29 @@ var/
 # The full EF 3.1 elementary-flow list: 41 MB, and the case study references it by
 # UUID without importing it. See ontology/pefdpp/skos/README.md.
 ontology/pefdpp/skos/ef31-elementaryflows.ttl
+
+# ---------------------------------------------------------------- secrets
+# This repository is mirrored publicly. A key committed here is a key published,
+# and git history keeps it after the file is deleted — so the rules below are
+# broad on purpose, and `.env.example` is the one exception that has to be named.
+#
+# These are the first of three layers. The other two are `.githooks/pre-commit`
+# (enable with `make hooks`) and `tests/test_no_secrets.py`, which fails the suite
+# if a secret-shaped file is ever tracked. The test is the one that matters: hooks
+# are not cloned and this file can be edited.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+secrets.*
+*_secret*
+*credential*
+*apikey*
+*api_key*
+*API_KEY*
+openApikey*
+.openai

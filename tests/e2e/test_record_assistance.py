@@ -225,3 +225,65 @@ class TestTheRepairIsAuditable:
         names = [s["name"] for s in body["trace"]["steps"]]
         assert "repair:gather" in names
         assert names.index("repair:gather") < names.index("repair")
+
+
+@pytest.fixture(scope="module")
+def recorded() -> TestClient:
+    """A client reading the bounded recorder's output directory."""
+    settings = Settings(llm_cassette_dir="tests/cassettes/recorded", llm_cassette_mode="replay")
+    with TestClient(create_app(settings)) as c:
+        yield c
+
+
+def _or_skip(response: Any) -> dict[str, Any]:
+    if response.status_code == 422 and response.json().get("error") == "model_unavailable":
+        pytest.skip("no route cassette recorded yet — run `make record` with a key in .env")
+    assert response.status_code == 200, response.text
+    return dict(response.json())
+
+
+class TestTheRecordedHappyPath:
+    """The route driven by a real recorded response, once one exists.
+
+    Dormant by design. Until ``make record`` has been run with a key, these skip
+    with a message saying so — and a skip is visible in the suite output, where a
+    silently-passing stub would not be. Once the cassettes are recorded they lock
+    in the one thing the stub cannot: that the *real* model's structured output
+    survives the whole path, from retrieval through grounding to the response
+    shape, without anyone editing a fixture to make it fit.
+
+    Read from ``tests/cassettes/recorded`` rather than the default directory,
+    because that is where the bounded recorder writes and the two sets are kept
+    apart on purpose: the default holds hand-built fixtures, and relabelling one as
+    a live recording would misrepresent what the model actually returned.
+    """
+
+    def test_repair_fills_a_field_from_a_real_response(self, recorded) -> None:
+        body = _or_skip(
+            recorded.post("/api/validate/repair", json={"dpp": KNOWN_SEED}, headers=NORMAL)
+        )
+        # Whatever the model returned, the contract holds: every applied fill names
+        # the evidence it came from, and nothing unverified sits among them.
+        for fill in body["grounded_fills"]:
+            assert fill["evidence_ref"], f"{fill['path']} was filled with no source named"
+            assert fill["source_pointer"]
+        applied = {f["path"] for f in body["grounded_fills"]}
+        suggested = {s["path"] for s in body["unverified_suggestions"]}
+        assert not applied & suggested
+
+    def test_every_suggestion_still_carries_its_warning(self, recorded) -> None:
+        body = _or_skip(
+            recorded.post("/api/validate/repair", json={"dpp": KNOWN_SEED}, headers=NORMAL)
+        )
+        for suggestion in body["unverified_suggestions"]:
+            assert suggestion["requires_review"] is True
+            assert suggestion["status"] == "unverified"
+
+    def test_synthesis_returns_a_conforming_passport(self, recorded) -> None:
+        body = _or_skip(recorded.post("/api/synthesize", json={"seed": KNOWN_SEED}, headers=NORMAL))
+        # The use case raises rather than returning a non-conforming record, so a
+        # 200 here *is* the conformance assertion. Checked anyway, because that
+        # guarantee living in one `if` is a reason to test it, not to trust it.
+        assert body["conforms"] is True
+        assert body["record"]
+        assert body["dpp_id"]

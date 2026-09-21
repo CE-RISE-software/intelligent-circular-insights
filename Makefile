@@ -45,6 +45,24 @@ cov:  ## Test with coverage
 live:  ## Real OpenAI calls. Run by hand, never in CI. Costs money.
 	uv run pytest -m live --run-live --no-header
 
+hooks:  ## Install the pre-commit secret guard (git does not do this from a clone)
+	git config core.hooksPath .githooks
+	chmod +x .githooks/*
+	@echo "Secret guard active. tests/test_no_secrets.py enforces it regardless."
+
+record:  ## Capture cassettes from the real model. Costs money. Capped at 40 calls / $1.
+	@test -f .env || { echo "No .env. Copy .env.example and add OPENAI_API_KEY."; exit 1; }
+	@grep -q '^OPENAI_API_KEY=sk-' .env || { echo ".env has no OPENAI_API_KEY."; exit 1; }
+	@echo "Recording against the live API. The recorder reserves worst-case cost"
+	@echo "before every attempt and refuses past 40 calls or 1 estimated USD."
+	uv run python -m tooling.record_llm --record --env-file .env
+	@echo
+	@echo "Now verify the suite still replays without the key:"
+	@echo "    LLM_CASSETTE_MODE=replay make test"
+
+secrets:  ## Check that no credential is tracked by git
+	uv run pytest tests/test_no_secrets.py -q
+
 demo:  ## Run the API locally
 	uv run uvicorn apps.api.main:app --reload --port 8000
 
@@ -54,4 +72,5 @@ gate-s0:  ## The Sprint 0 exit gate
 	uv run pytest -m contract -q
 	@echo "Sprint 0 gate: green"
 
-.PHONY: help setup lint format typecheck layering check test test-fast contract cov live demo gate-s0
+.PHONY: help setup lint format typecheck layering check test test-fast contract cov live \
+        demo gate-s0 hooks record secrets

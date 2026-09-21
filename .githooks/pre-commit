@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Refuse a commit that would publish a credential.
+#
+# Enable with `make hooks` (git does not install hooks from a clone, which is why
+# this is only the second of three layers — tests/test_no_secrets.py is the one
+# that travels with the repository).
+#
+# Checks the staged content, not the working tree: a file can be clean on disk and
+# staged with a key in it.
+set -euo pipefail
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$staged" ] && exit 0
+
+fail=0
+
+# 1. Filenames that should never be committed at all.
+while IFS= read -r path; do
+    [ -z "$path" ] && continue
+    lower=$(printf '%s' "$path" | tr '[:upper:]' '[:lower:]')
+    case "$lower" in
+        *.env.example|*.env.template) continue ;;
+    esac
+    case "$lower" in
+        *.env|*.env.*|*.key|*.pem|*apikey*|*api_key*|*credential*|*_secret*)
+            echo "BLOCKED  $path — this filename looks like a credential." >&2
+            fail=1
+            ;;
+    esac
+done <<< "$staged"
+
+# 2. Staged *content* that looks like a live key, whatever the file is called.
+#    Patterns rather than a wordlist: a key pasted into a source file is the
+#    common accident, and it does not announce itself in the filename.
+patterns='sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{50,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----'
+if git diff --cached -U0 -- . ':(exclude).githooks/pre-commit' ':(exclude)tests/test_no_secrets.py' \
+    | grep -E "^\+" | grep -qE "$patterns"; then
+    echo "BLOCKED  staged content matches a credential pattern." >&2
+    fail=1
+fi
+
+if [ "$fail" -ne 0 ]; then
+    cat >&2 <<'MSG'
+
+This repository is mirrored publicly. Deleting the file in a later commit does not
+remove it from history — the key would still be readable and would have to be
+rotated, not deleted. Put credentials in .env (ignored) and read them through
+apps/api/settings.py, which is the only module that reads the environment.
+
+If this is a false positive, --no-verify exists. Be certain first.
+MSG
+    exit 1
+fi

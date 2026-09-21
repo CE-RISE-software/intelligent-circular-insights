@@ -117,31 +117,72 @@ def main() -> None:
             provider = OpenAIProvider(transport)
             results[name] = run_case(name, provider)
             print(f"{name}: complete; cumulative live attempts={len(recorder.events)}", flush=True)
+        # Golden-output handling, per case rather than wholesale.
+        #
+        # A case whose output *changed* is a regression and still refuses loudly.
+        # A case that is *new* is merely a larger case set, and must not be treated
+        # as drift: comparing the two dicts as a whole meant that adding a case
+        # made the recorder fail after it had already spent the money, leaving the
+        # new cassettes on disk and the golden file never updated. Whoever ran it
+        # paid to be told nothing useful.
+        #
+        # A case that has been *removed* from CASE_NAMES keeps its golden entry.
+        # Dropping it here would quietly erase the record of a response that was
+        # once paid for and asserted against.
         expected_path = directory / "expected.json"
         if expected_path.exists():
-            if canonical(json.loads(expected_path.read_text())) != canonical(results):
+            golden = json.loads(expected_path.read_text())
+            drifted = [
+                name
+                for name in sorted(set(golden) & set(results))
+                if canonical(golden[name]) != canonical(results[name])
+            ]
+            if drifted:
                 raise ValueError(
-                    "Replay results differ from the golden output; review, do not overwrite."
+                    "Replay results differ from the golden output for: "
+                    + ", ".join(drifted)
+                    + ". Review the change; do not overwrite."
                 )
+            added = sorted(set(results) - set(golden))
+            retired = sorted(set(golden) - set(results))
+            if added or retired:
+                expected_path.write_text(canonical({**golden, **results}) + "\n", encoding="utf-8")
+                if added:
+                    print(f"golden output extended: {', '.join(added)}", flush=True)
+                if retired:
+                    print(
+                        "golden entries kept for cases no longer in CASE_NAMES: "
+                        + ", ".join(retired),
+                        flush=True,
+                    )
         else:
             expected_path.write_text(canonical(results) + "\n", encoding="utf-8")
+
+        # The manifest is rewritten every run, keeping the first recording date so
+        # the provenance of the original capture is not lost to a later one.
         manifest = directory / "manifest.json"
-        if not manifest.exists():
-            manifest.write_text(
-                canonical(
-                    {
-                        "origin": "Real OpenAI responses to synthetic/public demo inputs",
-                        "recorded_at": datetime.now(timezone.utc).isoformat(),
-                        "cases": list(CASE_NAMES),
-                        "max_calls": 40,
-                        "max_reserved_usd": 1.0,
-                        "live_attempts": len(recorder.events),
-                        "reserved_usd": sum(e["reserved_usd"] for e in recorder.events),
-                    }
-                )
-                + "\n",
-                encoding="utf-8",
+        now = datetime.now(timezone.utc).isoformat()
+        first_recorded = now
+        if manifest.exists():
+            first_recorded = json.loads(manifest.read_text()).get("recorded_at", now)
+        manifest.write_text(
+            canonical(
+                {
+                    "origin": "Real OpenAI responses to synthetic/public demo inputs",
+                    "recorded_at": first_recorded,
+                    "updated_at": now,
+                    "cases": list(CASE_NAMES),
+                    "max_calls": 40,
+                    "max_reserved_usd": 1.0,
+                    # Cumulative across every run, failed attempts included: the
+                    # ledger is an audit record of spend, not of success.
+                    "live_attempts": len(recorder.events),
+                    "reserved_usd": sum(e["reserved_usd"] for e in recorder.events),
+                }
             )
+            + "\n",
+            encoding="utf-8",
+        )
         print("Recording complete. All subsequent tests replay without a key.")
     finally:
         lock.unlink()

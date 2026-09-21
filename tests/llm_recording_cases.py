@@ -29,9 +29,43 @@ CASE_NAMES = (
     "repair:grounded",
     *(f"repair:{name}" for name in broken_records()),
     "synthesis:grounded",
+    # Sprint 3.1: the same two operations through the *route's* code path rather
+    # than a fixture pack. The composer cases above cannot cover the routes,
+    # because the routes build their context from live retrieval and so hash
+    # differently — which is exactly why the endpoints had no replayable cassette
+    # when they shipped.
+    "route-repair:battery",
+    "route-synthesis:battery",
     "compat:gpt5",
     "embeddings:openai",
 )
+
+# Fixed, so the pack and therefore the request hash are identical at record time
+# and replay time. A varying correlation id would scope memory recall differently
+# and silently change the prompt.
+ROUTE_CORRELATION = "recording"
+ROUTE_SEED = {
+    "dpp_id": "synthetic-demo-dpp-001",
+    "product": {"brand": "Generic", "model": "BEV pack 60 kWh", "category": "battery"},
+}
+
+
+def _route_use_case(provider):
+    """``SynthesizeRecord`` wired exactly as the routes wire it.
+
+    The bundle supplies retrieval and the schema registry; only the composer is
+    swapped for the recording provider. Reusing the real use case rather than
+    re-deriving the pack here is the point: a hand-rolled approximation would
+    record a hash the route never produces, which is the failure this case exists
+    to prevent.
+    """
+    from apps.api.bundles import _build_normal
+    from apps.api.settings import Settings
+
+    from ici_core.usecases.synthesize_record import SynthesizeRecord
+
+    bundle = _build_normal(Settings(llm_cassette_mode="replay"))
+    return SynthesizeRecord(bundle, RecordComposer(provider, audit=provider.audit))
 
 
 def run_case(name, provider):
@@ -65,6 +99,24 @@ def run_case(name, provider):
         return asdict(service.repair(broken_records()[label], ContextPack()))
     if kind == "synthesis":
         return asdict(service.synthesize({"product": DEMO_RECORD["product"]}, record_pack()))
+    if kind == "route-repair":
+        from ici_core.domain.ids import CorrelationId, ProfileId
+
+        result = _route_use_case(provider).repair(
+            ROUTE_SEED,
+            ProfileId("eu-dpp"),
+            correlation_id=CorrelationId(ROUTE_CORRELATION),
+        )
+        return asdict(result)
+    if kind == "route-synthesis":
+        from ici_core.domain.ids import CorrelationId, ProfileId
+
+        record = _route_use_case(provider)(
+            ROUTE_SEED,
+            ProfileId("eu-dpp"),
+            correlation_id=CorrelationId(ROUTE_CORRELATION),
+        )
+        return {"dpp_id": str(record.dpp_id), "record": dict(record.payload)}
     if kind == "compat":
         return dict(
             provider.structured(
