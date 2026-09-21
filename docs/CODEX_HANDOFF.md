@@ -138,14 +138,23 @@ source = OpenAIProvider(
     api_key=settings.openai_api_key,
     router=ModelRouter(settings.llm_model_default, settings.allowed_models),
 )
-provider = source if settings.llm_cassette_mode == "live" else CassetteProvider(
-    settings.llm_cassette_dir, mode=settings.llm_cassette_mode, provider=source,
+provider = (
+    source
+    if settings.llm_cassette_mode == "live"
+    else CassetteProvider(
+        settings.llm_cassette_dir,
+        mode=settings.llm_cassette_mode,
+        provider=source,
+    )
 )
 runtime = LLMRuntime(provider)
 
 # Optional explicit extraction from your trusted retriever, not arbitrary metadata.
 envelope = runtime.answer_question(
-    bundle, query, model=x_model, point=point,
+    bundle,
+    query,
+    model=x_model,
+    point=point,
     hint=AnswerHint(extracted_text, extracted_kind),
 )
 
@@ -200,7 +209,8 @@ from ici_llm import CachedEmbeddings, load_embeddings
 embeddings = CachedEmbeddings(
     load_embeddings(index_dimensions=384),
     Path("state/minilm-vectors.sqlite"),
-    index_dimensions=384, batch_size=32,
+    index_dimensions=384,
+    batch_size=32,
 )
 bound = request.bind(bundle, embeddings=embeddings)
 # Close the shared cache on application shutdown.

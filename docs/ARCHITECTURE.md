@@ -213,75 +213,107 @@ advance.
 class EvidenceProvider(Protocol):
     def retrieve(self, q: Query, budget: RetrievalBudget) -> Sequence[Evidence]: ...
 
+
 class FactMemory(Protocol):
     def recall(self, scope: ProductScope, q: Query) -> Sequence[Fact]: ...
     def commit(self, fact: Fact, validation: ValidationOutcome) -> FactId: ...
     def supersede(self, old: FactId, new: Fact, reason: str) -> FactId: ...
     def history(self, subject: SubjectRef) -> Sequence[FactVersion]: ...
 
+
 class SubstrateRegistry(Protocol):
     def mounted(self) -> Sequence[Substrate]: ...
     def facts_for(self, subject: SubjectRef) -> FactGraph: ...
-    def coverage_report(self) -> SubstrateCoverage: ...      # per-substrate fire rate
+    def coverage_report(self) -> SubstrateCoverage: ...  # per-substrate fire rate
+
 
 class SymbolicValidator(Protocol):
-    def entail(self, graph: FactGraph) -> EntailmentResult: ...   # OWL 2 RL, with traces
+    def entail(self, graph: FactGraph) -> EntailmentResult: ...  # OWL 2 RL, with traces
     def validate(self, claims: Sequence[Claim], graph: FactGraph) -> ValidationReport: ...
+
 
 class SchemaRegistry(Protocol):
     def profiles(self) -> Sequence[SchemaProfile]: ...
     def conform(self, record: DPPRecord, profile: ProfileId) -> ConformanceReport: ...
 
+
 class ImpactEngine(Protocol):
     def assess(self, subject: SubjectRef, req: ImpactRequest) -> ImpactResult: ...
     def explain(self, result: ImpactResult, target: TargetRef) -> Provenance: ...
 
-class DPPRepository(Protocol):          # the plain one: Validate and Synthesize
+
+class DPPRepository(Protocol):  # the plain one: Validate and Synthesize
     def get(self, dpp_id: DppId) -> DPPRecord | None: ...
     def put(self, record: DPPRecord) -> None: ...
     def list_ids(self) -> Sequence[DppId]: ...
+
 
 # --- reliability (the research surface) -------------------------------------
 class ConfidenceSignals(Protocol):
     """Each signal measures a different way an answer can be weak, and is named
     in the trace so an abstention is explainable by what was weak."""
+
     def emit(self, ctx: AnswerContext) -> SignalVector: ...
     def names(self) -> Sequence[SignalName]: ...
+
 
 class Calibrator(Protocol):
     def fit(self, scores: Sequence[float], correct: Sequence[bool]) -> None: ...
     def calibrate(self, raw: float) -> float: ...
-    def diagnostics(self) -> CalibrationDiagnostics: ...      # ECE, Brier, reliability bins
+    def diagnostics(self) -> CalibrationDiagnostics: ...  # ECE, Brier, reliability bins
+
 
 class SelectivePolicy(Protocol):
     def threshold_for(self, target: CoverageTarget) -> float: ...
     def decide(self, c: float, tau: float) -> Decision: ...
 
+
 class DataTrustProvider(Protocol):
     """Null in Normal mode. In bias-aware mode returns the latent-bias posterior
     summary for an attribute query."""
-    def assess(self, subject: SubjectRef, attribute: AttributeRef,
-               lam: ConstraintWeights) -> DataTrust: ...
+
+    def assess(
+        self, subject: SubjectRef, attribute: AttributeRef, lam: ConstraintWeights
+    ) -> DataTrust: ...
+
     # DataTrust: clean_value, interval_half_width w, target_sensitivity s, group_bias b̂_g
+
 
 class GroundingVerifier(Protocol):
     """Makes 'evidence before generation' mechanical rather than prompted."""
+
     def verify(self, answer: str, pack: ContextPack) -> GroundingReport: ...
 
+
 # --- shared -----------------------------------------------------------------
-class LLMProvider(Protocol):                                   # Codex owns every adapter
-    def compose(self, instruction: str, pack: ContextPack, *,
-                model: str | None = None, max_tokens: int = 512) -> str: ...
-    def structured(self, instruction: str, pack: ContextPack,
-                   schema: Mapping[str, Any], *, model: str | None = None) -> Mapping[str, Any]: ...
+class LLMProvider(Protocol):  # Codex owns every adapter
+    def compose(
+        self,
+        instruction: str,
+        pack: ContextPack,
+        *,
+        model: str | None = None,
+        max_tokens: int = 512,
+    ) -> str: ...
+    def structured(
+        self,
+        instruction: str,
+        pack: ContextPack,
+        schema: Mapping[str, Any],
+        *,
+        model: str | None = None,
+    ) -> Mapping[str, Any]: ...
     def embed(self, texts: Sequence[str]) -> Sequence[Sequence[float]]: ...
+
 
 class ProvenanceLedger(Protocol):
     def record(self, step: TraceStep) -> None: ...
     def trace(self, cid: CorrelationId) -> Trace: ...
 
+
 class DecisionPolicy(Protocol):
     """Which action next: memory, retrieval, symbolic, graph, data-trust, answer, abstain."""
+
     def act(self, obs: Observation) -> Action: ...
     def update(self, episodes: Sequence[Episode]) -> PolicyStats: ...
 ```

@@ -48,11 +48,24 @@ From `packages/ici_core/src/ici_core/ports.py` — read the real file, this is a
 
 ```python
 class LLMProvider(Protocol):
-    def compose(self, instruction: str, pack: ContextPack, *,
-                model: str | None = None, max_tokens: int = 512) -> str: ...
-    def structured(self, instruction: str, pack: ContextPack,
-                   schema: Mapping[str, Any], *, model: str | None = None) -> Mapping[str, Any]: ...
+    def compose(
+        self,
+        instruction: str,
+        pack: ContextPack,
+        *,
+        model: str | None = None,
+        max_tokens: int = 512,
+    ) -> str: ...
+    def structured(
+        self,
+        instruction: str,
+        pack: ContextPack,
+        schema: Mapping[str, Any],
+        *,
+        model: str | None = None,
+    ) -> Mapping[str, Any]: ...
     def embed(self, texts: Sequence[str]) -> Sequence[Sequence[float]]: ...
+
 
 class GroundingVerifier(Protocol):
     def verify(self, answer: str, pack: ContextPack) -> GroundingReport: ...

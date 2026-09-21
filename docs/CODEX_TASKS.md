@@ -79,6 +79,8 @@ context pack must not reach the user.
 ```python
 class GroundingVerifier(Protocol):
     def verify(self, answer: str, pack: ContextPack) -> GroundingReport: ...
+
+
 # GroundingReport: claims_total, claims_resolved, unresolved[], verdict
 ```
 
