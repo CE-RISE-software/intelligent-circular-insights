@@ -86,7 +86,7 @@ Updated 2026-09-21 against Claude commit `c1ee0b2`. The working tree was clean
 before this work; Claude's commit is one ahead of `origin/main`. These changes
 are local and uncommitted; no push, release tag or external issue was created.
 
-## Current status — read this before the historical Sprint 1 notes
+## Status as of Sprint 3 (superseded — see the top of this file)
 
 **Claude's delivered work.** Normal adapters and API feature routes, eighteen
 vendored model modules, the PEFDPP graph/LCA and sixteen fixed competency
@@ -157,18 +157,36 @@ and linked from `apps/web/node_modules`. The smoke run used the existing Chrome
 binary with `ICI_CHROMIUM`, without downloading a browser. Temporary dependencies
 may need reinstalling after machine cleanup; nothing from node_modules is tracked.
 
-### What still needs Claude / the next sprint
+### What still needed Claude, as of Sprint 3 — **items 1 and 2 are now done**
 
-1. **Repair/synthesis app integration is still absent.** `/api/validate` checks
-   conformance only; the finished `LLMRequest.records` repair/synthesis services
-   have no HTTP/UI entry points. Therefore the user-requested lower-confidence
-   model-training suggestions are implemented and tested, but not visible in the
-   workbench yet. Expose them separately for explicit review, never auto-apply them
-   or label them grounded. The historical wiring notes below still apply here.
-2. Four core use cases still raise `NotImplementedError("Sprint 1")`:
-   `ValidateRecord`, `SynthesizeRecord`, `AssessImpact`, `ExplainAnswer`. Existing
-   deterministic routes bypass them; working route tests do not complete these
-   architecture tasks. Avoid claiming full old-demo parity on the current gates.
+> Left in place because the reasoning still reads well, but do not act on the
+> first two: the repair and synthesis routes exist (`POST /api/validate/repair`,
+> `POST /api/synthesize`) with their windows, and all four use cases have bodies.
+> `grep -rn NotImplementedError packages/ apps/` returns nothing. The live list
+> of open work is **Next work — not silently claimed complete**, at the top.
+
+1. ~~**Repair/synthesis app integration is still absent.**~~ **Done in `95ba8f9`.**
+   Routes, use case and both windows shipped. Suggestions render in a separate
+   review surface with no apply control — exactly what this item asked for, and the
+   reasoning for it below is why. Formerly:
+
+   > `/api/validate` checks conformance only; the finished `LLMRequest.records`
+   > repair/synthesis services have no HTTP/UI entry points. Therefore the
+   > user-requested lower-confidence model-training suggestions are implemented and
+   > tested, but not visible in the workbench yet. Expose them separately for
+   > explicit review, never auto-apply them or label them grounded.
+2. ~~Four core use cases still raise `NotImplementedError`~~ **Done in `95ba8f9`.**
+   Filling `AssessImpact` surfaced two envelope invariants worth knowing: a
+   deterministic result is a `value`, not an `answer`, and no operating point
+   applies to arithmetic, so that path reports τ = 0. Formerly:
+
+   > `ValidateRecord`, `SynthesizeRecord`, `AssessImpact`, `ExplainAnswer`. Existing
+   > deterministic routes bypass them; working route tests do not complete these
+   > architecture tasks. Avoid claiming full old-demo parity on the current gates.
+
+   The last sentence was right and still is: the gates prove what is built, not
+   what the plan called for. `tests/e2e/test_record_assistance.py::TestTheRoutesExist`
+   is the check that closes that particular gap for these two routes.
 3. **X8 deferred under its cut line.** The sixteen fixed CQ queries exist, but no
    registered parameterized template/binding library exists. Agree a read-only,
    subject-scoped template contract before model-based query selection. No
@@ -373,3 +391,8 @@ does not replace production request budgeting.
 Release coordination note: README/ADR 0010 identify EUPL-1.2 while root
 `pyproject.toml` still says MIT. Reconcile packaging metadata in your licensing
 work before release; I did not silently make a licensing choice.
+
+> **Resolved in `ef726bd`.** The root had already been reconciled to EUPL-1.2;
+> the gap nobody had looked at was the nine member packages, which each build a
+> wheel and declared no licence at all. All ten now declare it, asserted against
+> `CITATION.cff` by `tests/test_packaging.py` so they cannot drift.

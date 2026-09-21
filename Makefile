@@ -63,6 +63,17 @@ record:  ## Capture cassettes from the real model. Costs money. Capped at 40 cal
 secrets:  ## Check that no credential is tracked by git
 	uv run pytest tests/test_no_secrets.py -q
 
+web:  ## Install/repair the frontend deps (outside the repo, symlinked in)
+	@bash apps/web/setup-web.sh
+
+web-check:  ## Typecheck and build the frontend
+	@bash apps/web/setup-web.sh --quiet
+	cd apps/web && npx tsc --noEmit && npx vite build
+
+smoke:  ## Playwright, both modes. Starts both servers itself.
+	@bash apps/web/setup-web.sh --quiet
+	cd apps/web && npx playwright test --grep smoke
+
 demo:  ## Run the API locally
 	uv run uvicorn apps.api.main:app --reload --port 8000
 
@@ -73,4 +84,4 @@ gate-s0:  ## The Sprint 0 exit gate
 	@echo "Sprint 0 gate: green"
 
 .PHONY: help setup lint format typecheck layering check test test-fast contract cov live \
-        demo gate-s0 hooks record secrets
+        demo gate-s0 hooks record secrets web web-check smoke
