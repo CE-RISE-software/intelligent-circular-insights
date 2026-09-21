@@ -71,6 +71,10 @@ Browser checks used the already-installed Chrome via `ICI_CHROMIUM`.
 
 ## Next work — not silently claimed complete
 
+> **`docs/PUSH_AND_REMAINING.md` is the current statement**, written after auditing
+> the tree rather than trusting these notes — two sections of this file had come to
+> contradict each other. Where they disagree, that file is right.
+
 Sprint 3.1 integration/recording is complete. **X8 remains deferred** pending a
 parameterized, read-only query-template contract. **X9/Sprint 4** production
 retry/backoff and budget polish and **X10/Sprint 5** deliberate release live smoke
