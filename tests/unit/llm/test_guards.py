@@ -19,36 +19,94 @@ from ici_llm.guards import (
 )
 from ici_llm.provider import OpenAIProvider
 
+LEGACY_NAMES = {
+    "_invalid_evidence_citations",
+    "_looks_like_header_copy",
+    "_misses_reliable_hint",
+    "_asks_unsupported_requirement",
+    "_RELIABLE_HINT_KINDS",
+    "_CITATION_BLOCK_RE",
+    "_CITATION_SEPARATOR_RE",
+    "_EVIDENCE_ID_RE",
+}
+
+LEGACY_SOURCE = Path(__file__).resolve().parents[4] / "CE-RISE-Demo/backend/api/search.py"
+LEGACY_SNAPSHOT = Path(__file__).resolve().parents[2] / "fixtures/legacy_search_predicates.py"
+
+
+def _nodes(path: Path) -> list:
+    """The predicate definitions, as AST. Nothing here imports or boots the API."""
+    tree = ast.parse(path.read_text())
+    return [
+        n
+        for n in tree.body
+        if (isinstance(n, ast.FunctionDef) and n.name in LEGACY_NAMES)
+        or (
+            isinstance(n, ast.Assign)
+            and any(isinstance(t, ast.Name) and t.id in LEGACY_NAMES for t in n.targets)
+        )
+    ]
+
+
+def _predicates(path: Path) -> dict:
+    """Execute only the pure predicate definitions, never import or boot the API."""
+    namespace = {"re": re, "List": list, "Dict": dict, "Any": object}
+    module = ast.Module(body=_nodes(path), type_ignores=[])
+    exec(compile(module, str(path), "exec"), namespace)
+    return namespace
+
 
 @pytest.fixture
 def legacy():
-    # Execute only pure predicate definitions, never import/boot the legacy API.
-    path = Path(__file__).resolve().parents[4] / "CE-RISE-Demo/backend/api/search.py"
-    if not path.is_file():
-        pytest.skip("legacy source is outside this standalone revamp checkout")
-    names = {
-        "_invalid_evidence_citations",
-        "_looks_like_header_copy",
-        "_misses_reliable_hint",
-        "_asks_unsupported_requirement",
-        "_RELIABLE_HINT_KINDS",
-        "_CITATION_BLOCK_RE",
-        "_CITATION_SEPARATOR_RE",
-        "_EVIDENCE_ID_RE",
-    }
-    tree = ast.parse(path.read_text())
-    nodes = [
-        n
-        for n in tree.body
-        if (isinstance(n, ast.FunctionDef) and n.name in names)
-        or (
-            isinstance(n, ast.Assign)
-            and any(isinstance(t, ast.Name) and t.id in names for t in n.targets)
-        )
-    ]
-    namespace = {"re": re, "List": list, "Dict": dict, "Any": object}
-    exec(compile(ast.Module(body=nodes, type_ignores=[]), str(path), "exec"), namespace)
-    return namespace
+    """The behaviour these guards replaced, as the oracle to compare against.
+
+    Prefers the live demo source, because that also catches the demo drifting away
+    from what we believe it does. Falls back to the committed snapshot, so a
+    standalone clone still verifies parity instead of skipping it — the suite in a
+    released repository must check "the current features are not broken", which is
+    the whole point of these tests, not go quiet about it.
+    """
+    path = LEGACY_SOURCE if LEGACY_SOURCE.is_file() else LEGACY_SNAPSHOT
+    assert path.is_file(), (
+        "neither the legacy source nor its snapshot is present; "
+        "regenerate the snapshot from CE-RISE-Demo/backend/api/search.py"
+    )
+    return _predicates(path)
+
+
+def test_the_snapshot_matches_the_legacy_source_when_both_are_present() -> None:
+    """The fallback is only trustworthy while it still agrees with the original.
+
+    Skips in a standalone clone — there is nothing to compare against there — but
+    in the monorepo, where both exist, a demo change that moves these predicates
+    fails here rather than silently invalidating the snapshot the released repo
+    ships with.
+    """
+    if not LEGACY_SOURCE.is_file():
+        pytest.skip("the legacy demo is not beside this checkout")
+
+    def by_name(path: Path) -> dict[str, str]:
+        # ast.dump, not bytecode: comparing __code__.co_code missed a flipped
+        # `return True` → `return False`, because the constant lives in co_consts
+        # rather than in the opcodes. The dump carries structure *and* constants,
+        # and ignores formatting and comments, which is exactly the line we want.
+        out = {}
+        for node in _nodes(path):
+            key = node.name if isinstance(node, ast.FunctionDef) else node.targets[0].id
+            out[key] = ast.dump(node)
+        return out
+
+    live, snapshot = by_name(LEGACY_SOURCE), by_name(LEGACY_SNAPSHOT)
+    assert set(live) == set(snapshot), (
+        "the demo defines a different set of predicates than the snapshot; "
+        "regenerate tests/fixtures/legacy_search_predicates.py"
+    )
+    drifted = sorted(name for name in live if live[name] != snapshot[name])
+    assert not drifted, (
+        f"these predicates have changed in the demo: {', '.join(drifted)}. "
+        f"Regenerate tests/fixtures/legacy_search_predicates.py, and check whether "
+        f"the rewritten guards need to follow."
+    )
 
 
 @pytest.mark.parametrize(

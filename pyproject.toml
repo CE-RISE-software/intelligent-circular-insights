@@ -84,6 +84,11 @@ ici-eval        = { workspace = true }
 line-length = 100
 target-version = "py310"
 src = ["packages", "apps", "tests"]
+# A verbatim snapshot of the legacy predicates, kept as the parity oracle for a
+# standalone clone. Reformatting it would defeat its purpose: it has to be what
+# the demo actually contains, not a tidied version of it. tests/unit/llm/
+# test_guards.py asserts it still matches the live source when both are present.
+extend-exclude = ["tests/fixtures/legacy_search_predicates.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "RUF", "ANN", "TID"]
