@@ -3,6 +3,11 @@ name = "ici-substrates"
 version = "0.1.0"
 description = "Substrate registry: DPP core, CE-RISE data models, PEFDPP graph, OFF."
 requires-python = ">=3.10,<3.13"
+license = { text = "EUPL-1.2" }
+authors = [
+    { name = "A M Esfar-E-Alam", email = "mail2turzo@gmail.com" },
+    { name = "Riccardo Boero", email = "ribo@nilu.no" },
+]
 dependencies = ["ici-core", "rdflib>=7.1", "jsonschema>=4.23"]
 
 [build-system]

@@ -3,6 +3,11 @@ name = "ici-policy"
 version = "0.1.0"
 description = "Decision policy: supervised router ships; bandit and RL seats."
 requires-python = ">=3.10,<3.13"
+license = { text = "EUPL-1.2" }
+authors = [
+    { name = "A M Esfar-E-Alam", email = "mail2turzo@gmail.com" },
+    { name = "Riccardo Boero", email = "ribo@nilu.no" },
+]
 dependencies = ["ici-core", "numpy>=1.26"]
 
 [build-system]

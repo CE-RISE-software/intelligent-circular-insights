@@ -5,6 +5,25 @@ description = "Neuro-symbolic DPP workbench with interchangeable Normal and CE-R
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
 license = { text = "EUPL-1.2" }
+authors = [
+    { name = "A M Esfar-E-Alam", email = "mail2turzo@gmail.com" },
+    { name = "Riccardo Boero", email = "ribo@nilu.no" },
+]
+keywords = [
+    "CE-RISE",
+    "Digital Product Passport",
+    "neuro-symbolic",
+    "selective prediction",
+    "retrieval-augmented generation",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+]
+
 dependencies = [
     "ici-core",
     "ici-evidence",
@@ -22,6 +41,11 @@ dependencies = [
     "structlog>=24.4",
 ]
 
+[project.urls]
+Homepage = "https://codeberg.org/CE-RISE-software/intelligent-circular-insights"
+Repository = "https://codeberg.org/CE-RISE-software/intelligent-circular-insights"
+Documentation = "https://codeberg.org/CE-RISE-software/intelligent-circular-insights/src/branch/main/docs"
+
 [dependency-groups]
 dev = [
     "pytest>=8.3",
@@ -34,6 +58,11 @@ dev = [
     "types-requests",
     "types-PyYAML",
     "types-jsonschema",
+    # tests/test_packaging.py reads pyproject metadata. Declared rather than
+    # relied on transitively: the project supports 3.10, where tomllib does not
+    # exist, and a build-tool dependency that happens to supply it today is not
+    # a guarantee it will tomorrow.
+    "tomli>=2.0; python_version < '3.11'",
 ]
 
 [tool.uv.workspace]
