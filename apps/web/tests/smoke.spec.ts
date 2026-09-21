@@ -414,3 +414,70 @@ test.describe("smoke · record assistance", () => {
     await expect(review).not.toBeVisible();
   });
 });
+
+
+test.describe("smoke · the decline stays readable", () => {
+  /**
+   * A contrast regression, caught by measuring a screenshot rather than by looking
+   * at one. The declined panel's heading came out at 1.53:1 against its background
+   * — WCAG AA wants 3.0 for large text, and every other heading in this app reads
+   * at about 14:1.
+   *
+   * The cause was a tinted fill at 14% opacity with nothing opaque beneath it, so
+   * the page's magenta gradient showed through and the "background" behind the
+   * heading was the gradient, not the panel.
+   *
+   * It is worth a test because of *which* panel it was. The product's whole claim
+   * is that declining honestly beats guessing; the text explaining why it declined
+   * cannot be the least legible thing on the page.
+   *
+   * The assertion is on opacity rather than on a computed ratio, because opacity is
+   * the property that actually failed and the one a future edit would regress.
+   */
+  const ALPHA = /rgba?\([^)]*?(?:,\s*([\d.]+))?\)$/;
+
+  function opacity(colour: string): number {
+    const m = colour.match(ALPHA);
+    return m && m[1] !== undefined ? Number.parseFloat(m[1]) : 1;
+  }
+
+  test("a declined panel is opaque enough to hide the page gradient", async ({ page }) => {
+    await useMode(page, "normal");
+    await goto(page, "/pef/overview");
+    const panel = page.getByTestId("declined");
+    await expect(panel).toBeVisible({ timeout: 15_000 });
+
+    const background = await panel.evaluate(el => getComputedStyle(el).backgroundColor);
+    expect(opacity(background),
+      `declined panel background ${background} lets the page show through`).toBeGreaterThan(0.85);
+
+    // And the text on it is dark ink, not the mid-tone that measured 1.53:1.
+    const head = await panel.locator(".head").evaluate(el => getComputedStyle(el).color);
+    const parts = (head.match(/\d+/g) ?? []).slice(0, 3).map(Number);
+    expect(parts, `could not read a colour from ${head}`).toHaveLength(3);
+    const [r = 0, g = 0, b = 0] = parts;
+    const relative = (v: number) => {
+      const c = v / 255;
+      return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    };
+    const luminance = 0.2126 * relative(r) + 0.7152 * relative(g) + 0.0722 * relative(b);
+    // Against the near-white panel base, this keeps the heading above AA.
+    expect(luminance, `heading colour ${head} is too light for this panel`).toBeLessThan(0.22);
+  });
+
+  test("the unverified-suggestion surface is opaque too", async ({ page }) => {
+    // Same failure mode, and the same reason it matters: a quarantine nobody can
+    // read is not a review surface.
+    await useMode(page, "normal");
+    await goto(page, "/validate");
+    const opacityOf = await page.evaluate(() => {
+      const probe = document.createElement("section");
+      probe.className = "suggestion-review";
+      document.body.append(probe);
+      const bg = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return bg;
+    });
+    expect(opacity(opacityOf)).toBeGreaterThan(0.85);
+  });
+});
