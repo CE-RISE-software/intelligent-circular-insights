@@ -742,3 +742,58 @@ pre {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } }
+
+/* ---- unverified suggestions: quarantined on purpose -----------------------
+   Its own surface, hatched border, warning colour and a tag that reads before
+   the values do. ADR 0011 keeps model-prior candidates out of the evidence path
+   in the payload; this keeps them out of it on screen, which is the only place
+   the distinction actually gets made or lost. Note there is no apply control —
+   accepting a guess into a compliance document should cost a human decision. */
+.suggestion-review {
+  border-radius: var(--r-card);
+  border: 1px dashed rgba(233, 75, 75, 0.55);
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(233, 75, 75, 0.05) 0 10px,
+      rgba(233, 75, 75, 0.02) 10px 20px
+    ),
+    rgba(255, 255, 255, 0.40);
+  padding: 20px;
+}
+.suggestion-review header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.suggestion-review h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #8f2222;
+}
+.suggestion-review .tag {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: var(--r-pill);
+  background: rgba(233, 75, 75, 0.85);
+  color: #fff;
+}
+.suggestion-review > p {
+  margin: 0 0 14px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--on-glass);
+  max-width: 68ch;
+}
+.suggestion-review .data-table th { color: rgba(143, 34, 34, 0.75); }
+.suggestion-review .data-table td { border-bottom-color: rgba(233, 75, 75, 0.16); }
+.suggestion-review footer {
+  margin-top: 12px;
+  font-size: 11.5px;
+  font-weight: 650;
+  color: #8f2222;
+}

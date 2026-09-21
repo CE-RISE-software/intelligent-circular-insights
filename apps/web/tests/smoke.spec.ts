@@ -264,3 +264,67 @@ test("smoke · an unscored grounded answer exposes model audit and survives a gr
   await expect(page.getByTestId("audit-panel")).toContainText(result.abstain_reason);
   await expect(page.getByTestId("audit-panel")).not.toContainText("Below the threshold");
 });
+
+
+test.describe("smoke · record assistance", () => {
+  // These two windows did not exist until the gap audit: the record composer was
+  // built, tested and reachable only from Python tests. What is asserted here is
+  // the half that could still go wrong — that a model's guess is never rendered
+  // where a person would read it as evidence.
+
+  test("validate offers repair only when the record does not conform", async ({ page }) => {
+    await useMode(page, "normal");
+    await goto(page, "/validate");
+
+    await page.getByTestId("validate-input").fill("{}");
+    await page.getByTestId("validate-submit").click();
+    await expect(page.getByTestId("validate-result")).toBeVisible({ timeout: 15_000 });
+    // An empty record cannot conform, so the offer is there.
+    await expect(page.getByTestId("repair-offer")).toBeVisible();
+    await expect(page.getByTestId("toggle-suggestions")).toBeChecked();
+  });
+
+  test("repair declines honestly when there is nothing to ground against", async ({ page }) => {
+    await useMode(page, "normal");
+    await goto(page, "/validate");
+
+    // A product no source in the workspace mentions. The system refuses *before*
+    // the model call rather than filling the gaps from its own priors.
+    await page
+      .getByTestId("validate-input")
+      .fill(JSON.stringify({ dpp_id: "zzz-000", product: { brand: "Qqzzx", model: "Wubbleflorp 9000" } }));
+    await page.getByTestId("validate-submit").click();
+    await expect(page.getByTestId("repair-offer")).toBeVisible({ timeout: 15_000 });
+    await page.getByTestId("repair-submit").click();
+
+    const declined = page.getByTestId("declined");
+    await expect(declined).toBeVisible({ timeout: 25_000 });
+    await expect(declined).toContainText("no evidence was found");
+  });
+
+  test("the synthesize window loads and declines an ungroundable seed", async ({ page }) => {
+    await useMode(page, "normal");
+    await goto(page, "/synthesize");
+    await expect(page.getByTestId("synthesize-form")).toBeVisible({ timeout: 15_000 });
+
+    await page
+      .getByTestId("synth-input")
+      .fill(JSON.stringify({ dpp_id: "zzz-000", product: { brand: "Qqzzx", model: "Wubbleflorp 9000" } }));
+    await page.getByTestId("synth-submit").click();
+
+    const declined = page.getByTestId("declined");
+    await expect(declined).toBeVisible({ timeout: 25_000 });
+    await expect(declined).toContainText("no evidence was found");
+    await expectServedBy(page, "normal");
+  });
+
+  test("synthesize is reachable from the sidebar in both modes", async ({ page }) => {
+    for (const mode of ["normal", "ce-rise"] as const) {
+      await page.context().clearCookies();
+      await useMode(page, mode);
+      await goto(page, "/search");
+      await page.getByTestId("nav-synthesize").click();
+      await expect(page.getByTestId("page-synthesize")).toBeVisible({ timeout: 15_000 });
+    }
+  });
+});

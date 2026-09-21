@@ -218,3 +218,60 @@ export interface SparqlResult {
   rows: Array<Record<string, string | null>>;
   truncated: boolean;
 }
+
+// ----------------------------------------------------- record assistance
+/**
+ * A field the system filled *because a source said so*, with that source named.
+ *
+ * `model_score` is a model feature, deliberately not called "confidence": it is
+ * not a calibrated probability and must never be read alongside a search result's.
+ */
+export interface GroundedFill {
+  path: string;
+  value: unknown;
+  evidence_id: string;
+  evidence_ref: string;
+  source_pointer: string;
+  model_score: number;
+}
+
+/**
+ * A candidate the model produced from its own priors. Not evidence, not applied
+ * to the record, and rendered where it cannot be mistaken for either (ADR 0011).
+ */
+export interface UnverifiedSuggestion {
+  path: string;
+  value: unknown;
+  rationale: string;
+  model_score: number;
+  source: string;
+  status: string;
+  requires_review: boolean;
+}
+
+export interface RecordIssue {
+  path: string;
+  reason: string;
+}
+
+export interface RepairResult {
+  mode: string;
+  record: Record<string, unknown>;
+  conforms: boolean;
+  after: Omit<ValidationReport, "mode">;
+  grounded_fills: GroundedFill[];
+  cannot_be_grounded: RecordIssue[];
+  rejected: RecordIssue[];
+  unverified_suggestions: UnverifiedSuggestion[];
+  trace: { correlation_id: string; steps: Array<{ name: string; detail: string }> };
+}
+
+export interface SynthesisResult {
+  mode: string;
+  dpp_id: string;
+  record: Record<string, unknown>;
+  profile: string;
+  conforms: boolean;
+  applied_schemas: string[];
+  trace: { correlation_id: string; steps: Array<{ name: string; detail: string }> };
+}

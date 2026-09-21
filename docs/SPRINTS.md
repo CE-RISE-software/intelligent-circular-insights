@@ -115,7 +115,7 @@ small enough to read when one legitimately changes.
 | `core/carbon_calculation_service.py` | 1343 | `ici_substrates/carbon/` |
 | `core/carbon_ontology_service.py` | 653 | same, audit + provenance |
 | `core/carbon_query_service.py` | 460 | use case + adapter split |
-| `api/validate.py` · `synthesize.py` · `single_dpp.py` | 1216 | use cases + routers |
+| `api/validate.py` · `synthesize.py` · `single_dpp.py` | 1216 | use cases + routers — **`validate` only in Sprint 1; repair and synthesis landed in the Sprint 3.1 gap audit** |
 | `api/ce_rise_models.py` | 592 | `ici_substrates/registry/catalog.py` |
 | `llmmain/backend/services/confidence.py`, `policy_router.py` | — | `ici_reliability/signals/`, `ici_policy/router.py` |
 | `llmmain/backend/eval/*`, `bias_aware_qa/calibrate.py`, `selective.py` | — | `ici_eval/`, `ici_reliability/calibration/` — **ported, not exercised** |
@@ -278,6 +278,96 @@ Updated Python gate: **503 passed offline**, **94% LLM coverage**, check/type/la
 clean, **22 cassette tests**. Frontend TypeScript/production build and **25 browser smoke
 tests** pass with local Chrome (both modes, including the grounded-answer audit regression).
 Zero new OpenAI calls. This does not certify full old-demo repair/synthesis HTTP/UI parity.
+
+---
+
+## Sprint 3.1 — Gap audit · **DONE, 21 Sep** · the layer that was not there
+
+Not a planned sprint. Codex, finishing X7, reported that record repair and synthesis
+still had no application integration and that the plan assigned them to Claude. It was
+right, and the audit that followed found more than it had reported.
+
+### What was actually missing
+
+**Four of six use cases were `raise NotImplementedError("Sprint 1")`** — `assess_impact`,
+`validate_record`, `explain_answer`, `synthesize_record`. All four were exported from
+`ici_core.usecases`, and nothing in the suite failed, because nothing called them: the
+routers reached *past* the use-case layer straight into the ports. Carbon and Validate
+therefore worked perfectly while the layer they were supposed to go through was hollow.
+
+That is the finding worth keeping. A layer nothing calls cannot fail, so a test suite
+cannot tell you it is missing. Sprint 1's gate was "every current feature working, with
+the outputs unchanged" — and every feature *was* working, which is exactly why the gap
+survived two further sprints and a green gate each time.
+
+**Repair and synthesis had no route and no window.** `RecordComposer` — Codex's, complete,
+grounded, cassette-tested — was reachable only from `tests/`. The Sprint 1 port table lists
+`api/validate.py · synthesize.py · single_dpp.py`, 1,216 LoC; only `validate` was ported.
+
+### What the envelope's own invariants settled
+
+Filling `AssessImpact` ran straight into `ReliabilityEnvelope.__post_init__`, and the
+refusals were right both times:
+
+* *A deterministic result is a `value`, not an `answer`.* The envelope rejects prose that
+  is not fully grounded, because prose is the thing that can hallucinate. Arithmetic is
+  not prose, and `QuantifiedValue` is the slot that already existed for it.
+* *No operating point applies, so the impact path reports τ = 0.* The selective threshold
+  governs whether to hazard a composed claim. Withholding a computed figure because its
+  factors were estimated would suppress the number the caveats exist to qualify. The
+  stub's `point` parameter was removed rather than quietly ignored.
+
+Carbon now reports `measured_share` — the contribution-weighted share of the result
+resting on measured rather than inferred inputs — under its own signal name, so nothing
+downstream can average it with a retrieval-and-grounding score. Fairphone 4 reads 0.93.
+
+`AssessImpact.detailed()` returns the envelope and the engine result from **one** call. An
+earlier draft had the router assess twice, once for each view, which is how two readings
+of the same question start to disagree.
+
+### Two new endpoints, and one rule between them
+
+`POST /api/validate/repair` and `POST /api/synthesize`.
+
+Repair keeps four things apart that a single "repaired record" field would merge: what was
+filled from evidence (each naming its source), what could not be grounded, what the model
+proposed and was rejected, and what it suggests for human review. Synthesis has no
+suggestions at all — repair mends a document somebody wrote and can review; synthesis
+writes one from nothing, where an unverified field has no author to answer for it.
+
+Both **refuse before spending**. If retrieval finds no evidence for the product, every
+field would have to come from the model's priors, so the request is declined with a reason
+and the composer is never called. A test asserts the composer receives nothing on that
+path — a refusal that fires after the call has already cost what it was meant to save.
+
+### In the workbench
+
+The Validate window offers repair only when a record does not conform, with a checkbox for
+whether to list model guesses at all. Unverified suggestions render in their own surface —
+hatched border, warning colour, a "not evidence" tag that reads before any value does, and
+**no apply button**. Accepting a guess into a compliance document should cost a human
+decision; a one-click "accept all" is how a guess ends up in a passport with nobody's name
+against it. A new Synthesize window builds a passport, or declines and says why.
+
+### Gate
+
+```
+518 pytest (24 s, no API key)      +15 on the record routes
+ 29 playwright smoke (55 s)        +4 on the two new windows
+clean                              ruff · mypy (59 files) · import-linter 2/2 · tsc · vite build
+```
+
+Route-level cassettes are **not** recorded. The composer's were recorded against a fixture
+context pack; these routes build theirs from live retrieval, so the hashes differ. The
+model-calling paths are driven by a stub and the refuse-before-spending paths run for real,
+which keeps the gate free. Recording them needs one deliberate run with a key.
+
+### What this says about the earlier gates
+
+Sprints 1–3 each reported green and each was green. The gates tested what was built, not
+what was planned — no check compared the port table against the routes that existed.
+`tests/e2e/test_record_assistance.py::TestTheRoutesExist` is that check for these two, and
+the four use cases now have bodies, so a fifth would fail loudly rather than quietly.
 
 ---
 

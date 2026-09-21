@@ -24,11 +24,13 @@ import type {
   ModelCatalog,
   Overview,
   PefResult,
+  RepairResult,
   RouteResult,
   SearchResult,
   Settings,
   SparqlResult,
   SubjectList,
+  SynthesisResult,
   ValidationReport,
   ProfileList,
 } from "./types";
@@ -184,6 +186,21 @@ export const carbonCalculate = (product_id: string, mode?: BackendMode) =>
 
 export const validateDpp = (dpp: unknown, profile: string, mode?: BackendMode) =>
   request<ValidationReport>("/api/validate", { method: "POST", body: { dpp, profile }, mode });
+
+export const repairDpp = (
+  dpp: unknown,
+  profile: string,
+  suggest_from_training: boolean,
+  mode?: BackendMode,
+) =>
+  request<RepairResult>("/api/validate/repair", {
+    method: "POST",
+    body: { dpp, profile, suggest_from_training },
+    mode,
+  });
+
+export const synthesizeDpp = (seed: unknown, profile: string, mode?: BackendMode) =>
+  request<SynthesisResult>("/api/synthesize", { method: "POST", body: { seed, profile }, mode });
 
 export const validationProfiles = (mode?: BackendMode) =>
   request<ProfileList>("/api/validate/profiles", { mode });

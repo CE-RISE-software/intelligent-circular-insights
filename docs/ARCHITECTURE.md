@@ -240,6 +240,7 @@ class SchemaRegistry(Protocol):
 class ImpactEngine(Protocol):
     def assess(self, subject: SubjectRef, req: ImpactRequest) -> ImpactResult: ...
     def explain(self, result: ImpactResult, target: TargetRef) -> Provenance: ...
+    def subjects(self) -> Sequence[SubjectRef]: ...  # what this engine can assess
 
 
 class DPPRepository(Protocol):  # the plain one: Validate and Synthesize

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { validateDpp, validationProfiles } from "../lib/api";
+import { repairDpp, validateDpp, validationProfiles } from "../lib/api";
 import type { ApiResult } from "../lib/api";
-import type { ValidationReport } from "../lib/types";
+import type { RepairResult, ValidationReport } from "../lib/types";
 import { GlassCard, Pill, Stat } from "../components/GlassCard";
+import { RecordAssist } from "../components/RecordAssist";
 import { DeclinedPanel, FailedPanel, Loading, Outcome } from "../components/Outcome";
 import { ModeWarningBanner } from "../components/ModeBadge";
 import { useApi } from "../lib/useApi";
@@ -26,6 +27,9 @@ export default function Validate() {
   const [parseError, setParseError] = useState<string | null>(null);
   const [result, setResult] = useState<ApiResult<ValidationReport> | null>(null);
   const [pending, setPending] = useState(false);
+  const [repair, setRepair] = useState<ApiResult<RepairResult> | null>(null);
+  const [repairing, setRepairing] = useState(false);
+  const [useSuggestions, setUseSuggestions] = useState(true);
 
   async function run() {
     let parsed: unknown;
@@ -39,8 +43,24 @@ export default function Validate() {
     }
     setParseError(null);
     setPending(true);
+    // A new conformance check invalidates the previous repair: showing fills from
+    // an older record beside a newer report is how someone concludes a field was
+    // fixed when it was not.
+    setRepair(null);
     setResult(await validateDpp(parsed, profile));
     setPending(false);
+  }
+
+  async function mend() {
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      return;
+    }
+    setRepairing(true);
+    setRepair(await repairDpp(parsed, profile, useSuggestions));
+    setRepairing(false);
   }
 
   return (
@@ -104,7 +124,44 @@ export default function Validate() {
       {pending && <Loading label="checking conformance" />}
       {!pending && result?.kind === "declined" && <DeclinedPanel result={result} />}
       {!pending && result?.kind === "failed" && <FailedPanel result={result} />}
-      {!pending && result?.kind === "ok" && <Report report={result.data} />}
+      {!pending && result?.kind === "ok" && (
+        <>
+          <Report report={result.data} />
+          {!result.data.conforms && (
+            <GlassCard
+              title="Mend it from evidence"
+              testId="repair-offer"
+              subtitle="Searches this workspace for sources that state the missing values, fills only what a source supports, and says plainly what it could not find. This is the one step on this page that costs a model call."
+            >
+              <label style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14, cursor: "pointer" }}>
+                <input
+                  type="checkbox"
+                  checked={useSuggestions}
+                  onChange={e => setUseSuggestions(e.target.checked)}
+                  data-testid="toggle-suggestions"
+                  style={{ accentColor: "var(--cerise-purple)", width: 16, height: 16 }}
+                />
+                <span style={{ fontSize: 13 }}>
+                  <strong>Also list what the model would guess</strong>
+                  <span className="faint" style={{ display: "block", marginTop: 2 }}>
+                    Shown in a separate review area, never applied to the record and never
+                    counted as evidence. Off if you want only what sources support.
+                  </span>
+                </span>
+              </label>
+              <button className="btn" onClick={() => void mend()} disabled={repairing}
+                      data-testid="repair-submit">
+                {repairing ? "Searching for evidence…" : "Repair with evidence"}
+              </button>
+            </GlassCard>
+          )}
+        </>
+      )}
+
+      {repairing && <Loading label="gathering evidence and repairing" />}
+      {!repairing && repair?.kind === "declined" && <DeclinedPanel result={repair} />}
+      {!repairing && repair?.kind === "failed" && <FailedPanel result={repair} />}
+      {!repairing && repair?.kind === "ok" && <RecordAssist result={repair.data} />}
     </div>
   );
 }

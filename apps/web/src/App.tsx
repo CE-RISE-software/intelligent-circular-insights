@@ -7,6 +7,7 @@ import { SettingsModal } from "./components/SettingsModal";
 import Search from "./pages/Search";
 import Carbon from "./pages/Carbon";
 import Validate from "./pages/Validate";
+import Synthesize from "./pages/Synthesize";
 import CeRiseModels from "./pages/CeRiseModels";
 import PefStudio from "./pages/PefStudio";
 import Compare from "./pages/Compare";
@@ -29,6 +30,7 @@ const NAV: NavItem[] = [
   { to: "/search", label: "Search & Answer", glyph: "🔍" },
   { to: "/carbon", label: "Carbon", glyph: "🌿" },
   { to: "/validate", label: "Validate", glyph: "✅" },
+  { to: "/synthesize", label: "Synthesize", glyph: "✨" },
   { to: "/models", label: "CE-RISE Models", glyph: "🧭" },
   { to: "/pef", label: "PEF Studio", glyph: "⚗️", subnav: PEF_SUBNAV },
   { to: "/compare", label: "Compare backends", glyph: "⚖️" },
@@ -65,6 +67,7 @@ export default function App() {
             <Route path="/search" element={<Search />} />
             <Route path="/carbon" element={<Carbon />} />
             <Route path="/validate" element={<Validate />} />
+            <Route path="/synthesize" element={<Synthesize />} />
             <Route path="/models" element={<CeRiseModels />} />
             <Route path="/pef" element={<Navigate to="/pef/overview" replace />} />
             <Route path="/pef/overview" element={<PefStudio tab="overview" />} />

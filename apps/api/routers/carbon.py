@@ -11,12 +11,15 @@ from __future__ import annotations
 
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header
 from pydantic import BaseModel, Field
 
 from apps.api.deps import get_bundle
+from ici_core.domain.ids import CorrelationId
 from ici_core.domain.impact import ImpactRequest, SubjectRef
+from ici_core.usecases.assess_impact import MEASURED_SHARE, AssessImpact
 from ici_core.usecases.deps import ProviderBundle
+from ici_core.usecases.explain_answer import ExplainAnswer
 
 router = APIRouter(prefix="/carbon", tags=["carbon"])
 
@@ -46,10 +49,22 @@ def subjects(bundle: Annotated[ProviderBundle, Depends(get_bundle)]) -> dict[str
 def calculate(
     req: CarbonRequest,
     bundle: Annotated[ProviderBundle, Depends(get_bundle)],
+    x_correlation_id: Annotated[str | None, Header()] = None,
 ) -> dict[str, Any]:
-    subject = SubjectRef(id=req.product_id)
-    result = bundle.impact.assess(
-        subject, ImpactRequest(indicator=req.indicator, functional_unit=req.functional_unit)
+    """Assess, and report the data quality alongside the number.
+
+    Goes through ``AssessImpact`` rather than calling the engine directly. Until
+    Sprint 3 this router reached past the use-case layer straight into the port —
+    which worked, and meant the layer was an empty claim: four of six use cases were
+    ``NotImplementedError`` stubs and nothing failed, because nothing called them.
+
+    The envelope is where the data-quality reading comes from. The contribution
+    payload below is unchanged, so no client breaks.
+    """
+    envelope, result = AssessImpact(bundle).detailed(
+        SubjectRef(id=req.product_id),
+        ImpactRequest(indicator=req.indicator, functional_unit=req.functional_unit),
+        correlation_id=CorrelationId(x_correlation_id or "anonymous"),
     )
     payload: dict[str, Any] = {
         "mode": bundle.mode.value,
@@ -73,9 +88,14 @@ def calculate(
         "uncertainty": list(result.uncertainty) if result.uncertainty else None,
         "diagnostics": list(result.diagnostics),
         "uses_proxy_factors": result.uses_proxy_factors,
+        # The contribution-weighted share resting on measured rather than inferred
+        # inputs. Not a calibrated probability and not comparable with a search
+        # result's confidence — named so nothing can average the two.
+        "measured_share": envelope.confidence.signals.values.get(MEASURED_SHARE),
     }
     if req.include_trace:
-        provenance = bundle.impact.explain(result, "total")
+        # Taken from the envelope rather than asking the engine again: one
+        # assessment, one derivation, no chance of two views disagreeing.
         payload["provenance"] = [
             {
                 "kind": link.kind.value,
@@ -83,7 +103,8 @@ def calculate(
                 "source_file": link.source_file,
                 "excerpt": link.excerpt,
             }
-            for link in provenance.links
+            for link in envelope.provenance
         ]
-        payload["arithmetic"] = provenance.arithmetic
+        payload["arithmetic"] = ExplainAnswer(bundle)(envelope, "total").arithmetic
+        payload["trace"] = [{"name": s.name, "detail": s.detail} for s in envelope.trace.steps]
     return payload
