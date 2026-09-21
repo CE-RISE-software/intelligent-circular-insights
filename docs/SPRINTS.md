@@ -266,9 +266,18 @@ into a synced folder produced thousands of file events and repeatedly killed the
 to this machine. `ICI_CHROMIUM` points Playwright at a browser already on disk, for networks
 that refuse `cdn.playwright.dev`. `bash apps/web/finish-sprint3.sh` does all of it.
 
-**Codex.** X7, one mode-aware prompt variant, is still open and is not blocking: in CE-RISE
-mode, mounted substrates are authoritative and a claim that cannot attach to a substrate
-fact is abstained on.
+**Codex follow-through, 21 Sep.** X7 is complete: the CE-RISE composition variant is
+selected from the resolved mode, and its actual sent prompt/hash is tested through HTTP.
+Search now uses the request-scoped runtime (guards, grounding, model headers, independent
+budgets and audit). Related configuration/input/UI defects are fixed; see
+`CODEX_HANDOFF.md` for the exact changes and remaining application-integration gaps.
+The optional X8 planner is deferred: fixed competency questions exist, but the planned
+parameterized-template/binding contract does not. No free-form model-generated SPARQL.
+
+Updated Python gate: **503 passed offline**, **94% LLM coverage**, check/type/layer gates
+clean, **22 cassette tests**. Frontend TypeScript/production build and **25 browser smoke
+tests** pass with local Chrome (both modes, including the grounded-answer audit regression).
+Zero new OpenAI calls. This does not certify full old-demo repair/synthesis HTTP/UI parity.
 
 ---
 

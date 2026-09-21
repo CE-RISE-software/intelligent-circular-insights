@@ -1,4 +1,105 @@
-# Codex → Claude: Sprint 1 handoff
+# Codex → Claude: Sprint 3 handoff
+
+Updated 2026-09-21 against Claude commit `c1ee0b2`. The working tree was clean
+before this work; Claude's commit is one ahead of `origin/main`. These changes
+are local and uncommitted; no push, release tag or external issue was created.
+
+## Current status — read this before the historical Sprint 1 notes
+
+**Claude's delivered work.** Normal adapters and API feature routes, eighteen
+vendored model modules, the PEFDPP graph/LCA and sixteen fixed competency
+questions, additive CE-RISE substrate composition, and the six-window frontend
+with per-response mode badges. I reproduced the baseline: 477 offline tests.
+
+**Codex X7 is complete.** A single versioned `compose_ce_rise.md` variant says
+mounted substrates are authoritative, unavailable facts require abstention, and
+model-training suggestions cannot appear as grounded answer claims. The mode is
+configuration on each request provider, not a change to either frozen port.
+`LLMRuntime.answer_question()` derives it from the resolved bundle; explicit
+sessions use `runtime.request(model=x_model, mode=bundle.mode)`.
+
+Normal composition/structured/repair prompts and their real cassettes remain
+unchanged. Structured grounding is shared between modes. A new **synthetic**
+CE-RISE fixture tests versioned replay, not live model quality. Grounding still
+combines model-assisted entailment with deterministic citation/quote/coverage
+checks; this is not a proof that a model can never misjudge entailment. X7 does
+not implement natural-language graph retrieval.
+
+### Integration defects fixed under the user's authorization
+
+- Search previously called the startup bundle's raw provider directly: guards
+  were bypassed, the audit was never returned, and its eight-call budget was
+  consumed across users. `get_llm_request` now creates fresh model/mode/audit/budget
+  state per request, binds guards and grounding, and merges the audit before
+  serialization. Parallel-request tests cover twelve requests across both modes.
+- `X-Model` now reaches both composition and decomposition. The actual model
+  is in the trace and `X-Model-Used` (absent when nothing was called).
+- Provider construction now honors Settings credentials, default/allowed models,
+  replay/record/live, and the API rejects model assistance when `llm_disabled`.
+  Invalid cassette modes fail configuration validation instead of reaching startup.
+  No environment settings or credentials were changed, and no live calls were made.
+- Missing/corrupt recordings return explained 422s without a network fallback.
+  Their body mode agrees with the middleware header. Twelve successive misses no
+  longer exhaust a process-wide budget. Corruption details do not expose paths.
+- Blank questions, invalid/non-finite thresholds, and negative/excessive retrieval
+  counts fail at the HTTP boundary. The configured default threshold is honored;
+  an explicit zero remains valid.
+- The API now exposes prompt hashes, model, cost, step durations and unresolved
+  claims. The frontend shows the audit and actual abstention reason, not a blanket
+  claim that every abstention happened below the confidence threshold.
+- Frontend grounding types match the API. Memory/derived evidence can have no
+  retrieval score; it displays as `unscored` instead of crashing on `null.toFixed`.
+  Failed Compare requests no longer clear the session's mode badge.
+- Playwright binds Vite to IPv4 explicitly (macOS otherwise bound only `::1`,
+  while its health check used `127.0.0.1`). `make demo` now uses port 8000, matching
+  the frontend proxy and its documentation.
+- Root packaging metadata now says EUPL-1.2, matching the existing LICENSE and
+  ADR 0010 decision. This corrects metadata, not a new licensing decision.
+
+Shared files touched: API bundles/deps/settings/search/error handlers, frontend
+audit/types/client/Search and smoke configuration, Makefile and root metadata.
+No core port signature, substrate engine or reference response was changed.
+
+### Verified here
+
+- `make check`: ruff, format, mypy (58 files), both layering contracts clean.
+- `pytest --no-network --cov=ici_llm`: **503 passed**, **94%** LLM statement coverage.
+  One pre-existing Starlette/anyio deprecation warning remains.
+- `pytest -m cassette --no-network`: **22 passed**; real recordings unchanged.
+- Frontend TypeScript/production build and **25 browser smoke tests** pass locally
+  across both modes, including null-score evidence and grounded-answer audit rendering.
+- LLM wheel build includes the new prompt; replay remains the default.
+
+Frontend dependencies are installed outside the synced repo under `/tmp/ici-s3-web.*`
+and linked from `apps/web/node_modules`. The smoke run used the existing Chrome
+binary with `ICI_CHROMIUM`, without downloading a browser. Temporary dependencies
+may need reinstalling after machine cleanup; nothing from node_modules is tracked.
+
+### What still needs Claude / the next sprint
+
+1. **Repair/synthesis app integration is still absent.** `/api/validate` checks
+   conformance only; the finished `LLMRequest.records` repair/synthesis services
+   have no HTTP/UI entry points. Therefore the user-requested lower-confidence
+   model-training suggestions are implemented and tested, but not visible in the
+   workbench yet. Expose them separately for explicit review, never auto-apply them
+   or label them grounded. The historical wiring notes below still apply here.
+2. Four core use cases still raise `NotImplementedError("Sprint 1")`:
+   `ValidateRecord`, `SynthesizeRecord`, `AssessImpact`, `ExplainAnswer`. Existing
+   deterministic routes bypass them; working route tests do not complete these
+   architecture tasks. Avoid claiming full old-demo parity on the current gates.
+3. **X8 deferred under its cut line.** The sixteen fixed CQ queries exist, but no
+   registered parameterized template/binding library exists. Agree a read-only,
+   subject-scoped template contract before model-based query selection. No
+   free-form SPARQL generation was added.
+4. **X9/S4 and X10/S5 remain:** production retry/backoff and budget policy, then
+   explicit release live smoke. The CE-RISE prompt variant has offline coverage,
+   not a new real-model recording. Cumulative recording spend stays at 22 attempts.
+5. Release checks (full legacy parity, secret/license audit, clean clone, Pages,
+   tag/mirror/Zenodo) are not certified by this sprint. No release tag was made.
+
+---
+
+## Historical Sprint 1 handoff
 
 Updated 2026-09-20. Codex X0–X6 are implemented and verified at the LLM boundary.
 Frozen `LLMProvider` and `GroundingVerifier` signatures are unchanged. This does

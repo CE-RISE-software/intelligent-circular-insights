@@ -7,7 +7,7 @@
  */
 
 export type Decision = "answer" | "abstain" | "escalate";
-export type GroundingVerdict = "grounded" | "partially_grounded" | "unresolved_claims" | "not_run";
+export type GroundingVerdict = "fully_grounded" | "unresolved_claims" | "not_applicable";
 
 export interface Settings {
   model_default: string;
@@ -28,7 +28,7 @@ export interface EvidenceItem {
   id: string;
   kind: string;
   ref: string;
-  score: number;
+  score: number | null;
   text: string;
 }
 
@@ -57,12 +57,22 @@ export interface SearchResult {
     verdict: GroundingVerdict;
     claims_total: number;
     claims_resolved: number;
+    unresolved: Array<{ id: string; text: string; cited: string[] }>;
   };
   evidence: EvidenceItem[];
   provenance: ProvenanceItem[];
   trace: {
     correlation_id: string;
-    steps: Array<{ name: string; detail: string }>;
+    model: string | null;
+    prompt_hashes: string[];
+    cost: {
+      prompt_tokens: number;
+      completion_tokens: number;
+      reasoning_tokens: number;
+      llm_calls: number;
+      usd: number;
+    };
+    steps: Array<{ name: string; detail: string; duration_ms: number | null }>;
   };
   data_trust: { clean_value: number; interval: [number, number] } | null;
 }

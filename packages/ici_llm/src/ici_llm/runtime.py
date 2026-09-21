@@ -8,6 +8,7 @@ from dataclasses import dataclass, replace
 
 from ici_core.domain.confidence import OperatingPoint
 from ici_core.domain.envelope import ReliabilityEnvelope
+from ici_core.domain.modes import BackendMode
 from ici_core.domain.query import Query, RetrievalBudget
 from ici_core.usecases.answer_question import AnswerQuestion
 from ici_core.usecases.deps import ProviderBundle
@@ -58,7 +59,7 @@ class LLMRuntime:
     max_calls: int = 8
     max_reserved_tokens: int = 100_000
 
-    def request(self, *, model: str | None = None) -> LLMRequest:
+    def request(self, *, model: str | None = None, mode: BackendMode | None = None) -> LLMRequest:
         source = self.provider
         selected = source.router.resolve(model)
         audit = AuditLog(prices=dict(source.audit.prices))
@@ -71,6 +72,7 @@ class LLMRuntime:
             structured_max_tokens=source.structured_max_tokens,
             embedding_model=source.embedding_model,
             embedding_dimensions=source.embedding_dimensions,
+            mode=mode if mode is not None else source.mode,
         )
         return LLMRequest(
             provider, GroundingVerifier(provider, prompts=source.prompts, audit=audit), audit
@@ -86,7 +88,7 @@ class LLMRuntime:
         point: OperatingPoint | None = None,
         hint: AnswerHint = AnswerHint(),
     ) -> ReliabilityEnvelope:
-        request = self.request(model=model)
+        request = self.request(model=model, mode=bundle.mode)
         envelope = AnswerQuestion(request.bind(bundle, hint=hint))(
             query, budget=budget, point=point
         )

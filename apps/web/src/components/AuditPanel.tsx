@@ -59,7 +59,7 @@ const VERDICT_META: Record<string, { label: string; tone: string; meaning: strin
   not_applicable: {
     label: "Not applicable",
     tone: "",
-    meaning: "Nothing to verify: a deterministic result with no composed prose.",
+    meaning: "No composed answer was available to verify, or this was a deterministic result.",
   },
 };
 
@@ -110,7 +110,7 @@ export function AuditPanel({ result }: { result: SearchResult }) {
         <p className="faint" style={{ margin: "8px 0 0" }}>
           {decision === "answer"
             ? "Above the threshold, so the system answered. The invariant that an answer must clear τ is enforced in the domain, not here."
-            : "Below the threshold, so the system declined rather than guessed."}
+            : result.abstain_reason ?? "The system declined; no supported answer was available."}
         </p>
       </div>
 
@@ -159,6 +159,11 @@ export function AuditPanel({ result }: { result: SearchResult }) {
           </span>
         </div>
         {verdict.meaning && <p className="faint" style={{ margin: "8px 0 0" }}>{verdict.meaning}</p>}
+        {grounding.unresolved?.map(claim => (
+          <p key={claim.id} className="faint" data-testid="unresolved-claim">
+            Unresolved: {claim.text}
+          </p>
+        ))}
       </div>
 
       {/* --- provenance ------------------------------------------------------ */}
@@ -188,6 +193,17 @@ export function AuditPanel({ result }: { result: SearchResult }) {
         </button>
         {openTrace && (
           <div style={{ marginTop: 10, display: "grid", gap: 6 }} data-testid="trace">
+            <div className="faint" data-testid="model-audit">
+              Model · {result.trace.model ?? "not called"}
+              {result.trace.cost && (
+                <> · live attempts {result.trace.cost.llm_calls} · estimated spend ${result.trace.cost.usd.toFixed(6)}</>
+              )}
+            </div>
+            {result.trace.prompt_hashes?.map((hash, i) => (
+              <div className="faint mono" key={`${hash}-${i}`} style={{ overflowWrap: "anywhere" }}>
+                prompt hash · {hash}
+              </div>
+            ))}
             {result.trace.steps.map((s, i) => (
               <div key={`${s.name}-${i}`} style={{ display: "grid", gridTemplateColumns: "22px 1fr", gap: 8 }}>
                 <span className="faint mono">{i + 1}</span>

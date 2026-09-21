@@ -19,7 +19,7 @@ from ici_core.domain.errors import (
     InvariantViolation,
     SubstrateUnavailable,
 )
-from ici_llm.errors import CassetteMiss
+from ici_llm.errors import CassetteCorrupt, CassetteMiss
 
 
 def install(app: FastAPI) -> None:
@@ -53,7 +53,7 @@ def install(app: FastAPI) -> None:
         )
 
     @app.exception_handler(CassetteMiss)
-    async def _cassette(_: Request, __: CassetteMiss) -> JSONResponse:
+    async def _cassette(request: Request, __: CassetteMiss) -> JSONResponse:
         """A deployment that cannot reach a model is not a server error.
 
         Deliberately *not* folded into an abstention. An abstention says the system
@@ -71,7 +71,7 @@ def install(app: FastAPI) -> None:
             content={
                 "error": "model_unavailable",
                 "capability": "a composed answer",
-                "mode": "",
+                "mode": request.state.mode_resolution.mode.value,
                 "reason": (
                     "No recorded response exists for this question and the workbench is "
                     "running in replay mode, which never calls the model. Record a "
@@ -79,6 +79,21 @@ def install(app: FastAPI) -> None:
                     "the questions that has one. Everything else on this page — "
                     "retrieval, validation, both impact engines — is deterministic and "
                     "unaffected."
+                ),
+            },
+        )
+
+    @app.exception_handler(CassetteCorrupt)
+    async def _corrupt_cassette(request: Request, _: CassetteCorrupt) -> JSONResponse:
+        return JSONResponse(
+            status_code=422,
+            content={
+                "error": "model_unavailable",
+                "capability": "a composed answer",
+                "mode": request.state.mode_resolution.mode.value,
+                "reason": (
+                    "The recorded response is invalid. Restore the reviewed cassette "
+                    "before retrying; no live fallback was attempted."
                 ),
             },
         )

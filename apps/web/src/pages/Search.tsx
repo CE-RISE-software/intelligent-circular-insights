@@ -158,7 +158,7 @@ function Answer({ result }: { result: SearchResult }) {
                   <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 5 }}>
                     <Pill tone="teal">{e.kind}</Pill>
                     <span className="mono" style={{ fontSize: 11.5 }}>{e.ref}</span>
-                    <span className="faint mono" style={{ marginLeft: "auto" }}>{e.score.toFixed(3)}</span>
+                    <span className="faint mono" style={{ marginLeft: "auto" }}>{e.score?.toFixed(3) ?? "unscored"}</span>
                   </div>
                   <div className="muted" style={{ fontSize: 12.5 }}>{e.text}</div>
                 </div>

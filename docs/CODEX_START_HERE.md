@@ -1,8 +1,15 @@
-# Codex — start here (Sprint 0x)
+# Codex — start here
 
-**S0x completed (2026-09-20).** X2, X0 and X1 are implemented and verified offline.
-Read `CODEX_HANDOFF.md` for Claude's integration steps, shared fixes, and the next
-Sprint 1 work. Live cassette recording has not been performed.
+**Current checkpoint (2026-09-21): X0–X7 complete.** Start with the Sprint 3
+section of `CODEX_HANDOFF.md`. Search is now request-scoped and mode-aware, and
+the API/frontend checks pass offline. X8 is deferred pending a safe template
+binding contract; X9 and X10 remain Sprint 4/5 work. Twenty-two live API attempts
+were recorded in Sprint 1; Sprint 3 spent nothing. The old setup notes below are
+historical, not the current task order or recording procedure. Deliberate live
+recording uses `tooling/record_llm.py` and its persistent ceiling; normal tests
+always replay and never fall back to the network.
+
+## Historical Sprint 0x setup
 
 Sprint 0 is done. The seam you build against exists, is typed, and is under test.
 You are unblocked; nothing you need is waiting on Claude.

@@ -81,7 +81,9 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   } catch (err) {
     // The backend is down or unreachable. Nothing is known about the mode now, so
     // the badge is cleared rather than left showing a stale value.
-    recordServedMode({ mode: null, source: null, warning: null });
+    if (options.mode === undefined) {
+      recordServedMode({ mode: null, source: null, warning: null });
+    }
     return { kind: "failed", message: describe(err), status: null };
   }
 

@@ -1,0 +1,21 @@
+{
+  "402c90d8dde4e066276fd750f694e6826b9677a656aba9dec7d64451c5a4d6bf": {
+    "version": 1,
+    "response": {
+      "id": "synthetic-chat-ce-rise",
+      "object": "chat.completion",
+      "created": 0,
+      "model": "gpt-4o-mini",
+      "choices": [{
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "The declared capacity is 60 kWh [e1].",
+          "refusal": null
+        }
+      }],
+      "usage": {"prompt_tokens": 100, "completion_tokens": 20, "total_tokens": 120}
+    }
+  }
+}

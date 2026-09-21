@@ -16,8 +16,11 @@ from fastapi import Depends, Header, Request
 from apps.api.bundles import BundleRegistry
 from apps.api.middleware.mode import ModeResolution, ModeResolver
 from apps.api.settings import Settings, get_settings
+from ici_core.domain.errors import CapabilityError
 from ici_core.domain.modes import BackendMode
 from ici_core.usecases.deps import ProviderBundle
+from ici_llm.provider import OpenAIProvider
+from ici_llm.runtime import LLMRequest, LLMRuntime
 
 
 def get_registry(request: Request) -> BundleRegistry:
@@ -55,10 +58,33 @@ def get_bundle(
     return registry.for_mode(resolution.mode)
 
 
+def get_llm_request(
+    request: Request,
+    bundle: Annotated[ProviderBundle, Depends(get_bundle)],
+    x_model: Annotated[str | None, Header()] = None,
+) -> LLMRequest:
+    """Bind the resolved mode and model to fresh audit/budget state, never the bundle."""
+    settings: Settings = request.app.state.settings
+    if settings.llm_disabled:
+        raise CapabilityError(
+            capability="language model",
+            mode=bundle.mode.value,
+            reason="Language-model assistance is disabled in this deployment.",
+        )
+    if not isinstance(bundle.llm, OpenAIProvider):
+        raise CapabilityError(
+            capability="language model",
+            mode=bundle.mode.value,
+            reason="No request-scoped language-model adapter is configured.",
+        )
+    return LLMRuntime(bundle.llm).request(model=x_model, mode=bundle.mode)
+
+
 __all__ = [
     "BackendMode",
     "Settings",
     "get_bundle",
+    "get_llm_request",
     "get_registry",
     "get_resolver",
     "get_settings",

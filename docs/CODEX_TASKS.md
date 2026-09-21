@@ -153,7 +153,8 @@ today's output exactly.
   `model_families`, `purpose`). A loader that hashes the rendered prompt into `Trace`.
 
   `tests/unit/llm/test_prompt_registry.py`, runtime/record audit tests, and wheel
-  resource loading verify all six current prompts. No persona prompts in Python.
+  resource loading verify the six Sprint 1 prompts (seven after X7).
+  No persona prompts in Python.
 
 **Acceptance.** `pytest tests/unit/llm/test_prompt_registry.py` — every referenced prompt
 exists, renders with its declared variables, and its hash appears in a composed answer's
@@ -201,9 +202,17 @@ dimension mismatch raises at construction; both satisfy the same contract suite.
 
 ## X7 — Mode-aware prompting · S3
 
-- [ ] In CE-RISE mode the system prompt states that mounted substrates are authoritative and
+- [x] In CE-RISE mode the system prompt states that mounted substrates are authoritative and
   that a claim which cannot be attached to a substrate fact must be abstained on rather than
   softened.
+
+  Completed 2026-09-21. `compose_ce_rise@1` is selected from the resolved bundle
+  mode in the request runtime. `tests/e2e/test_mode_matrix.py -k llm` checks the
+  actual system message, prompt id/hash in the HTTP trace, model headers, fallback,
+  and concurrent request isolation. `tests/grounding/test_graph_questions.py`
+  checks missing-fact abstentions. One explicitly synthetic CE-RISE cassette
+  exercises offline replay; no new live call or change to Normal-mode recordings.
+  Search now binds guards/grounding/audit through the runtime; see the handoff.
 
 **Acceptance.** `pytest tests/e2e/test_mode_matrix.py -k llm` — the prompt hash in the trace
 differs by mode, and the CE-RISE variant is the one actually sent.
@@ -214,6 +223,12 @@ differs by mode, and the CE-RISE variant is the one actually sent.
 
 - [ ] **Goal.** The model reads intent and *selects* a query; it does not write SPARQL
   freehand.
+
+  **Deferred under the cut line, 2026-09-21.** Claude shipped the sixteen fixed
+  competency queries in `ontology/pefdpp/cq/questions.json`, but not the planned
+  registered parameterized template library or binding contract. The existing
+  deterministic CQ runner remains available. Do not pretend these global queries
+  safely bind arbitrary product questions; agree that seam before enabling X8.
 
 Free-form generation over a graph is both a hallucination surface and an injection surface
 on an endpoint that must stay read-only. Claude ships a parameterised template library

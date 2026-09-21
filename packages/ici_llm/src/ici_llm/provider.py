@@ -17,6 +17,7 @@ from referencing import Registry
 from referencing.exceptions import Unresolvable
 
 from ici_core.domain.evidence import ContextPack
+from ici_core.domain.modes import BackendMode
 from ici_llm.audit import AuditLog
 from ici_llm.budget import RequestBudget
 from ici_llm.compat import grounded_chat_kwargs, structured_options
@@ -124,6 +125,7 @@ class OpenAIProvider:
         structured_max_tokens: int = 4096,
         embedding_model: str = "text-embedding-3-small",
         embedding_dimensions: int = 1536,
+        mode: BackendMode = BackendMode.NORMAL,
     ) -> None:
         self.transport = transport if transport is not None else OpenAITransport(api_key=api_key)
         self.router = router or ModelRouter()
@@ -133,6 +135,7 @@ class OpenAIProvider:
         self.structured_max_tokens = structured_max_tokens
         self.embedding_model = embedding_model
         self.embedding_dimensions = embedding_dimensions
+        self.mode = mode
         if structured_max_tokens < 1 or embedding_dimensions < 1:
             raise ValueError("token and dimension limits must be positive")
 
@@ -221,6 +224,8 @@ class OpenAIProvider:
         options: dict[str, Any],
         schema: Mapping[str, Any] | None = None,
     ) -> Request:
+        if name == "compose" and self.mode is BackendMode.CE_RISE:
+            name = "compose_ce_rise"
         if name == "structured" and schema and schema.get("x-ici-unverified-suggestions") is True:
             name = "structured_suggestions"
         prompt = self.prompts.render(name)
@@ -302,4 +307,5 @@ class CassetteProvider(OpenAIProvider):
             structured_max_tokens=source.structured_max_tokens,
             embedding_model=source.embedding_model,
             embedding_dimensions=source.embedding_dimensions,
+            mode=source.mode,
         )

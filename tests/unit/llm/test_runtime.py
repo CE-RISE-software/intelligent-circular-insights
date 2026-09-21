@@ -60,6 +60,17 @@ def test_sessions_do_not_share_model_audit_or_budget():
     assert second.provider.budget.calls == 0
 
 
+def test_sessions_do_not_share_mode_and_cassette_wrapping_preserves_it(tmp_path):
+    from ici_core.domain.modes import BackendMode
+
+    source = OpenAIProvider(ScriptedTransport([]), mode=BackendMode.CE_RISE)
+    wrapped = CassetteProvider(tmp_path, provider=source)
+    runtime = LLMRuntime(wrapped)
+    assert runtime.request().provider.mode is BackendMode.CE_RISE
+    assert runtime.request(mode=BackendMode.NORMAL).provider.mode is BackendMode.NORMAL
+    assert runtime.request().provider.mode is BackendMode.CE_RISE
+
+
 def test_record_assistance_shares_the_request_audit_and_provider():
     request = LLMRuntime(OpenAIProvider(ScriptedTransport([]))).request()
     assert request.records.provider is request.provider

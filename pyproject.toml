@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Neuro-symbolic DPP workbench with interchangeable Normal and CE-RISE backends"
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
-license = { text = "MIT" }
+license = { text = "EUPL-1.2" }
 dependencies = [
     "ici-core",
     "ici-evidence",

@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import type { SearchResult } from "../src/lib/types";
 
 /**
  * Six windows, two backends.
@@ -69,6 +70,10 @@ for (const mode of ["normal", "ce-rise"] as const) {
       await expect(page.getByTestId("tau-track")).toBeVisible();
       await expect(page.getByTestId("grounding-verdict")).toBeVisible();
       await expect(page.getByTestId("tau")).toHaveText("0.500");
+      await expect(page.getByTestId("audit-panel")).not.toContainText("Below the threshold");
+      await page.getByTestId("toggle-trace").click();
+      await expect(page.getByTestId("model-audit")).toContainText("not called");
+      await expect(page.getByTestId("model-audit")).toContainText("live attempts 0");
       await expectServedBy(page, mode);
     });
 
@@ -120,6 +125,15 @@ for (const mode of ["normal", "ce-rise"] as const) {
       await page.getByTestId("probe-carbon").click();
       await expect(page.getByTestId("compare-grid")).toBeVisible({ timeout: 25_000 });
       // Asking a specific backend must not move the session badge.
+      await expectServedBy(page, mode);
+    });
+
+    test("a failed compare request does not clear the session badge", async ({ page }) => {
+      await goto(page, "/compare");
+      await expectServedBy(page, mode);
+      await page.route("**/api/carbon/calculate", route => route.abort());
+      await page.getByTestId("probe-carbon").click();
+      await expect(page.getByTestId("compare-grid")).toBeVisible();
       await expectServedBy(page, mode);
     });
   });
@@ -208,4 +222,45 @@ test.describe("smoke · the mode switch", () => {
     await page.getByTestId("switch-mode").click();
     await expect(page.getByTestId("pef-overview")).toBeVisible({ timeout: 30_000 });
   });
+});
+
+test("smoke · an unscored grounded answer exposes model audit and survives a grounding decline", async ({ page }) => {
+  await useMode(page, "ce-rise");
+  const result: SearchResult = {
+    decision: "answer", mode: "ce-rise", answer: "The declared capacity is 60 kWh [e1].",
+    abstain_reason: null, weak_signal: null,
+    confidence: { raw: 0.9, calibrated: 0.9, calibrator: "synthetic", signals: {} },
+    operating_point: { tau: 0.5, coverage_target: null },
+    grounding: { verdict: "fully_grounded", claims_total: 1, claims_resolved: 1, unresolved: [] },
+    evidence: [{ id: "e1", kind: "substrate_row", ref: "synthetic:capacity", score: null, text: "60 kWh" }],
+    provenance: [{ kind: "triple", ref: "synthetic:capacity", source_file: null, excerpt: "60 kWh" }],
+    trace: {
+      correlation_id: "synthetic-browser-test", model: "gpt-4o-mini", prompt_hashes: ["mode-prompt-hash"],
+      cost: { prompt_tokens: 100, completion_tokens: 20, reasoning_tokens: 0, llm_calls: 0, usd: 0 },
+      steps: [{ name: "grounding", detail: "1/1", duration_ms: 0 }],
+    },
+    data_trust: null,
+  };
+  await page.route("**/api/search", route => route.fulfill({
+    status: 200, contentType: "application/json", headers: { "X-Backend-Mode-Used": "ce-rise" },
+    body: JSON.stringify(result),
+  }));
+  await goto(page, "/search");
+  await page.getByTestId("search-input").fill("capacity");
+  await page.getByTestId("search-submit").click();
+  await expect(page.getByTestId("evidence")).toContainText("unscored");
+  await expect(page.getByTestId("grounding-verdict")).toContainText("Fully grounded");
+  await page.getByTestId("toggle-trace").click();
+  await expect(page.getByTestId("model-audit")).toContainText("gpt-4o-mini");
+  await expect(page.getByTestId("trace")).toContainText("mode-prompt-hash");
+
+  result.decision = "abstain";
+  result.answer = null;
+  result.abstain_reason = "The warranty claim could not be traced to evidence.";
+  result.grounding = { verdict: "unresolved_claims", claims_total: 1, claims_resolved: 0,
+    unresolved: [{ id: "claim:1", text: "Ten-year warranty", cited: [] }] };
+  await page.getByTestId("search-submit").click();
+  await expect(page.getByTestId("unresolved-claim")).toContainText("Ten-year warranty");
+  await expect(page.getByTestId("audit-panel")).toContainText(result.abstain_reason);
+  await expect(page.getByTestId("audit-panel")).not.toContainText("Below the threshold");
 });

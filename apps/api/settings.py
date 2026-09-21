@@ -11,7 +11,9 @@ to reason about without grepping.
 from __future__ import annotations
 
 from functools import lru_cache
+from typing import Literal
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -33,12 +35,12 @@ class Settings(BaseSettings):
     llm_disabled: bool = False
 
     # -- cassettes: the reason the test suite costs nothing to run
-    llm_cassette_mode: str = "replay"
+    llm_cassette_mode: Literal["replay", "record", "live"] = "replay"
     """'replay' (default, no network), 'record', or 'live'."""
     llm_cassette_dir: str = "tests/cassettes"
 
     # -- selective decision
-    default_tau: float = 0.5
+    default_tau: float = Field(default=0.5, ge=0, le=1, allow_inf_nan=False)
 
     # -- retrieval
     max_context_chars: int = 12_000

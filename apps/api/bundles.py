@@ -122,7 +122,8 @@ def _build_normal(settings: Settings) -> ProviderBundle:
     from ici_datatrust import NullDataTrustProvider
     from ici_evidence import AppendOnlyFactMemory, DocumentEvidenceProvider
     from ici_llm.grounding import GroundingVerifier
-    from ici_llm.provider import CassetteProvider
+    from ici_llm.provider import CassetteProvider, OpenAIProvider
+    from ici_llm.routing import ModelRouter
     from ici_policy import HeuristicRouter
     from ici_reliability import EvidenceSignals, IsotonicCalibrator, ThresholdSelectivePolicy
     from ici_substrates import (
@@ -137,7 +138,17 @@ def _build_normal(settings: Settings) -> ProviderBundle:
     # Cassette-backed by default: replay makes no network call and fails loudly on a
     # miss, so running the suite can never quietly spend money. Recording is a
     # deliberate act (LLM_CASSETTE_MODE=record), not something a test can trigger.
-    llm = CassetteProvider(settings.llm_cassette_dir, mode=settings.llm_cassette_mode)
+    source = OpenAIProvider(
+        api_key=settings.openai_api_key,
+        router=ModelRouter(settings.llm_model_default, settings.allowed_models),
+    )
+    llm = (
+        source
+        if settings.llm_cassette_mode == "live"
+        else CassetteProvider(
+            settings.llm_cassette_dir, mode=settings.llm_cassette_mode, provider=source
+        )
+    )
     grounding = GroundingVerifier(llm, prompts=llm.prompts, audit=llm.audit)
 
     return ProviderBundle(

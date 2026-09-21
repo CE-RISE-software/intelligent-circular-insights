@@ -14,3 +14,9 @@ for composition and `a709...` for verification.
 
 Actual OpenAI recordings live in the separate `../recorded/` directory. Never
 relabel these hand-built fixtures as live recordings.
+
+Sprint 3 adds `402c...` for `ici.compose.ce_rise@1`. It is a new hand-built
+composition fixture, not a recaptured or relabelled OpenAI response. Normal-mode
+request hashes and real Sprint 1 recordings remain unchanged; both modes reuse
+the unchanged grounding fixture. CE-RISE prompt behavior is tested at the transport
+and HTTP boundary offline; live model quality for this variant is not yet measured.

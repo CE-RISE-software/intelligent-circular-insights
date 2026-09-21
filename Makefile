@@ -46,7 +46,7 @@ live:  ## Real OpenAI calls. Run by hand, never in CI. Costs money.
 	uv run pytest -m live --run-live --no-header
 
 demo:  ## Run the API locally
-	uv run uvicorn apps.api.main:app --reload --port 8001
+	uv run uvicorn apps.api.main:app --reload --port 8000
 
 gate-s0:  ## The Sprint 0 exit gate
 	@$(MAKE) check
