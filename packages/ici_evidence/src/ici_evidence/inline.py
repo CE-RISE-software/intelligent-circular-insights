@@ -1,0 +1,329 @@
+# SPDX-License-Identifier: EUPL-1.2
+# SPDX-FileCopyrightText: 2026 CE-RISE consortium
+"""Evidence from one document the caller supplied, rather than from the corpus.
+
+The workbench's "single passport" window: paste or upload a document, ask questions
+answerable only from it. Nothing is indexed, nothing is stored, and the corpus is
+not consulted — the point is a document that is *not* in the system yet.
+
+The design decision worth stating. The demo answered these questions down a second,
+parallel pipeline: its own section ranking, its own model call, its own confidence
+number, and no grounding check at all. That meant the one window where a user is
+most likely to paste an unfamiliar document was the window with the weakest
+guarantees, and its confidence number was not comparable with the one the main
+search reported.
+
+Here it is an ``EvidenceProvider`` and nothing more. The same ``AnswerQuestion`` use
+case runs, so a single-document question gets the whole reliability envelope for
+free: calibrated confidence against the same operating point, the grounding verifier
+rejecting any claim that cannot be traced to a section, an abstention that names the
+weak signal, and provenance pointing at the section it came from.
+
+Sectioning is structural where it can be. A JSON passport carries its meaning in its
+keys, so each top-level key becomes a section titled by that key and addressed by a
+JSON Pointer — which is what makes provenance resolvable rather than decorative.
+Free text falls back to the same paragraph packing the corpus reader uses.
+"""
+
+from __future__ import annotations
+
+import json
+import math
+import re
+from collections.abc import Sequence
+from dataclasses import dataclass, field
+from typing import Any
+
+from ici_core.domain.evidence import Evidence, EvidenceKind
+from ici_core.domain.ids import EvidenceId
+from ici_core.domain.query import Query, RetrievalBudget
+from ici_core.text import tokenize
+from ici_evidence.documents import K1, B, split_passages
+
+MAX_SECTION_CHARS = 2_000
+MAX_DOCUMENT_CHARS = 400_000
+"""Refused above this. A passport is a record, not a corpus; anything larger is
+either a mistake or belongs in the indexed collection."""
+
+
+@dataclass(frozen=True)
+class Section:
+    """One addressable part of the supplied document."""
+
+    id: str
+    title: str
+    path: str
+    """A JSON Pointer for structured input, or a line anchor for text. What a
+    reader follows to find this again in their own copy."""
+    kind: str
+    summary: str
+    text: str
+    fields: tuple[tuple[str, str], ...] = ()
+
+    @property
+    def tokens(self) -> tuple[str, ...]:
+        return tuple(tokenize(f"{self.title} {self.text}"))
+
+
+@dataclass(frozen=True)
+class ParsedDocument:
+    filename: str | None
+    document_type: str
+    title: str
+    char_count: int
+    sections: tuple[Section, ...]
+    warnings: tuple[str, ...] = ()
+
+
+class DocumentTooLarge(ValueError):
+    """Refused before parsing rather than truncated silently."""
+
+
+# ------------------------------------------------------------------ parsing
+
+
+def _scalar(value: Any) -> bool:
+    return isinstance(value, (str, int, float, bool)) or value is None
+
+
+def _readable(key: str) -> str:
+    return re.sub(r"[_\-]+", " ", str(key)).strip().capitalize() or "Section"
+
+
+def _render(value: Any, *, limit: int = 240) -> str:
+    if value is None:
+        return "—"
+    if isinstance(value, bool):
+        return "yes" if value else "no"
+    text = str(value) if _scalar(value) else json.dumps(value, ensure_ascii=False)
+    return text if len(text) <= limit else text[: limit - 1] + "…"
+
+
+def _fields(value: Any, prefix: str = "") -> list[tuple[str, str]]:
+    """Flatten to leaf key/value pairs, so a reader sees the facts not the shape."""
+    out: list[tuple[str, str]] = []
+    if isinstance(value, dict):
+        for key, inner in value.items():
+            path = f"{prefix}/{key}" if prefix else str(key)
+            out.extend(_fields(inner, path) if not _scalar(inner) else [(path, _render(inner))])
+    elif isinstance(value, list):
+        for index, inner in enumerate(value):
+            path = f"{prefix}/{index}"
+            out.extend(_fields(inner, path) if not _scalar(inner) else [(path, _render(inner))])
+    elif prefix:
+        out.append((prefix, _render(value)))
+    return out[:40]
+
+
+def _summarise(value: Any) -> str:
+    if isinstance(value, dict):
+        keys = ", ".join(str(k) for k in list(value)[:5])
+        return f"{len(value)} field{'' if len(value) == 1 else 's'}: {keys}"
+    if isinstance(value, list):
+        return f"{len(value)} item{'' if len(value) == 1 else 's'}"
+    return _render(value, limit=160)
+
+
+def _json_sections(data: Any) -> list[Section]:
+    """One section per top-level key, addressed by JSON Pointer.
+
+    A passport's structure *is* its meaning — 'compliance' and 'materials' are
+    different subjects — so splitting on keys keeps related facts together in a way
+    character-based chunking would cut across.
+    """
+    if not isinstance(data, dict):
+        return [
+            Section(
+                id="s0",
+                title="Document",
+                path="",
+                kind="json",
+                summary=_summarise(data),
+                text=json.dumps(data, indent=2, ensure_ascii=False)[:MAX_SECTION_CHARS],
+            )
+        ]
+    sections: list[Section] = []
+    scalars: list[tuple[str, str]] = []
+    for key, value in data.items():
+        if _scalar(value):
+            scalars.append((f"/{key}", _render(value)))
+            continue
+        body = json.dumps(value, indent=2, ensure_ascii=False)
+        sections.append(
+            Section(
+                id=f"s{len(sections)}",
+                title=_readable(key),
+                path=f"/{key}",
+                kind="json",
+                summary=_summarise(value),
+                text=body[:MAX_SECTION_CHARS],
+                fields=tuple(_fields(value, f"/{key}")),
+            )
+        )
+    if scalars:
+        # Top-level scalars are identity — dpp_id, schema_version — and they are
+        # what most questions about "which passport is this" actually need.
+        sections.insert(
+            0,
+            Section(
+                id="s-identity",
+                title="Identity",
+                path="/",
+                kind="json",
+                summary=f"{len(scalars)} top-level value{'' if len(scalars) == 1 else 's'}",
+                text="\n".join(f"{k}: {v}" for k, v in scalars),
+                fields=tuple(scalars),
+            ),
+        )
+    return sections
+
+
+def _text_sections(text: str) -> list[Section]:
+    out: list[Section] = []
+    for index, block in enumerate(split_passages(text)):
+        first = block.strip().splitlines()[0] if block.strip() else f"Part {index + 1}"
+        out.append(
+            Section(
+                id=f"t{index}",
+                title=(first[:70] + "…") if len(first) > 70 else first or f"Part {index + 1}",
+                path=f"#part-{index + 1}",
+                kind="text",
+                summary=block.strip()[:160],
+                text=block[:MAX_SECTION_CHARS],
+            )
+        )
+    return out
+
+
+def parse_document(content: str, filename: str | None = None) -> ParsedDocument:
+    """Split a supplied document into addressable sections.
+
+    JSON is parsed structurally; anything else is treated as text. A document that
+    *looks* like JSON but does not parse is reported as a warning and read as text,
+    because a malformed passport is exactly the case a user wants help with — the
+    Validate window will say what is wrong with it.
+    """
+    content = content or ""
+    if len(content) > MAX_DOCUMENT_CHARS:
+        raise DocumentTooLarge(
+            f"the document is {len(content):,} characters; the limit is "
+            f"{MAX_DOCUMENT_CHARS:,}. A passport is a record, not a corpus."
+        )
+
+    warnings: list[str] = []
+    stripped = content.strip()
+    data: Any = None
+    if stripped.startswith(("{", "[")):
+        try:
+            data = json.loads(stripped)
+        except json.JSONDecodeError as exc:
+            warnings.append(
+                f"this looks like JSON but does not parse ({exc.msg} at line {exc.lineno}); "
+                "read as text. The Validate window will locate the problem."
+            )
+
+    if data is not None:
+        sections = _json_sections(data)
+        doc_type = "json"
+        title = str(data.get("dpp_id") or "") if isinstance(data, dict) else ""
+    else:
+        sections = _text_sections(content)
+        doc_type = "text"
+        title = ""
+
+    if not sections:
+        warnings.append("nothing could be read from this document.")
+
+    return ParsedDocument(
+        filename=filename,
+        document_type=doc_type,
+        title=title or filename or "Supplied document",
+        char_count=len(content),
+        sections=tuple(sections),
+        warnings=tuple(warnings),
+    )
+
+
+# ----------------------------------------------------------------- retrieval
+
+
+@dataclass
+class InlineDocumentProvider:
+    """Implements ``EvidenceProvider`` over one supplied document.
+
+    Same BM25 constants as the corpus reader, deliberately: a section that scores
+    0.7 here means what it means there, and a user comparing two windows should not
+    have to know that the numbers were produced differently.
+    """
+
+    document: ParsedDocument
+    _idf_cache: dict[str, float] = field(default_factory=dict, init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        sections = self.document.sections
+        self._avg = (sum(len(s.tokens) for s in sections) / len(sections)) if sections else 0.0
+
+    def _idf(self, term: str) -> float:
+        if term not in self._idf_cache:
+            total = len(self.document.sections) or 1
+            hits = sum(1 for s in self.document.sections if term in s.tokens)
+            self._idf_cache[term] = math.log(1 + (total - hits + 0.5) / (hits + 0.5))
+        return self._idf_cache[term]
+
+    def _score(self, section: Section, terms: Sequence[str]) -> float:
+        tokens = section.tokens
+        if not tokens:
+            return 0.0
+        length = len(tokens)
+        total = 0.0
+        for term in terms:
+            frequency = tokens.count(term)
+            if not frequency:
+                continue
+            denominator = frequency + K1 * (1 - B + B * length / (self._avg or length))
+            total += self._idf(term) * (frequency * (K1 + 1)) / denominator
+        return total
+
+    def retrieve(self, q: Query, budget: RetrievalBudget) -> Sequence[Evidence]:
+        terms = tokenize(q.text)
+        sections = self.document.sections
+        if not sections:
+            return []
+
+        scored = sorted(
+            ((self._score(s, terms), s) for s in sections),
+            key=lambda pair: (-pair[0], pair[1].id),
+        )
+        top = [(score, s) for score, s in scored[: budget.top_k_documents] if score > 0]
+
+        # A short passport can match nothing lexically while still holding the
+        # answer — "is it compliant?" against a section titled 'certifications'.
+        # Falling back to the whole document lets the grounding verifier decide,
+        # which is a better judge than a term overlap of zero.
+        if not top:
+            top = [(0.0, s) for s in sections[: budget.top_k_documents]]
+
+        return [
+            Evidence(
+                id=EvidenceId(f"sec-{section.id}"),
+                kind=EvidenceKind.PASSAGE,
+                text=section.text[: budget.max_context_chars],
+                # The pointer, so provenance resolves in the user's own copy of the
+                # document rather than in a file we do not have.
+                ref=f"{self.document.filename or 'document'}{section.path}",
+                score=round(score, 6) if score else None,
+                source_file=self.document.filename,
+                metadata={"section": section.id, "title": section.title},
+            )
+            for score, section in top
+        ]
+
+
+__all__ = [
+    "MAX_DOCUMENT_CHARS",
+    "DocumentTooLarge",
+    "InlineDocumentProvider",
+    "ParsedDocument",
+    "Section",
+    "parse_document",
+]

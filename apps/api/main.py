@@ -64,9 +64,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.state.settings = settings
 
-    from apps.api.routers import carbon, models, pef, search, synthesize, validate
+    from apps.api.routers import carbon, models, pef, search, single_dpp, synthesize, validate
 
-    for module in (search, carbon, validate, synthesize, models, pef):
+    for module in (search, single_dpp, carbon, validate, synthesize, models, pef):
         app.include_router(module.router, prefix="/api")
 
     # Order matters: CORS is added last so it wraps outermost and the exposed

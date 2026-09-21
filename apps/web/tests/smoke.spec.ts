@@ -481,3 +481,74 @@ test.describe("smoke · the decline stays readable", () => {
     expect(opacity(opacityOf)).toBeGreaterThan(0.85);
   });
 });
+
+test.describe("smoke · single passport", () => {
+  // The last window from the demo's port table, and the one that most needed
+  // folding back into the shared path: in the demo it had its own pipeline, its
+  // own confidence number and no grounding check at all.
+
+  test("a pasted passport is split on its own structure", async ({ page }) => {
+    await useMode(page, "normal");
+    await goto(page, "/single-dpp");
+    await page.getByTestId("single-read").click();
+
+    const sections = page.getByTestId("single-sections");
+    await expect(sections).toBeVisible({ timeout: 15_000 });
+    // Keys, not character offsets.
+    await expect(sections).toContainText("Compliance");
+    await expect(sections).toContainText("/compliance");
+    await expectServedBy(page, "normal");
+  });
+
+  test("reading needs no model, and a broken document still reads", async ({ page }) => {
+    await useMode(page, "normal");
+    await goto(page, "/single-dpp");
+    await page.getByTestId("single-input").fill('{"broken": ');
+    await page.getByTestId("single-read").click();
+
+    // A malformed passport is exactly what someone wants help with, so it is read
+    // as text and the problem is named rather than the request failing.
+    const warnings = page.getByTestId("single-warnings");
+    await expect(warnings).toBeVisible({ timeout: 15_000 });
+    await expect(warnings).toContainText("does not parse");
+  });
+
+  test("asking renders an outcome and the same envelope as search", async ({ page }) => {
+    await useMode(page, "normal");
+    await goto(page, "/single-dpp");
+    await page.getByTestId("single-read").click();
+    await expect(page.getByTestId("single-ask")).toBeVisible({ timeout: 15_000 });
+
+    await page.getByTestId("single-question").fill("Which compliance standards does this carry?");
+    await page.getByTestId("single-submit").click();
+
+    // Answer, abstention or an honest decline — never a blank window. When it
+    // answers, the audit panel beside it is literally the search window's.
+    await expect(
+      page.getByTestId("single-answer").or(page.getByTestId("declined")),
+    ).toBeVisible({ timeout: 25_000 });
+    await expectServedBy(page, "normal");
+  });
+
+  test("changing the document clears the previous reading", async ({ page }) => {
+    // Sections from one passport beside an answer about another is how somebody
+    // reads a result about the wrong product.
+    await useMode(page, "normal");
+    await goto(page, "/single-dpp");
+    await page.getByTestId("single-read").click();
+    await expect(page.getByTestId("single-sections")).toBeVisible({ timeout: 15_000 });
+
+    await page.getByTestId("single-input").fill('{"dpp_id": "other-999"}');
+    await expect(page.getByTestId("single-sections")).toBeHidden();
+  });
+
+  test("it is reachable in both modes", async ({ page }) => {
+    for (const mode of ["normal", "ce-rise"] as const) {
+      await page.context().clearCookies();
+      await useMode(page, mode);
+      await goto(page, "/search");
+      await page.getByTestId("nav-single-dpp").click();
+      await expect(page.getByTestId("page-single-dpp")).toBeVisible({ timeout: 15_000 });
+    }
+  });
+});

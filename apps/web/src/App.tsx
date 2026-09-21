@@ -5,6 +5,7 @@ import type { Settings } from "./lib/types";
 import { ModeBadge } from "./components/ModeBadge";
 import { SettingsModal } from "./components/SettingsModal";
 import Search from "./pages/Search";
+import SingleDpp from "./pages/SingleDpp";
 import Carbon from "./pages/Carbon";
 import Validate from "./pages/Validate";
 import Synthesize from "./pages/Synthesize";
@@ -28,6 +29,7 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { to: "/search", label: "Search & Answer", glyph: "🔍" },
+  { to: "/single-dpp", label: "Single passport", glyph: "📄" },
   { to: "/carbon", label: "Carbon", glyph: "🌿" },
   { to: "/validate", label: "Validate", glyph: "✅" },
   { to: "/synthesize", label: "Synthesize", glyph: "✨" },
@@ -65,6 +67,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/search" replace />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/single-dpp" element={<SingleDpp />} />
             <Route path="/carbon" element={<Carbon />} />
             <Route path="/validate" element={<Validate />} />
             <Route path="/synthesize" element={<Synthesize />} />

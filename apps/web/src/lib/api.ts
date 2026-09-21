@@ -23,11 +23,13 @@ import type {
   CqResult,
   ModelCatalog,
   Overview,
+  ParsedDocument,
   PefResult,
   RepairResult,
   RouteResult,
   SearchResult,
   Settings,
+  SingleDppAnswer,
   SparqlResult,
   SubjectList,
   SynthesisResult,
@@ -173,6 +175,26 @@ export const search = (
   body: { q: string; product?: string | null; tau?: number; session?: string },
   mode?: BackendMode,
 ) => request<SearchResult>("/api/search", { method: "POST", body, mode });
+
+export const parseSingleDpp = (content: string, filename: string | null, mode?: BackendMode) =>
+  request<ParsedDocument>("/api/single-dpp/parse", {
+    method: "POST",
+    body: { content, filename },
+    mode,
+  });
+
+export const askSingleDpp = (
+  q: string,
+  content: string,
+  filename: string | null,
+  tau: number,
+  mode?: BackendMode,
+) =>
+  request<SingleDppAnswer>("/api/single-dpp/ask", {
+    method: "POST",
+    body: { q, content, filename, tau },
+    mode,
+  });
 
 export const carbonSubjects = (mode?: BackendMode) =>
   request<SubjectList>("/api/carbon/subjects", { mode });

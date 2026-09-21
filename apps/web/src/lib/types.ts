@@ -276,3 +276,35 @@ export interface SynthesisResult {
   support: Array<{ path: string; evidence_id: string; evidence_ref: string; source_pointer: string }>;
   trace: SearchResult["trace"];
 }
+
+// ------------------------------------------------------ single passport
+export interface DocumentSection {
+  id: string;
+  title: string;
+  /** JSON Pointer for structured input, line anchor for text — what a reader
+   *  follows to find this again in their own copy of the document. */
+  path: string;
+  kind: string;
+  summary: string;
+  preview: string;
+  fields: Array<{ path: string; value: string }>;
+}
+
+export interface ParsedDocument {
+  filename: string | null;
+  document_type: string;
+  title: string;
+  char_count: number;
+  warnings: string[];
+  sections: DocumentSection[];
+}
+
+/** The search envelope, plus which document it was answered from. */
+export interface SingleDppAnswer extends SearchResult {
+  document: {
+    filename: string | null;
+    title: string;
+    sections: number;
+    document_type: string;
+  };
+}
