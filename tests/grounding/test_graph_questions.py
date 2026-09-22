@@ -40,4 +40,4 @@ def test_a_claim_absent_from_the_substrate_abstains_even_with_a_real_citation(
     assert result.decision is Decision.ABSTAIN
     assert result.answer is None
     assert result.grounding.blocks_answering
-    assert transport.requests[0].prompt_id == "ici.compose.ce_rise@1"
+    assert transport.requests[0].prompt_id == "ici.compose.ce_rise@2"

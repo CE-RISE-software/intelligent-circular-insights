@@ -84,6 +84,7 @@ def test_llm_mode_selects_the_system_prompt_actually_sent_and_traced(http):
     assert hashes[0] != hashes[1]
     assert "mounted substrates are authoritative" in prompt.text
     assert "abstain rather than soften" in prompt.text
+    assert "without repeating the product name or its unrelated" in prompt.text
 
 
 @pytest.mark.parametrize("model", ["gpt-4o-mini", "gpt-5", "unknown"])
@@ -127,7 +128,7 @@ def test_llm_parallel_requests_have_independent_mode_model_budget_and_audit(http
         assert body["trace"]["cost"]["llm_calls"] == 2
         assert len(body["trace"]["prompt_hashes"]) == 3
         llm_steps = [json.loads(s["detail"]) for s in body["trace"]["steps"] if s["name"] == "llm"]
-        expected = "ici.compose@1" if mode == "normal" else "ici.compose.ce_rise@1"
+        expected = "ici.compose@1" if mode == "normal" else "ici.compose.ce_rise@2"
         assert llm_steps[0]["prompt_id"] == expected
 
     with ThreadPoolExecutor(max_workers=4) as pool:

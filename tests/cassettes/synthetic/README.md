@@ -19,4 +19,7 @@ Sprint 3 adds `402c...` for `ici.compose.ce_rise@1`. It is a new hand-built
 composition fixture, not a recaptured or relabelled OpenAI response. Normal-mode
 request hashes and real Sprint 1 recordings remain unchanged; both modes reuse
 the unchanged grounding fixture. CE-RISE prompt behavior is tested at the transport
-and HTTP boundary offline; live model quality for this variant is not yet measured.
+and HTTP boundary offline. The earlier fixture remains for historical replay;
+`994470...` is the hand-built CE-RISE v2 fixture for concise answers that avoid
+repeating unrelated numbers from product identifiers. Live model quality still
+requires explicit online checks; the synthetic fixture cannot establish it.

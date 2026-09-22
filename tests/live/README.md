@@ -11,5 +11,9 @@ be able to spend money by opening a pull request or saving a file.
 and with `--no-network`. Ordinary tests always block network calls and remove
 the API key, even when run alongside explicitly opted-in live tests.
 
-Six calls: one per window on `gpt-4o-mini`, plus one on `gpt-5`. Their job is to
-tell us the cassettes have not gone stale against the live API.
+The HTTP smoke test now exercises Single DPP, CE-RISE search with both allowed
+models, grounded repair, and synthesis. It uses synthetic/public input and a
+cumulative ceiling of 12 attempts / $0.15 estimated reservation, with SDK retries
+disabled. It checks live behavior, not merely whether the API accepts a request.
+The actual number of calls can be lower if a guard abstains early; the test then
+fails. The limit is an estimate, not a provider billing guarantee.
