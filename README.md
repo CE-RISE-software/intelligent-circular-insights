@@ -3,13 +3,13 @@
 Reliability-first question answering over product records: every output is an
 evidence-grounded answer with provenance, or an explicit abstention.
 
-> **Implemented through the Sprint 3.1 integration checkpoint.** The two-mode
+> **Implemented through the integration checkpoint.** The two-mode
 > workbench includes guarded search, impact tools, validation, repair and synthesis.
 > Try **Synthetic demo battery** in Validate or Synthesize: saved real-model responses
 > work offline, with field provenance and separate review-only training suggestions.
 > Frontend requires Node 20+. Release gates and later sprint work remain. Begin with
-> [`docs/PLAN.md`](docs/PLAN.md); see [`docs/CODEX_HANDOFF.md`](docs/CODEX_HANDOFF.md)
-> for integration and verification details.
+> [the architecture](docs/ARCHITECTURE.md); see
+> [verification and remaining work](docs/VERIFICATION_2026-09-22.md).
 
 ---
 
@@ -47,7 +47,7 @@ about which is which.
 
 This is a **software deliverable for the CE-RISE consortium**, not the evidence package
 behind a publication. It does not re-run experiments. Testing is moderate end-to-end coverage
-on mid and edge cases — around 280 tests, under five minutes, and **no OpenAI key required**:
+on mid and edge cases — over 600 tests, under five minutes, and **no OpenAI key required**:
 every LLM interaction is recorded once into a cassette and replayed, so neither CI nor a
 developer can spend money by running the suite.
 
@@ -59,12 +59,10 @@ Six sprints, roughly two days of work.
 
 | | |
 |---|---|
-| [`docs/PLAN.md`](docs/PLAN.md) | why a rewrite, what exists, sequence, blockers, risks |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | C4 diagrams, the hexagon and 15 ports, the inference path, substrates, and §9–10: which limitations are fixed here and which only get a seam |
-| [`docs/SPRINTS.md`](docs/SPRINTS.md) | six sprints, owners, exit gates, Gantt, and how the OpenAI bill stays small |
 | [`docs/TESTING.md`](docs/TESTING.md) | the test shape, the edge cases that matter, cassettes, coverage floors, CI |
-| [`docs/CODEX_TASKS.md`](docs/CODEX_TASKS.md) | the OpenAI-facing work — ten tasks, cassette-first |
-| [`docs/RELEASE.md`](docs/RELEASE.md) | publishing to Codeberg, GitHub and Zenodo — what happens when, and what needs a human |
+| [`docs/VERIFICATION_2026-09-22.md`](docs/VERIFICATION_2026-09-22.md) | verified behavior, publication state, and deferred release work |
+| [`docs/RELEASE.md`](docs/RELEASE.md) | release prerequisites, Codeberg and Zenodo handoff |
 | [`docs/adr/`](docs/adr/) | ten decision records (plus superseded v1 records) |
 
 ---

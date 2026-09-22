@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     backend_mode_default: str = "normal"
     backend_modes_allowed: str = "normal,ce-rise"
 
-    # -- models (Codex owns everything downstream of these)
+    # -- models
     llm_model_default: str = "gpt-4o-mini"
     llm_model_allowed: str = "gpt-4o-mini,gpt-5"
     openai_api_key: str = ""

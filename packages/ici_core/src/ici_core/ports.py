@@ -260,7 +260,7 @@ class GroundingVerifier(Protocol):
     black-box method does — but an answer containing a claim that resolves to
     nothing cannot be returned, which is the part that matters operationally.
 
-    Owned by Codex (CODEX_TASKS.md X1): decomposition needs a model in the loop.
+    Claim decomposition needs a model in the loop.
     """
 
     def verify(self, answer: str, pack: ContextPack) -> GroundingReport: ...
@@ -273,7 +273,7 @@ class GroundingVerifier(Protocol):
 class LLMProvider(Protocol):
     """The only thing in the system that talks to a model.
 
-    Owned by Codex. Nothing outside ``ici_llm`` knows which model is in use;
+    Nothing outside ``ici_llm`` knows which model is in use;
     model-specific behaviour lives in that package's ``compat`` module and nowhere
     else. Every call is cassette-recorded, so the test suite makes no live calls.
     """

@@ -2,20 +2,12 @@
 
 - [Introduction](index.md)
 
-# The plan
+# The project
 
-- [Plan](PLAN.md)
 - [Architecture](ARCHITECTURE.md)
-- [Sprints](SPRINTS.md)
 - [Testing](TESTING.md)
-
-# Working on it
-
-- [Commit access](COMMIT_ACCESS.md)
-- [Releasing](RELEASE.md)
-- [Codex task list](CODEX_TASKS.md)
-- [Codex: start here](CODEX_START_HERE.md)
-- [Codex: push prompt](CODEX_PUSH_PROMPT.md)
+- [Verification and remaining work](VERIFICATION_2026-09-22.md)
+- [Publishing and release](RELEASE.md)
 
 # Decisions
 

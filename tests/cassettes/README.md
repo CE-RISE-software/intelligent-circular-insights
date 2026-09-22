@@ -2,9 +2,9 @@
 
 Recorded LLM interactions, replayed by the whole test suite.
 
-**Why this directory is the most load-bearing thing Codex builds.** Once these
-exist, nobody spends another OpenAI call to run tests — not a developer, not CI,
-not the other agent. `make test` works with `OPENAI_API_KEY` unset.
+**Why this directory matters.** Once these recordings exist, nobody spends another
+OpenAI call to run tests — neither developers nor CI. `make test` works with
+`OPENAI_API_KEY` unset.
 
 - Format: one `<request_hash>.json` file containing
   `{request_hash: {"version": 1, "response": <SDK response>}}`. The hash covers
@@ -29,7 +29,7 @@ grounding-v1 fixture. `recorded/` holds real responses, the reviewed expected
 outputs, capture manifest and spend ledger. `inputs/` holds the three broken demo
 records; synthetic search and DPP inputs are in `tests/llm_scenarios.py`.
 The adapter receives mode/directory settings explicitly; it does not read the
-environment itself. See `docs/CODEX_HANDOFF.md` for wiring through API settings.
+environment itself. See `apps/api/settings.py` for the API wiring.
 
 Run `pytest -m cassette --no-network` or the entire `pytest --no-network` suite.
 Do not re-record merely to run tests. Prompt drift is a review event, not a reason

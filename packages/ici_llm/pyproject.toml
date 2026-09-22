@@ -1,7 +1,7 @@
 [project]
 name = "ici-llm"
 version = "0.1.0"
-description = "LLM provider, prompts, grounding verifier, cassettes. Owned by Codex."
+description = "LLM provider, prompts, grounding verifier, and cassettes."
 requires-python = ">=3.10,<3.13"
 license = { text = "EUPL-1.2" }
 authors = [

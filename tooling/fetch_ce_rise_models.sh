@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 # Vendor the 17 CE-RISE data models into schemas/ce-rise/.
 #
-# Run this on a machine with access to codeberg.org — the Claude/Codex sandboxes
-# get 403 at the egress proxy. See docs/adr/0005-vendor-ce-rise-models.md.
+# Run this on a machine with access to codeberg.org.
 #
 #   ./tooling/fetch_ce_rise_models.sh            # clone or update all 17
 #   ./tooling/fetch_ce_rise_models.sh --check    # report drift, change nothing

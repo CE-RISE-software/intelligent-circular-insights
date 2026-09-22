@@ -32,7 +32,7 @@ claims than its total.
 
 ## Consequences
 
-Claude's feature routes should use the runtime wrapper or the explicit
+Feature routes should use the runtime wrapper or the explicit
 request/bind/finish sequence. Direct calls to the ports still work but do not
 automatically enrich the envelope's trace. Later guard/composition work can reuse
 the request audit without changing core signatures. Current numeric checking is

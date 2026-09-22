@@ -1,6 +1,6 @@
 # ADR 0011 — Separate grounded repairs from unverified suggestions
 
-Status: accepted for Codex Sprint 1, 2026-09-20.
+Status: accepted in Sprint 1, 2026-09-20.
 
 The user explicitly amended the evidence-only repair plan: values drawn from the
 LLM's training should also be proposed, with lower confidence. The amendment does

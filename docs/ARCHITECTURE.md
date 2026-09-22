@@ -127,7 +127,7 @@ graph TB
         SUB["<b>ici_substrates</b><br/>registry · DPP core · CE-RISE models<br/>PEFDPP graph · OFF schema"]
         REL["<b>ici_reliability</b><br/>confidence signals · calibrators<br/>selective policy · risk–coverage"]
         TRUST["<b>ici_datatrust</b><br/>latent-bias posterior · clean value<br/>interval · target sensitivity"]
-        LLM["<b>ici_llm</b><br/>provider · prompts · grounding verifier<br/>cassettes  <i>(Codex)</i>"]
+        LLM["<b>ici_llm</b><br/>provider · prompts · grounding verifier<br/>cassettes"]
         POL["<b>ici_policy</b><br/>supervised router · bandit · RL<br/>off-policy evaluation"]
         EVAL["<b>ici_eval</b><br/>harness · AURC/ECE/McNemar/Wilson<br/>run manifests · figures"]
     end
@@ -287,7 +287,7 @@ class GroundingVerifier(Protocol):
 
 
 # --- shared -----------------------------------------------------------------
-class LLMProvider(Protocol):  # Codex owns every adapter
+class LLMProvider(Protocol):
     def compose(
         self,
         instruction: str,
@@ -613,14 +613,14 @@ revamp/
 │   ├── ici_substrates/         registry · DPP core · CE-RISE models · PEFDPP · OFF
 │   ├── ici_reliability/        signals · calibrators · selective policy · risk–coverage
 │   ├── ici_datatrust/          latent-bias posterior · clean value · interval · sensitivity
-│   ├── ici_llm/                provider · prompts · grounding verifier · cassettes  (Codex)
+│   ├── ici_llm/                provider · prompts · grounding verifier · cassettes
 │   ├── ici_policy/             router · bandit · RL · off-policy evaluation
 │   └── ici_eval/               harness · metrics · manifests · figures
 ├── ontology/                   DPP core + domain modules + PEFDPP + SHACL shapes
 ├── schemas/                    CE-RISE (vendored) · EU DPP · OFF · mappings
 ├── data/                       corpora · factors · benchmarks · examples
 ├── tests/                      unit · contract · integration · golden · e2e · property
-├── docs/                       this file · PLAN · SPRINTS · TESTING · CODEX_TASKS · adr/
+├── docs/                       architecture · testing · verification · adr/
 ├── tooling/                    Makefile · pyproject · ruff · mypy · CI · pre-commit
 └── var/                        gitignored: fact log, indices, runs, artifacts
 ```

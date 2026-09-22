@@ -23,6 +23,7 @@ apps/web/dist/
 # session-local
 .venv-ici/
 var/
+local-notes/
 
 # The full EF 3.1 elementary-flow list: 41 MB, and the case study references it by
 # UUID without importing it. See ontology/pefdpp/skos/README.md.

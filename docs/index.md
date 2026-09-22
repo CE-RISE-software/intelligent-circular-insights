@@ -16,11 +16,11 @@ auditor reads one shape.
 
 ## Where to start
 
-[The plan](PLAN.md) says why this exists and what it replaces.
 [The architecture](ARCHITECTURE.md) has the diagrams, the ports, and — in sections 9
 and 10 — an explicit split between what this rewrite fixes and what it only leaves a
 seam for. The [decision records](adr/0001-hexagonal-architecture.md) say why each
 choice was made, including the ones later reconsidered.
+[Verification and remaining work](VERIFICATION_2026-09-22.md) records the latest checks.
 
 ## Honest limitations
 

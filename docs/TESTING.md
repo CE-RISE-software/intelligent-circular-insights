@@ -1,11 +1,11 @@
 # Testing strategy
 
-**Current checkpoint — 21 Sep, Sprint 3.1 takeover:** 557 offline Python tests pass
-with 90% package statement coverage; 35 Playwright smoke tests pass. Both modes
+**Current checkpoint — 22 Sep:** 621 offline Python tests pass
+with 91% statement coverage; 45 Playwright smoke tests pass. Both modes
 exercise real recorded repair/synthesis responses. The five HTTP happy-path cases
 are strict failures on missing cassettes, not skips. Training-only review, unrelated
 record exclusion, trace isolation, stale UI results and malformed model output are
-also covered. See `CODEX_HANDOFF.md` for the exact recording budget and limitations.
+also covered. See `VERIFICATION_2026-09-22.md` for current limits and remaining work.
 The older Sprint 1 checkpoints and target matrix below are historical/design notes.
 
 **Scope note.** This is a CE-RISE software deliverable, not the evidence package behind a
@@ -18,7 +18,7 @@ interaction is recorded once into a cassette and replayed forever. The full suit
 `OPENAI_API_KEY` unset, and a cassette miss fails the test rather than silently making a
 live call.
 
-**Codex S1 checkpoint (2026-09-20):** 286 offline tests pass, with 94% LLM
+**Earlier S1 checkpoint (2026-09-20):** 286 offline tests passed, with 94% LLM
 statement coverage and 22 cassette-marked tests. Real-response goldens cover the
 LLM boundary for search, repair, synthesis, grounding, GPT-5 compatibility and
 OpenAI embeddings. A separate genuine cached-weight MiniLM smoke passed.
@@ -152,9 +152,9 @@ reviewer would actually spot.
 
 ```mermaid
 flowchart LR
-    REC["<b>Record</b> — once, Sprint 1<br/>Codex, gpt-4o-mini<br/>~40 calls, a few dollars"] --> DISK[("tests/cassettes/<br/>{request_hash: response}")]
-    DISK --> R1["Claude's test runs"]
-    DISK --> R2["Codex's test runs"]
+    REC["<b>Record</b> — once, Sprint 1<br/>gpt-4o-mini<br/>40-call / $1 ceiling"] --> DISK[("tests/cassettes/<br/>{request_hash: response}")]
+    DISK --> R1["Local test runs"]
+    DISK --> R2["Reviewer test runs"]
     DISK --> R3["CI, every PR"]
     MISS["prompt drifted<br/>→ cache miss"] --> FAIL["test fails loudly<br/><i>never a silent live call</i>"]
     DISK -.-> MISS
