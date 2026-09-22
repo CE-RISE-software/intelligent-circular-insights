@@ -41,6 +41,7 @@ from ici_core.text import tokenize
 from ici_evidence.documents import K1, B, split_passages
 
 MAX_SECTION_CHARS = 2_000
+MAX_SECTIONS = 1_000
 MAX_DOCUMENT_CHARS = 400_000
 """Refused above this. A passport is a record, not a corpus; anything larger is
 either a mistake or belongs in the indexed collection."""
@@ -90,6 +91,30 @@ def _readable(key: str) -> str:
     return re.sub(r"[_\-]+", " ", str(key)).strip().capitalize() or "Section"
 
 
+def _pointer_part(value: str) -> str:
+    return value.replace("~", "~0").replace("/", "~1")
+
+
+def _json_float(value: str) -> float:
+    number = float(value)
+    if not math.isfinite(number):
+        raise ValueError("non-finite JSON number")
+    return number
+
+
+def _json_constant(_: str) -> None:
+    raise ValueError("non-finite JSON number")
+
+
+def _json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON member")
+        result[key] = value
+    return result
+
+
 def _render(value: Any, *, limit: int = 240) -> str:
     if value is None:
         return "—"
@@ -104,7 +129,7 @@ def _fields(value: Any, prefix: str = "") -> list[tuple[str, str]]:
     out: list[tuple[str, str]] = []
     if isinstance(value, dict):
         for key, inner in value.items():
-            path = f"{prefix}/{key}" if prefix else str(key)
+            path = f"{prefix}/{_pointer_part(str(key))}" if prefix else _pointer_part(str(key))
             out.extend(_fields(inner, path) if not _scalar(inner) else [(path, _render(inner))])
     elif isinstance(value, list):
         for index, inner in enumerate(value):
@@ -132,55 +157,108 @@ def _json_sections(data: Any) -> list[Section]:
     character-based chunking would cut across.
     """
     if not isinstance(data, dict):
-        return [
-            Section(
-                id="s0",
-                title="Document",
-                path="",
-                kind="json",
-                summary=_summarise(data),
-                text=json.dumps(data, indent=2, ensure_ascii=False)[:MAX_SECTION_CHARS],
-            )
-        ]
+        sections: list[Section] = []
+        _append_json_sections(data, "", "Document", sections)
+        return sections
     sections: list[Section] = []
     scalars: list[tuple[str, str]] = []
     for key, value in data.items():
+        path = f"/{_pointer_part(str(key))}"
         if _scalar(value):
-            scalars.append((f"/{key}", _render(value)))
+            rendered = _render(value, limit=MAX_SECTION_CHARS + 1)
+            if len(rendered) > 240:
+                _append_json_sections(value, path, _readable(key), sections)
+            else:
+                scalars.append((path, rendered))
             continue
-        body = json.dumps(value, indent=2, ensure_ascii=False)
-        sections.append(
-            Section(
-                id=f"s{len(sections)}",
-                title=_readable(key),
-                path=f"/{key}",
-                kind="json",
-                summary=_summarise(value),
-                text=body[:MAX_SECTION_CHARS],
-                fields=tuple(_fields(value, f"/{key}")),
-            )
-        )
+        _append_json_sections(value, path, _readable(key), sections)
     if scalars:
         # Top-level scalars are identity — dpp_id, schema_version — and they are
         # what most questions about "which passport is this" actually need.
-        sections.insert(
-            0,
-            Section(
-                id="s-identity",
-                title="Identity",
-                path="/",
-                kind="json",
-                summary=f"{len(scalars)} top-level value{'' if len(scalars) == 1 else 's'}",
-                text="\n".join(f"{k}: {v}" for k, v in scalars),
-                fields=tuple(scalars),
-            ),
-        )
+        groups: list[list[tuple[str, str]]] = []
+        group: list[tuple[str, str]] = []
+        length = 0
+        for path, value in scalars:
+            line_length = len(path) + len(value) + 2
+            if line_length > MAX_SECTION_CHARS:
+                raise DocumentTooLarge(
+                    f"the value at {path} exceeds {MAX_SECTION_CHARS:,} characters"
+                )
+            if group and length + line_length + 1 > MAX_SECTION_CHARS:
+                groups.append(group)
+                group = []
+                length = 0
+            group.append((path, value))
+            length += line_length + (1 if len(group) > 1 else 0)
+        if group:
+            groups.append(group)
+        if len(sections) + len(groups) > MAX_SECTIONS:
+            raise DocumentTooLarge(
+                f"the document needs more than {MAX_SECTIONS:,} sections; split it before asking"
+            )
+        for index, fields in reversed(list(enumerate(groups))):
+            sections.insert(
+                0,
+                Section(
+                    id="s-identity" if index == 0 else f"s-identity-{index + 1}",
+                    title="Identity",
+                    # The JSON Pointer for the root is the empty string; "/"
+                    # would point to a member whose key is the empty string.
+                    path="",
+                    kind="json",
+                    summary=f"{len(fields)} top-level value{'' if len(fields) == 1 else 's'}",
+                    text="\n".join(f"{k}: {v}" for k, v in fields),
+                    fields=tuple(fields),
+                ),
+            )
     return sections
+
+
+def _append_json_sections(value: Any, path: str, title: str, sections: list[Section]) -> None:
+    """Split large containers on their own keys/items; never cut away their tail."""
+    if len(sections) >= MAX_SECTIONS:
+        raise DocumentTooLarge(
+            f"the document needs more than {MAX_SECTIONS:,} sections; split it before asking"
+        )
+    body = json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False)
+    if len(body) > MAX_SECTION_CHARS and isinstance(value, (dict, list)) and value:
+        children = value.items() if isinstance(value, dict) else enumerate(value)
+        for key, child in children:
+            child_path = f"{path}/{_pointer_part(str(key))}"
+            _append_json_sections(child, child_path, f"{title} · {_readable(str(key))}", sections)
+        return
+    if len(body) > MAX_SECTION_CHARS:
+        raise DocumentTooLarge(
+            f"the value at {path} is {len(body):,} characters; a single field may not exceed "
+            f"{MAX_SECTION_CHARS:,} characters. Split that field before asking about it."
+        )
+    sections.append(
+        Section(
+            id=f"s{len(sections)}",
+            title=title,
+            path=path,
+            kind="json",
+            summary=_summarise(value),
+            text=body,
+            fields=tuple(_fields(value, path)),
+        )
+    )
 
 
 def _text_sections(text: str) -> list[Section]:
     out: list[Section] = []
-    for index, block in enumerate(split_passages(text)):
+    paragraphs = [part.strip() for part in re.split(r"\n\s*\n", text) if part.strip()]
+    parts: list[str] = []
+    for paragraph in paragraphs:
+        while len(paragraph) > MAX_SECTION_CHARS:
+            split = paragraph.rfind(" ", 0, MAX_SECTION_CHARS)
+            if split < MAX_SECTION_CHARS // 2:
+                split = MAX_SECTION_CHARS
+            parts.append(paragraph[:split])
+            paragraph = paragraph[split:].strip()
+        if paragraph:
+            parts.append(paragraph)
+    for index, block in enumerate(split_passages("\n\n".join(parts), limit=MAX_SECTION_CHARS)):
         first = block.strip().splitlines()[0] if block.strip() else f"Part {index + 1}"
         out.append(
             Section(
@@ -189,7 +267,7 @@ def _text_sections(text: str) -> list[Section]:
                 path=f"#part-{index + 1}",
                 kind="text",
                 summary=block.strip()[:160],
-                text=block[:MAX_SECTION_CHARS],
+                text=block,
             )
         )
     return out
@@ -215,15 +293,31 @@ def parse_document(content: str, filename: str | None = None) -> ParsedDocument:
     data: Any = None
     if stripped.startswith(("{", "[")):
         try:
-            data = json.loads(stripped)
-        except json.JSONDecodeError as exc:
+            data = json.loads(
+                stripped,
+                parse_float=_json_float,
+                parse_constant=_json_constant,
+                object_pairs_hook=_json_object,
+            )
+        except RecursionError as exc:
+            raise DocumentTooLarge(
+                "the JSON is nested too deeply; flatten it before asking"
+            ) from exc
+        except (json.JSONDecodeError, ValueError) as exc:
+            location = f" at line {exc.lineno}" if isinstance(exc, json.JSONDecodeError) else ""
+            detail = exc.msg if isinstance(exc, json.JSONDecodeError) else str(exc)
             warnings.append(
-                f"this looks like JSON but does not parse ({exc.msg} at line {exc.lineno}); "
+                f"this looks like JSON but does not parse ({detail}{location}); "
                 "read as text. The Validate window will locate the problem."
             )
 
     if data is not None:
-        sections = _json_sections(data)
+        try:
+            sections = _json_sections(data)
+        except RecursionError as exc:
+            raise DocumentTooLarge(
+                "the JSON is nested too deeply; flatten it before asking"
+            ) from exc
         doc_type = "json"
         title = str(data.get("dpp_id") or "") if isinstance(data, dict) else ""
     else:

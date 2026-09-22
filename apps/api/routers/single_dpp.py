@@ -32,10 +32,10 @@ from __future__ import annotations
 
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, Header
-from pydantic import BaseModel, Field
+from fastapi import APIRouter, Depends, Header, Request, Response
+from pydantic import BaseModel, Field, field_validator
 
-from apps.api.deps import get_bundle
+from apps.api.deps import get_bundle, get_llm_request
 from apps.api.routers.search import _serialise
 from ici_core.domain.confidence import OperatingPoint
 from ici_core.domain.errors import CapabilityError
@@ -43,6 +43,7 @@ from ici_core.domain.ids import CorrelationId
 from ici_core.domain.query import ProductScope, Query, RetrievalBudget
 from ici_core.usecases.answer_question import AnswerQuestion
 from ici_core.usecases.deps import ProviderBundle
+from ici_llm.runtime import LLMRequest
 
 router = APIRouter(prefix="/single-dpp", tags=["single-dpp"])
 
@@ -56,8 +57,15 @@ class AskRequest(BaseModel):
     q: str = Field(min_length=1)
     content: str
     filename: str | None = None
-    tau: float | None = None
-    top_k: int = 4
+    tau: float | None = Field(default=None, ge=0, le=1, allow_inf_nan=False)
+    top_k: int = Field(default=4, ge=0, le=100)
+
+    @field_validator("q")
+    @classmethod
+    def nonblank_question(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("question must not be blank")
+        return value
 
 
 def _parse(content: str, filename: str | None) -> Any:
@@ -110,7 +118,10 @@ def parse(req: ParseRequest) -> dict[str, Any]:
 @router.post("/ask")
 def ask(
     req: AskRequest,
+    request: Request,
+    response: Response,
     bundle: Annotated[ProviderBundle, Depends(get_bundle)],
+    llm: Annotated[LLMRequest, Depends(get_llm_request)],
     x_correlation_id: Annotated[str | None, Header()] = None,
 ) -> dict[str, Any]:
     """Answer from the supplied document only, through the shared inference path."""
@@ -126,12 +137,12 @@ def ask(
             reason="nothing could be read from this document, so there is nothing to answer from",
         )
 
-    # The one substitution. Memory is left alone: a previously validated fact about
-    # this product is still legitimate support, and excluding it would make the
-    # window worse at exactly the questions it exists for.
+    # Bind a request-scoped model/guard/audit to the same answer use case as Search.
+    # Memory retrieval is disabled here: this caller-supplied document is the only
+    # authorized evidence and must not inherit facts from a different passport.
     scoped = replace(bundle, evidence=InlineDocumentProvider(document))
 
-    envelope = AnswerQuestion(scoped)(
+    envelope = AnswerQuestion(llm.bind(scoped))(
         Query(
             text=req.q,
             # No product scope. The document *is* the scope, and claiming a product
@@ -140,9 +151,18 @@ def ask(
             scope=ProductScope(),
             correlation_id=CorrelationId(x_correlation_id or "anonymous"),
         ),
-        budget=RetrievalBudget(top_k_documents=req.top_k, top_k_memory=0),
-        point=OperatingPoint(tau=req.tau if req.tau is not None else 0.5),
+        budget=RetrievalBudget(
+            top_k_documents=req.top_k,
+            top_k_memory=0,
+            max_context_chars=request.app.state.settings.max_context_chars,
+        ),
+        point=OperatingPoint(
+            tau=req.tau if req.tau is not None else request.app.state.settings.default_tau
+        ),
     )
+    envelope = llm.finish(envelope)
+    if envelope.trace.model is not None:
+        response.headers["X-Model-Used"] = envelope.trace.model
 
     return {
         **_serialise(envelope),

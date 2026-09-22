@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { Buffer } from "node:buffer";
 import type { RepairResult, SearchResult } from "../src/lib/types";
 
 /**
@@ -540,6 +541,64 @@ test.describe("smoke · single passport", () => {
 
     await page.getByTestId("single-input").fill('{"dpp_id": "other-999"}');
     await expect(page.getByTestId("single-sections")).toBeHidden();
+  });
+
+  test("a file upload replaces the example and can be read", async ({ page }) => {
+    await useMode(page, "normal");
+    await goto(page, "/single-dpp");
+    await page.getByTestId("single-file").setInputFiles({
+      name: "uploaded-passport.txt", mimeType: "text/plain",
+      buffer: Buffer.from("Synthetic uploaded passport.\n\nDeclared capacity: 5 kWh."),
+    });
+    await expect(page.getByTestId("single-input")).toHaveValue(/Declared capacity: 5 kWh/);
+    await page.getByTestId("single-read").click();
+    await expect(page.getByTestId("single-sections")).toContainText("Declared capacity");
+    await expectServedBy(page, "normal");
+  });
+
+  test("editing during a delayed parse cannot restore old sections", async ({ page }) => {
+    await useMode(page, "normal");
+    let release!: () => void;
+    const held = new Promise<void>(resolve => { release = resolve; });
+    await page.route("**/api/single-dpp/parse", async route => {
+      await held;
+      await route.continue();
+    });
+    await goto(page, "/single-dpp");
+    const request = page.waitForRequest("**/api/single-dpp/parse");
+    await page.getByTestId("single-read").click();
+    await request;
+    await page.getByTestId("single-input").fill("a different document");
+    const response = page.waitForResponse("**/api/single-dpp/parse");
+    release();
+    await response;
+    await expect(page.getByTestId("single-read")).toBeEnabled();
+    await expect(page.getByTestId("single-sections")).not.toBeVisible();
+  });
+
+  test("editing during a delayed answer cannot show the prior passport's result", async ({ page }) => {
+    await useMode(page, "normal");
+    let release!: () => void;
+    const held = new Promise<void>(resolve => { release = resolve; });
+    await page.route("**/api/single-dpp/ask", async route => {
+      await held;
+      await route.fulfill({ status: 422, contentType: "application/json",
+        headers: { "X-Backend-Mode-Used": "normal" },
+        body: JSON.stringify({ error: "model_unavailable", mode: "normal", reason: "STALE PASSPORT" }) });
+    });
+    await goto(page, "/single-dpp");
+    await page.getByTestId("single-read").click();
+    await expect(page.getByTestId("single-ask")).toBeVisible();
+    const request = page.waitForRequest("**/api/single-dpp/ask");
+    await page.getByTestId("single-question").fill("Which standard?");
+    await page.getByTestId("single-submit").click();
+    await request;
+    await page.getByTestId("single-input").fill("A different passport.");
+    const response = page.waitForResponse("**/api/single-dpp/ask");
+    release();
+    await response;
+    await expect(page.getByText("STALE PASSPORT")).not.toBeVisible();
+    await expect(page.getByTestId("single-sections")).not.toBeVisible();
   });
 
   test("it is reachable in both modes", async ({ page }) => {

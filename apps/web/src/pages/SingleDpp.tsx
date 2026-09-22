@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { askSingleDpp, parseSingleDpp } from "../lib/api";
 import type { ApiResult } from "../lib/api";
 import type { ParsedDocument, SingleDppAnswer } from "../lib/types";
@@ -52,30 +52,52 @@ export default function SingleDpp() {
   const [q, setQ] = useState("");
   const [answer, setAnswer] = useState<ApiResult<SingleDppAnswer> | null>(null);
   const [asking, setAsking] = useState(false);
+  const documentRevision = useRef(0);
+  const answerRevision = useRef(0);
+
+  function invalidateDocument() {
+    documentRevision.current++;
+    answerRevision.current++;
+    setDoc(null);
+    setAnswer(null);
+    setReading(false);
+    setAsking(false);
+  }
 
   async function read() {
+    const ticket = ++documentRevision.current;
+    answerRevision.current++;
     setReading(true);
+    setAsking(false);
     setAnswer(null);
-    setDoc(await parseSingleDpp(content, filename));
-    setReading(false);
+    const outcome = await parseSingleDpp(content, filename);
+    if (ticket === documentRevision.current) {
+      setDoc(outcome);
+      setReading(false);
+    }
   }
 
   async function ask(question: string) {
     if (!question.trim()) return;
+    const ticket = ++answerRevision.current;
+    const documentTicket = documentRevision.current;
     setAsking(true);
-    setAnswer(await askSingleDpp(question, content, filename, getTau()));
-    setAsking(false);
+    setAnswer(null);
+    const outcome = await askSingleDpp(question, content, filename, getTau());
+    if (ticket === answerRevision.current && documentTicket === documentRevision.current) {
+      setAnswer(outcome);
+      setAsking(false);
+    }
   }
 
   async function onFile(file: File | undefined) {
     if (!file) return;
+    invalidateDocument();
+    const ticket = documentRevision.current;
     const text = await file.text();
+    if (ticket !== documentRevision.current) return;
     setContent(text);
     setFilename(file.name);
-    // Invalidate: sections from the previous document beside a new one is how
-    // somebody reads an answer about the wrong passport.
-    setDoc(null);
-    setAnswer(null);
   }
 
   return (
@@ -109,9 +131,8 @@ export default function SingleDpp() {
           data-testid="single-input"
           value={content}
           onChange={e => {
+            invalidateDocument();
             setContent(e.target.value);
-            setDoc(null);
-            setAnswer(null);
           }}
           spellCheck={false}
           style={{ width: "100%", minHeight: 200, fontSize: 12, lineHeight: 1.5, resize: "vertical" }}
@@ -140,7 +161,12 @@ export default function SingleDpp() {
                 className="field-control"
                 data-testid="single-question"
                 value={q}
-                onChange={e => setQ(e.target.value)}
+                onChange={e => {
+                  answerRevision.current++;
+                  setAnswer(null);
+                  setAsking(false);
+                  setQ(e.target.value);
+                }}
                 placeholder="What does this document say about…?"
               />
               <button className="btn" type="submit" disabled={asking || !q.trim()}

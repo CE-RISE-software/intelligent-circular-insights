@@ -1,5 +1,11 @@
 # Pushing, and what is actually left
 
+> **Historical snapshot (21 September).** Counts, push instructions, and the
+> Codeberg access claim below are superseded by
+> [the 22 September verification and publication note](VERIFICATION_2026-09-22.md).
+> In particular, do not push until Codeberg's current generative-AI terms have
+> been reviewed against this project.
+
 Written 21 Sep after auditing the tree rather than trusting the handoffs — two of
 which contradicted each other. This is the single current statement; where it
 disagrees with `CODEX_HANDOFF.md`'s older sections, this is right.

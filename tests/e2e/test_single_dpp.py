@@ -18,9 +18,15 @@ import json
 from typing import Any
 
 import pytest
+from apps.api.deps import get_llm_request
 from apps.api.main import create_app
 from apps.api.settings import Settings
 from fastapi.testclient import TestClient
+from tests.unit.llm.conftest import ScriptedTransport, chat, claim_result
+
+from ici_core.domain.modes import BackendMode
+from ici_llm.provider import OpenAIProvider
+from ici_llm.runtime import LLMRuntime
 
 NORMAL = {"X-Backend-Mode": "normal"}
 CE_RISE = {"X-Backend-Mode": "ce-rise"}
@@ -60,8 +66,54 @@ class TestReadingTheDocument:
 
     def test_each_section_carries_a_pointer_a_reader_can_follow(self, client) -> None:
         body = client.post("/api/single-dpp/parse", json={"content": DOC}).json()
-        assert all(s["path"] for s in body["sections"])
+        assert next(s for s in body["sections"] if s["id"] == "s-identity")["path"] == ""
         assert {"/product", "/materials", "/compliance"} <= {s["path"] for s in body["sections"]}
+
+    def test_pointer_segments_escape_slashes_and_tildes(self, client) -> None:
+        content = json.dumps({"a/b": {"x~y": "needle"}})
+        body = client.post("/api/single-dpp/parse", json={"content": content}).json()
+        section = next(s for s in body["sections"] if s["title"] == "A/b")
+        assert section["path"] == "/a~1b"
+        assert {f["path"] for f in section["fields"]} == {"/a~1b/x~0y"}
+
+    def test_long_json_array_keeps_the_last_item_and_address(self, client) -> None:
+        values = [f"item-{i:03d}" for i in range(250)] + ["distinctive-tail-marker"]
+        content = json.dumps({"materials": values})
+        body = client.post("/api/single-dpp/parse", json={"content": content}).json()
+        assert body["document_type"] == "json"
+        assert len(body["sections"]) > 1
+        assert any(
+            s["path"] == "/materials/250" and "distinctive-tail-marker" in s["preview"]
+            for s in body["sections"]
+        )
+
+    def test_long_root_array_is_split_without_cutting_the_tail(self, client) -> None:
+        content = json.dumps([f"item-{i:03d}" for i in range(250)] + ["root-tail-marker"])
+        body = client.post("/api/single-dpp/parse", json={"content": content}).json()
+        assert body["document_type"] == "json"
+        assert any(
+            s["path"] == "/250" and "root-tail-marker" in s["preview"] for s in body["sections"]
+        )
+
+    def test_long_text_paragraph_keeps_its_tail(self, client) -> None:
+        from ici_evidence import parse_document
+
+        document = parse_document("word " * 1_000 + "distinctive-tail-marker")
+        assert len(document.sections) > 1
+        assert all(len(section.text) <= 2_000 for section in document.sections)
+        assert "distinctive-tail-marker" in document.sections[-1].text
+
+    def test_many_short_identity_values_are_split_without_cutting_them(self, client) -> None:
+        content = json.dumps({f"field_{i}": f"value_{i}" for i in range(300)})
+        body = client.post("/api/single-dpp/parse", json={"content": content}).json()
+        assert body["document_type"] == "json"
+        assert len(body["sections"]) > 1
+        assert all(len(s["preview"]) <= 600 for s in body["sections"])
+        assert any(
+            field == {"path": "/field_299", "value": "value_299"}
+            for section in body["sections"]
+            for field in section["fields"]
+        )
 
     def test_reading_a_document_needs_no_model_and_no_backend(self, client) -> None:
         # Deliberate: looking at a document the user already has should not depend
@@ -88,6 +140,38 @@ class TestWhenTheDocumentIsWrong:
         assert any("does not parse" in w for w in body["warnings"])
         assert any("Validate" in w for w in body["warnings"])
 
+    @pytest.mark.parametrize(
+        "content",
+        ['{"value": NaN}', '{"value": Infinity}', '{"value": 1e999}', '{"value": 1, "value": 2}'],
+    )
+    def test_nonstandard_or_ambiguous_json_is_not_treated_as_valid(self, client, content) -> None:
+        body = client.post("/api/single-dpp/parse", json={"content": content}).json()
+        assert body["document_type"] == "text"
+        assert any("does not parse" in warning for warning in body["warnings"])
+
+    @pytest.mark.parametrize("endpoint", ["parse", "ask"])
+    def test_single_oversized_json_value_is_typed_decline(self, client, endpoint) -> None:
+        payload = {"content": json.dumps({"notes": "x" * 3_000})}
+        if endpoint == "ask":
+            payload["q"] = "What do the notes say?"
+        response = client.post(f"/api/single-dpp/{endpoint}", json=payload, headers=NORMAL)
+        assert response.status_code == 422
+        assert "2,000" in response.json()["reason"]
+
+    def test_pathological_array_count_is_bounded(self, client) -> None:
+        response = client.post(
+            "/api/single-dpp/parse", json={"content": json.dumps(list(range(1_500)))}
+        )
+        assert response.status_code == 422
+        assert "1,000 sections" in response.json()["reason"]
+
+    def test_pathological_nesting_is_a_typed_decline_not_500(self, client) -> None:
+        response = client.post(
+            "/api/single-dpp/parse", json={"content": "[" * 1_100 + "0" + "]" * 1_100}
+        )
+        assert response.status_code == 422
+        assert "nested too deeply" in response.json()["reason"]
+
     def test_an_oversized_document_is_declined_with_the_numbers(self, client) -> None:
         r = client.post("/api/single-dpp/parse", json={"content": "x" * 500_000})
         assert r.status_code == 422
@@ -100,6 +184,58 @@ class TestWhenTheDocumentIsWrong:
         )
         assert r.status_code == 422
         assert "nothing could be read" in r.json()["reason"]
+
+    @pytest.mark.parametrize("headers", [NORMAL, CE_RISE], ids=["normal", "ce-rise"])
+    @pytest.mark.parametrize(
+        "change",
+        [
+            {"q": " "},
+            {"tau": -0.1},
+            {"tau": 1.1},
+            {"top_k": -1},
+            {"top_k": 101},
+        ],
+    )
+    def test_invalid_question_threshold_and_budget_are_422_not_500(
+        self, client, headers, change
+    ) -> None:
+        response = client.post(
+            "/api/single-dpp/ask",
+            json={"q": "standards", "content": DOC, **change},
+            headers=headers,
+        )
+        assert response.status_code == 422
+        assert response.headers["X-Backend-Mode-Used"] == headers["X-Backend-Mode"]
+
+    def test_zero_retrieval_budget_abstains_without_model(self, client) -> None:
+        response = client.post(
+            "/api/single-dpp/ask",
+            json={"q": "standards", "content": DOC, "top_k": 0},
+            headers=NORMAL,
+        )
+        assert response.status_code == 200
+        assert response.json()["decision"] == "abstain"
+        assert response.json()["trace"]["cost"]["llm_calls"] == 0
+
+    @pytest.mark.parametrize("headers", [NORMAL, CE_RISE], ids=["normal", "ce-rise"])
+    def test_disabled_model_still_allows_reading_but_declines_asking(self, headers) -> None:
+        with TestClient(create_app(Settings(llm_disabled=True))) as c:
+            assert c.post("/api/single-dpp/parse", json={"content": DOC}).status_code == 200
+            response = c.post(
+                "/api/single-dpp/ask", json={"q": "standards", "content": DOC}, headers=headers
+            )
+            assert response.status_code == 422
+            assert "disabled" in response.json()["reason"]
+            assert response.headers["X-Backend-Mode-Used"] == headers["X-Backend-Mode"]
+
+    def test_oversized_document_is_declined_before_asking(self, client) -> None:
+        response = client.post(
+            "/api/single-dpp/ask",
+            json={"q": "standards", "content": "x" * 400_001},
+            headers=NORMAL,
+        )
+        assert response.status_code == 422
+        assert "400,000" in response.json()["reason"]
 
 
 class TestItIsNotASecondPipeline:
@@ -114,6 +250,39 @@ class TestItIsNotASecondPipeline:
         )
         assert r.status_code != 500
         assert r.headers["X-Backend-Mode-Used"] == headers["X-Backend-Mode"]
+
+    @pytest.mark.parametrize("headers", [NORMAL, CE_RISE], ids=["normal", "ce-rise"])
+    def test_request_scoped_model_and_audit_are_used(self, client, headers) -> None:
+        answer = "The passport lists EN 62133-2 [sec-s2]."
+        transport = ScriptedTransport(
+            [
+                chat(answer),
+                chat(json.dumps(claim_result(answer, quote="EN 62133-2", evidence_id="sec-s2"))),
+            ]
+        )
+        source = OpenAIProvider(transport)
+        runtime = LLMRuntime(source)
+        mode = BackendMode(headers["X-Backend-Mode"])
+        client.app.dependency_overrides[get_llm_request] = lambda: runtime.request(mode=mode)
+        try:
+            response = client.post(
+                "/api/single-dpp/ask",
+                json={"q": "Which standards?", "content": DOC, "tau": 0},
+                headers={**headers, "X-Model": "gpt-4o-mini"},
+            )
+        finally:
+            client.app.dependency_overrides.pop(get_llm_request, None)
+        assert response.status_code == 200, response.text
+        body = response.json()
+        assert body["decision"] == "answer"
+        assert body["trace"]["model"] == response.headers["X-Model-Used"] == "gpt-4o-mini"
+        assert body["trace"]["cost"]["llm_calls"] == 2
+        assert body["trace"]["prompt_hashes"]
+        assert all(e["ref"].startswith("document/") for e in body["evidence"])
+        assert all(e["ref"].startswith("document/") for e in body["provenance"])
+        assert len(transport.requests) == 2
+        assert source.audit.steps == []
+        assert source.budget.calls == 0
 
     def test_the_corpus_is_not_consulted(self, client) -> None:
         """A question the seed corpus can answer must not be answered from it.
