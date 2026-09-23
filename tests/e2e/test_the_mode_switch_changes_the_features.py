@@ -269,18 +269,22 @@ class TestRepairAndSynthesisInheritTheModesSchema:
         assert str(normal) == "eu-dpp"
         assert str(ce_rise) == "ce-rise:auto"
 
-    @pytest.mark.parametrize("path", ["/api/validate", "/api/validate/repair", "/api/synthesize"])
-    def test_no_router_hard_codes_a_profile(self, path) -> None:
-        import inspect
+    def test_no_request_model_carries_a_profile_default(self) -> None:
+        """Every one of the three must default to "ask the mode", not to a literal.
 
-        from apps.api.routers import synthesize, validate
+        Checked on the field defaults rather than by grepping the source: a text
+        search cannot tell a live default from the word appearing in a comment, and
+        the first draft of this test failed on its own explanation.
+        """
+        from apps.api.routers.synthesize import SynthesizeRequest
+        from apps.api.routers.validate import RepairRequest, ValidateRequest
 
-        module = synthesize if "synthesize" in path else validate
-        source = inspect.getsource(module)
-        assert '"eu-dpp"' not in source, (
-            f"{module.__name__} pins a profile literal; it must ask the bound mode, "
-            f"or a new mode will silently keep validating against the old schema"
-        )
+        for model in (ValidateRequest, RepairRequest, SynthesizeRequest):
+            field = model.model_fields["profile"]
+            assert field.default is None, (
+                f"{model.__name__} pins a profile default; it must ask the bound "
+                f"mode, or a new mode will keep validating against the old schema"
+            )
 
     @pytest.mark.cassette
     def test_a_synthesised_passport_is_a_passport_in_both_modes(self, recorded) -> None:
