@@ -5,6 +5,13 @@
 from __future__ import annotations
 
 from ici_substrates.carbon import CarbonCalculationService, CsvFactorImpactEngine
+from ici_substrates.layered import (
+    ENGINE_FACTORS,
+    ENGINE_GRAPH,
+    LayeredImpactEngine,
+    ModeAwareImpactEngine,
+)
+from ici_substrates.layered_schemas import LayeredSchemaRegistry
 from ici_substrates.records import InMemoryRepository
 from ici_substrates.registry import (
     CeRiseModel,
@@ -15,6 +22,8 @@ from ici_substrates.registry import (
 )
 
 __all__ = [
+    "ENGINE_FACTORS",
+    "ENGINE_GRAPH",
     "CarbonCalculationService",
     "CeRiseModel",
     "CeRiseModelRegistry",
@@ -22,5 +31,8 @@ __all__ = [
     "CsvFactorImpactEngine",
     "InMemoryRepository",
     "JsonSchemaRegistry",
+    "LayeredImpactEngine",
+    "LayeredSchemaRegistry",
+    "ModeAwareImpactEngine",
     "load_catalog",
 ]

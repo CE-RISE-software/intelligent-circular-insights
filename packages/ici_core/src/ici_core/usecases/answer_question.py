@@ -54,9 +54,17 @@ class AnswerQuestion:
         # -- 1. evidence acquisition ---------------------------------------
         pack, trace = self._gather(query, budget, trace)
 
-        # -- 2. targeted symbolic validation -------------------------------
+        # -- 2. mounted facts ----------------------------------------------
+        # What the substrates already assert about this subject, offered to the
+        # composer directly. Without this the graph was fetched, reasoned over and
+        # then thrown away unless a rule happened to fire on it, so mounting a richer
+        # substrate changed what could be *derived* but not what could be *read*.
+        graph, trace = self._facts(query, trace)
+        pack = pack.merge(_substrate_evidence(graph, budget, taken=pack.ids))
+
+        # -- 3. targeted symbolic validation -------------------------------
         # A derived conclusion can itself be the only available answer evidence.
-        entailment, trace = self._entail(query, trace)
+        entailment, trace = self._entail(graph, trace)
         if entailment is not None:
             derived: list[Evidence] = []
             for index, triple in enumerate(entailment.derived):
@@ -84,7 +92,7 @@ class AnswerQuestion:
                 operating_point=point,
             )
 
-        # -- 3. composition -------------------------------------------------
+        # -- 4. composition -------------------------------------------------
         try:
             answer = self.bundle.llm.compose(query.text, pack)
         except GenerationError as exc:
@@ -97,7 +105,7 @@ class AnswerQuestion:
             )
         trace = trace.with_step(TraceStep("compose", f"{len(answer)} chars"))
 
-        # -- 4. grounding ----------------------------------------------------
+        # -- 5. grounding ----------------------------------------------------
         grounding = self.bundle.grounding.verify(answer, pack)
         trace = trace.with_step(
             TraceStep("grounding", f"{grounding.claims_resolved}/{grounding.claims_total}")
@@ -116,7 +124,7 @@ class AnswerQuestion:
                 operating_point=point,
             )
 
-        # -- 5. confidence and the selective decision ------------------------
+        # -- 6. confidence and the selective decision ------------------------
         signals = self.bundle.signals.emit(query, pack, entailment)
         raw = _mean(tuple(signals.values.values()))
         confidence = Confidence(
@@ -185,20 +193,27 @@ class AnswerQuestion:
 
         return _dedupe(items), trace
 
-    def _entail(self, query: Query, trace: Trace) -> tuple[EntailmentResult | None, Trace]:
+    def _facts(self, query: Query, trace: Trace) -> tuple[FactGraph, Trace]:
+        """Everything the mounted substrates assert about the subject.
+
+        Fetched once and used twice — as evidence and as the input to the symbolic
+        layer — because two fetches could disagree, and an answer grounded in triples
+        the reasoner did not see would be unauditable.
+        """
+        if not query.scope.is_product_scoped:
+            return FactGraph(), trace.with_step(TraceStep("facts", "skipped: no product scope"))
+
+        from ici_core.domain.impact import SubjectRef
+
+        graph = self.bundle.substrates.facts_for(SubjectRef(id=str(query.scope.product_id)))
+        return graph, trace.with_step(TraceStep("facts", f"{len(graph.triples)} triples"))
+
+    def _entail(self, graph: FactGraph, trace: Trace) -> tuple[EntailmentResult | None, Trace]:
         """Run the symbolic layer only where there are facts to reason over.
 
         'Targeted validity': applying it everywhere would dilute a guarantee that
         is only meaningful where structured facts and rules actually exist.
         """
-        if not query.scope.is_product_scoped:
-            return None, trace.with_step(TraceStep("entail", "skipped: no product scope"))
-
-        from ici_core.domain.impact import SubjectRef
-
-        graph: FactGraph = self.bundle.substrates.facts_for(
-            SubjectRef(id=str(query.scope.product_id))
-        )
         if not graph:
             return None, trace.with_step(TraceStep("entail", "skipped: empty fact graph"))
 
@@ -206,6 +221,35 @@ class AnswerQuestion:
         return result, trace.with_step(
             TraceStep("entail", f"{len(result.derived)} derived, fired={result.fired}")
         )
+
+
+def _substrate_evidence(
+    graph: FactGraph, budget: RetrievalBudget, *, taken: frozenset[EvidenceId]
+) -> ContextPack:
+    """Mounted triples as citable evidence, bounded by the budget.
+
+    Kinded ``SUBSTRATE_ROW`` rather than ``FACT``: a fact is something this system
+    validated and remembered, whereas this is what a mounted source asserts. The
+    distinction survives into provenance, so a reader can tell an assertion the
+    consortium's graph makes from one this deployment has confirmed.
+
+    ``taken`` is the ids already in the pack, so a collision widens the id rather
+    than raising on a duplicate — ``ContextPack`` rejects duplicates by design.
+    """
+    items: list[Evidence] = []
+    for index, triple in enumerate(graph.triples[: budget.top_k_facts]):
+        candidate = f"substrate:{index}"
+        while EvidenceId(candidate) in taken:
+            candidate = f"substrate:{candidate}"
+        items.append(
+            Evidence(
+                id=EvidenceId(candidate),
+                kind=EvidenceKind.SUBSTRATE_ROW,
+                text=f"{triple.subject} {triple.predicate} {triple.object}",
+                ref=f"substrate:{triple.subject}",
+            )
+        )
+    return ContextPack(tuple(items))
 
 
 def _dedupe(items: list[Evidence]) -> ContextPack:

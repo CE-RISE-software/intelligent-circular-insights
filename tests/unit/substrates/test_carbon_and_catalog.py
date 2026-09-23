@@ -63,11 +63,23 @@ class TestCarbonBoundaries:
         with pytest.raises(CapabilityError, match=r"EF 3\.1"):
             engine.assess(SubjectRef(id="fairphone_4"), ImpactRequest(indicator="acidification"))
 
-    def test_an_unknown_product_raises_the_same_error_as_before(self, engine) -> None:
-        # Frozen behaviour: the pre-port engine raised FileNotFoundError, so a port
-        # that swallowed it into an empty result would be a silent change.
-        with pytest.raises(FileNotFoundError):
+    def test_an_unknown_product_is_a_capability_error_naming_what_is_available(
+        self, engine
+    ) -> None:
+        """Still raises -- but as something the API can turn into a 422.
+
+        This previously froze ``FileNotFoundError``, on the grounds that the pre-port
+        engine raised it and swallowing it into an empty result would be a silent
+        change. Swallowing is still forbidden; what changed is that a bare
+        ``FileNotFoundError`` reached the API unhandled and became a 500, which also
+        loses the mode header. It went unnoticed until CE-RISE mode began offering
+        subjects this engine has never heard of and something finally asked for one.
+        """
+        with pytest.raises(CapabilityError) as raised:
             engine.assess(SubjectRef(id="no_such_product_at_all"), ImpactRequest())
+        # The message has to be actionable: what it cannot do, and what it can.
+        assert "fairphone_4" in str(raised.value)
+        assert isinstance(raised.value.__cause__, FileNotFoundError)
 
     def test_explain_returns_links_for_every_stage(self, engine) -> None:
         result = engine.assess(SubjectRef(id="fairphone_4"), ImpactRequest())

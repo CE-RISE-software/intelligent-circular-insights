@@ -1,6 +1,10 @@
 __pycache__/
 *.py[cod]
 .venv/
+# ...and a symlink to one, which `.venv/` does not match. Keeping the environment
+# outside a synced folder is the difference between a one-second install and a
+# thousands-of-files sync.
+.venv
 .uv/
 *.egg-info/
 dist/

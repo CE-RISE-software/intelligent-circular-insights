@@ -31,6 +31,15 @@ class DPPRecord:
 class ViolationKind(str, Enum):
     MISSING_REQUIRED = "missing_required"
     TYPE_MISMATCH = "type_mismatch"
+    UNKNOWN_PROPERTY = "unknown_property"
+    """A term the profile has never heard of.
+
+    Distinguished from a shape violation because it answers a different question:
+    not "is this value right?" but "is this document written in this vocabulary at
+    all?" — which is what decides, in CE-RISE mode, which data model a record is
+    checked against.
+    """
+
     ENUM_VIOLATION = "enum_violation"
     SHAPE_VIOLATION = "shape_violation"
     CROSS_MODULE_INCONSISTENCY = "cross_module_inconsistency"

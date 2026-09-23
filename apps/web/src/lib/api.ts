@@ -206,23 +206,38 @@ export const carbonCalculate = (product_id: string, mode?: BackendMode) =>
     mode,
   });
 
-export const validateDpp = (dpp: unknown, profile: string, mode?: BackendMode) =>
-  request<ValidationReport>("/api/validate", { method: "POST", body: { dpp, profile }, mode });
+/**
+ * `profile` may be null, meaning "whatever this mode checks against".
+ *
+ * Omitted from the body rather than sent as null, so the choice is made once, by
+ * the backend that knows which schemas it mounted. Sending a literal here is what
+ * left Validate checking the EU DPP schema after the user had switched to CE-RISE.
+ */
+export const validateDpp = (dpp: unknown, profile: string | null, mode?: BackendMode) =>
+  request<ValidationReport>("/api/validate", {
+    method: "POST",
+    body: profile ? { dpp, profile } : { dpp },
+    mode,
+  });
 
 export const repairDpp = (
   dpp: unknown,
-  profile: string,
+  profile: string | null,
   suggest_from_training: boolean,
   mode?: BackendMode,
 ) =>
   request<RepairResult>("/api/validate/repair", {
     method: "POST",
-    body: { dpp, profile, suggest_from_training },
+    body: profile ? { dpp, profile, suggest_from_training } : { dpp, suggest_from_training },
     mode,
   });
 
-export const synthesizeDpp = (seed: unknown, profile: string, mode?: BackendMode) =>
-  request<SynthesisResult>("/api/synthesize", { method: "POST", body: { seed, profile }, mode });
+export const synthesizeDpp = (seed: unknown, profile: string | null, mode?: BackendMode) =>
+  request<SynthesisResult>("/api/synthesize", {
+    method: "POST",
+    body: profile ? { seed, profile } : { seed },
+    mode,
+  });
 
 export const validationProfiles = (mode?: BackendMode) =>
   request<ProfileList>("/api/validate/profiles", { mode });

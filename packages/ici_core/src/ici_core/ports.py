@@ -132,6 +132,16 @@ class SchemaRegistry(Protocol):
 
     def profiles(self) -> Sequence[SchemaProfile]: ...
 
+    def default_profile(self) -> ProfileId:
+        """What a request that names no profile is checked against.
+
+        On the port because the registry is the only thing that knows which profiles
+        exist in this mode, and because validate, repair and synthesise must all pick
+        the same one. Hard-coding a literal in each router meant a mode could mount
+        different schemas and still be checked against the old default.
+        """
+        ...
+
     def conform(self, record: DPPRecord, profile: ProfileId) -> ConformanceReport:
         """Typed violations with locations. Never a bare boolean."""
         ...

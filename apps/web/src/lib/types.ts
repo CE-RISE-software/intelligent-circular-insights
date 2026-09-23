@@ -121,6 +121,8 @@ export interface ValidationReport {
 
 export interface ProfileList {
   mode: string;
+  /** What a record is checked against when none is chosen. Decided by the mode. */
+  default: string;
   profiles: Array<{ id: string; title: string; layer: string; version: string | null }>;
 }
 

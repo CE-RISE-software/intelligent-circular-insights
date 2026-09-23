@@ -52,58 +52,96 @@ def build_registry(
     less clearly.
     """
     settings = settings or get_settings()
+    # Built once and shared. Every mode is derived from the Normal set, so building
+    # it per mode would give each one its own calibrator, its own audit log and its
+    # own copy of the recorder's spend ceiling — three things that are supposed to be
+    # properties of the deployment rather than of the backend you happen to be in.
+    normal = _build_normal(settings)
     built: dict[BackendMode, ProviderBundle] = {}
     for mode in modes:
-        bundle = _build(mode, settings)
+        bundle = _build(mode, normal)
         if bundle is not None:
             built[mode] = bundle
     return BundleRegistry(built)
 
 
-def _build(mode: BackendMode, settings: Settings) -> ProviderBundle | None:
+def _build(mode: BackendMode, normal: ProviderBundle) -> ProviderBundle | None:
     if mode is BackendMode.NORMAL:
-        return _build_normal(settings)
+        return normal
     if mode is BackendMode.CE_RISE:
-        return _build_ce_rise(settings)
+        return _build_ce_rise(normal)
     return None
 
 
-def _build_ce_rise(settings: Settings) -> ProviderBundle:
-    """The CE-RISE adapter set.
+def _build_ce_rise(normal: ProviderBundle) -> ProviderBundle:
+    """The CE-RISE adapter set: the same five features, run over CE-RISE data.
 
-    Differs from Normal in exactly one place: the substrate registry also mounts the
-    WP3 knowledge graph, which carries real triples for the symbolic layer to reason
-    over and a graph-solved assessment behind PEF Studio.
+    The mode switch has to change what QA, Carbon, Validate, Repair and Synthesize
+    *do*, not merely unlock an extra window. Each override below names which feature
+    it moves and why that feature's CE-RISE answer is arrived at the way it is.
 
-    It *adds*; it does not replace. The word is load-bearing and has now cost two
-    bugs. In Sprint 2 an earlier draft swapped the impact engine, and the Carbon
-    window stopped working for the five products the graph has never heard of. In
-    Sprint 3 this function still *assigned* the graph into the one ``substrates``
-    slot, and the CE-RISE Models window went from eighteen models to none the moment
-    you switched to the more rigorous backend. Both were caught by a test asserting
-    that a shared feature survives the switch; both are the same mistake.
+    What it must not do is substitute blindly. An earlier draft swapped the impact
+    engine outright and Carbon stopped working for the five products the graph has
+    never heard of; the repair was to make CE-RISE purely additive, which removed the
+    breakage by removing the difference. Both drafts were wrong in the same way: they
+    treated two sources that model different things as interchangeable, then argued
+    about which one wins. They do not model the same thing, so neither wins — each
+    answers for what it actually covers, and the result says which one answered.
 
-    So the graph is composed in front of the catalogue rather than over it. The
-    graph goes first because it is the more specific source: it answers graph
-    questions, and anything it does not implement falls through to the catalogue.
-
-    Built on top of the Normal bundle rather than beside it, so a difference between
-    them is visible here as an override rather than hidden in two parallel lists.
+    Derived from the Normal bundle rather than built beside it, so every difference
+    between the two modes is visible here as an override rather than hidden in two
+    parallel lists — and so the reliability path is shared by identity, not merely
+    configured the same way twice.
     """
+    from ici_core.domain.ids import ProfileId
     from ici_core.ledger import InMemoryLedger
-    from ici_substrates import CeRiseModelRegistry, CompositeSubstrateRegistry
+    from ici_substrates import (
+        CeRiseModelRegistry,
+        CompositeSubstrateRegistry,
+        LayeredImpactEngine,
+        LayeredSchemaRegistry,
+    )
     from ici_substrates.pefdpp import PefdppSubstrateRegistry, build_services
+    from ici_substrates.registry.schemas import (
+        CE_RISE_GENERATED,
+        CE_RISE_PREFIX,
+        CE_RISE_ROOTS,
+        EU_DPP,
+    )
 
     graph, lca = build_services()
-    normal = _build_normal(settings)
+    pefdpp = PefdppSubstrateRegistry(graph=graph, lca=lca)
+
+    # Which CE-RISE models a record may be routed to: those that declare a document
+    # root, and only ones actually generated. Offering a profile whose schema is
+    # missing would fail at validation time rather than simply not being on the list.
+    vocabulary = tuple(
+        ProfileId(f"{CE_RISE_PREFIX}{name}")
+        for name in sorted(CE_RISE_ROOTS)
+        if (CE_RISE_GENERATED / f"{name}.json").is_file()
+    )
+
     return replace(
         normal,
         mode=BackendMode.CE_RISE,
-        substrates=CompositeSubstrateRegistry(
-            members=(
-                PefdppSubstrateRegistry(graph=graph, lca=lca),
-                CeRiseModelRegistry(),
-            )
+        # QA: the WP3 graph *and* the model catalogue, never one instead of the other.
+        # The graph goes first because it is the more specific source; anything it
+        # does not implement falls through to the catalogue.
+        substrates=CompositeSubstrateRegistry(members=(pefdpp, CeRiseModelRegistry())),
+        # Carbon: the graph answers for the study it models, the factor table for the
+        # products it models. Routed, not substituted -- the two describe different
+        # systems with different functional units, four orders of magnitude apart, and
+        # mapping one onto the other would produce a confidently wrong number. Every
+        # result names the engine that produced it.
+        impact=LayeredImpactEngine(preferred=pefdpp.impact, fallback=normal.impact),
+        # Validate, and through it Repair and Synthesize: a record is checked against
+        # the consortium's model that recognises its vocabulary, and against the EU
+        # DPP schema when none does. Routed for the same reason carbon is -- the two
+        # describe different documents, sharing not one top-level term, so checking
+        # both at once would reject every record ever written. A named profile is
+        # still honoured exactly.
+        schemas=LayeredSchemaRegistry(
+            inner=normal.schemas, base_profile=EU_DPP, candidates=vocabulary
         ),
         ledger=InMemoryLedger(mode=BackendMode.CE_RISE),
     )
@@ -132,6 +170,7 @@ def _build_normal(settings: Settings) -> ProviderBundle:
         CsvFactorImpactEngine,
         InMemoryRepository,
         JsonSchemaRegistry,
+        ModeAwareImpactEngine,
     )
     from ici_substrates.paths import SEED_DOCS_ROOT
     from ici_symbolic import OwlRlValidator
@@ -159,7 +198,7 @@ def _build_normal(settings: Settings) -> ProviderBundle:
         substrates=CeRiseModelRegistry(),
         symbolic=OwlRlValidator.for_domain("battery"),
         schemas=JsonSchemaRegistry(),
-        impact=CsvFactorImpactEngine.from_data_root(),
+        impact=ModeAwareImpactEngine(CsvFactorImpactEngine.from_data_root()),
         records=InMemoryRepository.from_directory(Path(settings.record_evidence_dir)),
         signals=EvidenceSignals(),
         calibrator=IsotonicCalibrator(),

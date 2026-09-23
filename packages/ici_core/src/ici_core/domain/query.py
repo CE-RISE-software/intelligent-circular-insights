@@ -34,6 +34,15 @@ class RetrievalBudget:
 
     top_k_documents: int = 4
     top_k_memory: int = 3
+    top_k_facts: int = 12
+    """Triples read from the mounted substrates and offered as evidence.
+
+    Higher than the document budget because a triple is one short assertion rather
+    than a passage, and a subject the graph actually models is described by several
+    of them at once. Bounded all the same: a mounted substrate is not a licence to
+    put an entire subgraph in front of the model.
+    """
+
     max_steps: int = 6
     max_context_chars: int = 12_000
 

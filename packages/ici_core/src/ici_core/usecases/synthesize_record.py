@@ -29,7 +29,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any, Protocol
 
 from ici_core.domain.assistance import RepairResult, SynthesisResult, same_product
@@ -88,7 +88,6 @@ class SynthesizeRecord:
         record = DPPRecord(
             dpp_id=DppId(str(result.record.get("dpp_id", "synthesised"))),
             payload=result.record,
-            applied_schemas=(str(profile),),
         )
 
         # Checked against the *bound* schema registry, not only the composer's own
@@ -96,6 +95,12 @@ class SynthesizeRecord:
         # the deployment may have bound a stricter profile, and a record that clears
         # one and not the other is not a record this system may return.
         report = self.bundle.schemas.conform(record, profile)
+
+        # Stamped with the profile the registry actually applied, which need not be
+        # the one asked for: a mode may route a request to the model that fits the
+        # record. Recording the request instead would label the record with a
+        # profile nothing ever checked it against.
+        record = replace(record, applied_schemas=(str(report.profile),))
         self._stamp(
             correlation_id,
             "synthesize",
@@ -107,7 +112,7 @@ class SynthesizeRecord:
                 capability="a synthesised passport",
                 mode=self.bundle.mode.value,
                 reason=(
-                    f"the generated record does not conform to {profile}: "
+                    f"the generated record does not conform to {report.profile}: "
                     + "; ".join(
                         f"{v.location or '(root)'} {v.message}" for v in report.violations[:4]
                     )

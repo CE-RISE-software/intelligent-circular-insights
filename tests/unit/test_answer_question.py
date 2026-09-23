@@ -32,6 +32,7 @@ def test_answers_when_everything_is_in_order(bundle: ProviderBundle, query: Quer
     assert env.trace.step_names() == (
         "recall",
         "retrieve",
+        "facts",
         "entail",
         "compose",
         "grounding",
@@ -138,7 +139,16 @@ def test_derived_only_evidence_reaches_composition(bundle: ProviderBundle, query
 def test_untraced_symbolic_conclusion_is_not_answer_evidence(
     bundle: ProviderBundle, query: Query
 ) -> None:
+    """A conclusion with no rule trace is not auditable, so it is not citable.
+
+    Asserted on the evidence rather than on the decision. The substrate's own
+    triples are legitimate evidence and can carry an answer on their own, so a
+    decision check would pass here for the wrong reason — and did, until mounted
+    facts started reaching the composer.
+    """
     from dataclasses import replace
+
+    from ici_core.domain.evidence import EvidenceKind
 
     graph = FactGraph((Triple("bat-60", "type", "battery"),))
     fired = replace(
@@ -147,4 +157,67 @@ def test_untraced_symbolic_conclusion_is_not_answer_evidence(
         substrates=FakeSubstrateRegistry(graph=graph),
         symbolic=FakeSymbolic(EntailmentResult(derived=graph.triples)),
     )
-    assert AnswerQuestion(fired)(query).decision is Decision.ABSTAIN
+    env = AnswerQuestion(fired)(query)
+    assert not [e for e in env.evidence if e.kind is EvidenceKind.DERIVED_TRIPLE]
+    assert not [link for link in env.provenance if link.kind.value == "rule"]
+
+
+def test_an_untraced_conclusion_cannot_carry_an_answer_by_itself(
+    bundle: ProviderBundle, query: Query
+) -> None:
+    """The original guard, with nothing else in the pack to answer from.
+
+    The graph is still non-empty, so the symbolic layer runs and really does produce
+    the untraced conclusion; `top_k_facts=0` is what empties the pack, rather than an
+    empty graph that would skip entailment altogether and prove nothing.
+    """
+    from dataclasses import replace
+
+    conclusion = Triple("bat-60", "requiresCompliance", "IEC-62133")
+    fired = replace(
+        bundle,
+        evidence=FakeEvidenceProvider([]),
+        substrates=FakeSubstrateRegistry(graph=FactGraph((Triple("bat-60", "type", "battery"),))),
+        symbolic=FakeSymbolic(EntailmentResult(derived=(conclusion,))),
+    )
+    env = AnswerQuestion(fired)(query, budget=RetrievalBudget(top_k_facts=0))
+    assert env.decision is Decision.ABSTAIN
+    assert "No evidence" in (env.abstain_reason or "")
+
+
+def test_mounted_triples_are_offered_as_evidence_and_bounded(
+    bundle: ProviderBundle, query: Query
+) -> None:
+    """What the substrate asserts is readable, not only reasonable-over.
+
+    This is the whole of the CE-RISE difference for Search & Answer: the same
+    inference path, with a substrate that actually knows something about the
+    subject. Kinded SUBSTRATE_ROW so a reader can tell a mounted assertion from a
+    fact this deployment validated and remembered.
+    """
+    from dataclasses import replace
+
+    from ici_core.domain.evidence import EvidenceKind
+
+    triples = tuple(Triple("bat-60", f"p{i}", f"v{i}") for i in range(20))
+    mounted = replace(
+        bundle,
+        evidence=FakeEvidenceProvider([]),
+        substrates=FakeSubstrateRegistry(graph=FactGraph(triples)),
+    )
+    env = AnswerQuestion(mounted)(query, budget=RetrievalBudget(top_k_facts=5))
+    rows = [e for e in env.evidence if e.kind is EvidenceKind.SUBSTRATE_ROW]
+    assert len(rows) == 5
+    assert rows[0].text == "bat-60 p0 v0"
+
+
+def test_an_empty_substrate_adds_nothing(bundle: ProviderBundle, query: Query) -> None:
+    """Normal mode's catalogue has no per-product triples, and must stay unchanged."""
+    from dataclasses import replace
+
+    from ici_core.domain.evidence import EvidenceKind
+
+    empty = replace(bundle, substrates=FakeSubstrateRegistry(graph=FactGraph()))
+    env = AnswerQuestion(empty)(query)
+    assert env.decision is Decision.ANSWER
+    assert not [e for e in env.evidence if e.kind is EvidenceKind.SUBSTRATE_ROW]

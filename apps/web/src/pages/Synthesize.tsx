@@ -32,7 +32,8 @@ const EXAMPLES: Record<string, string> = {
 
 export default function Synthesize() {
   const profiles = useApi(() => validationProfiles(), []);
-  const [profile, setProfile] = useState("eu-dpp");
+  // null means "whatever this mode checks against"; see the note in Validate.
+  const [profile, setProfile] = useState<string | null>(null);
   const [text, setText] = useState(EXAMPLES["Synthetic demo battery"] ?? "{}");
   const [parseError, setParseError] = useState<string | null>(null);
   const [result, setResult] = useState<ApiResult<SynthesisResult> | null>(null);
@@ -74,24 +75,31 @@ export default function Synthesize() {
         subtitle="Supply what you know. Everything else has to be grounded in retrievable evidence about this product — if it cannot be, the request is declined rather than filled in."
       >
         <Outcome result={profiles.result} pending={profiles.pending} pendingLabel="loading profiles">
-          {data => (
+          {data => {
+            const selected = profile ?? data.default;
+            return (
             <div style={{ marginBottom: 14 }}>
               <div className="label">Target profile</div>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {data.profiles.map(p => (
                   <button
                     key={p.id}
-                    className={"pill " + (p.id === profile ? "teal" : "")}
+                    className={"pill " + (p.id === selected ? "teal" : "")}
                     data-testid={`synth-profile-${p.id}`}
-                    onClick={() => { invalidate(); setProfile(p.id); }}
+                    onClick={() => {
+                      invalidate();
+                      setProfile(p.id === data.default ? null : p.id);
+                    }}
                     style={{ cursor: "pointer", fontSize: 11.5 }}
                   >
                     {p.title}
+                    {p.id === data.default ? " ·  default" : ""}
                   </button>
                 ))}
               </div>
             </div>
-          )}
+            );
+          }}
         </Outcome>
 
         <div className="label">Seed facts</div>

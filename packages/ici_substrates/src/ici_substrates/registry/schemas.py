@@ -68,6 +68,8 @@ _KIND_BY_VALIDATOR = {
     "type": ViolationKind.TYPE_MISMATCH,
     "enum": ViolationKind.ENUM_VIOLATION,
     "const": ViolationKind.ENUM_VIOLATION,
+    "additionalProperties": ViolationKind.UNKNOWN_PROPERTY,
+    "unevaluatedProperties": ViolationKind.UNKNOWN_PROPERTY,
 }
 
 
@@ -97,6 +99,14 @@ class JsonSchemaRegistry:
             ),
             *self._ce_rise_profiles(),
         ]
+
+    def default_profile(self) -> ProfileId:
+        """The regulatory profile. The CE-RISE models are vocabularies, not defaults.
+
+        Checking an unspecified record against one of them would report conformance
+        for an empty passport, because they declare no required fields.
+        """
+        return EU_DPP
 
     def _ce_rise_profiles(self) -> list[SchemaProfile]:
         """The CE-RISE models that define a document, generated from their LinkML.

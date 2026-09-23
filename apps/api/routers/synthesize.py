@@ -39,7 +39,19 @@ class SynthesizeRequest(BaseModel):
             "retrievable evidence about this product, or the request is declined."
         )
     )
-    profile: str = "eu-dpp"
+    profile: str | None = Field(
+        default=None,
+        description="Omit to use whatever the bound mode checks against by default.",
+    )
+
+
+def _profile(req_profile: str | None, bundle: ProviderBundle) -> ProfileId:
+    """The named profile, or whatever the bound mode checks by default.
+
+    Not a literal default on the request model: what "no profile given" means is a
+    property of the schemas this mode mounted, and CE-RISE mode mounts more of them.
+    """
+    return ProfileId(req_profile) if req_profile else bundle.schemas.default_profile()
 
 
 @router.post("")
@@ -51,16 +63,20 @@ def synthesize(
     x_correlation_id: Annotated[str | None, Header()] = None,
 ) -> dict[str, Any]:
     correlation_id = CorrelationId(x_correlation_id or "anonymous")
+    profile = _profile(req.profile, bundle)
     record, result = SynthesizeRecord(bundle, llm.records).detailed(
         req.seed,
-        ProfileId(req.profile),
+        profile,
         correlation_id=correlation_id,
     )
     return {
         "mode": bundle.mode.value,
         "dpp_id": str(record.dpp_id),
         "record": dict(record.payload),
-        "profile": str(ProfileId(req.profile)),
+        # What was applied, not what was asked for: in a mode that routes, those
+        # differ, and naming the request would tell a reader their record conforms
+        # to a profile nothing checked it against.
+        "profile": record.applied_schemas[0],
         # True by construction: the use case raises rather than returning a record
         # that does not conform. Reported anyway, because a client should not have
         # to know that to read the response.

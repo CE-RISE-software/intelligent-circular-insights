@@ -196,12 +196,20 @@ class TestSubjectsAreDiscoverable:
         assert all(s["kind"] == "product" for s in body["subjects"])
 
     def test_ce_rise_lists_the_studies_the_graph_declares(self, client) -> None:
-        body = client.get("/api/carbon/subjects", headers=CE_RISE).json()
-        # Same bundle key, different substrate: CE-RISE keeps the CSV engine, so the
-        # carbon window still works for products the graph has never heard of.
-        assert {s["id"] for s in body["subjects"]} == {
-            s["id"] for s in client.get("/api/carbon/subjects", headers=NORMAL).json()["subjects"]
-        }
+        """A superset, not a swap and not a copy.
+
+        The graph's studies appear -- that is the point of the mode -- and every
+        product the factor table models is still there, because the graph has never
+        heard of five of them and dropping them is how this broke the first time.
+        """
+
+        def ids(headers: dict[str, str]) -> set[str]:
+            body = client.get("/api/carbon/subjects", headers=headers).json()
+            return {s["id"] for s in body["subjects"]}
+
+        ce_rise, normal = ids(CE_RISE), ids(NORMAL)
+        assert normal < ce_rise
+        assert "BatteryPackPEFStudy" in ce_rise - normal
 
 
 class TestTheModelBeingUnreachableIsNotAServerError:

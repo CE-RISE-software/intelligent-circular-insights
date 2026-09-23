@@ -8,7 +8,7 @@ the same ports: a caller asks the same question and chooses how much rigour it w
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -114,8 +114,16 @@ class PefdppImpactEngine:
 
         This is what a graph buys over a factor table: ``target`` is a flow IRI, and
         what comes back names the file the triple lives in.
+
+        ``"total"`` is the one target every engine behind this port must answer,
+        because it is the number the carbon window shows. Explaining it needs no
+        flow IRI, so it is handled before the lookup rather than reaching it and
+        failing -- which is what happened the first time this engine was routed to,
+        turning a working assessment into a 422 at the trace step.
         """
         calculated = self.lca.calculate()
+        if target == "total":
+            return self._explain_total(calculated)
         try:
             detail = self.lca.explain(calculated, target)
         except Exception as exc:
@@ -140,6 +148,71 @@ class PefdppImpactEngine:
             arithmetic=str(detail.get("arithmetic") or ""),
             scaling_chain=tuple(str(s) for s in detail.get("scaling_chain", [])),
         )
+
+    def _explain_total(self, calculated: dict[str, Any]) -> Provenance:
+        """How the headline figure was reached: the stages that make it up.
+
+        One link per lifecycle stage rather than per exchange. A reader who wants
+        an individual exchange asks for its flow IRI; what the total needs is the
+        roll-up, the functional unit it is declared against, and the fact that the
+        background intensities are proxies.
+        """
+        headline = calculated["headline"]
+        stages = calculated.get("by_stage", [])
+        unit = str(headline["climate_change_unit"])
+        total = float(headline["climate_change_per_fu"])
+        fu = str(headline.get("fu_label", ""))
+
+        links = tuple(
+            ProvenanceLink(
+                kind=ProvenanceKind.CALC_STEP,
+                ref=str(stage["stage"]),
+                excerpt=(
+                    f"{stage['stage']} = {float(stage['climate_change']):.6g} {unit} "
+                    f"({float(stage.get('share_pct', 0.0)):.1f}% of the total)"
+                )[:200],
+            )
+            for stage in stages
+        )
+        terms = " + ".join(f"{float(stage['climate_change']):.6g}" for stage in stages)
+        return Provenance(
+            target="total",
+            links=links,
+            arithmetic=f"{terms} = {total:.6g} {unit} per {fu}" if terms else "",
+            scaling_chain=(
+                f"Functional unit: {fu}",
+                f"Study: {calculated.get('study') or '(unnamed)'}",
+                f"{calculated.get('exchange_count', 0)} exchanges over "
+                f"{len(stages)} lifecycle stages",
+                "Background intensities are proxies from a documented factor pack.",
+            ),
+        )
+
+
+def _as_triples(subject: str, kind: str, record: Mapping[str, Any]) -> FactGraph:
+    """A nested record flattened into scalar assertions about one subject.
+
+    Nested keys become dotted predicates, so ``scope.system_boundary`` stays
+    readable as a claim rather than being dropped for not being a scalar. Lists of
+    scalars are joined; lists of objects are left out, because a triple is a single
+    assertion and flattening a collection of them into one would misstate what the
+    graph says.
+    """
+    triples = [Triple(subject, "type", kind)]
+
+    def walk(prefix: str, value: Any) -> None:
+        if isinstance(value, Mapping):
+            for key, inner in value.items():
+                walk(f"{prefix}.{key}" if prefix else str(key), inner)
+        elif isinstance(value, (list, tuple)):
+            scalars = [str(v) for v in value if isinstance(v, (str, int, float))]
+            if scalars and len(scalars) == len(value):
+                triples.append(Triple(subject, prefix, ", ".join(scalars)))
+        elif isinstance(value, (str, int, float)) and value not in (None, ""):
+            triples.append(Triple(subject, prefix, str(value)))
+
+    walk("", record)
+    return FactGraph(tuple(triples))
 
 
 @dataclass
@@ -177,19 +250,24 @@ class PefdppSubstrateRegistry:
         ]
 
     def facts_for(self, subject: SubjectRef) -> FactGraph:
+        """What the graph asserts about this subject: an activity, or the study.
+
+        Studies are included because the study is what the carbon picker offers and
+        therefore what a reader asks about. Answering only for activities meant the
+        one subject a user could actually name returned nothing -- the graph was
+        mounted, and silent about the very thing it models.
+        """
         self._seen += 1
         activity = self.graph.activities.get(subject.id)
-        if activity is None:
-            return FactGraph()
-        self._fired += 1
-        record = activity.as_dict()
-        triples = [Triple(subject.id, "type", "Activity")]
-        triples += [
-            Triple(subject.id, key, str(value))
-            for key, value in record.items()
-            if isinstance(value, (str, int, float)) and value not in (None, "")
-        ]
-        return FactGraph(tuple(triples))
+        if activity is not None:
+            self._fired += 1
+            return _as_triples(subject.id, "Activity", activity.as_dict())
+
+        if subject.id in self.graph.studies():
+            self._fired += 1
+            return _as_triples(subject.id, "PEFStudy", self.graph.study(subject.id))
+
+        return FactGraph()
 
     def coverage_report(self) -> CoverageReport:
         return CoverageReport(

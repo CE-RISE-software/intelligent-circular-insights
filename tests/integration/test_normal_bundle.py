@@ -114,12 +114,25 @@ def test_the_data_trust_seat_is_declared_empty(bundle) -> None:
     assert bundle.data_trust.is_null is True
 
 
+# The three ports that carry data. Switching mode is meant to change what the
+# features run *over*, so these are exactly the ports that may differ.
+DATA_PORTS = frozenset({"substrates", "impact", "schemas"})
+
+# Everything that decides whether an answer may be returned at all. A difference
+# here would mean the two modes have different reliability semantics, which is the
+# one thing the two-backend design must never let drift.
+RELIABILITY_PORTS = frozenset(PORTS) - DATA_PORTS - {"ledger"}
+
+
 def test_both_modes_build_and_differ_only_where_they_should(bundle) -> None:
     """Two modes, one product.
 
-    They share evidence, memory, schemas, reliability and policy; they differ in
-    the impact engine and the substrate registry. If that list ever grows, the two
-    backends are drifting into two products and this test should fail.
+    An earlier version of this test asserted that the modes differed in exactly one
+    port — and so *encoded* the bug it was meant to catch. CE-RISE mode had been made
+    purely additive after a naive engine swap broke Carbon, which fixed the breakage
+    by deleting the difference; every gate then passed while switching backends
+    changed nothing any feature did. The contract is not "differ in as few places as
+    possible". It is: differ in the data, never in the reliability path.
     """
     registry = build_registry((BackendMode.NORMAL, BackendMode.CE_RISE), Settings())
     assert set(registry.available()) == {BackendMode.NORMAL, BackendMode.CE_RISE}
@@ -130,10 +143,17 @@ def test_both_modes_build_and_differ_only_where_they_should(bundle) -> None:
     differing = {
         name for name in PORTS if type(getattr(normal, name)) is not type(getattr(ce_rise, name))
     }
-    assert differing == {"substrates"}, (
-        f"modes differ in {sorted(differing)}; CE-RISE should add the graph, not\n"
-        f"replace anything — the CSV carbon path must survive the switch"
+    assert differing == DATA_PORTS, (
+        f"modes differ in {sorted(differing)}, expected {sorted(DATA_PORTS)}.\n"
+        f"Missing means the switch does not reach a feature; extra means the two\n"
+        f"backends are drifting into two products."
     )
+    assert not differing & RELIABILITY_PORTS
+
+    # Shared by identity, not merely by type: the same calibrator and the same
+    # selective policy, so a confidence figure means the same thing in both modes.
+    for name in ("calibrator", "selective", "signals", "grounding", "llm"):
+        assert getattr(normal, name) is getattr(ce_rise, name), name
 
 
 def test_an_unbuilt_mode_is_a_typed_capability_error(bundle) -> None:

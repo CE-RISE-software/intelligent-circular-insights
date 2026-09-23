@@ -177,6 +177,9 @@ class FakeSchemaRegistry:
     def profiles(self) -> Sequence[SchemaProfile]:
         return [SchemaProfile(id=ProfileId("eu-dpp"), title="EU DPP", layer="regulatory")]
 
+    def default_profile(self) -> ProfileId:
+        return ProfileId("eu-dpp")
+
     def conform(self, record: DPPRecord, profile: ProfileId) -> ConformanceReport:
         return ConformanceReport(profile=profile)
 

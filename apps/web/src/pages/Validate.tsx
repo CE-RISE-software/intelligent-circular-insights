@@ -22,9 +22,20 @@ const SAMPLES: Record<string, string> = {
   ),
 };
 
+function profileNote(id: string): string {
+  if (id === "ce-rise:auto")
+    return "Routed by the record: a document written in a CE-RISE data model is checked against that model; anything else — a passport, an empty object — against the EU DPP profile. The report names whichever one ran.";
+  if (id.startsWith("ce-rise:"))
+    return "A CE-RISE data model: checks that the record uses the consortium's vocabulary — unknown properties, wrong types. It declares no required fields, so an empty record conforms to it. For completeness, check against the EU DPP profile as well.";
+  return "The EU DPP profile: checks completeness — which required fields are missing — plus this workbench's own material-share rule. For vocabulary, check against a CE-RISE data model as well.";
+}
+
 export default function Validate() {
   const profiles = useApi(() => validationProfiles(), []);
-  const [profile, setProfile] = useState("eu-dpp");
+  // null means "whatever this mode checks against". Held as null rather than
+  // pre-filled with the mode's answer, so switching backend moves the default
+  // instead of leaving a stale literal pinned behind the user's back.
+  const [profile, setProfile] = useState<string | null>(null);
   const [text, setText] = useState(SAMPLES["Synthetic demo battery"] ?? "{}");
   const [parseError, setParseError] = useState<string | null>(null);
   const [result, setResult] = useState<ApiResult<ValidationReport> | null>(null);
@@ -94,33 +105,40 @@ export default function Validate() {
         testId="validate-form"
       >
         <Outcome result={profiles.result} pending={profiles.pending} pendingLabel="loading profiles">
-          {data => (
+          {data => {
+            const selected = profile ?? data.default;
+            return (
             <div style={{ marginBottom: 14 }}>
               <div className="label">Profile</div>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {data.profiles.map(p => (
                   <button
                     key={p.id}
-                    className={"pill " + (p.id === profile ? "teal" : "")}
+                    className={"pill " + (p.id === selected ? "teal" : "")}
                     data-testid={`profile-${p.id}`}
-                    onClick={() => { invalidate(); setProfile(p.id); }}
+                    onClick={() => {
+                      invalidate();
+                      // Re-clicking the mode's own default releases the pin, so the
+                      // choice follows the backend again.
+                      setProfile(p.id === data.default ? null : p.id);
+                    }}
                     title={`${p.title} · ${p.layer}${p.version ? ` · ${p.version}` : ""}`}
                     style={{ cursor: "pointer", fontSize: 11.5 }}
                   >
                     {p.title}
+                    {p.id === data.default ? " ·  default" : ""}
                   </button>
                 ))}
               </div>
-              {/* The two kinds of profile answer different questions, and reading a
+              {/* The kinds of profile answer different questions, and reading a
                   "conforms" from the wrong one is the mistake this note prevents. */}
               <p className="faint" style={{ marginTop: 10, marginBottom: 0 }}
                  data-testid="profile-note">
-                {profile.startsWith("ce-rise:")
-                  ? "A CE-RISE data model: checks that the record uses the consortium's vocabulary — unknown properties, wrong types. It declares no required fields, so an empty record conforms to it. For completeness, check against the EU DPP profile as well."
-                  : "The EU DPP profile: checks completeness — which required fields are missing — plus this workbench's own material-share rule. For vocabulary, check against a CE-RISE data model as well."}
+                {profileNote(selected)}
               </p>
             </div>
-          )}
+            );
+          }}
         </Outcome>
 
         <div className="label">Record</div>

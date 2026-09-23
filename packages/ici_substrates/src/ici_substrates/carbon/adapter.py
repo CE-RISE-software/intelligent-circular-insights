@@ -48,7 +48,22 @@ class CsvFactorImpactEngine:
                 ),
             )
 
-        payload = asdict(self.service.calculate(subject.id))
+        try:
+            payload = asdict(self.service.calculate(subject.id))
+        except FileNotFoundError as exc:
+            # A subject this engine does not model is a capability fact, not a
+            # crash. It escaped as a 500 until CE-RISE mode started offering
+            # subjects the factor table has never heard of and something finally
+            # asked for one -- and a 500 also loses the mode header, because an
+            # unhandled exception propagates past the middleware that stamps it.
+            raise CapabilityError(
+                capability=f"carbon assessment of {subject.id!r}",
+                mode="normal",
+                reason=(
+                    "no product profile is mounted for this subject; "
+                    f"available: {', '.join(s.id for s in self.subjects())}"
+                ),
+            ) from exc
         total = float(payload.get("total_kg_co2e") or 0.0)
 
         # stage_results is keyed by stage name, not a list — preserved as the

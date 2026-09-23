@@ -36,12 +36,18 @@ router = APIRouter(prefix="/validate", tags=["validate"])
 
 class ValidateRequest(BaseModel):
     dpp: dict[str, Any]
-    profile: str = "eu-dpp"
+    profile: str | None = Field(
+        default=None,
+        description="Omit to use whatever the bound mode checks against by default.",
+    )
 
 
 class RepairRequest(BaseModel):
     dpp: dict[str, Any]
-    profile: str = "eu-dpp"
+    profile: str | None = Field(
+        default=None,
+        description="Omit to use whatever the bound mode checks against by default.",
+    )
     suggest_from_training: bool = Field(
         default=True,
         description=(
@@ -49,6 +55,15 @@ class RepairRequest(BaseModel):
             "separate field, are never applied to the record, and are never evidence."
         ),
     )
+
+
+def _profile(req_profile: str | None, bundle: ProviderBundle) -> ProfileId:
+    """The named profile, or whatever the bound mode checks by default.
+
+    Not a literal default on the request model: what "no profile given" means is a
+    property of the schemas this mode mounted, and CE-RISE mode mounts more of them.
+    """
+    return ProfileId(req_profile) if req_profile else bundle.schemas.default_profile()
 
 
 def _record(payload: dict[str, Any]) -> DPPRecord:
@@ -82,7 +97,7 @@ def validate(
 ) -> dict[str, Any]:
     report = ValidateRecord(bundle)(
         _record(req.dpp),
-        ProfileId(req.profile),
+        _profile(req.profile, bundle),
         correlation_id=CorrelationId(x_correlation_id or "anonymous"),
     )
     return {"mode": bundle.mode.value, **_report(report)}
@@ -97,9 +112,10 @@ def repair(
     x_correlation_id: Annotated[str | None, Header()] = None,
 ) -> dict[str, Any]:
     correlation_id = CorrelationId(x_correlation_id or "anonymous")
+    profile = _profile(req.profile, bundle)
     result = SynthesizeRecord(bundle, llm.records).repair(
         req.dpp,
-        ProfileId(req.profile),
+        profile,
         correlation_id=correlation_id,
         suggest_from_training=req.suggest_from_training,
     )
@@ -107,7 +123,7 @@ def repair(
     # Re-checked against the bound profile rather than trusting the composer's own
     # verdict: the composer validates against the schema it was built with, and a
     # deployment may have bound a stricter one.
-    after = bundle.schemas.conform(_record(result.record), ProfileId(req.profile))
+    after = bundle.schemas.conform(_record(result.record), profile)
 
     return {
         "mode": bundle.mode.value,
@@ -157,6 +173,11 @@ def profiles(
 ) -> dict[str, Any]:
     return {
         "mode": bundle.mode.value,
+        # Named, not implied by ordering: the window has to show which profile a
+        # record is checked against when the user picks none, and that answer is the
+        # mode's, not the client's. Hard-coding "eu-dpp" in the UI is how switching
+        # backend left Validate checking the old schema.
+        "default": str(bundle.schemas.default_profile()),
         "profiles": [
             {"id": str(p.id), "title": p.title, "layer": p.layer, "version": p.version}
             for p in bundle.schemas.profiles()
