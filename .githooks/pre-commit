@@ -21,6 +21,14 @@ while IFS= read -r path; do
     case "$lower" in
         *.env.example|*.env.template) continue ;;
     esac
+    # The three files that name these patterns in order to hunt for them. The
+    # content check below already skips two of them; this check did not skip any,
+    # and blocked `tests/test_no_secrets.py` on the word "secret" in its name --
+    # the same mistake `.gitignore` made with `*_secret*`. Kept in step with
+    # `EXEMPT` in tests/test_no_secrets.py, which asserts this list contains it.
+    case "$path" in
+        tests/test_no_secrets.py|.githooks/pre-commit|.gitignore) continue ;;
+    esac
     case "$lower" in
         *.env|*.env.*|*.key|*.pem|*apikey*|*api_key*|*credential*|*_secret*)
             echo "BLOCKED  $path — this filename looks like a credential." >&2

@@ -82,3 +82,44 @@ def test_the_citation_file_and_the_root_version_agree() -> None:
     cff = re.search(r"^version:\s*(\S+)", (ROOT / "CITATION.cff").read_text(), re.M)
     assert cff, "CITATION.cff declares no version"
     assert cff.group(1) == _project(ROOT / "pyproject.toml")["version"]
+
+
+def test_no_test_file_is_ignored_by_git() -> None:
+    """A test git ignores is a test that exists for nobody but its author.
+
+    `tests/test_no_secrets.py` was ignored for a week by a `.gitignore` rule
+    reading `*_secret*`, which was written to keep credential files out and caught
+    the file hunting for them by its name. It passed on the machine that wrote it
+    and was absent from every clone, so CI never ran it and the repository's only
+    load-bearing protection against a committed key was not in the repository.
+
+    Checked against `git check-ignore` rather than a list of known rules: the point
+    is what git actually does, and the next rule to swallow a test will not be this
+    one. Anything genuinely meant to stay out of the repository does not belong
+    under `tests/` in the first place.
+    """
+    import subprocess
+
+    candidates = sorted(
+        str(path.relative_to(ROOT))
+        for path in (ROOT / "tests").rglob("*.py")
+        if "__pycache__" not in path.parts
+    )
+    assert candidates, "no test files found; this check would pass vacuously"
+
+    result = subprocess.run(
+        ["git", "check-ignore", "--stdin"],
+        cwd=ROOT,
+        input="\n".join(candidates),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode == 128:  # pragma: no cover - not a git working tree
+        pytest.skip("not a git working tree")
+    ignored = [line for line in result.stdout.splitlines() if line]
+    assert not ignored, (
+        "git ignores these test files, so they run only here: "
+        + ", ".join(ignored)
+        + ". Add a `!` negation in .gitignore, or move the file out of tests/."
+    )

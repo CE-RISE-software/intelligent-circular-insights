@@ -52,6 +52,13 @@ ontology/pefdpp/skos/ef31-elementaryflows.ttl
 secrets/
 secrets.*
 *_secret*
+# ...but not the test that hunts for them. `*_secret*` matched
+# `tests/test_no_secrets.py` by its name and quietly kept the only load-bearing
+# layer out of the repository entirely: it ran here and existed nowhere else, so
+# CI never ran it and no clone had it. `tests/test_packaging.py` now fails if any
+# file under `tests/` is ignored, because a test git ignores is a test that does
+# not exist for anybody else.
+!tests/test_no_secrets.py
 *credential*
 *apikey*
 *api_key*
