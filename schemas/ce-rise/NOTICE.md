@@ -24,8 +24,9 @@ consumer of the API sees the terms rather than having to find this file.
 
 ## Status
 
-The 17 model repositories are **not yet vendored here**; the catalogue metadata in
-`data/ce_rise_models.json` stands in. Run `tooling/fetch_ce_rise_models.sh` from a
-machine with Codeberg access — or against the GitHub mirrors, which are reachable
-where Codeberg is not — and commit the result with each model's commit SHA
-recorded in `VENDOR.md`.
+The 18 data-model repositories used by the catalogue are vendored in this subtree
+and pinned to the commits recorded in `VENDOR.md`. Seventeen also have generated
+JSON Schema artefacts under `_generated/`; only the six upstream models that declare
+a document root are offered as validation profiles. The catalogue metadata remains
+in `data/ce_rise_models.json` so API consumers receive the source, version and licence
+for each model.

@@ -1,104 +1,213 @@
-# Intelligent Circular Insights
+# CE-RISE Task 4.2 Workbench
 
-Reliability-first question answering over product records: every output is an
-evidence-grounded answer with provenance, or an explicit abstention.
+The CE-RISE Task 4.2 Workbench is a full-stack tool for exploring, validating,
+repairing and synthesising Digital Product Passport (DPP) records. It combines an
+evidence-grounded FastAPI backend with a React/TypeScript frontend and supports both
+a general-purpose backend profile and a CE-RISE profile over the consortium's data
+models and WP3 PEFDPP knowledge graph.
 
-> **Implemented through the integration checkpoint.** The two-mode
-> workbench includes guarded search, impact tools, validation, repair and synthesis.
-> Try **Synthetic demo battery** in Validate or Synthesize: saved real-model responses
-> work offline, with field provenance and separate review-only training suggestions.
-> Frontend requires Node 20+. Release gates and later sprint work remain. Begin with
-> [the architecture](docs/ARCHITECTURE.md); see
-> [verification and remaining work](docs/VERIFICATION_2026-09-22.md).
+Every generated answer must be traceable to evidence or the workbench abstains. Model
+training knowledge may be used only to propose lower-confidence, unverified repair
+suggestions for human review; those suggestions are clearly separated from grounded
+values and are never applied automatically.
 
----
-
-## What this is
-
-This is **COMPASS**, rebuilt so it can carry the research forward.
-
-COMPASS answers questions about Digital Product Passports through four stages — hybrid
-evidence acquisition over documents and persistent memory, targeted symbolic validation over
-a DPP ontology, context-bound composition where every claim carries a provenance identifier,
-and a calibrated answer-or-abstain decision. Three principles hold it together: *evidence
-before generation*, *targeted validity*, *selective output*.
-
-One workbench, two backend profiles. *Normal* is the fast path — flat product profiles, CSV
-emission factors, JSON-Schema validation. *CE-RISE* mounts the 17 CE-RISE data models and the
-WP3 PEFDPP graph, and runs the same five features over them: questions are answered from the
-graph's own assertions, carbon is solved off the RDF for the product systems it models,
-and records are checked against the consortium's data model that recognises them. You switch
-in Settings, per request, and both are live in the same session.
-
-The switch **routes**; it does not substitute. The two carbon engines describe different
-systems with different functional units, and the EU DPP schema and the CE-RISE models
-describe different documents, so each source answers for what it actually covers and every
-answer names which one produced it. Anything the CE-RISE side does not model keeps working
-exactly as it did in Normal mode. `docs/ARCHITECTURE.md` §7.1 says why, and what it cost to
-learn.
-
-The rewrite also fixes two things that are defects rather than research questions:
-
-- **memory becomes product-scoped**, append-only, superseding rather than overwriting. Today
-  recall is scoped by session, so a query about one product can return another product's
-  facts — in a compliance tool, the worst kind of quiet failure.
-- **a grounding verifier** sits between composition and the confidence step. An answer
-  containing a claim that resolves to nothing in the context pack cannot reach a user.
-
-Where the research has genuinely open questions — calibration, the policy layer, bias-aware
-abstention — the architecture provides a port and stops there. Building the seam costs hours;
-skipping it costs a rewrite when the next paper needs it. `ARCHITECTURE.md` §9 is explicit
-about which is which.
+The canonical repository is on
+[Codeberg](https://codeberg.org/CE-RISE-software/intelligent-circular-insights).
 
 ---
 
-## Scope
+## What the workbench provides
 
-This is a **software deliverable for the CE-RISE consortium**, not the evidence package
-behind a publication. It does not re-run experiments. Testing is moderate end-to-end coverage
-on mid and edge cases — over 600 tests, under five minutes, and **no OpenAI key required**:
-every LLM interaction is recorded once into a cassette and replayed, so neither CI nor a
-developer can spend money by running the suite.
-
-Six sprints, roughly two days of work.
-
----
-
-## Documents
-
-| | |
+| Area | Current capability |
 |---|---|
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | C4 diagrams, the hexagon and 15 ports, the inference path, substrates, and §9–10: which limitations are fixed here and which only get a seam |
-| [`docs/TESTING.md`](docs/TESTING.md) | the test shape, the edge cases that matter, cassettes, coverage floors, CI |
-| [`docs/VERIFICATION_2026-09-22.md`](docs/VERIFICATION_2026-09-22.md) | verified behavior, publication state, and deferred release work |
-| [`docs/RELEASE.md`](docs/RELEASE.md) | release prerequisites, Codeberg and Zenodo handoff |
-| [`docs/adr/`](docs/adr/) | ten decision records (plus superseded v1 records) |
+| Search and Answer | Hybrid retrieval, product-scoped memory, mounted substrate facts, symbolic reasoning, evidence citations, calibrated confidence and explicit abstention |
+| Single Passport | Stateless parsing and question answering over a user-supplied JSON or text passport without adding it to the corpus |
+| Carbon | Lifecycle calculations with contribution breakdowns, uncertainty, provenance and an explicit identifier for the calculation engine used |
+| Validate | EU DPP completeness checks and CE-RISE vocabulary/type validation with typed, located violations |
+| Repair | Evidence-backed field repair plus separate, lower-confidence suggestions derived from model training for human review |
+| Synthesize | Strict generation of a conforming passport in which every added field must have retrievable support |
+| CE-RISE Models | An 18-model catalogue, 17 generated JSON Schemas and six document-root validation profiles |
+| PEF Studio | WP3 PEFDPP overview, graph-based calculation, fixed competency questions and constrained read-only SPARQL |
+| Compare | Side-by-side execution of the same question through both backend profiles |
+
+## Backend profiles
+
+The frontend sends the selected profile on every request, and every API response states
+which backend actually served it.
+
+- **Normal** uses flat product profiles, published CSV emission factors, the EU DPP
+  JSON Schema, lexical evidence retrieval and the shared reliability pipeline.
+- **CE-RISE** adds the consortium data models and the WP3 PEFDPP graph. Questions can
+  cite graph assertions, carbon calculations use the graph for product systems it
+  models, and records written in a recognised CE-RISE vocabulary are routed to that
+  model's schema.
+
+The CE-RISE profile extends coverage without treating unlike sources as interchangeable.
+For example, a graph result declared per kilowatt-hour is not substituted for a whole
+product lifecycle result. The response identifies the source and calculation path so the
+two cannot be confused.
+
+## Reliability and safety
+
+The backend applies the same reliability path in both profiles:
+
+1. gather bounded evidence from documents, memory and mounted substrates;
+2. derive relevant symbolic facts where structured data is available;
+3. compose an answer using only the supplied context;
+4. verify citations, quoted support, claim coverage and numeric support;
+5. answer only when the configured operating threshold is met, otherwise abstain.
+
+Additional safeguards include request-local model budgets, disabled SDK retries for
+deliberate live checks, append-only product-scoped memory, provenance for generated
+records, typed capability errors and secret-scanning gates.
+
+## Repository structure
+
+```text
+apps/api/                 FastAPI backend and HTTP routes
+apps/web/                 React, TypeScript and Vite frontend
+packages/ici_core/        Domain model, ports and use cases
+packages/ici_evidence/    Retrieval, inline documents and fact memory
+packages/ici_llm/         Model providers, prompts, grounding and record assistance
+packages/ici_substrates/  Schemas, carbon factors, model catalogue and PEFDPP adapters
+packages/ici_symbolic/    Ontology and OWL-RL validation
+schemas/                  EU DPP schema and vendored CE-RISE data models
+tests/                    Unit, contract, integration, end-to-end, browser and live tests
+docs/                     Architecture, testing, release notes and decision records
+```
+
+## Local setup
+
+Prerequisites:
+
+- Python 3.10–3.12
+- [uv](https://docs.astral.sh/uv/)
+- Node.js 20 or newer
+
+Install the Python workspace and frontend dependencies:
+
+```bash
+make setup
+make web
+```
+
+Start the backend in one terminal:
+
+```bash
+make demo
+```
+
+Start the frontend in another terminal:
+
+```bash
+cd apps/web
+npm run dev -- --port 5173
+```
+
+Open <http://localhost:5173>. The API is served at <http://localhost:8000>.
+
+### Model configuration
+
+Replay mode is the default: it uses reviewed responses and never calls the model
+provider. Deterministic features such as validation, retrieval, graph queries and
+impact calculations work without an API key.
+
+To deliberately use the live model:
+
+```bash
+cp .env.example .env
+```
+
+Add the API key to `.env`, set `LLM_CASSETTE_MODE=live`, and restart the backend.
+Never commit `.env`, a token or a private key.
+
+## Verification
+
+The normal test suite is offline by construction. A cassette miss fails instead of
+silently making a paid network call.
+
+```bash
+make check       # Ruff, formatting, MyPy and dependency-layer contracts
+make test        # complete Python suite
+make web-check   # frontend typecheck and production build
+make smoke       # Playwright tests across both backend profiles
+make secrets     # tracked-file credential checks
+```
+
+Real-model checks are opt-in, use synthetic/public inputs, disable SDK retries and
+enforce a cumulative attempt and estimated-cost ceiling:
+
+```bash
+make live
+```
+
+See [Testing](docs/TESTING.md) for the complete test strategy and
+[Architecture](docs/ARCHITECTURE.md) for the component model, ports, inference path
+and backend-routing decisions.
+
+## Scope and limitations
+
+This is the CE-RISE Task 4.2 software workbench, not a legal certification service
+or the evidence package for a scientific publication.
+
+The WP3 battery case study includes its foreground inventory but not the licensed
+background database. A documented proxy factor pack is used instead; proxy values are
+labelled and must not be presented as an Environmental Footprint-compliant declaration.
+The six CE-RISE root schemas validate vocabulary and types but declare no required
+fields, so EU DPP completeness and CE-RISE vocabulary conformance remain separate,
+explicit checks.
+
+## Documentation
+
+| Document | Purpose |
+|---|---|
+| [Architecture](docs/ARCHITECTURE.md) | Components, ports, reliability path, substrates and backend routing |
+| [Testing](docs/TESTING.md) | Offline gates, model cassettes, browser coverage and live-test controls |
+| [Release](docs/RELEASE.md) | Codeberg, GitHub mirror, tagging and Zenodo handoff |
+| [Architecture decisions](docs/adr/) | Rationale and consequences for the major design choices |
+| [Dated verification checkpoint](docs/VERIFICATION_2026-09-22.md) | Historical verification state on 22 September 2026; later commits may supersede deferred items |
+
+## License
+
+The workbench software is licensed under the
+[European Union Public Licence v1.2 (EUPL-1.2)](LICENSE). This matches the
+[CE-RISE software template](https://codeberg.org/CE-RISE-software/template-software)
+and the related CE-RISE software repositories maintained by Riccardo Boero, including
+the [Digital Passport Model Assessment Workbench](https://codeberg.org/CE-RISE-software/dp-assessment-workbench)
+and [Digital Passport Engineering Assistant](https://codeberg.org/CE-RISE-software/dp-engineering-assistant).
+
+The vendored CE-RISE data models and generated derivatives under
+[`schemas/ce-rise/`](schemas/ce-rise/) retain their upstream
+**Creative Commons Attribution-NonCommercial 4.0 International
+(CC-BY-NC-4.0)** terms. They are segregated from the EUPL-licensed application code;
+see the [model notice](schemas/ce-rise/NOTICE.md) and
+[licensing decision](docs/adr/0010-licensing.md).
+
+## Contributing
+
+This repository is maintained on
+[Codeberg](https://codeberg.org/CE-RISE-software/intelligent-circular-insights),
+which is the canonical source of truth. The GitHub repository is a read mirror used
+for release archival and Zenodo integration. Issues and pull requests should be opened
+on Codeberg.
 
 ---
 
-## A note on scope
-
-The PEFDPP ontology and its battery case study are WP3 work by Mintjes, Barilli, Mondello,
-van Nielen, Hischier, Beloin-Saint-Pierre, Donati, Boero and Mogollón. Here they are **one
-mountable substrate** — a good one, because a real graph with triple-level provenance makes
-environmental questions checkable rather than merely retrievable. They are not the
-architecture, and nothing in the core knows they exist.
-
-The battery case study carries a complete foreground inventory but not the licensed
-background; a documented proxy factor pack stands in, every proxy value is badged, and the
-workbench says on every screen that this is not an EF-compliant declaration.
-
----
-
-## Licence
-
-**EUPL-1.2** — the licence the target repository already carries, matching the CE-RISE
-software template.
-
-Vendored CE-RISE data models live in a segregated `schemas/ce-rise/` subtree under their
-own **CC-BY-NC-4.0**, with per-file REUSE metadata, because non-commercial terms and EUPL's
-permission of commercial use cannot share one blanket statement. See
-[`docs/adr/0010-licensing.md`](docs/adr/0010-licensing.md) and
-[`docs/RELEASE.md`](docs/RELEASE.md).
+<a href="https://europa.eu" target="_blank" rel="noopener noreferrer">
+  <img src="https://ce-rise.eu/wp-content/uploads/2023/01/EN-Funded-by-the-EU-PANTONE-e1663585234561-1-1.png" alt="Funded by the European Union" width="200"/>
+</a>
 
 Funded by the European Union under Grant Agreement No. 101092281 — CE-RISE.
+
+Views and opinions expressed are those of the author(s) only and do not necessarily
+reflect those of the European Union or the granting authority (HADEA). Neither the
+European Union nor the granting authority can be held responsible for them.
+
+© 2026 CE-RISE consortium.
+
+Licensed under the [European Union Public Licence v1.2 (EUPL-1.2)](LICENSE).
+
+Attribution: CE-RISE project (Grant Agreement No. 101092281) and the individual
+authors and partners indicated in the repository metadata.
+
+Maintained by A M Esfar-E-Alam and Riccardo Boero (NILU) within CE-RISE Task 4.2.
