@@ -189,7 +189,7 @@ class JsonSchemaRegistry:
         )
         violations = [
             _to_violation(error, profile)
-            for error in sorted(validator.iter_errors(dict(record.payload)), key=str)
+            for error in sorted(validator.iter_errors(dict(record.payload)), key=_error_order)
         ]
         materials = record.payload.get("materials") if profile == EU_DPP else None
         if (
@@ -214,6 +214,27 @@ class JsonSchemaRegistry:
             violations=tuple(violations),
             checked_paths=len(record.payload),
         )
+
+
+def _error_order(error: Any) -> tuple[tuple[str, ...], str, str]:
+    """A stable sort key: where, then what, then the message.
+
+    This used to be ``key=str``, which is a trap with a large schema.
+    ``ValidationError.__str__`` renders the failing schema *and* the instance into
+    the message -- 917,000 characters for one error against a generated CE-RISE
+    model -- so sorting a single violation cost 60 ms, and a routed check that
+    consults six candidates cost about 290 ms of pure string formatting. Normal
+    mode never noticed, because the hand-written EU DPP schema is small.
+
+    Sorting by location is also the better order for the reader: violations arrive
+    grouped by the part of the record they concern, which is how someone repairing
+    one works through them.
+    """
+    return (
+        tuple(str(part) for part in error.absolute_path),
+        str(error.validator or ""),
+        str(error.message),
+    )
 
 
 def _to_violation(error: Any, profile: ProfileId) -> Violation:

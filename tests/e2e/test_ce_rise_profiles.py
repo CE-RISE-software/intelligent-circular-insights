@@ -171,3 +171,54 @@ class TestAnUnknownProfileIsStillRefused:
             "/api/validate", json={"dpp": {}, "profile": "ce-rise:does-not-exist"}, headers=NORMAL
         ).json()
         assert "no such profile" in body["violations"][0]["message"]
+
+
+class TestViolationsAreOrderedWithoutRenderingTheSchema:
+    """The sort key is the whole of this, and it was a 120x defect.
+
+    ``sorted(..., key=str)`` looks harmless until the schema is large.
+    ``ValidationError.__str__`` renders the failing schema *and* the instance into
+    its message, so one error against a generated CE-RISE model stringifies to
+    roughly 900,000 characters; sorting a single violation cost 60 ms, and a routed
+    check that consults six candidates spent about 290 ms formatting strings it
+    then threw away. Normal mode never showed it, because the hand-written EU DPP
+    schema is small enough for the cost to hide.
+
+    Asserted on the key rather than on a stopwatch: a timing threshold is flaky on
+    a loaded machine, and what actually has to stay true is that ordering never
+    renders the schema.
+    """
+
+    def test_the_sort_key_does_not_stringify_the_error(self) -> None:
+        from jsonschema import Draft202012Validator, FormatChecker
+        from referencing import Registry
+
+        from ici_core.domain.ids import ProfileId
+        from ici_substrates.registry.schemas import _error_order
+
+        registry = JsonSchemaRegistry()
+        schema = registry._ce_rise_schema(ProfileId("ce-rise:lci-dataset"))
+        assert schema is not None
+        validator = Draft202012Validator(
+            schema, format_checker=FormatChecker(), registry=Registry()
+        )
+        error = next(validator.iter_errors({"a_term_this_model_never_declared": 1}))
+
+        # The trap, measured rather than described.
+        assert len(str(error)) > 100_000
+        assert len(str(_error_order(error))) < 500
+
+    def test_violations_arrive_grouped_by_where_they_are(self, client) -> None:
+        """Ordering by location is also the order a reader repairs in."""
+        record = {
+            "lci_dataset_identifier": 1,
+            "lci_dataset_name": 2,
+            "activities": "not a list",
+        }
+        body = client.post(
+            "/api/validate",
+            json={"dpp": record, "profile": "ce-rise:lci-dataset"},
+            headers=NORMAL,
+        ).json()
+        locations = [v["location"] for v in body["violations"]]
+        assert locations == sorted(locations)

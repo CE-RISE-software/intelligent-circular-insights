@@ -444,7 +444,7 @@ graph TB
         N3["Flat product profiles<br/>CSV emission factors"]
     end
 
-    subgraph "CE-RISE profile — adds"
+    subgraph "CE-RISE profile — mounted alongside"
         C1["<b>CE-RISE data models (17)</b><br/>record metadata · custody · governance<br/>product/material profile · integrated LCA<br/>circularity · data quality · UQ · traceability"]
         C2["<b>PEFDPP graph</b><br/>LCI datasets · activities · flows<br/>reproducible LCA with triple provenance"]
         C3["SHACL conformance profiles"]
@@ -472,6 +472,63 @@ precision per substrate, so the paper can say exactly which knowledge bought whi
 PEFDPP is valuable here precisely because it is a real graph with triple-level provenance:
 questions about environmental performance become checkable rather than retrievable. But it
 is one substrate. Nothing in the core knows it exists.
+
+### 7.1 What the switch changes — route, never substitute
+
+Mounting knowledge is only half of it. The mode has to change what the five features
+*do* — Search & Answer, Carbon, Validate, Repair, Synthesize — or it is a window, not a
+backend. Three ports differ between the two bundles (`substrates`, `impact`, `schemas`);
+every port on the reliability path is shared **by identity**, so a confidence figure means
+the same thing in both modes.
+
+The rule those three follow is the same one, and it is worth stating once because it is not
+obvious and getting it wrong is expensive:
+
+> When two sources model **different things**, route between them. Do not substitute one
+> for the other, and do not conjoin them.
+
+Both halves of that have cost a bug.
+
+**Substituting.** An early draft swapped the impact engine when the mode flipped, and Carbon
+stopped working for the five products the graph has never heard of. The repair — making the
+mode purely *additive* — removed the breakage by removing the difference, and was pinned by
+a test asserting the two modes differed in exactly one port. That test then guarded the
+absence of the feature for three sprints.
+
+The two engines are not interchangeable and no amount of care makes them so. The graph
+solves `BatteryPackPEFStudy` — a foreground inventory over a documented proxy factor pack,
+declared per kilowattHour — at 0.059384 kg CO₂ eq. The factor table totals
+`generic_bev_pack_60kwh` at 21,362 kg CO₂e over a whole product lifecycle. Different system
+boundaries, different functional units, four orders of magnitude apart. Mapping one onto the
+other to make the switch *do something* would produce a confidently wrong number, which is
+worse than doing nothing. `LayeredImpactEngine` gives each engine the subjects it declares
+and names the answering engine in every result, so a graph-solved figure is never mistaken
+for a table-multiplied one.
+
+**Conjoining.** The same reasoning applies to schemas, and the first attempt there failed
+too. The EU DPP schema and the CE-RISE data models share **not one top-level term** — a
+passport declares `dpp_id`, `product`, `materials`; `ProductSystem` declares
+`product_system_identifier`, `activity_references`, `reference_flow_specification` — and
+every CE-RISE root model closes its object. A conjunction of the two is therefore not merely
+strict, it is *unsatisfiable*: no document conforms to both, and a mode that checked both
+would reject every record ever written. Synthesis failing is what surfaced this.
+
+`LayeredSchemaRegistry` routes instead, on **vocabulary rather than validity**: a model
+recognises a record when it knows all of the record's top-level terms. Routing on
+conformance would invert the useful behaviour — the more broken a CE-RISE document is, the
+less likely it would be recognised as one, so a `ProductSystem` with a single wrong type
+would be told it was missing `dpp_id`. A record recognised by exactly one model is checked
+against that model; everything else, including an empty object, falls back to the regulatory
+profile, because the CE-RISE models declare no required fields and routing an unrecognised
+record to one of them would answer "conforms" about a document nothing had understood.
+
+Validate, Repair and Synthesize all take their profile from the bound registry
+(`SchemaRegistry.default_profile()`) rather than from a literal, so adding a mode moves all
+three at once. The response names the profile that **ran**, never the one requested.
+
+`tests/e2e/test_the_mode_switch_changes_the_features.py` is where this contract lives: one
+class per feature, each asserting the difference the switch makes *and* the behaviour it
+must not break, together.
 
 ---
 

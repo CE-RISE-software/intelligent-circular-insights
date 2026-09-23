@@ -25,8 +25,17 @@ before generation*, *targeted validity*, *selective output*.
 
 One workbench, two backend profiles. *Normal* is the fast path — flat product profiles, CSV
 emission factors, JSON-Schema validation. *CE-RISE* mounts the 17 CE-RISE data models and the
-WP3 PEFDPP graph on top of it, with SHACL conformance and a life cycle assessment solved off
-the RDF. You switch in Settings, per request, and both are live in the same session.
+WP3 PEFDPP graph, and runs the same five features over them: questions are answered from the
+graph's own assertions, carbon is solved off the RDF for the product systems it models,
+and records are checked against the consortium's data model that recognises them. You switch
+in Settings, per request, and both are live in the same session.
+
+The switch **routes**; it does not substitute. The two carbon engines describe different
+systems with different functional units, and the EU DPP schema and the CE-RISE models
+describe different documents, so each source answers for what it actually covers and every
+answer names which one produced it. Anything the CE-RISE side does not model keeps working
+exactly as it did in Normal mode. `docs/ARCHITECTURE.md` §7.1 says why, and what it cost to
+learn.
 
 The rewrite also fixes two things that are defects rather than research questions:
 
