@@ -1,0 +1,1571 @@
+{
+  "$comment": "Generated from schemas/ce-rise/data-quality-framework/model/model.yaml by tooling/build_ce_rise_profiles.py. Do not edit. The CE-RISE data models are CC-BY-NC-4.0; see ../NOTICE.md.",
+  "$defs": {
+    "AggregationLevelEnum": {
+      "description": "Levels at which data quality may be aggregated",
+      "enum": [
+        "value",
+        "record",
+        "dataset",
+        "input_quantity",
+        "indicator",
+        "model",
+        "component",
+        "product",
+        "material",
+        "portfolio",
+        "other"
+      ],
+      "title": "AggregationLevelEnum",
+      "type": "string"
+    },
+    "AggregationMethodEnum": {
+      "description": "Methods for aggregating data quality information",
+      "enum": [
+        "worst_score",
+        "rule_based",
+        "weighted_mean",
+        "arithmetic_mean",
+        "geometric_mean",
+        "maximum_risk",
+        "hierarchical",
+        "expert_judgement",
+        "custom",
+        "not_evaluated"
+      ],
+      "title": "AggregationMethodEnum",
+      "type": "string"
+    },
+    "AssessmentStatusEnum": {
+      "description": "Lifecycle status values for data quality assessments",
+      "enum": [
+        "draft",
+        "active",
+        "reviewed",
+        "verified",
+        "partial",
+        "superseded",
+        "expired",
+        "unavailable"
+      ],
+      "title": "AssessmentStatusEnum",
+      "type": "string"
+    },
+    "ConfidenceLevelEnum": {
+      "description": "Confidence levels derived from data quality assessment",
+      "enum": [
+        "high",
+        "medium",
+        "low",
+        "very_low",
+        "not_evaluated"
+      ],
+      "title": "ConfidenceLevelEnum",
+      "type": "string"
+    },
+    "DataCharacterization": {
+      "additionalProperties": false,
+      "description": "Characterization of the assessed data, including source, provenance, scope, collection method, versioning, and preprocessing",
+      "properties": {
+        "collection_end_date_value": {
+          "description": "End date for the data collection or generation period",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "collection_method_value": {
+          "description": "Method, protocol, procedure, system, or workflow used to collect or generate the data",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "collection_protocol_value": {
+          "description": "Documented collection protocol, questionnaire, instrument, test method, API, or extraction logic",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "collection_start_date_value": {
+          "description": "Start date for the data collection or generation period",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_characterization_identifier_value": {
+          "description": "Identifier for a data characterization record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_domain_value": {
+          "description": "Domain or subject area of the data, such as product specification, LCA, diagnostics, compliance, or circularity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_provider_value": {
+          "description": "Provider, owner, custodian, supplier, laboratory, or organization responsible for the data",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a report, dataset, diagnostic output, certificate, standard, or workflow record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_traceability_reference_value": {
+          "description": "Reference to a metrological traceability statement, chain, method, calibration, or boundary definition related to this data quality assessment",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_unit_value": {
+          "description": "Unit associated with a quantitative value or metric",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_source_identifier_value": {
+          "description": "Identifier for the assessed data source, dataset, value source, or information source",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_source_name_value": {
+          "description": "Name of the assessed data source, dataset, value source, or information source",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_source_type_value": {
+          "$ref": "#/$defs/DataSourceTypeEnum",
+          "description": "Type of data source used"
+        },
+        "data_type_value": {
+          "$ref": "#/$defs/DataTypeEnum",
+          "description": "Type of data being assessed"
+        },
+        "data_version_value": {
+          "description": "Version, edition, revision, release date, or snapshot identifier for the assessed data",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "geographic_coverage_value": {
+          "description": "Geographic coverage or spatial representativeness of the data",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "harmonization_description_value": {
+          "description": "Harmonization, mapping, coding, unit conversion, or schema alignment applied to combine or compare data",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "population_or_scope_value": {
+          "description": "Target population, inference scope, product scope, material scope, or process scope represented by the data",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "preprocessing_description_value": {
+          "description": "Preprocessing, cleaning, transformation, imputation, filtering, or normalization applied before assessment",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "provenance_description_value": {
+          "description": "Narrative provenance of the data, including who collected it, when, under which protocol, and how it was processed",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sample_size_value": {
+          "description": "Sample size, number of observations, number of records, or number of contributing sources",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "technological_coverage_value": {
+          "description": "Technological, product, process, or system coverage represented by the data",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "temporal_coverage_value": {
+          "description": "Temporal coverage or period represented by the data",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "update_frequency_value": {
+          "description": "Update cadence or refresh frequency for the data",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "variable_definition_value": {
+          "description": "Definition of the variable, field, indicator, category, or qualitative construct being assessed",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "DataCharacterization",
+      "type": "object"
+    },
+    "DataQualityAssessment": {
+      "additionalProperties": false,
+      "description": "Reusable assessment describing the quality, fitness for purpose, diagnostics, and improvement needs of data used by CE-RISE models",
+      "properties": {
+        "assessment_notes_value": {
+          "description": "Additional notes about the data quality assessment",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "assessment_purpose_value": {
+          "description": "Purpose for which the data quality assessment is performed",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "assessor_value": {
+          "description": "Person, organization, system, or workflow responsible for the data quality assessment",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_characterization": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DataCharacterization"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Characterization of the assessed data and its provenance"
+        },
+        "data_quality_applies_to_class_value": {
+          "description": "Class in an external model to which this data quality assessment applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_applies_to_model_value": {
+          "description": "Name, URI, or namespace of the external data model to which this data quality assessment applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_applies_to_record_value": {
+          "description": "Identifier of the external record, object, dataset, or passport entry to which this data quality assessment applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_applies_to_slot_value": {
+          "description": "Slot or attribute in an external model to which this data quality assessment applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_applies_to_value_identifier_value": {
+          "description": "Identifier of a specific value object when the target model gives value-level identifiers",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_applies_to_value_path_value": {
+          "description": "JSONPath, XPath, RDF path, or other pointer to the value to which this data quality assessment applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_assessment_date_value": {
+          "description": "Date and time when the data quality assessment was issued or last updated",
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_assessment_identifier_value": {
+          "description": "Identifier for a data quality assessment that can be referenced from another CE-RISE model",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_assessment_label_value": {
+          "description": "Human-readable label for the data quality assessment",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_assessment_status_value": {
+          "$ref": "#/$defs/AssessmentStatusEnum",
+          "description": "Lifecycle status of the data quality assessment"
+        },
+        "data_quality_assessment_type_value": {
+          "$ref": "#/$defs/DataQualityAssessmentTypeEnum",
+          "description": "Type of data quality assessment being documented"
+        },
+        "data_quality_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a report, dataset, diagnostic output, certificate, standard, or workflow record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_profile": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DataQualityProfile"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Data quality profile associated with an assessment"
+        },
+        "data_quality_standards_applied_value": {
+          "description": "Standard, guide, protocol, or scoring framework applied in the data quality assessment",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_traceability_reference_value": {
+          "description": "Reference to a metrological traceability statement, chain, method, calibration, or boundary definition related to this data quality assessment",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_uncertainty_reference_value": {
+          "description": "Reference to an uncertainty statement, uncertainty budget, or uncertainty component informed by this data quality assessment",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fitness_for_purpose_value": {
+          "$ref": "#/$defs/FitnessForPurposeEnum",
+          "description": "Overall statement of whether the data are fit for the stated purpose"
+        },
+        "intended_use_value": {
+          "description": "Intended use, decision context, or analytical purpose for which data fitness is assessed",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quality_diagnostics": {
+          "description": "Data-quality diagnostic runs, checks, or analyses",
+          "items": {
+            "$ref": "#/$defs/QualityDiagnostic"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "quality_issues": {
+          "description": "Data quality issues, limitations, anomalies, or risks",
+          "items": {
+            "$ref": "#/$defs/QualityIssue"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "remediation_actions": {
+          "description": "Remediation, mitigation, containment, or improvement actions",
+          "items": {
+            "$ref": "#/$defs/RemediationAction"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "uncertainty_translation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyTranslation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "DQA-to-uncertainty translation associated with an assessment or profile"
+        }
+      },
+      "title": "DataQualityAssessment",
+      "type": "object"
+    },
+    "DataQualityAssessmentTypeEnum": {
+      "description": "Kinds of data quality assessments supported by this model",
+      "enum": [
+        "value_assessment",
+        "record_assessment",
+        "dataset_assessment",
+        "indicator_input_assessment",
+        "indicator_output_assessment",
+        "evidence_assessment",
+        "process_assessment",
+        "composite_assessment",
+        "not_evaluated",
+        "other"
+      ],
+      "title": "DataQualityAssessmentTypeEnum",
+      "type": "string"
+    },
+    "DataQualityEvidenceReference": {
+      "additionalProperties": false,
+      "description": "Supporting evidence record for a data quality assessment, score, diagnostic, issue, remediation action, uncertainty translation, or aggregation",
+      "properties": {
+        "data_quality_evidence_date_value": {
+          "description": "Date associated with supporting evidence",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_evidence_description_value": {
+          "description": "Description of supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_evidence_identifier_value": {
+          "description": "Identifier for supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_evidence_provider_value": {
+          "description": "Provider, author, laboratory, supplier, or organization responsible for supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_evidence_type_value": {
+          "$ref": "#/$defs/DataQualityEvidenceTypeEnum",
+          "description": "Type of supporting evidence"
+        },
+        "data_quality_evidence_url_value": {
+          "description": "URL for supporting evidence",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_evidence_version_value": {
+          "description": "Version, edition, or revision of supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "DataQualityEvidenceReference",
+      "type": "object"
+    },
+    "DataQualityEvidenceTypeEnum": {
+      "description": "Types of evidence used to support data quality assessments",
+      "enum": [
+        "diagnostic_report",
+        "data_profile",
+        "dataset_snapshot",
+        "provenance_record",
+        "metadata_record",
+        "calibration_certificate",
+        "traceability_record",
+        "validation_report",
+        "harmonization_log",
+        "remediation_record",
+        "workflow_record",
+        "supplier_declaration",
+        "standard_or_protocol",
+        "other"
+      ],
+      "title": "DataQualityEvidenceTypeEnum",
+      "type": "string"
+    },
+    "DataQualityFramework": {
+      "additionalProperties": false,
+      "description": "Root container for data quality assessments and supporting records",
+      "properties": {
+        "criterion_assessments": {
+          "description": "Criterion-level pedigree assessments",
+          "items": {
+            "$ref": "#/$defs/QualityCriterionAssessment"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "data_characterizations": {
+          "description": "Data characterization records available for reuse by one or more assessments",
+          "items": {
+            "$ref": "#/$defs/DataCharacterization"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "data_quality_assessments": {
+          "description": "Reusable data quality assessments that can be embedded or referenced by other CE-RISE data models",
+          "items": {
+            "$ref": "#/$defs/DataQualityAssessment"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "data_quality_evidence_references": {
+          "description": "Evidence records referenced by the data quality framework",
+          "items": {
+            "$ref": "#/$defs/DataQualityEvidenceReference"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "data_quality_profiles": {
+          "description": "Data quality profiles available for reuse by one or more assessments",
+          "items": {
+            "$ref": "#/$defs/DataQualityProfile"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "quality_aggregations": {
+          "description": "Aggregations of data quality assessments, profiles, criteria, metrics, or uncertainty translations",
+          "items": {
+            "$ref": "#/$defs/QualityAggregation"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "quality_diagnostics": {
+          "description": "Data-quality diagnostic runs, checks, or analyses",
+          "items": {
+            "$ref": "#/$defs/QualityDiagnostic"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "quality_issues": {
+          "description": "Data quality issues, limitations, anomalies, or risks",
+          "items": {
+            "$ref": "#/$defs/QualityIssue"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "quality_metrics": {
+          "description": "Quality metrics or diagnostic metrics used by profiles, criteria, or diagnostics",
+          "items": {
+            "$ref": "#/$defs/QualityMetric"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "remediation_actions": {
+          "description": "Remediation, mitigation, containment, or improvement actions",
+          "items": {
+            "$ref": "#/$defs/RemediationAction"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "uncertainty_translations": {
+          "description": "Translations from data quality scores to uncertainty information",
+          "items": {
+            "$ref": "#/$defs/UncertaintyTranslation"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "DataQualityFramework",
+      "type": "object"
+    },
+    "DataQualityProfile": {
+      "additionalProperties": false,
+      "description": "Profile aggregating data quality criteria, scores, flags, and confidence for a dataset, value, source, or information product",
+      "properties": {
+        "aggregation_method_value": {
+          "$ref": "#/$defs/AggregationMethodEnum",
+          "description": "Method used to aggregate criterion scores or lower-level assessments into a profile"
+        },
+        "confidence_level_value": {
+          "$ref": "#/$defs/ConfidenceLevelEnum",
+          "description": "Confidence level implied by the data quality assessment"
+        },
+        "criterion_assessments": {
+          "description": "Criterion-level pedigree assessments",
+          "items": {
+            "$ref": "#/$defs/QualityCriterionAssessment"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "data_quality_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a report, dataset, diagnostic output, certificate, standard, or workflow record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_profile_identifier_value": {
+          "description": "Identifier for a data quality profile aggregating one or more criterion assessments",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_profile_name_value": {
+          "description": "Human-readable name of a data quality profile",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "limiting_criteria_value": {
+          "description": "Criterion or criteria that limit the overall score, confidence, or decision flag",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "overall_numeric_score_value": {
+          "description": "Numeric quality score when the score is represented as a number",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "overall_quality_score_value": {
+          "$ref": "#/$defs/QualityScoreEnum",
+          "description": "Overall pedigree score for the assessed data, typically from 1 very reliable to 4 dubious"
+        },
+        "profile_summary_value": {
+          "description": "Summary of the data quality profile, including main strengths and weaknesses",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quality_flag_value": {
+          "$ref": "#/$defs/QualityFlagEnum",
+          "description": "Operational decision flag derived from the quality profile"
+        },
+        "uncertainty_translation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyTranslation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "DQA-to-uncertainty translation associated with an assessment or profile"
+        }
+      },
+      "title": "DataQualityProfile",
+      "type": "object"
+    },
+    "DataSourceTypeEnum": {
+      "description": "Types of data sources",
+      "enum": [
+        "direct_measurement",
+        "laboratory_test",
+        "supplier_declaration",
+        "administrative_record",
+        "database",
+        "literature",
+        "expert_judgement",
+        "survey_or_interview",
+        "sensor_or_iot",
+        "calculation_or_model",
+        "mixed",
+        "other"
+      ],
+      "title": "DataSourceTypeEnum",
+      "type": "string"
+    },
+    "DataTypeEnum": {
+      "description": "Types of data covered by data quality assessments",
+      "enum": [
+        "quantitative",
+        "semi_quantitative",
+        "qualitative",
+        "categorical",
+        "boolean",
+        "time_series",
+        "geospatial",
+        "modelled",
+        "mixed",
+        "other"
+      ],
+      "title": "DataTypeEnum",
+      "type": "string"
+    },
+    "DiagnosticTypeEnum": {
+      "description": "Types of data-quality diagnostics",
+      "enum": [
+        "comprehensive_profiling",
+        "missing_data_analysis",
+        "structural_integrity_validation",
+        "relational_integrity_validation",
+        "distributional_alignment",
+        "semantic_unit_consistency",
+        "temporal_spatial_alignment",
+        "provenance_correlation",
+        "impact_sensitivity",
+        "scoring_rule_check",
+        "reproducibility_check",
+        "other"
+      ],
+      "title": "DiagnosticTypeEnum",
+      "type": "string"
+    },
+    "FitnessForPurposeEnum": {
+      "description": "Fitness-for-purpose decision values",
+      "enum": [
+        "fit",
+        "fit_with_conditions",
+        "exploratory_only",
+        "not_fit",
+        "insufficient_information",
+        "not_evaluated"
+      ],
+      "title": "FitnessForPurposeEnum",
+      "type": "string"
+    },
+    "IssueStatusEnum": {
+      "description": "Lifecycle status of data quality issues",
+      "enum": [
+        "open",
+        "under_review",
+        "mitigated",
+        "remediated",
+        "accepted_risk",
+        "closed",
+        "superseded"
+      ],
+      "title": "IssueStatusEnum",
+      "type": "string"
+    },
+    "PriorityEnum": {
+      "description": "Priority values for remediation actions",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "urgent",
+        "not_assigned"
+      ],
+      "title": "PriorityEnum",
+      "type": "string"
+    },
+    "QualityAggregation": {
+      "additionalProperties": false,
+      "description": "Aggregation of assessments, profiles, criterion scores, metrics, or uncertainty translations across values, records, datasets, or indicators",
+      "properties": {
+        "aggregation_identifier_value": {
+          "description": "Identifier for an aggregation of data quality assessments, profiles, criteria, metrics, or uncertainty translations",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "aggregation_input_references_value": {
+          "description": "References to the input assessments, profiles, criteria, metrics, or data sources used in the aggregation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "aggregation_level_value": {
+          "$ref": "#/$defs/AggregationLevelEnum",
+          "description": "Level at which aggregation is performed"
+        },
+        "aggregation_method_value": {
+          "$ref": "#/$defs/AggregationMethodEnum",
+          "description": "Method used to aggregate criterion scores or lower-level assessments into a profile"
+        },
+        "aggregation_output_reference_value": {
+          "description": "Reference to the output assessment, profile, score, uncertainty translation, or decision produced by the aggregation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "aggregation_rationale_value": {
+          "description": "Rationale for the aggregation method and weighting choices",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "aggregation_weights_value": {
+          "description": "Weights or weighting rule used in the aggregation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a report, dataset, diagnostic output, certificate, standard, or workflow record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "QualityAggregation",
+      "type": "object"
+    },
+    "QualityCriterionAssessment": {
+      "additionalProperties": false,
+      "description": "Criterion-level assessment for a data quality dimension such as validity, accuracy, consistency, timeliness, or completeness",
+      "properties": {
+        "criterion_assessment_identifier_value": {
+          "description": "Identifier for a criterion-level quality assessment",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "criterion_impact_value": {
+          "description": "Impact of this criterion on the intended use, uncertainty, bias, comparability, or decision",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "criterion_metric_value": {
+          "description": "Metric value, observation, or diagnostic result used to support the criterion score",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "criterion_numeric_score_value": {
+          "description": "Numeric criterion score when the score is represented as a number",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "criterion_rationale_value": {
+          "description": "Rationale for assigning the criterion score",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "criterion_score_value": {
+          "$ref": "#/$defs/QualityScoreEnum",
+          "description": "Pedigree score assigned to a quality criterion"
+        },
+        "criterion_threshold_value": {
+          "description": "Threshold, rule, target, or expectation used to score the criterion",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "criterion_type_value": {
+          "$ref": "#/$defs/QualityCriterionEnum",
+          "description": "Quality criterion being assessed"
+        },
+        "criterion_weight_value": {
+          "description": "Weight assigned to the criterion in an aggregation or decision rule",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "data_quality_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a report, dataset, diagnostic output, certificate, standard, or workflow record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quality_issues": {
+          "description": "Data quality issues, limitations, anomalies, or risks",
+          "items": {
+            "$ref": "#/$defs/QualityIssue"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "quality_metrics": {
+          "description": "Quality metrics or diagnostic metrics used by profiles, criteria, or diagnostics",
+          "items": {
+            "$ref": "#/$defs/QualityMetric"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "uncertainty_translation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyTranslation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "DQA-to-uncertainty translation associated with an assessment or profile"
+        }
+      },
+      "title": "QualityCriterionAssessment",
+      "type": "object"
+    },
+    "QualityCriterionEnum": {
+      "description": "Data quality criteria supported by the framework",
+      "enum": [
+        "validity",
+        "accuracy",
+        "consistency",
+        "timeliness",
+        "completeness",
+        "representativeness",
+        "transparency",
+        "provenance",
+        "reproducibility",
+        "precision",
+        "other"
+      ],
+      "title": "QualityCriterionEnum",
+      "type": "string"
+    },
+    "QualityDiagnostic": {
+      "additionalProperties": false,
+      "description": "Diagnostic run or analysis that compares data against expectations, detects deviations, infers causes, and estimates impact",
+      "properties": {
+        "data_quality_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a report, dataset, diagnostic output, certificate, standard, or workflow record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "diagnostic_cause_value": {
+          "description": "Plausible or confirmed cause of the observed diagnostic finding",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "diagnostic_identifier_value": {
+          "description": "Identifier for a diagnostic run, check, or analysis",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "diagnostic_impact_value": {
+          "description": "Impact of the diagnostic finding on the intended analysis, decision, uncertainty, or comparability",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "diagnostic_method_value": {
+          "description": "Diagnostic method, test, script, notebook, query, or procedure used",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "diagnostic_reproducibility_value": {
+          "description": "Information needed to reproduce the diagnostic run, such as pinned dependencies, configuration, hash, or workflow version",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "diagnostic_run_timestamp_value": {
+          "description": "Date and time when the diagnostic run was executed",
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "diagnostic_severity_value": {
+          "$ref": "#/$defs/SeverityEnum",
+          "description": "Severity of the diagnostic finding"
+        },
+        "diagnostic_software_reference_value": {
+          "description": "Software, notebook, workflow, configuration, or service used to execute the diagnostic",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "diagnostic_type_value": {
+          "$ref": "#/$defs/DiagnosticTypeEnum",
+          "description": "Type of data quality diagnostic"
+        },
+        "expectation_specification_value": {
+          "description": "Expected value, threshold, rule, contract, baseline, or target used by the diagnostic",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "observed_deviation_value": {
+          "description": "Observed deviation from the expectation, threshold, baseline, or target",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quality_issues": {
+          "description": "Data quality issues, limitations, anomalies, or risks",
+          "items": {
+            "$ref": "#/$defs/QualityIssue"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "quality_metrics": {
+          "description": "Quality metrics or diagnostic metrics used by profiles, criteria, or diagnostics",
+          "items": {
+            "$ref": "#/$defs/QualityMetric"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "QualityDiagnostic",
+      "type": "object"
+    },
+    "QualityFlagEnum": {
+      "description": "Operational decision flags derived from quality scores",
+      "enum": [
+        "green_proceed",
+        "orange_review",
+        "red_reject",
+        "grey_not_evaluated"
+      ],
+      "title": "QualityFlagEnum",
+      "type": "string"
+    },
+    "QualityIssue": {
+      "additionalProperties": false,
+      "description": "Data quality issue, limitation, anomaly, or risk identified through scoring, diagnostics, provenance review, or expert assessment",
+      "properties": {
+        "data_quality_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a report, dataset, diagnostic output, certificate, standard, or workflow record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_uncertainty_reference_value": {
+          "description": "Reference to an uncertainty statement, uncertainty budget, or uncertainty component informed by this data quality assessment",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issue_affected_criteria_value": {
+          "description": "Quality criteria affected by the issue",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issue_detected_date_value": {
+          "description": "Date when the issue was detected",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issue_risk_statement_value": {
+          "description": "Risk statement explaining how the issue may affect the intended use, decision, or analysis",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issue_root_cause_value": {
+          "description": "Root cause, suspected cause, or causal inference for the issue",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issue_scope_value": {
+          "description": "Scope of the issue, such as affected fields, records, time periods, regions, suppliers, or processes",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "issue_severity_value": {
+          "$ref": "#/$defs/SeverityEnum",
+          "description": "Severity or criticality of the data quality issue"
+        },
+        "issue_status_value": {
+          "$ref": "#/$defs/IssueStatusEnum",
+          "description": "Lifecycle status of the data quality issue"
+        },
+        "quality_issue_identifier_value": {
+          "description": "Identifier for a data quality issue, limitation, anomaly, or risk",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quality_issue_type_value": {
+          "$ref": "#/$defs/QualityIssueTypeEnum",
+          "description": "Type of data quality issue"
+        },
+        "remediation_actions": {
+          "description": "Remediation, mitigation, containment, or improvement actions",
+          "items": {
+            "$ref": "#/$defs/RemediationAction"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "QualityIssue",
+      "type": "object"
+    },
+    "QualityIssueTypeEnum": {
+      "description": "Types of data quality issues",
+      "enum": [
+        "missingness",
+        "non_representativeness",
+        "timeliness_deficit",
+        "schema_drift",
+        "unit_mismatch",
+        "coding_mismatch",
+        "calibration_gap",
+        "provenance_gap",
+        "method_mismatch",
+        "boundary_mismatch",
+        "outlier_or_anomaly",
+        "duplicate_or_conflict",
+        "bias",
+        "invalid_value",
+        "other"
+      ],
+      "title": "QualityIssueTypeEnum",
+      "type": "string"
+    },
+    "QualityMetric": {
+      "additionalProperties": false,
+      "description": "Metric, indicator, diagnostic output, threshold check, or quality measurement supporting a criterion score",
+      "properties": {
+        "data_quality_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a report, dataset, diagnostic output, certificate, standard, or workflow record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "metric_method_value": {
+          "description": "Method, query, diagnostic procedure, rule, or script used to compute the metric",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "metric_numeric_value": {
+          "description": "Numeric value of a metric, indicator, diagnostic output, or score",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "metric_pass_flag_value": {
+          "description": "Whether the metric passes the defined threshold or expectation",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "metric_text_value": {
+          "description": "Textual, categorical, or structured value of a metric, indicator, diagnostic output, or score",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "metric_threshold_value": {
+          "description": "Threshold, tolerance, expectation, or acceptance criterion for the metric",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "metric_unit_value": {
+          "description": "Unit associated with a metric value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quality_metric_category_value": {
+          "$ref": "#/$defs/QualityCriterionEnum",
+          "description": "Category or criterion to which the quality metric belongs"
+        },
+        "quality_metric_identifier_value": {
+          "description": "Identifier for a data quality metric or diagnostic metric",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quality_metric_name_value": {
+          "description": "Human-readable name of the data quality metric",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "QualityMetric",
+      "type": "object"
+    },
+    "QualityScoreEnum": {
+      "description": "Pedigree score scale for data quality",
+      "enum": [
+        "score_1_very_reliable",
+        "score_2_reliable",
+        "score_3_unreliable",
+        "score_4_dubious",
+        "not_evaluated",
+        "not_applicable"
+      ],
+      "title": "QualityScoreEnum",
+      "type": "string"
+    },
+    "RemediationAction": {
+      "additionalProperties": false,
+      "description": "Remediation, mitigation, containment, or improvement activity for a data quality issue",
+      "properties": {
+        "data_quality_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a report, dataset, diagnostic output, certificate, standard, or workflow record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "expected_score_improvement_value": {
+          "description": "Expected score, score change, or quality improvement after remediation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "remediation_action_identifier_value": {
+          "description": "Identifier for a remediation action, mitigation, containment, or improvement activity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "remediation_action_type_value": {
+          "$ref": "#/$defs/RemediationActionTypeEnum",
+          "description": "Type of remediation action"
+        },
+        "remediation_completion_date_value": {
+          "description": "Completion date for the remediation activity",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "remediation_description_value": {
+          "description": "Description of the remediation, mitigation, containment, or improvement activity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "remediation_due_date_value": {
+          "description": "Due date for the remediation activity",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "remediation_owner_value": {
+          "description": "Person, organization, team, system, or workflow responsible for remediation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "remediation_priority_value": {
+          "$ref": "#/$defs/PriorityEnum",
+          "description": "Priority assigned to the remediation activity"
+        },
+        "remediation_status_value": {
+          "$ref": "#/$defs/RemediationStatusEnum",
+          "description": "Lifecycle status of the remediation activity"
+        },
+        "verification_method_value": {
+          "description": "Method or evidence used to verify that remediation was effective",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "RemediationAction",
+      "type": "object"
+    },
+    "RemediationActionTypeEnum": {
+      "description": "Types of remediation, mitigation, or improvement actions",
+      "enum": [
+        "sampling_redesign",
+        "reweighting",
+        "imputation",
+        "recalibration",
+        "metadata_completion",
+        "data_contract_enforcement",
+        "unit_canonicalization",
+        "source_refresh",
+        "governance_agreement",
+        "uncertainty_inflation",
+        "quarantine",
+        "rejection",
+        "other"
+      ],
+      "title": "RemediationActionTypeEnum",
+      "type": "string"
+    },
+    "RemediationStatusEnum": {
+      "description": "Lifecycle status of remediation actions",
+      "enum": [
+        "proposed",
+        "planned",
+        "in_progress",
+        "completed",
+        "verified",
+        "deferred",
+        "cancelled",
+        "not_applicable"
+      ],
+      "title": "RemediationStatusEnum",
+      "type": "string"
+    },
+    "SeverityEnum": {
+      "description": "Severity values for diagnostics and quality issues",
+      "enum": [
+        "low",
+        "moderate",
+        "high",
+        "critical",
+        "not_evaluated"
+      ],
+      "title": "SeverityEnum",
+      "type": "string"
+    },
+    "UncertaintyTranslation": {
+      "additionalProperties": false,
+      "description": "Translation from data quality information into uncertainty metadata, such as coefficient of variation or uncertainty factor",
+      "properties": {
+        "coefficient_of_variation_lower_value": {
+          "description": "Lower bound of coefficient of variation derived from data quality information",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "coefficient_of_variation_upper_value": {
+          "description": "Upper bound of coefficient of variation derived from data quality information",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "combined_coefficient_of_variation_value": {
+          "description": "Combined coefficient of variation after aggregating data-quality-derived uncertainty contributions",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "combined_uncertainty_factor_value": {
+          "description": "Combined uncertainty factor after aggregating data-quality-derived uncertainty contributions",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "data_quality_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a report, dataset, diagnostic output, certificate, standard, or workflow record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_quality_uncertainty_factor_value": {
+          "description": "Uncertainty factor derived from data quality information",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "data_quality_uncertainty_reference_value": {
+          "description": "Reference to an uncertainty statement, uncertainty budget, or uncertainty component informed by this data quality assessment",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_quality_score_value": {
+          "$ref": "#/$defs/QualityScoreEnum",
+          "description": "Quality score used as input to the uncertainty translation"
+        },
+        "uncertainty_distribution_assumption_value": {
+          "description": "Distributional assumption used for data-quality-derived uncertainty, such as normal or lognormal",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_translation_identifier_value": {
+          "description": "Identifier for a translation from data quality scores to uncertainty information",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_translation_method_value": {
+          "$ref": "#/$defs/UncertaintyTranslationMethodEnum",
+          "description": "Method used to translate data quality information into uncertainty"
+        },
+        "uncertainty_translation_rationale_value": {
+          "description": "Rationale explaining how data quality information was translated into uncertainty",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "UncertaintyTranslation",
+      "type": "object"
+    },
+    "UncertaintyTranslationMethodEnum": {
+      "description": "Methods for translating data quality into uncertainty",
+      "enum": [
+        "cv_lookup",
+        "uf_lookup",
+        "direct_cv",
+        "direct_uf",
+        "lognormal_uf",
+        "expert_judgement",
+        "sensitivity_analysis",
+        "monte_carlo",
+        "not_evaluated",
+        "other"
+      ],
+      "title": "UncertaintyTranslationMethodEnum",
+      "type": "string"
+    }
+  },
+  "$id": "https://ce-rise-models.codeberg.page/data-quality-framework/",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "additionalProperties": true,
+  "metamodel_version": "1.11.0",
+  "title": "data-quality-framework",
+  "type": "object",
+  "version": "0.0.3"
+}

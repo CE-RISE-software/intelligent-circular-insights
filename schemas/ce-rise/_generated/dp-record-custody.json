@@ -1,0 +1,1360 @@
+{
+  "$comment": "Generated from schemas/ce-rise/dp-record-custody/model/model.yaml by tooling/build_ce_rise_profiles.py. Do not edit. The CE-RISE data models are CC-BY-NC-4.0; see ../NOTICE.md.",
+  "$defs": {
+    "ActorRoleEnum": {
+      "description": "Roles that actors can have in the custody chain",
+      "enum": [
+        "CREATOR",
+        "EDITOR",
+        "VALIDATOR",
+        "CUSTODIAN",
+        "AUDITOR",
+        "VIEWER",
+        "ADMINISTRATOR",
+        "REGULATOR"
+      ],
+      "title": "ActorRoleEnum",
+      "type": "string"
+    },
+    "AttestationStandardEnum": {
+      "description": "Standards for external attestation",
+      "enum": [
+        "RFC3161",
+        "EIDAS",
+        "ETSI",
+        "X509",
+        "ISO27001",
+        "ANSI_X962",
+        "W3C_VC"
+      ],
+      "title": "AttestationStandardEnum",
+      "type": "string"
+    },
+    "AuditRecord": {
+      "additionalProperties": false,
+      "description": "Record of an audit performed on the DPP/DMP custody chain",
+      "properties": {
+        "audit_findings": {
+          "description": "Findings from the audit",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "audit_id": {
+          "description": "Unique identifier for the audit",
+          "type": "string"
+        },
+        "audit_recommendations": {
+          "description": "Recommendations from the audit",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "audit_timestamp": {
+          "description": "When audit was performed (ISO 8601)",
+          "format": "date-time",
+          "type": "string"
+        },
+        "audit_type": {
+          "$ref": "#/$defs/AuditTypeEnum",
+          "description": "Type of audit performed"
+        },
+        "auditor": {
+          "description": "Auditor performing the review",
+          "type": "string"
+        },
+        "compliance_status": {
+          "description": "Compliance status determined by audit",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "audit_id",
+        "audit_type",
+        "audit_timestamp",
+        "auditor"
+      ],
+      "title": "AuditRecord",
+      "type": "object"
+    },
+    "AuditTypeEnum": {
+      "description": "Types of audits performed",
+      "enum": [
+        "INTERNAL",
+        "EXTERNAL",
+        "REGULATORY",
+        "SECURITY",
+        "PERFORMANCE"
+      ],
+      "title": "AuditTypeEnum",
+      "type": "string"
+    },
+    "AuthenticationMethodEnum": {
+      "description": "Methods used to authenticate actors",
+      "enum": [
+        "OIDC",
+        "OAUTH2",
+        "SAML",
+        "X509",
+        "DID",
+        "API_KEY",
+        "JWT",
+        "WEBAUTHN",
+        "KERBEROS"
+      ],
+      "title": "AuthenticationMethodEnum",
+      "type": "string"
+    },
+    "BlockchainAnchoring": {
+      "additionalProperties": false,
+      "description": "Blockchain-based immutability anchoring",
+      "properties": {
+        "anchor_timestamp": {
+          "description": "When anchored to blockchain (ISO 8601)",
+          "format": "date-time",
+          "type": "string"
+        },
+        "block_number": {
+          "description": "Block number containing the transaction",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "blockchain_network": {
+          "$ref": "#/$defs/BlockchainNetworkEnum",
+          "description": "Which blockchain network is used"
+        },
+        "confirmation_count": {
+          "description": "Number of blockchain confirmations",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "did_document": {
+          "description": "W3C DID document for blockchain identity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "smart_contract_address": {
+          "description": "Smart contract address if applicable",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "transaction_hash": {
+          "description": "Transaction hash on the blockchain",
+          "type": "string"
+        }
+      },
+      "required": [
+        "blockchain_network",
+        "transaction_hash",
+        "anchor_timestamp"
+      ],
+      "title": "BlockchainAnchoring",
+      "type": "object"
+    },
+    "BlockchainNetworkEnum": {
+      "description": "Supported blockchain networks",
+      "enum": [
+        "ETHEREUM",
+        "POLYGON",
+        "HYPERLEDGER",
+        "BITCOIN",
+        "AVALANCHE",
+        "HEDERA",
+        "IPFS",
+        "ARWEAVE"
+      ],
+      "title": "BlockchainNetworkEnum",
+      "type": "string"
+    },
+    "CustodianIdentity": {
+      "additionalProperties": false,
+      "description": "Complete identification of a custodian entity",
+      "properties": {
+        "custodian_certifications": {
+          "description": "Security certifications held (ISO 27001, SOC2, etc.)",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "custodian_contact": {
+          "description": "Contact information (vCard or Schema.org ContactPoint)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "custodian_did": {
+          "description": "Decentralized Identifier if applicable",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "custodian_id": {
+          "description": "Unique identifier (DID, OIDC sub, LEI for organizations)",
+          "type": "string"
+        },
+        "custodian_jurisdiction": {
+          "description": "Legal jurisdiction (ISO 3166 country code)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "custodian_lei": {
+          "description": "Legal Entity Identifier if applicable (ISO 17442)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "custodian_name": {
+          "description": "Name of the custodian",
+          "type": "string"
+        },
+        "custodian_type": {
+          "$ref": "#/$defs/CustodianTypeEnum",
+          "description": "Type of custodian entity"
+        }
+      },
+      "required": [
+        "custodian_id",
+        "custodian_name"
+      ],
+      "title": "CustodianIdentity",
+      "type": "object"
+    },
+    "CustodianRecord": {
+      "additionalProperties": false,
+      "description": "Record of a specific custodian's period of responsibility for the DPP/DMP record, including their identity, custody period, and responsibilities",
+      "properties": {
+        "custodian_identity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CustodianIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Full identification details of the custodian"
+        },
+        "custody_period": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CustodyPeriod"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Time period during which this custodian held the record"
+        },
+        "custody_responsibilities": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CustodyResponsibilities"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Responsibilities and permissions during custody"
+        }
+      },
+      "title": "CustodianRecord",
+      "type": "object"
+    },
+    "CustodianTypeEnum": {
+      "description": "Types of custodian entities",
+      "enum": [
+        "INDIVIDUAL",
+        "ORGANIZATION",
+        "SYSTEM",
+        "GOVERNMENT",
+        "PARTNER",
+        "VENDOR",
+        "REGULATOR"
+      ],
+      "title": "CustodianTypeEnum",
+      "type": "string"
+    },
+    "CustodyEvent": {
+      "additionalProperties": false,
+      "description": "A significant action or change in the DPP/DMP record's custody chain, capturing who did what, when, and with what authority",
+      "properties": {
+        "event_actor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventActor"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The agent who performed this custody event"
+        },
+        "event_integrity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventIntegrity"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Cryptographic integrity information for the event"
+        },
+        "event_metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Core metadata about the custody event"
+        },
+        "transformation_details": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RecordTransformationDetails"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Data-level transformation details linking passport records"
+        }
+      },
+      "title": "CustodyEvent",
+      "type": "object"
+    },
+    "CustodyPeriod": {
+      "additionalProperties": false,
+      "description": "Time period during which custody was held",
+      "properties": {
+        "custody_active": {
+          "description": "Whether this custodian is currently active",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "custody_duration_days": {
+          "description": "Calculated duration of custody in days",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "custody_end_time": {
+          "description": "When custody ended (ISO 8601), null if current",
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "custody_start_time": {
+          "description": "When custody began (ISO 8601)",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "custody_start_time"
+      ],
+      "title": "CustodyPeriod",
+      "type": "object"
+    },
+    "CustodyResponsibilities": {
+      "additionalProperties": false,
+      "description": "Responsibilities and permissions held during custody",
+      "properties": {
+        "access_granted": {
+          "description": "Permissions and access rights during custody",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "compliance_obligations": {
+          "description": "Regulatory and compliance requirements",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "data_stewardship": {
+          "description": "What data the custodian was responsible for",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "delegation_allowed": {
+          "description": "Whether custodian could delegate to others",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "modification_rights": {
+          "description": "Rights to modify the record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "CustodyResponsibilities",
+      "type": "object"
+    },
+    "DPRecordCustody": {
+      "additionalProperties": false,
+      "description": "Root class for the chain of custody and governance history of DPP/DMP records. Full implementation includes all five stages: Custody Events, Custodian History, Transfer Records, Integrity Evidence, and Governance Actions.",
+      "properties": {
+        "custodian_history": {
+          "description": "Historical record of all custodians who have held the DPP/DMP record",
+          "items": {
+            "$ref": "#/$defs/CustodianRecord"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "custody_events": {
+          "description": "Chronological list of all custody-related events",
+          "items": {
+            "$ref": "#/$defs/CustodyEvent"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "governance_actions": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GovernanceActions"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Validation, audit, and disposal records for governance"
+        },
+        "integrity_evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IntegrityEvidence"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Cryptographic and external evidence of data integrity"
+        },
+        "transfer_records": {
+          "description": "Records of all authorized transfers between custodians",
+          "items": {
+            "$ref": "#/$defs/TransferRecord"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "DPRecordCustody",
+      "type": "object"
+    },
+    "DataFingerprint": {
+      "additionalProperties": false,
+      "description": "Cryptographic fingerprint of DPP/DMP data at a specific point",
+      "properties": {
+        "canonical_form": {
+          "description": "Canonical form used before hashing",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fingerprint_algorithm": {
+          "$ref": "#/$defs/HashAlgorithmEnum",
+          "description": "Algorithm used for fingerprinting"
+        },
+        "fingerprint_scope": {
+          "description": "What data is included in the fingerprint",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "fingerprint_timestamp": {
+          "description": "When the fingerprint was created (ISO 8601)",
+          "format": "date-time",
+          "type": "string"
+        },
+        "fingerprint_value": {
+          "description": "The hash value of the data",
+          "type": "string"
+        }
+      },
+      "required": [
+        "fingerprint_value",
+        "fingerprint_algorithm",
+        "fingerprint_timestamp"
+      ],
+      "title": "DataFingerprint",
+      "type": "object"
+    },
+    "DisposalMethodEnum": {
+      "description": "Methods for data disposal",
+      "enum": [
+        "DELETION",
+        "SECURE_DELETION",
+        "ANONYMIZATION",
+        "PSEUDONYMIZATION",
+        "AGGREGATION",
+        "ARCHIVAL"
+      ],
+      "title": "DisposalMethodEnum",
+      "type": "string"
+    },
+    "DisposalRecord": {
+      "additionalProperties": false,
+      "description": "Record of DPP/DMP data disposal when applicable",
+      "properties": {
+        "disposal_authorization": {
+          "description": "Authorization for disposal",
+          "type": "string"
+        },
+        "disposal_method": {
+          "$ref": "#/$defs/DisposalMethodEnum",
+          "description": "Method used for disposal"
+        },
+        "disposal_reason": {
+          "description": "Reason for disposal",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "disposal_timestamp": {
+          "description": "When disposal occurred (ISO 8601)",
+          "format": "date-time",
+          "type": "string"
+        },
+        "disposal_verification": {
+          "description": "Verification that disposal was complete",
+          "type": "string"
+        },
+        "legal_hold_status": {
+          "description": "Whether legal hold was checked",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "retention_exception": {
+          "description": "Any data retained despite disposal",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "disposal_authorization",
+        "disposal_timestamp",
+        "disposal_method",
+        "disposal_verification"
+      ],
+      "title": "DisposalRecord",
+      "type": "object"
+    },
+    "EventActor": {
+      "additionalProperties": false,
+      "description": "The authenticated agent who performed the custody event",
+      "properties": {
+        "actor_authentication": {
+          "$ref": "#/$defs/AuthenticationMethodEnum",
+          "description": "How the actor was authenticated"
+        },
+        "actor_email": {
+          "description": "Email address (from OIDC email claim)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "actor_id": {
+          "description": "Unique identifier (OpenID sub claim, DID, or system ID)",
+          "type": "string"
+        },
+        "actor_ip_address": {
+          "description": "IP address of the actor for audit purposes",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "actor_name": {
+          "description": "Name of the actor (from OIDC name/preferred_username claim)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "actor_organization": {
+          "description": "Organization the actor represents (from OIDC org claim or SAML)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "actor_role": {
+          "$ref": "#/$defs/ActorRoleEnum",
+          "description": "Role of the actor in the custody chain"
+        },
+        "actor_session_id": {
+          "description": "Session identifier (JWT jti claim or session ID)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "actor_user_agent": {
+          "description": "User agent string for forensic analysis",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "actor_id"
+      ],
+      "title": "EventActor",
+      "type": "object"
+    },
+    "EventIntegrity": {
+      "additionalProperties": false,
+      "description": "Cryptographic integrity and chaining information for custody events",
+      "properties": {
+        "current_hash": {
+          "description": "Hash of the current event data",
+          "type": "string"
+        },
+        "digital_signature": {
+          "description": "Optional digital signature of the event",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hash_algorithm": {
+          "$ref": "#/$defs/HashAlgorithmEnum",
+          "description": "Algorithm used for hashing"
+        },
+        "merkle_root": {
+          "description": "Merkle tree root if event is part of batch",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "nonce": {
+          "description": "Nonce value for preventing replay attacks",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "previous_hash": {
+          "description": "Hash of the previous event for chain integrity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "signature_algorithm": {
+          "$ref": "#/$defs/SignatureAlgorithmEnum",
+          "description": "Algorithm used for digital signature"
+        },
+        "signing_key_id": {
+          "description": "Identifier of the key used for signing",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "current_hash",
+        "hash_algorithm"
+      ],
+      "title": "EventIntegrity",
+      "type": "object"
+    },
+    "EventMetadata": {
+      "additionalProperties": false,
+      "description": "Core identifying and descriptive information about a custody event",
+      "properties": {
+        "event_description": {
+          "description": "Human-readable description of what happened",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "event_id": {
+          "description": "Unique identifier for this custody event",
+          "type": "string"
+        },
+        "event_justification": {
+          "description": "Reason or authorization for this event",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "event_source_system": {
+          "description": "System that generated this event",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "event_timestamp": {
+          "description": "When the event occurred (ISO 8601)",
+          "format": "date-time",
+          "type": "string"
+        },
+        "event_type": {
+          "$ref": "#/$defs/EventTypeEnum",
+          "description": "Type of custody event"
+        }
+      },
+      "required": [
+        "event_id",
+        "event_type",
+        "event_timestamp"
+      ],
+      "title": "EventMetadata",
+      "type": "object"
+    },
+    "EventTypeEnum": {
+      "description": "Types of custody events that can occur",
+      "enum": [
+        "CREATION",
+        "UPDATE",
+        "TRANSFORMATION",
+        "TRANSFER",
+        "VALIDATION",
+        "ACCESS",
+        "ARCHIVAL",
+        "DISPOSAL",
+        "AUDIT",
+        "RESTORATION",
+        "MIGRATION"
+      ],
+      "title": "EventTypeEnum",
+      "type": "string"
+    },
+    "ExternalAttestation": {
+      "additionalProperties": false,
+      "description": "Third-party attestation or notarization service",
+      "properties": {
+        "attestation_id": {
+          "description": "Unique identifier for the attestation",
+          "type": "string"
+        },
+        "attestation_proof": {
+          "description": "X.509 cert, VC, or signed statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "attestation_provider": {
+          "description": "Provider of attestation (TSA, notary service, CA)",
+          "type": "string"
+        },
+        "attestation_revocable": {
+          "description": "Whether attestation can be revoked",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "attestation_standard": {
+          "$ref": "#/$defs/AttestationStandardEnum",
+          "description": "Standard used (eIDAS, ETSI, RFC 3161)"
+        },
+        "attestation_timestamp": {
+          "description": "RFC 3161 timestamp or attestation time",
+          "format": "date-time",
+          "type": "string"
+        },
+        "attestation_validity": {
+          "description": "Validity period of the attestation",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "attestation_provider",
+        "attestation_id",
+        "attestation_timestamp"
+      ],
+      "title": "ExternalAttestation",
+      "type": "object"
+    },
+    "GovernanceActions": {
+      "additionalProperties": false,
+      "description": "Governance activities including validations, audits, and disposal actions taken on the DPP/DMP record",
+      "properties": {
+        "audit_trail": {
+          "description": "Complete audit trail of governance reviews",
+          "items": {
+            "$ref": "#/$defs/AuditRecord"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "disposal_record": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DisposalRecord"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Record of data disposal when applicable"
+        },
+        "validation_records": {
+          "description": "Records of all validation activities",
+          "items": {
+            "$ref": "#/$defs/ValidationRecord"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "GovernanceActions",
+      "type": "object"
+    },
+    "HashAlgorithmEnum": {
+      "description": "Cryptographic hash algorithms supported",
+      "enum": [
+        "SHA256",
+        "SHA384",
+        "SHA512",
+        "SHA3_256",
+        "SHA3_512",
+        "BLAKE2B",
+        "BLAKE3"
+      ],
+      "title": "HashAlgorithmEnum",
+      "type": "string"
+    },
+    "IntegrityEvidence": {
+      "additionalProperties": false,
+      "description": "Comprehensive cryptographic and external evidence maintaining the integrity and authenticity of the DPP/DMP record",
+      "properties": {
+        "blockchain_anchoring": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BlockchainAnchoring"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Optional blockchain anchoring for immutability"
+        },
+        "data_fingerprint": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DataFingerprint"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Cryptographic fingerprint of the data"
+        },
+        "external_attestation": {
+          "description": "Third-party attestation services",
+          "items": {
+            "$ref": "#/$defs/ExternalAttestation"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "IntegrityEvidence",
+      "type": "object"
+    },
+    "RecordTransformationDetails": {
+      "additionalProperties": false,
+      "description": "Data-level lineage details describing how one or more passport records are derived, aggregated, or reconciled to produce another passport record.",
+      "properties": {
+        "inputs": {
+          "description": "Source passport record identifiers used as inputs",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "operation_method": {
+          "$ref": "#/$defs/RecordTransformationMethodEnum",
+          "description": "Method used for the data-level transformation"
+        },
+        "operation_ref": {
+          "description": "Reference to an external workflow, job, or process record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "operation_type": {
+          "$ref": "#/$defs/RecordTransformationTypeEnum",
+          "description": "Type of data-level transformation"
+        },
+        "outputs": {
+          "description": "Resulting passport record identifiers produced as outputs",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "operation_type"
+      ],
+      "title": "RecordTransformationDetails",
+      "type": "object"
+    },
+    "RecordTransformationMethodEnum": {
+      "description": "Methods used to perform data-level transformations",
+      "enum": [
+        "RULE_BASED",
+        "MANUAL_CURATION",
+        "AUTOMATED_PIPELINE",
+        "EXTERNAL_SOURCE"
+      ],
+      "title": "RecordTransformationMethodEnum",
+      "type": "string"
+    },
+    "RecordTransformationTypeEnum": {
+      "description": "Types of data-level transformations between passport records",
+      "enum": [
+        "DERIVED_FROM",
+        "AGGREGATED_FROM",
+        "MERGED_FROM",
+        "SPLIT_FROM",
+        "RECONCILED_WITH",
+        "ENRICHED_WITH",
+        "VERSIONED_FROM",
+        "DISTILLED_FROM"
+      ],
+      "title": "RecordTransformationTypeEnum",
+      "type": "string"
+    },
+    "SignatureAlgorithmEnum": {
+      "description": "Digital signature algorithms supported",
+      "enum": [
+        "RSA_SHA256",
+        "RSA_SHA512",
+        "ECDSA_SHA256",
+        "ECDSA_SHA512",
+        "ED25519",
+        "RSA_PSS"
+      ],
+      "title": "SignatureAlgorithmEnum",
+      "type": "string"
+    },
+    "TransferAuthorization": {
+      "additionalProperties": false,
+      "description": "Authorization and legal basis for custody transfer",
+      "properties": {
+        "authorization_document": {
+          "description": "URI reference to authorization document",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "authorization_expiry": {
+          "description": "When the authorization expires",
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "authorization_id": {
+          "description": "Unique identifier for the authorization",
+          "type": "string"
+        },
+        "authorization_token": {
+          "description": "OAuth2 token or signed JWT for authorization",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "authorizing_party": {
+          "description": "Party who authorized the transfer (DID or OIDC identifier)",
+          "type": "string"
+        },
+        "legal_basis": {
+          "description": "Legal basis for transfer (GDPR Article 6/9, contract, consent)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "transfer_conditions": {
+          "description": "Conditions or restrictions on the transfer",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "authorization_id",
+        "authorizing_party"
+      ],
+      "title": "TransferAuthorization",
+      "type": "object"
+    },
+    "TransferDetails": {
+      "additionalProperties": false,
+      "description": "Execution details of the custody transfer",
+      "properties": {
+        "data_scope": {
+          "description": "What data was transferred",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "from_custodian": {
+          "description": "Custodian transferring custody",
+          "type": "string"
+        },
+        "to_custodian": {
+          "description": "Custodian receiving custody",
+          "type": "string"
+        },
+        "transfer_id": {
+          "description": "Unique identifier for the transfer",
+          "type": "string"
+        },
+        "transfer_method": {
+          "$ref": "#/$defs/TransferMethodEnum",
+          "description": "Method used for transfer"
+        },
+        "transfer_reason": {
+          "description": "Reason for the transfer",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "transfer_timestamp": {
+          "description": "When the transfer occurred (ISO 8601)",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "transfer_id",
+        "transfer_timestamp",
+        "from_custodian",
+        "to_custodian"
+      ],
+      "title": "TransferDetails",
+      "type": "object"
+    },
+    "TransferMethodEnum": {
+      "description": "Methods used for custody transfer",
+      "enum": [
+        "API",
+        "MANUAL",
+        "MIGRATION",
+        "BLOCKCHAIN",
+        "SMART_CONTRACT",
+        "ESCROW",
+        "DIRECT"
+      ],
+      "title": "TransferMethodEnum",
+      "type": "string"
+    },
+    "TransferRecord": {
+      "additionalProperties": false,
+      "description": "Complete record of a custody transfer between parties, including authorization, details, and verification",
+      "properties": {
+        "transfer_authorization": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TransferAuthorization"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Authorization details for the transfer"
+        },
+        "transfer_details": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TransferDetails"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Specific details of the transfer execution"
+        },
+        "transfer_verification": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TransferVerification"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Verification that transfer was completed successfully"
+        }
+      },
+      "title": "TransferRecord",
+      "type": "object"
+    },
+    "TransferVerification": {
+      "additionalProperties": false,
+      "description": "Verification and confirmation of successful transfer",
+      "properties": {
+        "verification_evidence": {
+          "description": "Evidence supporting the verification",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verification_hash": {
+          "description": "Hash of transferred data for integrity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verification_method": {
+          "$ref": "#/$defs/VerificationMethodEnum",
+          "description": "Method used to verify the transfer"
+        },
+        "verification_result": {
+          "$ref": "#/$defs/VerificationResultEnum",
+          "description": "Result of the verification"
+        },
+        "verification_timestamp": {
+          "description": "When verification was completed",
+          "format": "date-time",
+          "type": "string"
+        },
+        "verifier_id": {
+          "description": "Identity of the verifying party",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "verification_method",
+        "verification_timestamp",
+        "verification_result"
+      ],
+      "title": "TransferVerification",
+      "type": "object"
+    },
+    "ValidationOutcomeEnum": {
+      "description": "Possible validation outcomes",
+      "enum": [
+        "PASS",
+        "FAIL",
+        "WARNING",
+        "SKIPPED"
+      ],
+      "title": "ValidationOutcomeEnum",
+      "type": "string"
+    },
+    "ValidationRecord": {
+      "additionalProperties": false,
+      "description": "Record of a validation performed on the DPP/DMP data",
+      "properties": {
+        "validation_errors": {
+          "description": "List of errors if validation failed",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "validation_id": {
+          "description": "Unique identifier for the validation",
+          "type": "string"
+        },
+        "validation_outcome": {
+          "$ref": "#/$defs/ValidationOutcomeEnum",
+          "description": "Result of the validation"
+        },
+        "validation_schema": {
+          "description": "Schema or rules used for validation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "validation_timestamp": {
+          "description": "When validation was performed (ISO 8601)",
+          "format": "date-time",
+          "type": "string"
+        },
+        "validation_type": {
+          "$ref": "#/$defs/ValidationTypeEnum",
+          "description": "Type of validation performed"
+        },
+        "validator": {
+          "description": "Person or system performing validation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "validation_id",
+        "validation_type",
+        "validation_timestamp",
+        "validator",
+        "validation_outcome"
+      ],
+      "title": "ValidationRecord",
+      "type": "object"
+    },
+    "ValidationTypeEnum": {
+      "description": "Types of validation that can be performed",
+      "enum": [
+        "SCHEMA",
+        "BUSINESS_RULES",
+        "REGULATORY",
+        "INTEGRITY",
+        "COMPLETENESS",
+        "CONSISTENCY"
+      ],
+      "title": "ValidationTypeEnum",
+      "type": "string"
+    },
+    "VerificationMethodEnum": {
+      "description": "Methods for verifying transfers",
+      "enum": [
+        "CRYPTOGRAPHIC",
+        "MANUAL_REVIEW",
+        "AUTOMATED",
+        "BLOCKCHAIN",
+        "THIRD_PARTY",
+        "MULTI_PARTY"
+      ],
+      "title": "VerificationMethodEnum",
+      "type": "string"
+    },
+    "VerificationResultEnum": {
+      "description": "Possible verification results",
+      "enum": [
+        "SUCCESS",
+        "FAILURE",
+        "PARTIAL",
+        "PENDING",
+        "TIMEOUT"
+      ],
+      "title": "VerificationResultEnum",
+      "type": "string"
+    }
+  },
+  "$id": "https://ce-rise-models.codeberg.page/dp-record-custody/",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "additionalProperties": true,
+  "metamodel_version": "1.11.0",
+  "title": "dp_record_custody",
+  "type": "object",
+  "version": "0.0.3"
+}

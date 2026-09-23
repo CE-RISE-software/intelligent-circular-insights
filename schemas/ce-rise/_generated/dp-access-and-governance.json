@@ -1,0 +1,1740 @@
+{
+  "$comment": "Generated from schemas/ce-rise/dp-access-and-governance/model/model.yaml by tooling/build_ce_rise_profiles.py. Do not edit. The CE-RISE data models are CC-BY-NC-4.0; see ../NOTICE.md.",
+  "$defs": {
+    "APISpecification": {
+      "additionalProperties": false,
+      "description": "API endpoint definitions and configuration",
+      "properties": {
+        "api_authentication": {
+          "$ref": "#/$defs/AuthenticationMethodEnum",
+          "description": "Required authentication for API access"
+        },
+        "api_documentation_url": {
+          "description": "URL to API documentation",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "api_endpoints": {
+          "description": "List of available API endpoints",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "api_version": {
+          "description": "API version identifier",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rate_limits": {
+          "description": "API rate limiting configuration",
+          "items": {
+            "$ref": "#/$defs/RateLimit"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "APISpecification",
+      "type": "object"
+    },
+    "AccessControl": {
+      "additionalProperties": false,
+      "description": "Comprehensive access control configuration including access levels, security settings, and consent management for DPP and DMP data",
+      "properties": {
+        "access_levels": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AccessLevels"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Multi-tier access model defining public, authenticated, and restricted access"
+        },
+        "consent_management": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConsentManagement"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "GDPR-compliant consent handling configuration"
+        },
+        "security_settings": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SecuritySettings"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Security configuration for data protection and transport"
+        }
+      },
+      "title": "AccessControl",
+      "type": "object"
+    },
+    "AccessLevels": {
+      "additionalProperties": false,
+      "description": "Three-tier access model for granular data access control",
+      "properties": {
+        "authenticated_access": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AuthenticatedAccess"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Configuration for authenticated user access"
+        },
+        "public_access": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PublicAccess"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Configuration for publicly accessible data"
+        },
+        "restricted_access": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RestrictedAccess"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Configuration for role-based restricted access"
+        }
+      },
+      "title": "AccessLevels",
+      "type": "object"
+    },
+    "AccessLogging": {
+      "additionalProperties": false,
+      "description": "Configuration for logging access attempts and security events",
+      "properties": {
+        "log_failed_attempts": {
+          "description": "Whether to log failed access attempts",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "log_permission_checks": {
+          "description": "Whether to log permission check events",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "log_retention_days": {
+          "description": "Number of days to retain access logs",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "log_storage_location": {
+          "description": "Where access logs are stored",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "AccessLogging",
+      "type": "object"
+    },
+    "ArchivalStrategy": {
+      "additionalProperties": false,
+      "description": "Long-term data preservation and archival configuration",
+      "properties": {
+        "archive_access_process": {
+          "description": "Process for accessing archived data",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "archive_encryption": {
+          "$ref": "#/$defs/EncryptionMethodEnum",
+          "description": "Encryption method for archived data"
+        },
+        "archive_format": {
+          "$ref": "#/$defs/ArchiveFormatEnum",
+          "description": "Format for archived data"
+        },
+        "archive_integrity_check": {
+          "description": "Method for verifying archive integrity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "archive_location": {
+          "description": "Where archives are stored",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "archive_retrieval_time": {
+          "description": "Expected time to retrieve from archive in hours",
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "title": "ArchivalStrategy",
+      "type": "object"
+    },
+    "ArchiveFormatEnum": {
+      "description": "Supported archive formats",
+      "enum": [
+        "ZIP",
+        "TAR_GZ",
+        "PARQUET",
+        "JSON_LD",
+        "RDF_TURTLE",
+        "WARC",
+        "BAGIT"
+      ],
+      "title": "ArchiveFormatEnum",
+      "type": "string"
+    },
+    "AuthenticatedAccess": {
+      "additionalProperties": false,
+      "description": "Configuration for data requiring authentication",
+      "properties": {
+        "authenticated_fields": {
+          "description": "List of field identifiers accessible after authentication",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "authentication_endpoint": {
+          "description": "URL endpoint for authentication services",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "authentication_method": {
+          "$ref": "#/$defs/AuthenticationMethodEnum",
+          "description": "Method used for authentication (OAuth2, API key, certificate, etc.)"
+        },
+        "token_lifetime": {
+          "description": "Duration of authentication token validity in seconds",
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "title": "AuthenticatedAccess",
+      "type": "object"
+    },
+    "AuthenticationMethodEnum": {
+      "description": "Supported authentication methods",
+      "enum": [
+        "OAUTH2",
+        "API_KEY",
+        "CERTIFICATE",
+        "JWT",
+        "BASIC",
+        "SAML",
+        "OIDC"
+      ],
+      "title": "AuthenticationMethodEnum",
+      "type": "string"
+    },
+    "AvailabilityCommitment": {
+      "additionalProperties": false,
+      "description": "Service level agreements and availability guarantees",
+      "properties": {
+        "availability_zones": {
+          "description": "Geographic or logical zones where data is available",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "disaster_recovery_time": {
+          "description": "Maximum recovery time objective in hours",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "guaranteed_availability_period": {
+          "description": "Period during which availability is guaranteed in days",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "maintenance_windows": {
+          "description": "Scheduled maintenance periods",
+          "items": {
+            "$ref": "#/$defs/MaintenanceWindow"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "service_level_agreement": {
+          "description": "Uptime percentage commitment (e.g., 99.9)",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "title": "AvailabilityCommitment",
+      "type": "object"
+    },
+    "AvailabilityStatusEnum": {
+      "description": "Service availability status",
+      "enum": [
+        "OPERATIONAL",
+        "DEGRADED",
+        "PARTIAL_OUTAGE",
+        "MAJOR_OUTAGE",
+        "MAINTENANCE"
+      ],
+      "title": "AvailabilityStatusEnum",
+      "type": "string"
+    },
+    "CapacityMetrics": {
+      "additionalProperties": false,
+      "description": "Capacity and resource usage metrics",
+      "properties": {
+        "bandwidth_usage": {
+          "description": "Current bandwidth usage in bytes per second",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "compute_utilization": {
+          "description": "CPU utilization percentage",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "storage_capacity": {
+          "description": "Total storage capacity in bytes",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "storage_usage": {
+          "description": "Current storage usage in bytes",
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "title": "CapacityMetrics",
+      "type": "object"
+    },
+    "CarrierLocation": {
+      "additionalProperties": false,
+      "description": "Physical or digital location details for the data carrier",
+      "properties": {
+        "access_instructions": {
+          "description": "Instructions for accessing the carrier at this location",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "digital_location": {
+          "description": "URL, URI, or digital endpoint",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "location_type": {
+          "$ref": "#/$defs/LocationTypeEnum",
+          "description": "Type of location (physical, digital, hybrid)"
+        },
+        "physical_location": {
+          "description": "Physical address or coordinates if applicable",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "CarrierLocation",
+      "type": "object"
+    },
+    "CarrierRedundancy": {
+      "additionalProperties": false,
+      "description": "Backup and redundancy configuration for data carriers",
+      "properties": {
+        "backup_carrier_type": {
+          "$ref": "#/$defs/CarrierTypeEnum",
+          "description": "Type of carrier used for backup"
+        },
+        "backup_location": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CarrierLocation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Location of the backup carrier"
+        },
+        "failover_mechanism": {
+          "description": "How failover to this redundancy is triggered",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "redundancy_level": {
+          "$ref": "#/$defs/RedundancyLevelEnum",
+          "description": "Level or priority of this redundancy (primary, secondary, tertiary)"
+        },
+        "sync_frequency": {
+          "description": "How often this redundancy is synchronized in seconds",
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "title": "CarrierRedundancy",
+      "type": "object"
+    },
+    "CarrierTypeEnum": {
+      "description": "Types of data carriers supported",
+      "enum": [
+        "QR_CODE",
+        "RFID",
+        "NFC",
+        "BARCODE",
+        "URL",
+        "API",
+        "BLOCKCHAIN",
+        "IPFS",
+        "DATABASE",
+        "FILE_SYSTEM",
+        "CLOUD_STORAGE"
+      ],
+      "title": "CarrierTypeEnum",
+      "type": "string"
+    },
+    "CarrierUpdateMechanism": {
+      "additionalProperties": false,
+      "description": "Configuration for how carrier data is updated and maintained",
+      "properties": {
+        "cache_duration": {
+          "description": "How long cached data remains valid in seconds",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "offline_capability": {
+          "description": "Whether carrier can function when offline",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "update_endpoint": {
+          "description": "Endpoint for pushing or pulling updates",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "update_frequency": {
+          "description": "How often updates occur in seconds (0 for real-time)",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "update_method": {
+          "$ref": "#/$defs/UpdateMethodEnum",
+          "description": "Method used to update carrier data"
+        }
+      },
+      "title": "CarrierUpdateMechanism",
+      "type": "object"
+    },
+    "CompressionMethodEnum": {
+      "description": "Supported compression methods",
+      "enum": [
+        "GZIP",
+        "BROTLI",
+        "DEFLATE",
+        "ZIP",
+        "NONE"
+      ],
+      "title": "CompressionMethodEnum",
+      "type": "string"
+    },
+    "ConsentManagement": {
+      "additionalProperties": false,
+      "description": "GDPR-compliant consent handling and management",
+      "properties": {
+        "consent_duration": {
+          "description": "Duration of consent validity in days",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "consent_granularity": {
+          "description": "Level of granularity for consent (field-level, record-level, etc.)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "consent_required": {
+          "description": "Whether consent is required for data access",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "consent_revocation_method": {
+          "description": "Method or endpoint for revoking consent",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "consent_scope": {
+          "description": "Scope and purpose of the consent",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "ConsentManagement",
+      "type": "object"
+    },
+    "ConsumerSystem": {
+      "additionalProperties": false,
+      "description": "Configuration for a downstream system consuming data",
+      "properties": {
+        "authorized_scopes": {
+          "description": "Data scopes this consumer is authorized to access",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "consumer_identifier": {
+          "description": "Unique identifier for the consumer system",
+          "type": "string"
+        },
+        "consumer_name": {
+          "description": "Human-readable name of the consumer system",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "consumer_type": {
+          "$ref": "#/$defs/ConsumerSystemTypeEnum",
+          "description": "Type of consumer system"
+        },
+        "usage_restrictions": {
+          "description": "Restrictions on how consumer can use data",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "usage_tracking": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UsageTracking"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Configuration for tracking data usage"
+        }
+      },
+      "required": [
+        "consumer_identifier"
+      ],
+      "title": "ConsumerSystem",
+      "type": "object"
+    },
+    "ConsumerSystemTypeEnum": {
+      "description": "Types of consumer systems",
+      "enum": [
+        "ANALYTICS",
+        "REPORTING",
+        "VISUALIZATION",
+        "MARKETPLACE",
+        "REGULATORY",
+        "PARTNER",
+        "MOBILE_APP",
+        "WEB_APP"
+      ],
+      "title": "ConsumerSystemTypeEnum",
+      "type": "string"
+    },
+    "DPAccessAndGovernance": {
+      "additionalProperties": false,
+      "description": "Root class for operational and access-related metadata governing DPP and DMP records. Full implementation includes all five stages: Access Control, Data Carrier, Data Longevity, Interoperability, and System Integration mechanisms.",
+      "properties": {
+        "access_control": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AccessControl"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Access control configuration defining who can access what data under what conditions"
+        },
+        "data_carrier": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DataCarrier"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Configuration for how and where DPP and DMP data is stored and accessed"
+        },
+        "data_longevity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DataLongevity"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Lifecycle policies for data retention, availability, archival, and disposal"
+        },
+        "interoperability_configuration": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/InteroperabilityConfiguration"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Configuration for cross-system data exchange and protocol support"
+        },
+        "system_integration": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SystemIntegration"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Configuration for upstream source systems and downstream consumers"
+        }
+      },
+      "title": "DPAccessAndGovernance",
+      "type": "object"
+    },
+    "DataCarrier": {
+      "additionalProperties": false,
+      "description": "Configuration specifying how and where DPP and DMP data is physically or digitally stored, including carrier types, capacity, location, redundancy, and update mechanisms",
+      "properties": {
+        "carrier_capacity": {
+          "description": "Data size limits in bytes for the carrier",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "carrier_location": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CarrierLocation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Physical or digital location of the carrier"
+        },
+        "carrier_redundancy": {
+          "description": "Backup and failover carrier configurations",
+          "items": {
+            "$ref": "#/$defs/CarrierRedundancy"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "carrier_type": {
+          "$ref": "#/$defs/CarrierTypeEnum",
+          "description": "Type of physical or digital storage mechanism (QR code, RFID, NFC, URL, API, blockchain, etc.)"
+        },
+        "carrier_update_mechanism": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CarrierUpdateMechanism"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "How carrier data is refreshed and synchronized"
+        }
+      },
+      "title": "DataCarrier",
+      "type": "object"
+    },
+    "DataClassificationEnum": {
+      "description": "Data security classification levels",
+      "enum": [
+        "PUBLIC",
+        "INTERNAL",
+        "CONFIDENTIAL",
+        "SECRET",
+        "PERSONAL"
+      ],
+      "title": "DataClassificationEnum",
+      "type": "string"
+    },
+    "DataLongevity": {
+      "additionalProperties": false,
+      "description": "Lifecycle policies and strategies for data retention, availability commitments, archival processes, and disposal policies throughout the DPP and DMP data lifecycle",
+      "properties": {
+        "archival_strategy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ArchivalStrategy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Long-term preservation and archival approach"
+        },
+        "availability_commitment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AvailabilityCommitment"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Service level agreements and uptime guarantees"
+        },
+        "disposal_policy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DisposalPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Policies for when and how to dispose of data"
+        },
+        "retention_policy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RetentionPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Policies defining how long data must or can be retained"
+        }
+      },
+      "title": "DataLongevity",
+      "type": "object"
+    },
+    "DataMapping": {
+      "additionalProperties": false,
+      "description": "Mapping between source and target data fields",
+      "properties": {
+        "source_field": {
+          "description": "Field identifier in source system",
+          "type": "string"
+        },
+        "target_field": {
+          "description": "Field identifier in target system",
+          "type": "string"
+        },
+        "transformation_rule": {
+          "description": "Transformation applied during mapping",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "source_field",
+        "target_field"
+      ],
+      "title": "DataMapping",
+      "type": "object"
+    },
+    "DataSourceSystem": {
+      "additionalProperties": false,
+      "description": "Configuration for an upstream system providing data",
+      "properties": {
+        "connection_endpoint": {
+          "description": "Endpoint for connecting to source system",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_mappings": {
+          "description": "Mappings between source and target data fields",
+          "items": {
+            "$ref": "#/$defs/DataMapping"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "last_sync_timestamp": {
+          "description": "Timestamp of last successful synchronization",
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_system_identifier": {
+          "description": "Unique identifier for the source system",
+          "type": "string"
+        },
+        "source_system_name": {
+          "description": "Human-readable name of the source system",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_system_type": {
+          "$ref": "#/$defs/SourceSystemTypeEnum",
+          "description": "Type of source system"
+        },
+        "sync_frequency": {
+          "description": "How often data is synchronized in seconds",
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "source_system_identifier"
+      ],
+      "title": "DataSourceSystem",
+      "type": "object"
+    },
+    "DisposalMethodEnum": {
+      "description": "Methods for data disposal",
+      "enum": [
+        "DELETION",
+        "SECURE_DELETION",
+        "ANONYMIZATION",
+        "PSEUDONYMIZATION",
+        "AGGREGATION",
+        "ARCHIVAL"
+      ],
+      "title": "DisposalMethodEnum",
+      "type": "string"
+    },
+    "DisposalPolicy": {
+      "additionalProperties": false,
+      "description": "Policies governing when and how data should be disposed",
+      "properties": {
+        "disposal_criteria": {
+          "description": "Conditions triggering data disposal",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "disposal_method": {
+          "$ref": "#/$defs/DisposalMethodEnum",
+          "description": "Method for data disposal"
+        },
+        "disposal_notification": {
+          "description": "Who to notify about disposal",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "disposal_verification": {
+          "description": "Method for verifying successful disposal",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "legal_hold_check": {
+          "description": "Whether to check for legal holds before disposal",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "title": "DisposalPolicy",
+      "type": "object"
+    },
+    "EncryptionMethodEnum": {
+      "description": "Supported encryption algorithms",
+      "enum": [
+        "AES_256_GCM",
+        "AES_256_CBC",
+        "RSA_2048",
+        "RSA_4096",
+        "CHACHA20_POLY1305",
+        "ECDH"
+      ],
+      "title": "EncryptionMethodEnum",
+      "type": "string"
+    },
+    "FormatDelivery": {
+      "additionalProperties": false,
+      "description": "Configuration for format negotiation and content delivery",
+      "properties": {
+        "compression_options": {
+          "description": "Available compression methods",
+          "items": {
+            "$ref": "#/$defs/CompressionMethodEnum"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "default_format": {
+          "description": "Default format when none specified",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "format_conversion_service": {
+          "description": "Service endpoint for format conversion",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "format_negotiation": {
+          "$ref": "#/$defs/FormatNegotiationEnum",
+          "description": "Content negotiation method used"
+        },
+        "supported_formats": {
+          "description": "List of supported output formats",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "FormatDelivery",
+      "type": "object"
+    },
+    "FormatNegotiationEnum": {
+      "description": "Content negotiation methods",
+      "enum": [
+        "HTTP_ACCEPT",
+        "URL_PARAMETER",
+        "FILE_EXTENSION",
+        "CONTENT_TYPE"
+      ],
+      "title": "FormatNegotiationEnum",
+      "type": "string"
+    },
+    "InteroperabilityConfiguration": {
+      "additionalProperties": false,
+      "description": "Configuration for enabling cross-system data exchange through APIs, format negotiation, protocol support, and standards compliance",
+      "properties": {
+        "api_specification": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/APISpecification"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "RESTful or other API definitions and configurations"
+        },
+        "format_delivery": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FormatDelivery"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Format negotiation and delivery configuration"
+        },
+        "protocol_support": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProtocolSupport"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Supported communication and data transfer protocols"
+        },
+        "standards_compliance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StandardsCompliance"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Industry standards and certifications"
+        }
+      },
+      "title": "InteroperabilityConfiguration",
+      "type": "object"
+    },
+    "LocationTypeEnum": {
+      "description": "Types of carrier locations",
+      "enum": [
+        "PHYSICAL",
+        "DIGITAL",
+        "HYBRID"
+      ],
+      "title": "LocationTypeEnum",
+      "type": "string"
+    },
+    "MaintenanceWindow": {
+      "additionalProperties": false,
+      "description": "Scheduled maintenance period configuration",
+      "properties": {
+        "advance_notice": {
+          "description": "Advance notice period for maintenance in hours",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "window_duration": {
+          "description": "Duration of maintenance window in minutes",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "window_recurrence": {
+          "description": "Recurrence pattern (e.g., weekly, monthly)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "window_start": {
+          "description": "Start time of maintenance window (ISO 8601)",
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "MaintenanceWindow",
+      "type": "object"
+    },
+    "OperationalMetrics": {
+      "additionalProperties": false,
+      "description": "Metrics for monitoring system operations and performance",
+      "properties": {
+        "capacity_metrics": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CapacityMetrics"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Capacity and resource usage metrics"
+        },
+        "performance_metrics": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PerformanceMetrics"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Performance-related metrics"
+        },
+        "service_metrics": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ServiceMetrics"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Service-level operational metrics"
+        }
+      },
+      "title": "OperationalMetrics",
+      "type": "object"
+    },
+    "PerformanceMetrics": {
+      "additionalProperties": false,
+      "description": "Performance-related operational metrics",
+      "properties": {
+        "average_response_time": {
+          "description": "Average response time in milliseconds",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "concurrent_connections": {
+          "description": "Maximum concurrent connections supported",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "latency_p99": {
+          "description": "99th percentile latency in milliseconds",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "throughput": {
+          "description": "Requests processed per second",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "title": "PerformanceMetrics",
+      "type": "object"
+    },
+    "ProtocolSupport": {
+      "additionalProperties": false,
+      "description": "Supported communication and data transfer protocols",
+      "properties": {
+        "protocol_version": {
+          "description": "Specific protocol versions supported",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "query_protocols": {
+          "description": "Supported query protocols (REST, GraphQL, SPARQL)",
+          "items": {
+            "$ref": "#/$defs/QueryProtocolEnum"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "subscription_protocols": {
+          "description": "Supported subscription protocols (WebSocket, SSE)",
+          "items": {
+            "$ref": "#/$defs/SubscriptionProtocolEnum"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "transfer_protocols": {
+          "description": "Supported data transfer protocols (HTTPS, MQTT, CoAP, etc.)",
+          "items": {
+            "$ref": "#/$defs/TransferProtocolEnum"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "ProtocolSupport",
+      "type": "object"
+    },
+    "PublicAccess": {
+      "additionalProperties": false,
+      "description": "Configuration for data that can be accessed without authentication",
+      "properties": {
+        "public_access_url": {
+          "description": "URL endpoint for public data access",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "public_data_license": {
+          "description": "License governing public data usage",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "public_fields": {
+          "description": "List of field identifiers that are openly accessible",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "PublicAccess",
+      "type": "object"
+    },
+    "QueryProtocolEnum": {
+      "description": "Query and API protocols",
+      "enum": [
+        "REST",
+        "GRAPHQL",
+        "SPARQL",
+        "SQL",
+        "ODATA",
+        "GRPC"
+      ],
+      "title": "QueryProtocolEnum",
+      "type": "string"
+    },
+    "RateLimit": {
+      "additionalProperties": false,
+      "description": "Rate limiting configuration for API access",
+      "properties": {
+        "limit_scope": {
+          "description": "Scope of the limit (per user, per API key, global)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "limit_type": {
+          "$ref": "#/$defs/RateLimitTypeEnum",
+          "description": "Type of rate limit (per minute, per hour, per day)"
+        },
+        "request_limit": {
+          "description": "Maximum number of requests allowed",
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "title": "RateLimit",
+      "type": "object"
+    },
+    "RateLimitTypeEnum": {
+      "description": "Types of rate limiting periods",
+      "enum": [
+        "PER_SECOND",
+        "PER_MINUTE",
+        "PER_HOUR",
+        "PER_DAY",
+        "PER_REQUEST"
+      ],
+      "title": "RateLimitTypeEnum",
+      "type": "string"
+    },
+    "RedundancyLevelEnum": {
+      "description": "Redundancy priority levels",
+      "enum": [
+        "PRIMARY",
+        "SECONDARY",
+        "TERTIARY",
+        "ARCHIVE"
+      ],
+      "title": "RedundancyLevelEnum",
+      "type": "string"
+    },
+    "RestrictedAccess": {
+      "additionalProperties": false,
+      "description": "Configuration for role-based and specially restricted data access",
+      "properties": {
+        "access_justification_required": {
+          "description": "Whether access requests require justification",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "access_request_process": {
+          "description": "URL or description of process to request access",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "restricted_fields": {
+          "description": "List of field identifiers under restricted access",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "role_based_permissions": {
+          "description": "Map of roles to their permitted field access",
+          "items": {
+            "$ref": "#/$defs/RolePermission"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "RestrictedAccess",
+      "type": "object"
+    },
+    "RetentionPolicy": {
+      "additionalProperties": false,
+      "description": "Data retention requirements and justifications",
+      "properties": {
+        "data_categories": {
+          "description": "Categories of data covered by this retention policy",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "maximum_retention_period": {
+          "description": "Maximum allowed retention period in days (0 for indefinite)",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "minimum_retention_period": {
+          "description": "Minimum required retention period in days",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "regulatory_requirement": {
+          "description": "Specific regulations requiring this retention",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "retention_justification": {
+          "description": "Legal or business justification for retention period",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "RetentionPolicy",
+      "type": "object"
+    },
+    "RolePermission": {
+      "additionalProperties": false,
+      "description": "Mapping of a role to its permitted data access",
+      "properties": {
+        "permitted_fields": {
+          "description": "Fields this role can access",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "role_description": {
+          "description": "Description of the role's purpose and scope",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "role_name": {
+          "description": "Name or identifier of the role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role_name"
+      ],
+      "title": "RolePermission",
+      "type": "object"
+    },
+    "SecuritySettings": {
+      "additionalProperties": false,
+      "description": "Security configuration for data protection in transit and at rest",
+      "properties": {
+        "access_attempt_logging": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AccessLogging"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Configuration for logging access attempts"
+        },
+        "data_classification": {
+          "$ref": "#/$defs/DataClassificationEnum",
+          "description": "Security classification level of the data"
+        },
+        "encryption_method": {
+          "$ref": "#/$defs/EncryptionMethodEnum",
+          "description": "Encryption method for data in transit"
+        },
+        "integrity_verification": {
+          "description": "Method for verifying data integrity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "transport_security": {
+          "$ref": "#/$defs/TransportSecurityEnum",
+          "description": "Transport layer security configuration"
+        }
+      },
+      "title": "SecuritySettings",
+      "type": "object"
+    },
+    "ServiceMetrics": {
+      "additionalProperties": false,
+      "description": "Service-level operational metrics",
+      "properties": {
+        "availability_status": {
+          "$ref": "#/$defs/AvailabilityStatusEnum",
+          "description": "Current availability status"
+        },
+        "error_rate": {
+          "description": "Error rate percentage",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "sla_compliance": {
+          "description": "SLA compliance percentage",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "uptime_percentage": {
+          "description": "Service uptime percentage",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "title": "ServiceMetrics",
+      "type": "object"
+    },
+    "SourceSystemTypeEnum": {
+      "description": "Types of source systems",
+      "enum": [
+        "ERP",
+        "MES",
+        "PLM",
+        "IOT_PLATFORM",
+        "DATABASE",
+        "API_SERVICE",
+        "FILE_SYSTEM",
+        "STREAMING"
+      ],
+      "title": "SourceSystemTypeEnum",
+      "type": "string"
+    },
+    "StandardsCompliance": {
+      "additionalProperties": false,
+      "description": "Industry standards and certification compliance",
+      "properties": {
+        "compliance_level": {
+          "description": "Level of compliance achieved",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "compliance_standards": {
+          "description": "List of standards complied with (ISO, W3C, GS1, etc.)",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "conformance_certificates": {
+          "description": "URLs or identifiers for conformance certificates",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "validation_endpoint": {
+          "description": "Endpoint for validating compliance",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "StandardsCompliance",
+      "type": "object"
+    },
+    "SubscriptionProtocolEnum": {
+      "description": "Event subscription protocols",
+      "enum": [
+        "WEBSOCKET",
+        "SSE",
+        "WEBHOOK",
+        "MQTT_SUB",
+        "AMQP"
+      ],
+      "title": "SubscriptionProtocolEnum",
+      "type": "string"
+    },
+    "SystemIntegration": {
+      "additionalProperties": false,
+      "description": "Configuration for connecting with upstream data sources and downstream consumer systems, including synchronization, usage tracking, and operational monitoring",
+      "properties": {
+        "consumer_systems": {
+          "description": "Configuration for downstream systems consuming data",
+          "items": {
+            "$ref": "#/$defs/ConsumerSystem"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "data_source_systems": {
+          "description": "Configuration for upstream systems providing data",
+          "items": {
+            "$ref": "#/$defs/DataSourceSystem"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "operational_metrics": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OperationalMetrics"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Metrics for monitoring system operations"
+        }
+      },
+      "title": "SystemIntegration",
+      "type": "object"
+    },
+    "TransferProtocolEnum": {
+      "description": "Data transfer protocols",
+      "enum": [
+        "HTTPS",
+        "HTTP2",
+        "HTTP3",
+        "MQTT",
+        "COAP",
+        "FTP",
+        "SFTP",
+        "WEBSOCKET"
+      ],
+      "title": "TransferProtocolEnum",
+      "type": "string"
+    },
+    "TransportSecurityEnum": {
+      "description": "Transport layer security protocols",
+      "enum": [
+        "TLS_1_2",
+        "TLS_1_3",
+        "MTLS",
+        "HTTPS",
+        "VPN",
+        "API_SIGNATURE"
+      ],
+      "title": "TransportSecurityEnum",
+      "type": "string"
+    },
+    "UpdateMethodEnum": {
+      "description": "Methods for updating carrier data",
+      "enum": [
+        "PUSH",
+        "PULL",
+        "BIDIRECTIONAL",
+        "STATIC",
+        "EVENT_DRIVEN",
+        "SCHEDULED"
+      ],
+      "title": "UpdateMethodEnum",
+      "type": "string"
+    },
+    "UsageTracking": {
+      "additionalProperties": false,
+      "description": "Configuration for tracking how data is used",
+      "properties": {
+        "track_access": {
+          "description": "Whether to track data access events",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "track_modifications": {
+          "description": "Whether to track data modification events",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "usage_analytics_enabled": {
+          "description": "Whether to enable usage analytics",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "usage_log_retention": {
+          "description": "How long to retain usage logs in days",
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "title": "UsageTracking",
+      "type": "object"
+    }
+  },
+  "$id": "https://ce-rise-models.codeberg.page/dp-access-and-governance/",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "additionalProperties": true,
+  "metamodel_version": "1.11.0",
+  "title": "dp_access_and_governance",
+  "type": "object",
+  "version": "0.0.3"
+}

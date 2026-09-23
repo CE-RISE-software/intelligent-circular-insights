@@ -1,0 +1,1736 @@
+{
+  "$comment": "Generated from schemas/ce-rise/metrological-traceability/model/model.yaml by tooling/build_ce_rise_profiles.py. Do not edit. The CE-RISE data models are CC-BY-NC-4.0; see ../NOTICE.md.",
+  "$defs": {
+    "BoundaryDefinition": {
+      "additionalProperties": false,
+      "description": "Goal-and-scope, system boundary, scenario, allocation, or model definition used as the reference for a boundary-defined result",
+      "properties": {
+        "allocation_rule_value": {
+          "description": "Allocation, partitioning, substitution, cut-off, or burden-sharing rule applied in the boundary definition",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "boundary_identifier_value": {
+          "description": "Identifier for a boundary, scope, scenario, or modelling reference definition",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "boundary_name_value": {
+          "description": "Name of the boundary, scope, scenario, or modelling definition",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "boundary_type_value": {
+          "$ref": "#/$defs/BoundaryTypeEnum",
+          "description": "Type of boundary or scope definition"
+        },
+        "characterization_model_value": {
+          "description": "Characterization model, factor set, time horizon, scenario, or model version used to convert inputs into the reported result",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_source_scope_value": {
+          "description": "Temporal, geographical, technological, or population scope of the data sources used by the boundary definition",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "excluded_processes_value": {
+          "description": "Processes, stages, flows, compartments, or elements excluded from the boundary",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "goal_scope_definition_value": {
+          "description": "Goal and scope definition or equivalent statement that defines the assessed value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "impact_method_value": {
+          "description": "Impact assessment, characterization, scoring, or calculation method used for a modelled result",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "included_processes_value": {
+          "description": "Processes, stages, flows, compartments, or elements included in the boundary",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "procedure_standard_value": {
+          "description": "Standardized procedure, protocol, guide, or method document",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "procedure_version_value": {
+          "description": "Version, edition, revision, or publication date of the procedure",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_data_quality_reference_value": {
+          "description": "Reference to a data quality assessment associated with this traceability record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_uncertainty_reference_value": {
+          "description": "Reference to an uncertainty statement, uncertainty budget, or uncertainty component associated with this traceability record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "BoundaryDefinition",
+      "type": "object"
+    },
+    "BoundaryTypeEnum": {
+      "description": "Types of boundary or scope definitions",
+      "enum": [
+        "system_boundary",
+        "goal_and_scope",
+        "functional_unit",
+        "allocation_boundary",
+        "scenario_definition",
+        "temporal_boundary",
+        "geographical_boundary",
+        "technological_boundary",
+        "characterization_model",
+        "other"
+      ],
+      "title": "BoundaryTypeEnum",
+      "type": "string"
+    },
+    "CalibrationRecord": {
+      "additionalProperties": false,
+      "description": "Calibration, comparison, verification, or check record contributing to a traceability chain",
+      "properties": {
+        "calibrated_item_identifier_value": {
+          "description": "Identifier of the instrument, sensor, measuring system, reference material, standard, or software item calibrated or checked",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibrated_item_type_value": {
+          "description": "Type of calibrated item",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_certificate_identifier_value": {
+          "description": "Identifier of the calibration certificate or equivalent evidence record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_certificate_url_value": {
+          "description": "URL for the calibration certificate or equivalent evidence record",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_date_value": {
+          "description": "Date on which the calibration was performed",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_due_date_value": {
+          "description": "Date by which recalibration is due",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_identifier_value": {
+          "description": "Identifier for a calibration, comparison, verification, or check record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_interval_value": {
+          "description": "Calibration interval or recalibration frequency",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_laboratory_accreditation_value": {
+          "description": "Accreditation identifier, scope, or body associated with the calibration provider",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_laboratory_value": {
+          "description": "Laboratory, organization, or facility that performed the calibration",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_method_value": {
+          "description": "Calibration method, procedure, comparison method, or protocol used",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_result_value": {
+          "description": "Calibration result, correction, factor, or outcome statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_status_value": {
+          "$ref": "#/$defs/CalibrationStatusEnum",
+          "description": "Validity or acceptance status of the calibration record"
+        },
+        "traceability_environmental_conditions_value": {
+          "description": "Environmental, operating, or procedural conditions relevant to traceability",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_uncertainty_reference_value": {
+          "description": "Reference to an uncertainty statement, uncertainty budget, or uncertainty component associated with this traceability record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "CalibrationRecord",
+      "type": "object"
+    },
+    "CalibrationStatusEnum": {
+      "description": "Status of a calibration or equivalent record",
+      "enum": [
+        "valid",
+        "valid_with_restrictions",
+        "due",
+        "expired",
+        "failed",
+        "superseded",
+        "not_available"
+      ],
+      "title": "CalibrationStatusEnum",
+      "type": "string"
+    },
+    "ChainCompletenessEnum": {
+      "description": "Completeness of a traceability chain",
+      "enum": [
+        "complete",
+        "partial",
+        "inferred",
+        "gap_identified",
+        "unavailable"
+      ],
+      "title": "ChainCompletenessEnum",
+      "type": "string"
+    },
+    "ComparabilityAssessment": {
+      "additionalProperties": false,
+      "description": "Assessment of whether two reported values are metrologically comparable through the same reference basis, measurand definition, method, or boundary",
+      "properties": {
+        "comparability_assessment_identifier_value": {
+          "description": "Identifier for an assessment of metrological comparability",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "comparability_decision_value": {
+          "$ref": "#/$defs/ComparabilityDecisionEnum",
+          "description": "Decision about whether the compared results are metrologically comparable"
+        },
+        "comparability_rationale_value": {
+          "description": "Rationale for the comparability decision, including relevant mismatches or limitations",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "left_traceability_reference_value": {
+          "description": "Reference to the first traceability statement, chain, or basis being compared",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "right_traceability_reference_value": {
+          "description": "Reference to the second traceability statement, chain, or basis being compared",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "same_measurand_definition_value": {
+          "description": "Whether the compared results use the same measurand or operational definition",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "same_method_or_boundary_value": {
+          "description": "Whether the compared results use the same method-defined or boundary-defined reference",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "same_reference_basis_value": {
+          "description": "Whether the compared results are traceable to the same reference basis",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "traceability_uncertainty_reference_value": {
+          "description": "Reference to an uncertainty statement, uncertainty budget, or uncertainty component associated with this traceability record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "ComparabilityAssessment",
+      "type": "object"
+    },
+    "ComparabilityDecisionEnum": {
+      "description": "Decision values for metrological comparability assessments",
+      "enum": [
+        "comparable",
+        "comparable_with_conditions",
+        "not_comparable",
+        "insufficient_information",
+        "not_evaluated"
+      ],
+      "title": "ComparabilityDecisionEnum",
+      "type": "string"
+    },
+    "CompetenceRecord": {
+      "additionalProperties": false,
+      "description": "Competence, accreditation, validation, proficiency, or quality system evidence supporting traceability",
+      "properties": {
+        "accreditation_body_value": {
+          "description": "Accreditation body, authority, or organization responsible for the competence record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "accreditation_identifier_value": {
+          "description": "Accreditation, authorization, scope, or certificate identifier",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "competence_basis_value": {
+          "description": "Basis for competence, such as accreditation, proficiency testing, validation, authorization, or quality management system",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "competence_provider_value": {
+          "description": "Laboratory, person, organization, facility, or software provider whose competence is documented",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "competence_record_identifier_value": {
+          "description": "Identifier for a competence, accreditation, authorization, or quality system record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "competence_scope_value": {
+          "description": "Scope of competence, accreditation, validation, or authorization",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "competence_status_value": {
+          "$ref": "#/$defs/CompetenceStatusEnum",
+          "description": "Status of the competence or accreditation record"
+        },
+        "reference_valid_from_value": {
+          "description": "Start date of validity for the reference entity or assigned value",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_valid_until_value": {
+          "description": "End date of validity for the reference entity or assigned value",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "CompetenceRecord",
+      "type": "object"
+    },
+    "CompetenceStatusEnum": {
+      "description": "Status values for competence and accreditation records",
+      "enum": [
+        "active",
+        "suspended",
+        "expired",
+        "withdrawn",
+        "not_applicable",
+        "not_available"
+      ],
+      "title": "CompetenceStatusEnum",
+      "type": "string"
+    },
+    "MeasurementProcedure": {
+      "additionalProperties": false,
+      "description": "Measurement, calculation, sampling, calibration, analytical, or modelling procedure used to define or transfer a value",
+      "properties": {
+        "method_parameters_value": {
+          "description": "Key method parameters, such as extraction conditions, incubation time, temperature, calibration model, or reporting rule",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "operator_or_software_value": {
+          "description": "Operator, laboratory, instrument system, model, or software used to apply the procedure",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "procedure_description_value": {
+          "description": "Description of the procedure and how it defines or transfers the value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "procedure_identifier_value": {
+          "description": "Identifier of a measurement, calculation, sampling, calibration, analytical, or modelling procedure",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "procedure_name_value": {
+          "description": "Name of the procedure or method",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "procedure_role_value": {
+          "$ref": "#/$defs/ProcedureRoleEnum",
+          "description": "Role of the procedure in establishing traceability"
+        },
+        "procedure_standard_value": {
+          "description": "Standardized procedure, protocol, guide, or method document",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "procedure_uri_value": {
+          "description": "URI or URL identifying the procedure",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "procedure_version_value": {
+          "description": "Version, edition, revision, or publication date of the procedure",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sampling_or_specimen_definition_value": {
+          "description": "Definition of the sample, specimen, item, batch, population subset, or material matrix used by the method",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_environmental_conditions_value": {
+          "description": "Environmental, operating, or procedural conditions relevant to traceability",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_uncertainty_reference_value": {
+          "description": "Reference to an uncertainty statement, uncertainty budget, or uncertainty component associated with this traceability record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "MeasurementProcedure",
+      "type": "object"
+    },
+    "MeasurementStandard": {
+      "additionalProperties": false,
+      "description": "Measurement standard, artefact, instrument standard, or unit realization used in a calibration hierarchy",
+      "properties": {
+        "assigned_value_uncertainty_value": {
+          "description": "Uncertainty associated with the assigned value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "assigned_value_unit_value": {
+          "description": "Unit associated with the assigned value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "assigned_value_value": {
+          "description": "Assigned value of a measurement standard, reference material, calibrator, or conventional reference",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "calibration_records": {
+          "description": "Calibration, comparison, verification, or check records that support traceability",
+          "items": {
+            "$ref": "#/$defs/CalibrationRecord"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "measurement_standard_identifier_value": {
+          "description": "Identifier for a measurement standard, artefact, instrument standard, or realization",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "measurement_standard_level_value": {
+          "description": "Position of the measurement standard in the calibration hierarchy",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "measurement_standard_name_value": {
+          "description": "Name of the measurement standard",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "measurement_standard_owner_value": {
+          "description": "Owner, custodian, laboratory, or institute responsible for the measurement standard",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "measurement_standard_type_value": {
+          "$ref": "#/$defs/MeasurementStandardTypeEnum",
+          "description": "Type or level of measurement standard"
+        },
+        "reference_valid_from_value": {
+          "description": "Start date of validity for the reference entity or assigned value",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_valid_until_value": {
+          "description": "End date of validity for the reference entity or assigned value",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_quantity_kind_value": {
+          "description": "Kind of quantity or indicator being traced, such as mass, length, concentration, carbon footprint, or circularity indicator",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_quantity_unit_value": {
+          "description": "Unit in which the value or measurand is expressed",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "MeasurementStandard",
+      "type": "object"
+    },
+    "MeasurementStandardTypeEnum": {
+      "description": "Types or hierarchy levels of measurement standards",
+      "enum": [
+        "international_standard",
+        "national_standard",
+        "primary_standard",
+        "secondary_standard",
+        "reference_standard",
+        "working_standard",
+        "transfer_standard",
+        "instrument_standard",
+        "unit_realization",
+        "other"
+      ],
+      "title": "MeasurementStandardTypeEnum",
+      "type": "string"
+    },
+    "MetrologicalTraceability": {
+      "additionalProperties": false,
+      "description": "Root container for metrological traceability statements and supporting records",
+      "properties": {
+        "boundary_definitions": {
+          "description": "Boundary, goal-and-scope, scenario, or model definitions used as traceability references",
+          "items": {
+            "$ref": "#/$defs/BoundaryDefinition"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "calibration_records": {
+          "description": "Calibration, comparison, verification, or check records that support traceability",
+          "items": {
+            "$ref": "#/$defs/CalibrationRecord"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "comparability_assessments": {
+          "description": "Assessments of whether traceability statements support meaningful comparison",
+          "items": {
+            "$ref": "#/$defs/ComparabilityAssessment"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "competence_records": {
+          "description": "Competence, accreditation, validation, or quality system records supporting traceability",
+          "items": {
+            "$ref": "#/$defs/CompetenceRecord"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "measurement_procedures": {
+          "description": "Measurement, calculation, sampling, calibration, analytical, or modelling procedures used for traceability",
+          "items": {
+            "$ref": "#/$defs/MeasurementProcedure"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "measurement_standards": {
+          "description": "Measurement standards, artefacts, instruments, and realizations used in traceability",
+          "items": {
+            "$ref": "#/$defs/MeasurementStandard"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "reference_entities": {
+          "description": "Reference entities, standards, methods, instruments, datasets, or organizations used in traceability",
+          "items": {
+            "$ref": "#/$defs/ReferenceEntity"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "reference_materials": {
+          "description": "Reference materials and certified reference materials used in traceability",
+          "items": {
+            "$ref": "#/$defs/ReferenceMaterial"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "traceability_bases": {
+          "description": "Reference bases used to establish metrological traceability",
+          "items": {
+            "$ref": "#/$defs/TraceabilityBasis"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "traceability_chains": {
+          "description": "Traceability chains or networks available for reuse by one or more traceability statements",
+          "items": {
+            "$ref": "#/$defs/TraceabilityChain"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "traceability_evidence_references": {
+          "description": "Evidence records referenced by the metrological traceability model",
+          "items": {
+            "$ref": "#/$defs/TraceabilityEvidenceReference"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "traceability_statements": {
+          "description": "Reusable traceability statements that can be embedded or referenced by other CE-RISE data models",
+          "items": {
+            "$ref": "#/$defs/TraceabilityStatement"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "MetrologicalTraceability",
+      "type": "object"
+    },
+    "ProcedureRoleEnum": {
+      "description": "Roles of procedures in a traceability statement",
+      "enum": [
+        "measurement",
+        "calibration",
+        "sampling",
+        "analytical_method",
+        "calculation",
+        "modelling",
+        "quality_control",
+        "reporting",
+        "other"
+      ],
+      "title": "ProcedureRoleEnum",
+      "type": "string"
+    },
+    "ReferenceEntity": {
+      "additionalProperties": false,
+      "description": "Generic reference entity used in a traceability statement, chain, procedure, calibration, or boundary definition",
+      "properties": {
+        "assigned_value_uncertainty_value": {
+          "description": "Uncertainty associated with the assigned value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "assigned_value_unit_value": {
+          "description": "Unit associated with the assigned value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "assigned_value_value": {
+          "description": "Assigned value of a measurement standard, reference material, calibrator, or conventional reference",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_entity_identifier_value": {
+          "description": "Identifier for a reference entity, material, standard, instrument, facility, method, or dataset",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_entity_name_value": {
+          "description": "Name of the reference entity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_entity_provider_value": {
+          "description": "Provider, custodian, producer, laboratory, institute, or publisher of the reference entity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_entity_type_value": {
+          "$ref": "#/$defs/ReferenceEntityTypeEnum",
+          "description": "Type of reference entity"
+        },
+        "reference_entity_uri_value": {
+          "description": "URI or URL for the reference entity",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_valid_from_value": {
+          "description": "Start date of validity for the reference entity or assigned value",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_valid_until_value": {
+          "description": "End date of validity for the reference entity or assigned value",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "ReferenceEntity",
+      "type": "object"
+    },
+    "ReferenceEntityTypeEnum": {
+      "description": "Types of reference entities used in traceability records",
+      "enum": [
+        "si_definition",
+        "national_standard",
+        "international_standard",
+        "working_standard",
+        "instrument",
+        "reference_material",
+        "calibration_certificate",
+        "method_document",
+        "dataset",
+        "software",
+        "boundary_document",
+        "organization",
+        "other"
+      ],
+      "title": "ReferenceEntityTypeEnum",
+      "type": "string"
+    },
+    "ReferenceMaterial": {
+      "additionalProperties": false,
+      "description": "Reference material or certified reference material used to establish traceability",
+      "properties": {
+        "assigned_value_uncertainty_value": {
+          "description": "Uncertainty associated with the assigned value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "assigned_value_unit_value": {
+          "description": "Unit associated with the assigned value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "assigned_value_value": {
+          "description": "Assigned value of a measurement standard, reference material, calibrator, or conventional reference",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "certificate_identifier_value": {
+          "description": "Identifier of the reference material certificate",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "certificate_url_value": {
+          "description": "URL for the reference material certificate",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "certified_property_value": {
+          "description": "Certified or assigned property of the reference material",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "matrix_or_material_value": {
+          "description": "Matrix, material, substance, artefact, or object represented by the reference material",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_material_identifier_value": {
+          "description": "Identifier for a reference material or certified reference material",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_material_lot_value": {
+          "description": "Lot, batch, serial number, or production identifier of the reference material",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_material_name_value": {
+          "description": "Name of the reference material",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_material_producer_value": {
+          "description": "Producer, supplier, or certifying body responsible for the reference material",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_material_type_value": {
+          "$ref": "#/$defs/ReferenceMaterialTypeEnum",
+          "description": "Type or role of the reference material"
+        },
+        "reference_valid_from_value": {
+          "description": "Start date of validity for the reference entity or assigned value",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_valid_until_value": {
+          "description": "End date of validity for the reference entity or assigned value",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "ReferenceMaterial",
+      "type": "object"
+    },
+    "ReferenceMaterialTypeEnum": {
+      "description": "Types of reference materials",
+      "enum": [
+        "certified_reference_material",
+        "reference_material",
+        "calibrator",
+        "quality_control_material",
+        "matrix_reference_material",
+        "in_house_reference_material",
+        "other"
+      ],
+      "title": "ReferenceMaterialTypeEnum",
+      "type": "string"
+    },
+    "TraceabilityBasis": {
+      "additionalProperties": false,
+      "description": "Reference basis to which a result is related, such as an SI realization, measurement standard, reference material, standard method, or boundary definition",
+      "properties": {
+        "common_reference_identifier_value": {
+          "description": "Identifier for the final reference, such as an SI unit realization, standard method, reference material, system boundary definition, or characterization model",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "common_reference_name_value": {
+          "description": "Name of the final common reference",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "common_reference_uri_value": {
+          "description": "URI or URL identifying the final common reference",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_authority_value": {
+          "description": "Authority, organization, metrology institute, standards body, or publisher responsible for the reference",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_scope_value": {
+          "description": "Scope or field of application for the reference",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_used_date_value": {
+          "description": "Date at which the reference was used to establish the traceability hierarchy",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_version_value": {
+          "description": "Version, edition, revision, or publication date of the reference",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_basis_description_value": {
+          "description": "Description of the common reference basis that gives meaning to the result",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_basis_identifier_value": {
+          "description": "Identifier for a traceability basis record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_basis_type_value": {
+          "$ref": "#/$defs/TraceabilityBasisTypeEnum",
+          "description": "Type of reference basis used to establish traceability"
+        },
+        "traceability_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_uncertainty_reference_value": {
+          "description": "Reference to an uncertainty statement, uncertainty budget, or uncertainty component associated with this traceability record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "TraceabilityBasis",
+      "type": "object"
+    },
+    "TraceabilityBasisTypeEnum": {
+      "description": "Types of references that can serve as the basis for traceability",
+      "enum": [
+        "si_unit_realization",
+        "measurement_standard",
+        "certified_reference_material",
+        "reference_material",
+        "measurement_procedure",
+        "standard_method",
+        "system_boundary",
+        "characterization_model",
+        "data_source_or_dataset",
+        "conventional_reference",
+        "other"
+      ],
+      "title": "TraceabilityBasisTypeEnum",
+      "type": "string"
+    },
+    "TraceabilityChain": {
+      "additionalProperties": false,
+      "description": "Documented chain or network relating a measurement result to a reference",
+      "properties": {
+        "chain_completeness_value": {
+          "$ref": "#/$defs/ChainCompletenessEnum",
+          "description": "Assessment of whether the chain is complete, partial, inferred, or unavailable"
+        },
+        "chain_end_reference_value": {
+          "description": "Final reference reached by the traceability chain",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "chain_notes_value": {
+          "description": "Additional notes about the traceability chain, including gaps or assumptions",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "chain_start_reference_value": {
+          "description": "Reference or value at the user-facing end of the traceability chain",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "chain_validation_status_value": {
+          "$ref": "#/$defs/TraceabilityStatusEnum",
+          "description": "Validation status of the traceability chain"
+        },
+        "traceability_chain_identifier_value": {
+          "description": "Identifier for a traceability chain or traceability network",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_chain_name_value": {
+          "description": "Human-readable name of the traceability chain",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_chain_type_value": {
+          "$ref": "#/$defs/TraceabilityChainTypeEnum",
+          "description": "Type or topology of the traceability chain"
+        },
+        "traceability_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_links": {
+          "description": "Ordered or networked links that make up a traceability chain",
+          "items": {
+            "$ref": "#/$defs/TraceabilityLink"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "traceability_uncertainty_reference_value": {
+          "description": "Reference to an uncertainty statement, uncertainty budget, or uncertainty component associated with this traceability record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "TraceabilityChain",
+      "type": "object"
+    },
+    "TraceabilityChainTypeEnum": {
+      "description": "Topology or kind of traceability chain",
+      "enum": [
+        "linear_calibration_chain",
+        "branched_calibration_network",
+        "method_traceability_chain",
+        "boundary_traceability_chain",
+        "hybrid_chain",
+        "not_documented"
+      ],
+      "title": "TraceabilityChainTypeEnum",
+      "type": "string"
+    },
+    "TraceabilityEvidenceReference": {
+      "additionalProperties": false,
+      "description": "Supporting evidence record for a traceability statement, chain, calibration, method, boundary, reference material, or competence record",
+      "properties": {
+        "traceability_evidence_date_value": {
+          "description": "Date associated with supporting evidence",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_description_value": {
+          "description": "Description of supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_identifier_value": {
+          "description": "Identifier for supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_provider_value": {
+          "description": "Provider, author, laboratory, supplier, or organization responsible for supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_type_value": {
+          "$ref": "#/$defs/TraceabilityEvidenceTypeEnum",
+          "description": "Type of supporting evidence"
+        },
+        "traceability_evidence_url_value": {
+          "description": "URL for supporting evidence",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_version_value": {
+          "description": "Version, edition, or revision of supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "TraceabilityEvidenceReference",
+      "type": "object"
+    },
+    "TraceabilityEvidenceTypeEnum": {
+      "description": "Types of evidence used to support traceability",
+      "enum": [
+        "calibration_certificate",
+        "reference_material_certificate",
+        "test_report",
+        "method_standard",
+        "procedure_document",
+        "accreditation_record",
+        "proficiency_test",
+        "validation_report",
+        "dataset_reference",
+        "software_record",
+        "boundary_document",
+        "supplier_declaration",
+        "other"
+      ],
+      "title": "TraceabilityEvidenceTypeEnum",
+      "type": "string"
+    },
+    "TraceabilityLink": {
+      "additionalProperties": false,
+      "description": "Single documented step in a traceability chain, including calibration, comparison, transfer, method adherence, or boundary reference",
+      "properties": {
+        "calibration_records": {
+          "description": "Calibration, comparison, verification, or check records that support traceability",
+          "items": {
+            "$ref": "#/$defs/CalibrationRecord"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "link_date_value": {
+          "description": "Date on which this traceability link, calibration, comparison, transformation, or modelling step was established",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "link_from_reference_value": {
+          "description": "Reference entity, value, standard, method, or node from which this link starts",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "link_procedure_value": {
+          "description": "Procedure, calibration, comparison, transformation, conversion, or modelling step used in this link",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "link_role_value": {
+          "$ref": "#/$defs/TraceabilityLinkRoleEnum",
+          "description": "Role of the traceability link in the chain"
+        },
+        "link_sequence_value": {
+          "description": "Position of the link in the traceability chain, where lower numbers are closer to the reported result",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "link_to_reference_value": {
+          "description": "Reference entity, value, standard, method, or node to which this link points",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "link_uncertainty_reference_value": {
+          "description": "Reference to the uncertainty contribution associated with this traceability link",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_link_identifier_value": {
+          "description": "Identifier for a step, edge, or link in a traceability chain",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_statement_notes_value": {
+          "description": "Additional notes about the traceability statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "TraceabilityLink",
+      "type": "object"
+    },
+    "TraceabilityLinkRoleEnum": {
+      "description": "Roles of links in a traceability chain",
+      "enum": [
+        "calibration",
+        "comparison",
+        "verification",
+        "correction",
+        "value_transfer",
+        "method_definition",
+        "boundary_definition",
+        "data_source_mapping",
+        "software_or_model_execution",
+        "other"
+      ],
+      "title": "TraceabilityLinkRoleEnum",
+      "type": "string"
+    },
+    "TraceabilityStatement": {
+      "additionalProperties": false,
+      "description": "Reusable statement documenting the traceability basis of a measured, calculated, method-defined, or boundary-defined value",
+      "properties": {
+        "boundary_definition": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BoundaryDefinition"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Boundary, goal-and-scope, scenario, or model definition used to define a modelled value"
+        },
+        "calibration_records": {
+          "description": "Calibration, comparison, verification, or check records that support traceability",
+          "items": {
+            "$ref": "#/$defs/CalibrationRecord"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "competence_records": {
+          "description": "Competence, accreditation, validation, or quality system records supporting traceability",
+          "items": {
+            "$ref": "#/$defs/CompetenceRecord"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "measurement_procedure": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MeasurementProcedure"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Procedure or method used to define, obtain, transfer, or compare the value"
+        },
+        "measurement_standards": {
+          "description": "Measurement standards, artefacts, instruments, and realizations used in traceability",
+          "items": {
+            "$ref": "#/$defs/MeasurementStandard"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "reference_entities": {
+          "description": "Reference entities, standards, methods, instruments, datasets, or organizations used in traceability",
+          "items": {
+            "$ref": "#/$defs/ReferenceEntity"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "reference_materials": {
+          "description": "Reference materials and certified reference materials used in traceability",
+          "items": {
+            "$ref": "#/$defs/ReferenceMaterial"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "reported_value_identifier_value": {
+          "description": "Identifier for the reported measured, calculated, or assessed value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reported_value_unit_value": {
+          "description": "Unit associated with the reported value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reported_value_value": {
+          "description": "Reported value to which the traceability statement applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "result_date_value": {
+          "description": "Date or time at which the reported result was generated, measured, calculated, or issued",
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_applies_to_class_value": {
+          "description": "Class in an external model to which this traceability statement applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_applies_to_model_value": {
+          "description": "Name, URI, or namespace of the external data model to which this traceability statement applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_applies_to_record_value": {
+          "description": "Identifier of the external record, object, dataset, or passport entry to which this traceability statement applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_applies_to_slot_value": {
+          "description": "Slot or attribute in an external model to which this traceability statement applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_applies_to_value_identifier_value": {
+          "description": "Identifier of a specific value object when the target model gives value-level identifiers",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_applies_to_value_path_value": {
+          "description": "JSONPath, XPath, RDF path, or other pointer to the value to which this traceability statement applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_basis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TraceabilityBasis"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Reference basis that establishes the meaning and comparability of the value"
+        },
+        "traceability_chain": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TraceabilityChain"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Traceability chain or network that relates the result to a reference"
+        },
+        "traceability_data_quality_reference_value": {
+          "description": "Reference to a data quality assessment associated with this traceability record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, procedure, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_measurand_description_value": {
+          "description": "Operational definition of the measurand, including what is measured, calculated, or assessed",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_measurand_identifier_value": {
+          "description": "Identifier for the measurand, quantity, indicator, or value of interest",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_measurand_name_value": {
+          "description": "Name of the measurand, quantity, indicator, or value of interest",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_quantity_kind_value": {
+          "description": "Kind of quantity or indicator being traced, such as mass, length, concentration, carbon footprint, or circularity indicator",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_quantity_unit_value": {
+          "description": "Unit in which the value or measurand is expressed",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_standards_applied_value": {
+          "description": "Standard, guide, protocol, or normative document applied when establishing traceability",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_statement_date_value": {
+          "description": "Date and time when the traceability statement was issued or last updated",
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_statement_identifier_value": {
+          "description": "Identifier for a metrological traceability statement that can be referenced from another CE-RISE model",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_statement_label_value": {
+          "description": "Human-readable label for the traceability statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_statement_notes_value": {
+          "description": "Additional notes about the traceability statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_statement_type_value": {
+          "$ref": "#/$defs/TraceabilityStatementTypeEnum",
+          "description": "Type of traceability being documented"
+        },
+        "traceability_status_value": {
+          "$ref": "#/$defs/TraceabilityStatusEnum",
+          "description": "Lifecycle or validity status of the traceability statement"
+        },
+        "traceability_uncertainty_reference_value": {
+          "description": "Reference to an uncertainty statement, uncertainty budget, or uncertainty component associated with this traceability record",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "TraceabilityStatement",
+      "type": "object"
+    },
+    "TraceabilityStatementTypeEnum": {
+      "description": "Kinds of traceability statements supported by this model",
+      "enum": [
+        "si_traceability",
+        "method_defined_traceability",
+        "boundary_defined_traceability",
+        "reference_material_traceability",
+        "conventional_reference_traceability",
+        "hybrid_traceability",
+        "not_evaluated",
+        "other"
+      ],
+      "title": "TraceabilityStatementTypeEnum",
+      "type": "string"
+    },
+    "TraceabilityStatusEnum": {
+      "description": "Lifecycle and validation status values for traceability records",
+      "enum": [
+        "draft",
+        "active",
+        "reviewed",
+        "verified",
+        "partial",
+        "expired",
+        "superseded",
+        "unavailable"
+      ],
+      "title": "TraceabilityStatusEnum",
+      "type": "string"
+    }
+  },
+  "$id": "https://ce-rise-models.codeberg.page/metrological-traceability/",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "additionalProperties": true,
+  "metamodel_version": "1.11.0",
+  "title": "metrological-traceability",
+  "type": "object",
+  "version": "0.0.3"
+}

@@ -1,0 +1,1637 @@
+{
+  "$comment": "Generated from schemas/ce-rise/uncertainty-quantification/model/model.yaml by tooling/build_ce_rise_profiles.py. Do not edit. The CE-RISE data models are CC-BY-NC-4.0; see ../NOTICE.md.",
+  "$defs": {
+    "BoundaryMatchEnum": {
+      "description": "Compatibility of method, scope, or system boundaries for comparison",
+      "enum": [
+        "matching",
+        "compatible",
+        "partial",
+        "divergent",
+        "not_assessed"
+      ],
+      "title": "BoundaryMatchEnum",
+      "type": "string"
+    },
+    "ComparisonAssessment": {
+      "additionalProperties": false,
+      "description": "Assessment of whether two uncertainty-backed values can be compared meaningfully",
+      "properties": {
+        "additional_uncertainty_component": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyComponent"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Additional uncertainty component introduced because of comparison mismatch"
+        },
+        "additional_uncertainty_rationale_value": {
+          "description": "Rationale for adding or expanding uncertainty because of traceability, boundary, method, or data quality mismatch",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "boundary_match_value": {
+          "$ref": "#/$defs/BoundaryMatchEnum",
+          "description": "Assessment of whether method, scope, or system boundaries are compatible for comparison"
+        },
+        "comparison_decision_value": {
+          "$ref": "#/$defs/ComparisonDecisionEnum",
+          "description": "Decision on whether a direct or conditional comparison is meaningful"
+        },
+        "comparison_identifier_value": {
+          "description": "Identifier for a comparison assessment involving uncertainty statements",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "left_statement_reference_value": {
+          "description": "Reference to the first uncertainty statement in a comparison",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "right_statement_reference_value": {
+          "description": "Reference to the second uncertainty statement in a comparison",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "traceability_match_value": {
+          "$ref": "#/$defs/TraceabilityMatchEnum",
+          "description": "Assessment of whether traceability bases are compatible for comparison"
+        },
+        "uncertainty_statement_notes_value": {
+          "description": "Additional notes about the uncertainty statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "ComparisonAssessment",
+      "type": "object"
+    },
+    "ComparisonDecisionEnum": {
+      "description": "Decisions about whether uncertainty-backed values can be compared",
+      "enum": [
+        "direct_comparison_valid",
+        "comparison_valid_with_expanded_uncertainty",
+        "comparison_conditional",
+        "comparison_not_recommended",
+        "comparison_infeasible"
+      ],
+      "title": "ComparisonDecisionEnum",
+      "type": "string"
+    },
+    "Correlation": {
+      "additionalProperties": false,
+      "description": "Correlation or covariance relationship between input quantities or uncertainty components",
+      "properties": {
+        "correlation_basis_value": {
+          "description": "Basis, evidence, or assumption used to justify a correlation or covariance",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "correlation_coefficient_value": {
+          "description": "Correlation coefficient between two quantities",
+          "maximum": 1.0,
+          "minimum": -1.0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "correlation_identifier_value": {
+          "description": "Identifier for a correlation or covariance relationship",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "covariance_value": {
+          "description": "Covariance between two quantities",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "first_quantity_reference_value": {
+          "description": "Reference to the first quantity in a correlation or covariance relationship",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "second_quantity_reference_value": {
+          "description": "Reference to the second quantity in a correlation or covariance relationship",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "Correlation",
+      "type": "object"
+    },
+    "DistributionParameter": {
+      "additionalProperties": false,
+      "description": "Name-value-unit parameter used to define a probability distribution",
+      "properties": {
+        "distribution_parameter_name_value": {
+          "description": "Name of a distribution parameter, such as mean, standard deviation, minimum, maximum, shape, or scale",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "distribution_parameter_unit_value": {
+          "description": "Unit associated with a distribution parameter",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "distribution_parameter_value_value": {
+          "description": "Numeric value of a distribution parameter",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "title": "DistributionParameter",
+      "type": "object"
+    },
+    "DistributionTypeEnum": {
+      "description": "Probability distribution types used to represent uncertainty",
+      "enum": [
+        "normal",
+        "lognormal",
+        "triangular",
+        "uniform",
+        "rectangular",
+        "student_t",
+        "beta",
+        "gamma",
+        "exponential",
+        "empirical",
+        "discrete",
+        "multimodal",
+        "custom"
+      ],
+      "title": "DistributionTypeEnum",
+      "type": "string"
+    },
+    "EvaluationTypeEnum": {
+      "description": "Evaluation types for uncertainty components",
+      "enum": [
+        "type_a",
+        "type_b",
+        "mixed",
+        "data_quality_derived",
+        "expert_judgement",
+        "scenario_based"
+      ],
+      "title": "EvaluationTypeEnum",
+      "type": "string"
+    },
+    "InputQuantity": {
+      "additionalProperties": false,
+      "description": "Input quantity in a measurement, calculation, or statistical model",
+      "properties": {
+        "input_quantity_estimate_value": {
+          "description": "Best estimate of an input quantity",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "input_quantity_identifier_value": {
+          "description": "Identifier for an input quantity in a measurement or calculation model",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "input_quantity_name_value": {
+          "description": "Name of an input quantity in a measurement or calculation model",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "input_quantity_unit_value": {
+          "description": "Unit of an input quantity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "probability_distribution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyDistribution"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Probability distribution describing uncertainty"
+        },
+        "relative_standard_uncertainty_value": {
+          "description": "Standard uncertainty divided by the absolute value of the associated quantity value",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "standard_uncertainty_value": {
+          "description": "Standard uncertainty expressed as a standard deviation",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "uncertainty_data_quality_reference_value": {
+          "description": "Reference to a data quality assessment that informs or justifies an uncertainty contribution",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_traceability_reference_value": {
+          "description": "Reference to a metrological traceability statement, chain, method, calibration, or boundary definition",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "InputQuantity",
+      "type": "object"
+    },
+    "IntervalTypeEnum": {
+      "description": "Interval types used to report uncertainty",
+      "enum": [
+        "coverage_interval",
+        "expanded_uncertainty_interval",
+        "percentile_interval",
+        "credible_interval",
+        "tolerance_interval",
+        "decision_interval"
+      ],
+      "title": "IntervalTypeEnum",
+      "type": "string"
+    },
+    "MeasurandSpecification": {
+      "additionalProperties": false,
+      "description": "Operational specification of the measurand, quantity of interest, method, conditions, and boundary",
+      "properties": {
+        "corrections_applied_value": {
+          "description": "Corrections applied to the measured or calculated value, including corrections for bias, drift, blank, recovery, or matrix effects",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "decision_rule_value": {
+          "description": "Decision rule used for conformity assessment or comparison when uncertainty is considered",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "measurement_method_value": {
+          "description": "Measurement, calculation, test, or modelling method used to obtain the value",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "measurement_model_value": {
+          "description": "Measurement model, calculation model, statistical model, or equation relating inputs to the measurand",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "method_standard_value": {
+          "description": "Standardized method or protocol defining the measurand or evaluation procedure",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "method_version_value": {
+          "description": "Version, edition, date, or revision of the method used",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "object_or_matrix_value": {
+          "description": "Object, material matrix, product, population, or system to which the measurand applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reference_conditions_value": {
+          "description": "Reference conditions to which the reported value is corrected or intended to apply",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rounding_rule_value": {
+          "description": "Rounding or reporting rule applied to the value and uncertainty",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sample_definition_value": {
+          "description": "Definition of the sample, specimen, item, batch, or population subset used for the evaluation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sampling_frame_value": {
+          "description": "Sampling frame, location, period, state, or population basis for the measurand",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "system_boundary_value": {
+          "description": "System boundary, scope, or modelling boundary relevant to the measurand",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_environmental_conditions_value": {
+          "description": "Environmental or procedural conditions during data acquisition",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_measurand_description_value": {
+          "description": "Operational definition of the measurand, including what is measured and under which conditions",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_measurand_identifier_value": {
+          "description": "Identifier for the measurand or quantity of interest",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_measurand_name_value": {
+          "description": "Name of the measurand or quantity of interest",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_quantity_kind_value": {
+          "description": "Kind of quantity being evaluated, such as mass, length, concentration, carbon footprint, or circularity indicator",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_quantity_unit_value": {
+          "description": "Unit in which the measurand is expressed",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_traceability_reference_value": {
+          "description": "Reference to a metrological traceability statement, chain, method, calibration, or boundary definition",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "MeasurandSpecification",
+      "type": "object"
+    },
+    "MethodReference": {
+      "additionalProperties": false,
+      "description": "Reference to a method, guide, standard, protocol, or implementation used for uncertainty evaluation",
+      "properties": {
+        "method_reference_description_value": {
+          "description": "Description of the referenced method, guide, standard, protocol, or documentation resource",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "method_reference_identifier_value": {
+          "description": "Identifier for a method reference",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "method_reference_url_value": {
+          "description": "URL for a method, guide, standard, protocol, or documentation resource",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "method_standard_value": {
+          "description": "Standardized method or protocol defining the measurand or evaluation procedure",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "method_version_value": {
+          "description": "Version, edition, date, or revision of the method used",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "MethodReference",
+      "type": "object"
+    },
+    "PropagationAnalysis": {
+      "additionalProperties": false,
+      "description": "Analysis used to propagate input uncertainties to an output uncertainty statement",
+      "properties": {
+        "analysis_timestamp_value": {
+          "description": "Date and time when an analysis was performed",
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "model_equation_value": {
+          "description": "Equation, model expression, or model reference used for propagation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "output_distribution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyDistribution"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Output probability distribution produced by propagation"
+        },
+        "output_interval": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyInterval"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Output interval produced by propagation"
+        },
+        "propagation_identifier_value": {
+          "description": "Identifier for an uncertainty propagation analysis",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "propagation_method_value": {
+          "$ref": "#/$defs/PropagationMethodEnum",
+          "description": "Method used to propagate uncertainty"
+        },
+        "random_seed_value": {
+          "description": "Random seed used for a stochastic simulation, when recorded",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "scenario_uncertainties": {
+          "description": "Scenario-specific uncertainty results or structural alternatives",
+          "items": {
+            "$ref": "#/$defs/ScenarioUncertainty"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "sensitivity_results": {
+          "description": "Sensitivity results identifying drivers of output uncertainty",
+          "items": {
+            "$ref": "#/$defs/SensitivityResult"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "simulation_runs_value": {
+          "description": "Number of simulation runs used in a numerical uncertainty propagation",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "software_reference_value": {
+          "description": "Software, workflow, script, or computational environment used for uncertainty evaluation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_standards_applied_value": {
+          "description": "Standard, guide, or protocol applied in the uncertainty evaluation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_statement_notes_value": {
+          "description": "Additional notes about the uncertainty statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "PropagationAnalysis",
+      "type": "object"
+    },
+    "PropagationMethodEnum": {
+      "description": "Methods for uncertainty combination or propagation",
+      "enum": [
+        "analytical_gum",
+        "monte_carlo",
+        "bayesian_updating",
+        "bootstrap",
+        "sensitivity_analysis",
+        "scenario_analysis",
+        "hybrid",
+        "not_evaluated"
+      ],
+      "title": "PropagationMethodEnum",
+      "type": "string"
+    },
+    "QuantityValue": {
+      "additionalProperties": false,
+      "description": "Reported value or estimate associated with an uncertainty statement",
+      "properties": {
+        "numeric_value_value": {
+          "description": "Numeric value associated with a reported result, estimate, distribution parameter, or uncertainty quantity",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "text_value_value": {
+          "description": "Textual, categorical, or structured value when the result is not represented as a simple number",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_unit_value": {
+          "description": "Unit associated with a reported result, estimate, distribution parameter, or uncertainty quantity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value_source_value": {
+          "description": "Source of the value, such as measurement, calculation, supplier declaration, literature, or simulation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value_timestamp_value": {
+          "description": "Date and time associated with the value",
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value_type_value": {
+          "$ref": "#/$defs/ValueTypeEnum",
+          "description": "Type of value being reported"
+        }
+      },
+      "title": "QuantityValue",
+      "type": "object"
+    },
+    "ScenarioUncertainty": {
+      "additionalProperties": false,
+      "description": "Scenario-specific uncertainty context for structural, boundary, allocation, or modelling alternatives",
+      "properties": {
+        "coverage_interval": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyInterval"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Coverage interval or other interval representation of uncertainty"
+        },
+        "probability_distribution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyDistribution"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Probability distribution describing uncertainty"
+        },
+        "scenario_boundary_value": {
+          "description": "Boundary, scope, allocation rule, or modelling choice represented by a scenario",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scenario_description_value": {
+          "description": "Description of a scenario, including the structural or boundary choice it represents",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scenario_identifier_value": {
+          "description": "Identifier for a scenario used in uncertainty or robustness analysis",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scenario_name_value": {
+          "description": "Human-readable name of a scenario",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scenario_probability_value": {
+          "description": "Optional probability or weight assigned to a scenario",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "uncertainty_data_quality_reference_value": {
+          "description": "Reference to a data quality assessment that informs or justifies an uncertainty contribution",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_statement_notes_value": {
+          "description": "Additional notes about the uncertainty statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_traceability_reference_value": {
+          "description": "Reference to a metrological traceability statement, chain, method, calibration, or boundary definition",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "ScenarioUncertainty",
+      "type": "object"
+    },
+    "SensitivityResult": {
+      "additionalProperties": false,
+      "description": "Sensitivity metric for identifying uncertainty drivers and quality hotspots",
+      "properties": {
+        "quality_hotspot_flag_value": {
+          "description": "Whether the sensitivity result identifies a data quality or traceability hotspot",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "sensitivity_metric_value": {
+          "description": "Sensitivity metric, such as Sobol index, rank correlation, derivative, or elementary effect",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sensitivity_parameter_value": {
+          "description": "Input, parameter, or component assessed in a sensitivity analysis",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sensitivity_rank_value": {
+          "description": "Rank of an input, parameter, or component according to sensitivity or uncertainty contribution",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "sensitivity_value_value": {
+          "description": "Numeric value of a sensitivity metric",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "uncertainty_data_quality_reference_value": {
+          "description": "Reference to a data quality assessment that informs or justifies an uncertainty contribution",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_statement_notes_value": {
+          "description": "Additional notes about the uncertainty statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_traceability_reference_value": {
+          "description": "Reference to a metrological traceability statement, chain, method, calibration, or boundary definition",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "SensitivityResult",
+      "type": "object"
+    },
+    "StatementStatusEnum": {
+      "description": "Lifecycle status values for uncertainty statements",
+      "enum": [
+        "draft",
+        "reported",
+        "revised",
+        "superseded",
+        "withdrawn"
+      ],
+      "title": "StatementStatusEnum",
+      "type": "string"
+    },
+    "TraceabilityMatchEnum": {
+      "description": "Compatibility of traceability bases for comparison",
+      "enum": [
+        "matching",
+        "compatible",
+        "partial",
+        "divergent",
+        "not_assessed"
+      ],
+      "title": "TraceabilityMatchEnum",
+      "type": "string"
+    },
+    "UncertaintyBudget": {
+      "additionalProperties": false,
+      "description": "Statement of uncertainty components, their calculation, and their combination",
+      "properties": {
+        "budget_method_value": {
+          "$ref": "#/$defs/PropagationMethodEnum",
+          "description": "Method used to combine uncertainty components"
+        },
+        "combined_standard_uncertainty_value": {
+          "description": "Combined standard uncertainty obtained from the individual uncertainty components",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "correlations": {
+          "description": "Correlations or covariances between input quantities or components",
+          "items": {
+            "$ref": "#/$defs/Correlation"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "coverage_factor_value": {
+          "description": "Coverage factor used to obtain expanded uncertainty from combined standard uncertainty",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "coverage_interval": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyInterval"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Coverage interval or other interval representation of uncertainty"
+        },
+        "coverage_probability_value": {
+          "description": "Coverage probability associated with a coverage interval or expanded uncertainty",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "effective_degrees_of_freedom_value": {
+          "description": "Effective degrees of freedom associated with the combined uncertainty",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "expanded_uncertainty_value": {
+          "description": "Expanded uncertainty obtained by multiplying combined standard uncertainty by a coverage factor",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "input_quantities": {
+          "description": "Input quantities in the measurement or calculation model",
+          "items": {
+            "$ref": "#/$defs/InputQuantity"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "measurement_model_value": {
+          "description": "Measurement model, calculation model, statistical model, or equation relating inputs to the measurand",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "relative_standard_uncertainty_value": {
+          "description": "Standard uncertainty divided by the absolute value of the associated quantity value",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "uncertainty_budget_identifier_value": {
+          "description": "Identifier for an uncertainty budget",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_budget_name_value": {
+          "description": "Human-readable name of the uncertainty budget",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_components": {
+          "description": "Individual uncertainty components included in an uncertainty budget",
+          "items": {
+            "$ref": "#/$defs/UncertaintyComponent"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "uncertainty_standards_applied_value": {
+          "description": "Standard, guide, or protocol applied in the uncertainty evaluation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_statement_notes_value": {
+          "description": "Additional notes about the uncertainty statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "UncertaintyBudget",
+      "type": "object"
+    },
+    "UncertaintyComponent": {
+      "additionalProperties": false,
+      "description": "Individual contribution to uncertainty from a source, input, bias, model discrepancy, scenario, or data quality limitation",
+      "properties": {
+        "coefficient_of_variation_value": {
+          "description": "Coefficient of variation used as a relative uncertainty measure",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "component_estimate_value": {
+          "description": "Best estimate associated with an uncertainty component",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "coverage_factor_value": {
+          "description": "Coverage factor used to obtain expanded uncertainty from combined standard uncertainty",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "degrees_of_freedom_value": {
+          "description": "Degrees of freedom associated with an uncertainty component or estimate",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "evaluation_type_value": {
+          "$ref": "#/$defs/EvaluationTypeEnum",
+          "description": "Type of evaluation used for the uncertainty component"
+        },
+        "probability_distribution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyDistribution"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Probability distribution describing uncertainty"
+        },
+        "relative_standard_uncertainty_value": {
+          "description": "Standard uncertainty divided by the absolute value of the associated quantity value",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "sensitivity_coefficient_value": {
+          "description": "Sensitivity coefficient describing how the measurand responds to this input or component",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "standard_uncertainty_value": {
+          "description": "Standard uncertainty expressed as a standard deviation",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "uncertainty_component_factor_value": {
+          "description": "Multiplicative uncertainty factor used to express a plausible range around a positive quantity",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "uncertainty_component_identifier_value": {
+          "description": "Identifier for an uncertainty component",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_data_quality_reference_value": {
+          "description": "Reference to a data quality assessment that informs or justifies an uncertainty contribution",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_source_category_value": {
+          "$ref": "#/$defs/UncertaintySourceCategoryEnum",
+          "description": "Category of uncertainty source"
+        },
+        "uncertainty_source_value": {
+          "description": "Description or name of the uncertainty source",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_statement_notes_value": {
+          "description": "Additional notes about the uncertainty statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_traceability_reference_value": {
+          "description": "Reference to a metrological traceability statement, chain, method, calibration, or boundary definition",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "UncertaintyComponent",
+      "type": "object"
+    },
+    "UncertaintyDistribution": {
+      "additionalProperties": false,
+      "description": "Probability distribution representing uncertainty for a measurand, input quantity, component, or model output",
+      "properties": {
+        "distribution_identifier_value": {
+          "description": "Identifier for a probability distribution used in the uncertainty evaluation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "distribution_location_value": {
+          "description": "Location parameter of the probability distribution when applicable",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "distribution_lower_bound_value": {
+          "description": "Lower support bound of the probability distribution",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "distribution_mean_value": {
+          "description": "Mean of the probability distribution",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "distribution_median_value": {
+          "description": "Median of the probability distribution",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "distribution_notes_value": {
+          "description": "Notes about distribution choice, fitting, assumptions, or limitations",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "distribution_parameters": {
+          "description": "Flexible distribution parameters, such as mean, standard deviation, minimum, maximum, shape, or scale",
+          "items": {
+            "$ref": "#/$defs/DistributionParameter"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "distribution_scale_value": {
+          "description": "Scale parameter of the probability distribution when applicable",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "distribution_standard_deviation_value": {
+          "description": "Standard deviation of the probability distribution",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "distribution_type_value": {
+          "$ref": "#/$defs/DistributionTypeEnum",
+          "description": "Type of probability distribution used to describe uncertainty"
+        },
+        "distribution_upper_bound_value": {
+          "description": "Upper support bound of the probability distribution",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "empirical_values_reference_value": {
+          "description": "Reference to empirical samples or tabulated values used to define an empirical distribution",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "UncertaintyDistribution",
+      "type": "object"
+    },
+    "UncertaintyEvidenceReference": {
+      "additionalProperties": false,
+      "description": "Reference to supporting evidence used to define, justify, or update uncertainty",
+      "properties": {
+        "uncertainty_evidence_date_value": {
+          "description": "Date associated with supporting evidence",
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_evidence_description_value": {
+          "description": "Description of supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_evidence_identifier_value": {
+          "description": "Identifier for supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_evidence_provider_value": {
+          "description": "Provider, author, laboratory, supplier, or organization responsible for supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_evidence_type_value": {
+          "$ref": "#/$defs/UncertaintyEvidenceTypeEnum",
+          "description": "Type of supporting evidence"
+        },
+        "uncertainty_evidence_url_value": {
+          "description": "URL for supporting evidence",
+          "format": "uri",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_evidence_version_value": {
+          "description": "Version, edition, or revision of supporting evidence",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "UncertaintyEvidenceReference",
+      "type": "object"
+    },
+    "UncertaintyEvidenceTypeEnum": {
+      "description": "Types of supporting evidence for uncertainty evaluation",
+      "enum": [
+        "calibration_certificate",
+        "reference_material_certificate",
+        "measurement_report",
+        "laboratory_report",
+        "data_quality_assessment",
+        "standard_method",
+        "software_record",
+        "expert_judgement",
+        "literature_source",
+        "supplier_declaration",
+        "other"
+      ],
+      "title": "UncertaintyEvidenceTypeEnum",
+      "type": "string"
+    },
+    "UncertaintyInterval": {
+      "additionalProperties": false,
+      "description": "Interval representation of uncertainty, including coverage intervals and percentile intervals",
+      "properties": {
+        "coverage_factor_value": {
+          "description": "Coverage factor used to obtain expanded uncertainty from combined standard uncertainty",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "coverage_probability_value": {
+          "description": "Coverage probability associated with a coverage interval or expanded uncertainty",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "interval_type_value": {
+          "$ref": "#/$defs/IntervalTypeEnum",
+          "description": "Type of interval used to communicate uncertainty"
+        },
+        "lower_bound_value": {
+          "description": "Lower bound of an uncertainty interval, coverage interval, or plausible range",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "percentile_lower_value": {
+          "description": "Lower percentile used to define an interval, such as 5 for a 5th percentile bound",
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "percentile_upper_value": {
+          "description": "Upper percentile used to define an interval, such as 95 for a 95th percentile bound",
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "uncertainty_unit_value": {
+          "description": "Unit associated with a reported result, estimate, distribution parameter, or uncertainty quantity",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "upper_bound_value": {
+          "description": "Upper bound of an uncertainty interval, coverage interval, or plausible range",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "title": "UncertaintyInterval",
+      "type": "object"
+    },
+    "UncertaintyQuantification": {
+      "additionalProperties": false,
+      "description": "Root container for uncertainty quantification statements and supporting records",
+      "properties": {
+        "comparison_assessments": {
+          "description": "Assessments of whether uncertainty statements support meaningful comparison",
+          "items": {
+            "$ref": "#/$defs/ComparisonAssessment"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "method_references": {
+          "description": "Methods, standards, and protocols referenced by the uncertainty model",
+          "items": {
+            "$ref": "#/$defs/MethodReference"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "propagation_analyses": {
+          "description": "Propagation analyses available for reuse by one or more uncertainty statements",
+          "items": {
+            "$ref": "#/$defs/PropagationAnalysis"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "uncertainty_budgets": {
+          "description": "Uncertainty budgets available for reuse by one or more uncertainty statements",
+          "items": {
+            "$ref": "#/$defs/UncertaintyBudget"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "uncertainty_evidence_references": {
+          "description": "Evidence records referenced by the uncertainty model",
+          "items": {
+            "$ref": "#/$defs/UncertaintyEvidenceReference"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "uncertainty_statements": {
+          "description": "Reusable uncertainty statements that can be embedded or referenced by other CE-RISE data models",
+          "items": {
+            "$ref": "#/$defs/UncertaintyStatement"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "title": "UncertaintyQuantification",
+      "type": "object"
+    },
+    "UncertaintySourceCategoryEnum": {
+      "description": "Categories of uncertainty sources",
+      "enum": [
+        "repeatability",
+        "reproducibility",
+        "calibration",
+        "reference_material",
+        "resolution",
+        "environmental_condition",
+        "sampling",
+        "sample_preparation",
+        "method_bias",
+        "recovery",
+        "drift",
+        "model_discrepancy",
+        "data_quality",
+        "boundary_condition",
+        "scenario_choice",
+        "input_data",
+        "software",
+        "other"
+      ],
+      "title": "UncertaintySourceCategoryEnum",
+      "type": "string"
+    },
+    "UncertaintyStatement": {
+      "additionalProperties": false,
+      "description": "Reusable statement describing uncertainty for a reported value, field, dataset, model output, or comparison",
+      "properties": {
+        "coverage_interval": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyInterval"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Coverage interval or other interval representation of uncertainty"
+        },
+        "measurand": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MeasurandSpecification"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Operational definition of the measurand or value of interest"
+        },
+        "probability_distribution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyDistribution"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Probability distribution describing uncertainty"
+        },
+        "propagation_analysis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PropagationAnalysis"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Propagation or numerical analysis used to derive an uncertainty statement"
+        },
+        "reported_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QuantityValue"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Reported value to which the uncertainty statement applies, when represented in this utility model"
+        },
+        "uncertainty_applies_to_class_value": {
+          "description": "Class in an external model to which this uncertainty statement applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_applies_to_model_value": {
+          "description": "Name, URI, or namespace of the external data model to which this uncertainty statement applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_applies_to_record_value": {
+          "description": "Identifier of the external record, object, dataset, or passport entry to which this uncertainty statement applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_applies_to_slot_value": {
+          "description": "Slot or attribute in an external model to which this uncertainty statement applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_applies_to_value_identifier_value": {
+          "description": "Identifier of a specific value object when the target model gives value-level identifiers",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_applies_to_value_path_value": {
+          "description": "JSONPath, XPath, RDF path, or other pointer to the value to which this uncertainty statement applies",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_budget": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UncertaintyBudget"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Uncertainty budget used to calculate or justify an uncertainty statement"
+        },
+        "uncertainty_data_quality_reference_value": {
+          "description": "Reference to a data quality assessment that informs or justifies an uncertainty contribution",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_evidence_reference_value": {
+          "description": "Reference to supporting evidence such as a certificate, report, dataset, standard, or software record",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_standards_applied_value": {
+          "description": "Standard, guide, or protocol applied in the uncertainty evaluation",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_statement_date_value": {
+          "description": "Date and time when the uncertainty statement was issued or last updated",
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_statement_identifier_value": {
+          "description": "Identifier for an uncertainty statement that can be referenced from another CE-RISE model",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_statement_label_value": {
+          "description": "Human-readable label for the uncertainty statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_statement_notes_value": {
+          "description": "Additional notes about the uncertainty statement",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uncertainty_statement_status_value": {
+          "$ref": "#/$defs/StatementStatusEnum",
+          "description": "Lifecycle status of the uncertainty statement"
+        },
+        "uncertainty_statement_type_value": {
+          "$ref": "#/$defs/UncertaintyStatementTypeEnum",
+          "description": "Type of uncertainty being described"
+        },
+        "uncertainty_traceability_reference_value": {
+          "description": "Reference to a metrological traceability statement, chain, method, calibration, or boundary definition",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "UncertaintyStatement",
+      "type": "object"
+    },
+    "UncertaintyStatementTypeEnum": {
+      "description": "Types of uncertainty statement supported by the model",
+      "enum": [
+        "measurement_uncertainty",
+        "parameter_uncertainty",
+        "model_uncertainty",
+        "scenario_uncertainty",
+        "data_quality_derived_uncertainty",
+        "comparison_uncertainty",
+        "combined_uncertainty"
+      ],
+      "title": "UncertaintyStatementTypeEnum",
+      "type": "string"
+    },
+    "ValueTypeEnum": {
+      "description": "Types of values that may carry uncertainty",
+      "enum": [
+        "measured_value",
+        "calculated_value",
+        "estimated_value",
+        "simulated_value",
+        "categorical_value",
+        "interval_value"
+      ],
+      "title": "ValueTypeEnum",
+      "type": "string"
+    }
+  },
+  "$id": "https://ce-rise-models.codeberg.page/uncertainty-quantification/",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "additionalProperties": true,
+  "metamodel_version": "1.11.0",
+  "title": "uncertainty-quantification",
+  "type": "object",
+  "version": "0.0.3"
+}

@@ -111,6 +111,14 @@ export default function Validate() {
                   </button>
                 ))}
               </div>
+              {/* The two kinds of profile answer different questions, and reading a
+                  "conforms" from the wrong one is the mistake this note prevents. */}
+              <p className="faint" style={{ marginTop: 10, marginBottom: 0 }}
+                 data-testid="profile-note">
+                {profile.startsWith("ce-rise:")
+                  ? "A CE-RISE data model: checks that the record uses the consortium's vocabulary — unknown properties, wrong types. It declares no required fields, so an empty record conforms to it. For completeness, check against the EU DPP profile as well."
+                  : "The EU DPP profile: checks completeness — which required fields are missing — plus this workbench's own material-share rule. For vocabulary, check against a CE-RISE data model as well."}
+              </p>
             </div>
           )}
         </Outcome>
