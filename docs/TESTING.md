@@ -192,20 +192,14 @@ Overall floor 70 %. No mutation testing. Coverage is a sanity check, not a goal:
 
 ## 8. CI
 
-```mermaid
-flowchart LR
-    PR["Push / PR"] --> L["lint + typecheck + layering"]
-    L --> U["unit"]
-    U --> C["contract · both modes"]
-    C --> I["integration"]
-    I --> R["reference set<br/>no regression"]
-    R --> E["e2e · 6 windows × 2 modes"]
-    E --> S["gitleaks · pip-audit"]
-    S --> OK(["mergeable"])
-```
+Codeberg Forgejo Actions run on pushes to `main`, pull requests and manual dispatch.
+For Python 3.10 and 3.12, the workflow runs Ruff, formatting, mypy,
+import-linter and the offline pytest suite with coverage. No API key is supplied.
 
-One pipeline, under five minutes, no API key, no nightly job. If it is slow or flaky people
-stop trusting it, and an untrusted suite is worse than a small one.
+The GitHub mirror retains its equivalent Python CI and a separate Gitleaks job
+until the Codeberg workflow has been verified. Frontend build and Playwright smoke
+tests are release checks run with `make web-check` and `make smoke`; they are not
+part of either automated CI workflow. Neither workflow currently runs `pip-audit`.
 
 ---
 

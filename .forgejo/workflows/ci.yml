@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# LLM requests replay from recorded cassettes; no API key is provided.
+jobs:
+  check:
+    runs-on: codeberg-tiny
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: https://github.com/actions/checkout@v4
+      - uses: https://github.com/astral-sh/setup-uv@v3
+      - run: uv python install ${{ matrix.python }}
+      - run: uv sync --frozen --all-packages --dev
+      - run: make check
+      - run: uv run pytest --cov=packages --cov-report=term-missing
