@@ -1,4 +1,4 @@
-# Intelligent Circular Insights
+# CE-RISE Intelligent Circular Insights Workbench
 
 Reliability-first question answering over Digital Product Passports: every output is
 an evidence-grounded answer with provenance, or an explicit abstention.

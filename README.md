@@ -1,7 +1,8 @@
-# CE-RISE Task 4.2 Workbench
+# CE-RISE Intelligent Circular Insights Workbench
 
-The CE-RISE Task 4.2 Workbench is a full-stack tool for exploring, validating,
-repairing and synthesising Digital Product Passport (DPP) records. It combines an
+The CE-RISE Intelligent Circular Insights Workbench is a full-stack tool for
+exploring, validating, repairing and synthesising Digital Product Passport (DPP)
+records. It combines an
 evidence-grounded FastAPI backend with a React/TypeScript frontend and supports both
 a general-purpose backend profile and a CE-RISE profile over the consortium's data
 models and WP3 PEFDPP knowledge graph.
@@ -147,7 +148,7 @@ and backend-routing decisions.
 
 ## Scope and limitations
 
-This is the CE-RISE Task 4.2 software workbench, not a legal certification service
+This CE-RISE Task 4.2 software is not a legal certification service
 or the evidence package for a scientific publication.
 
 The WP3 battery case study includes its foreground inventory but not the licensed
