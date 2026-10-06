@@ -12,6 +12,8 @@ Target version: **0.1.0**. No release date or tag has been assigned.
   public documentation and citation metadata
 - Replaced internal work-package and task shorthand in public descriptions, and
   clarified the limits of the CE-RISE validation and proxy-factor results
+- Removed unsupported compliance claims from PEFDPP descriptions and labelled
+  graph-based footprint results as indicative, proxy-backed estimates
 
 ### Added — Sprint 0, foundation
 - Hexagonal architecture: 15 `typing.Protocol` ports in `ici_core`, which imports

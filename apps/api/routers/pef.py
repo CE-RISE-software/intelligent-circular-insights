@@ -63,8 +63,8 @@ def overview(bundle: Annotated[ProviderBundle, Depends(get_bundle)]) -> dict[str
             "share_of_paper": round(summary.share_of_paper, 4),
         },
         "compliance_note": (
-            "Background flows use a documented proxy factor pack, not licensed data. "
-            "This is not an EF-compliant declaration."
+            "Background flows use documented proxy factors rather than a complete "
+            "background inventory. Results are indicative estimates, not declarations."
         ),
     }
 

@@ -85,7 +85,7 @@ function Calculator() {
     <Outcome result={result} pending={pending} pendingLabel="solving the product system">
       {data => (
         <>
-          <GlassCard title="PEF result" testId="pef-result"
+          <GlassCard title="Climate footprint estimate" testId="pef-result"
                      subtitle={data.functional_unit ?? "per functional unit"}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 20 }}>
               <Stat label="Climate change" value={data.total.toFixed(6)} unit={data.unit} />

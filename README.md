@@ -152,7 +152,7 @@ This software is not a legal certification service.
 
 The battery case study includes its foreground inventory but not the licensed
 background database. A documented proxy factor pack is used instead; proxy values are
-labelled and must not be presented as an Environmental Footprint-compliant declaration.
+labelled, and the outputs are indicative estimates rather than declarations.
 The six CE-RISE root schemas validate vocabulary and types but declare no required
 fields, so EU DPP completeness and CE-RISE vocabulary conformance remain separate,
 explicit checks.

@@ -12,9 +12,8 @@
     "",
     "To produce a demonstrable number, this pack supplies ONE published, citable cradle-to-gate",
     "GWP100 value per background flow. Every value carries its tier, source and uncertainty and",
-    "is rendered in the UI with a visible 'proxy' badge. NOTHING here is presented as an",
-    "EF-compliant result. Licensed background data would still require review of data",
-    "coverage, calculation methods and reporting before making a compliance claim.",
+    "is rendered in the UI with a visible 'proxy' badge. This pack supports indicative",
+    "estimates only; it does not provide a complete background inventory or a declaration.",
     "",
     "TIERS:",
     "  A — well-established published value for this exact material/process, low spread",
@@ -28,7 +27,7 @@
     "indicator": "Climate change (GWP100)",
     "indicator_unit": "kg CO2 eq",
     "method_reference": "IPCC AR6 GWP100, as adopted in EF 3.1",
-    "compliance": "NOT EF-compliant. Proxy layer for demonstration only.",
+    "compliance": "Indicative proxy factors only; not for declarations.",
     "replaces": "ecoinvent 3.12 cut-off / EF-node background datasets"
   },
 

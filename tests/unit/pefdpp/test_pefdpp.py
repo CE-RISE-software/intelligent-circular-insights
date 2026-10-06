@@ -92,11 +92,19 @@ class TestPublishedResults:
         assert round(sum(c.share or 0 for c in result.contributions), 3) == 1.0
 
     def test_every_number_is_badged_as_proxy_backed(self, engine) -> None:
-        # This is not an EF-compliant declaration, and the result says so rather
-        # than leaving a reader to find the caveat in a footnote.
+        # Every contribution exposes its proxy basis to the caller.
         result = engine.assess(STUDY, ImpactRequest())
         assert result.uses_proxy_factors is True
         assert all(c.is_proxy for c in result.contributions)
+
+    def test_raw_result_is_labelled_as_an_estimate(self, services, registry) -> None:
+        raw = services[1].calculate()
+        assert raw["headline"]["compliance_status"] == (
+            "indicative proxy-backed estimate; not a declaration"
+        )
+        assert "regulated_indicator" not in raw["headline"]
+        assert "compliant" not in raw["method"]["honesty_note"].lower()
+        assert "compliant" not in registry.mounted()[0].title.lower()
 
     def test_the_graph_diagnostics_still_fire(self, engine) -> None:
         # Findings the WP3 note calls out: things a PDF would have hidden.

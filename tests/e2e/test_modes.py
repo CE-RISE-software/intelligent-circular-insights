@@ -85,7 +85,7 @@ class TestWhereTheModesDiffer:
 
     def test_the_compliance_caveat_travels_with_the_result(self, client) -> None:
         body = client.get("/api/pef/overview", headers=CE_RISE).json()
-        assert "not an EF-compliant declaration" in body["compliance_note"]
+        assert "indicative estimates, not declarations" in body["compliance_note"]
 
     def test_carbon_differs_by_backend(self, client) -> None:
         # Normal reads a flat profile and multiplies a factor table; CE-RISE solves

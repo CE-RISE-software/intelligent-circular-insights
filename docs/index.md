@@ -26,10 +26,8 @@ the design choices and their revisions.
 The battery case study carries a complete *foreground* inventory but not the
 licensed background: ecoinvent is commercial and is referenced in the graph by name
 and UUID only. A documented proxy factor pack stands in, every proxy value is badged
-as such in the API response and on screen. **This is not an EF-compliant
-declaration.** Using licensed background data would require a separate review of
-data coverage, calculation methods and reporting requirements before making
-any compliance claim.
+as such in the API response and on screen. The result is an indicative estimate
+from an incomplete background inventory, not a declaration or conformity assessment.
 
 ## Licensing
 

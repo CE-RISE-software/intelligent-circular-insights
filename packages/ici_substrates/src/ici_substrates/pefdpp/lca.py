@@ -22,12 +22,12 @@ WHAT THIS DOES
 
 WHAT THIS DOES NOT DO
 ---------------------
-It does not produce an EF-compliant declaration. The case study graph carries
+It produces indicative estimates, not declarations. The case study graph carries
 no background inventory (ecoinvent 3.12 is licensed and referenced by UUID
 only), so background impacts come from a documented proxy factor pack. Every
 such number is tagged ``tier`` and ``is_proxy`` and is rendered with a badge in
-the UI. Point ``factors/background_factors.json`` at a licensed EF-node extract
-and the same engine produces a compliant result.
+the UI. Background inventory coverage and method suitability require separate
+evaluation before these estimates can be used for other purposes.
 
 Port note
 ---------
@@ -982,7 +982,7 @@ class PefdppLcaService:
                     "partial",
                     (
                         "Computed for the elementary flows that appear directly in the foreground graph "
-                        "only. Background contributions need an EF-compliant background dataset."
+                        "only. Background contributions are not calculated for this category."
                     ),
                 )
             else:
@@ -1077,8 +1077,7 @@ class PefdppLcaService:
                     "Pack mass from Crenna et al. (2021) as cited in the case study; "
                     "used only to restate the result in familiar units."
                 ),
-                "regulated_indicator": True,
-                "compliance_status": "indicative — not an EF-compliant declaration",
+                "compliance_status": "indicative proxy-backed estimate; not a declaration",
             },
             "by_stage": stage_rows,
             "by_activity": sorted(
@@ -1160,9 +1159,8 @@ class PefdppLcaService:
                     "The foreground inventory, its linkages, the geographies, the CFF parameters "
                     "and the data-quality scores are all read from the RDF graph. The background "
                     "impact intensities are proxies from a documented factor pack, because the "
-                    "case study references ecoinvent 3.12 by UUID without shipping it. Swap the "
-                    "factor pack for a licensed EF-node extract and this becomes a compliant "
-                    "calculation with no change to the engine."
+                    "case study references ecoinvent 3.12 by UUID without shipping it. This "
+                    "calculation is an indicative estimate based on incomplete background data."
                 ),
             },
         }
