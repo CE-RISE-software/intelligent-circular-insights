@@ -1,6 +1,6 @@
 {
   "_readme": [
-    "PROXY BACKGROUND FACTOR PACK — CE-RISE DPP Workbench / WP3 PEFDPP integration.",
+    "PROXY BACKGROUND FACTOR PACK — CE-RISE Intelligent Circular Insights Workbench.",
     "",
     "WHY THIS FILE EXISTS:",
     "The PEFDPP case study (Mintjes et al.) carries a COMPLETE machine-readable foreground",
@@ -13,8 +13,8 @@
     "To produce a demonstrable number, this pack supplies ONE published, citable cradle-to-gate",
     "GWP100 value per background flow. Every value carries its tier, source and uncertainty and",
     "is rendered in the UI with a visible 'proxy' badge. NOTHING here is presented as an",
-    "EF-compliant result. Swapping this file for a licensed ecoinvent/EF-node extract turns the",
-    "same calculation into a compliant one without touching the engine.",
+    "EF-compliant result. Licensed background data would still require review of data",
+    "coverage, calculation methods and reporting before making a compliance claim.",
     "",
     "TIERS:",
     "  A — well-established published value for this exact material/process, low spread",

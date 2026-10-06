@@ -3,33 +3,33 @@
 Reliability-first question answering over Digital Product Passports: every output is
 an evidence-grounded answer with provenance, or an explicit abstention.
 
-One workbench, two interchangeable backends, switchable per request.
+One workbench, two backend profiles, switchable per request.
 
 - **Normal** — flat product profiles, published emission factors, JSON-Schema
   validation, hybrid lexical retrieval. Fast, broad, shallow.
-- **CE-RISE** — the consortium data models and the WP3 PEFDPP ontology, with SHACL
-  conformance and a life cycle assessment solved off the RDF graph. Slower, narrower,
-  regulator-grade.
+- **CE-RISE** — CE-RISE data models and the PEFDPP knowledge graph, with
+  vocabulary and type checks against generated JSON Schemas and a life-cycle
+  calculation for the modelled product system.
 
 Both return the same envelope, so the interface renders one component tree and an
 auditor reads one shape.
 
 ## Where to start
 
-[The architecture](ARCHITECTURE.md) has the diagrams, the ports, and — in sections 9
-and 10 — an explicit split between what this rewrite fixes and what it only leaves a
-seam for. The [decision records](adr/0001-hexagonal-architecture.md) say why each
-choice was made, including the ones later reconsidered.
-[Verification and remaining work](VERIFICATION_2026-09-22.md) records the latest checks.
+[The architecture](ARCHITECTURE.md) describes the components, ports and planned
+extensions. The [decision records](adr/0001-hexagonal-architecture.md) explain
+the design choices and their revisions.
+[Verification and remaining work](VERIFICATION_2026-09-22.md) records a dated check.
 
 ## Honest limitations
 
 The battery case study carries a complete *foreground* inventory but not the
 licensed background: ecoinvent is commercial and is referenced in the graph by name
 and UUID only. A documented proxy factor pack stands in, every proxy value is badged
-as such in the API response and on screen, and **this is not an EF-compliant
-declaration**. Point the factor pack at a licensed extract and the same engine
-produces a compliant result with no code change.
+as such in the API response and on screen. **This is not an EF-compliant
+declaration.** Using licensed background data would require a separate review of
+data coverage, calculation methods and reporting requirements before making
+any compliance claim.
 
 ## Licensing
 

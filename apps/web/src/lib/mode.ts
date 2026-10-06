@@ -19,7 +19,7 @@ export const MODE_BLURBS: Record<BackendMode, string> = {
   normal:
     "Flat product profiles, published emission factors, JSON-Schema conformance and lexical retrieval. Fast and broad.",
   "ce-rise":
-    "Adds the WP3 knowledge graph: a product system solved off RDF, competency questions, and triples behind every number.",
+    "Adds the PEFDPP knowledge graph: a product system calculated from RDF, competency questions, and supporting triples for the result.",
 };
 
 const LS_MODE = "ici.backendMode";

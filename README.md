@@ -2,10 +2,10 @@
 
 The CE-RISE Intelligent Circular Insights Workbench is a full-stack tool for
 exploring, validating, repairing and synthesising Digital Product Passport (DPP)
-records. It combines an
-evidence-grounded FastAPI backend with a React/TypeScript frontend and supports both
-a general-purpose backend profile and a CE-RISE profile over the consortium's data
-models and WP3 PEFDPP knowledge graph.
+records. It combines an evidence-grounded FastAPI backend with a React/TypeScript
+frontend and supports both
+a general-purpose backend profile and a CE-RISE profile over the CE-RISE data
+models and PEFDPP life-cycle assessment knowledge graph.
 
 Every generated answer must be traceable to evidence or the workbench abstains. Model
 training knowledge may be used only to propose lower-confidence, unverified repair
@@ -28,7 +28,7 @@ The canonical repository is on
 | Repair | Evidence-backed field repair plus separate, lower-confidence suggestions derived from model training for human review |
 | Synthesize | Strict generation of a conforming passport in which every added field must have retrievable support |
 | CE-RISE Models | An 18-model catalogue, 17 generated JSON Schemas and six document-root validation profiles |
-| PEF Studio | WP3 PEFDPP overview, graph-based calculation, fixed competency questions and constrained read-only SPARQL |
+| PEF Studio | PEFDPP knowledge graph overview, graph-based calculation, fixed competency questions and constrained read-only SPARQL |
 | Compare | Side-by-side execution of the same question through both backend profiles |
 
 ## Backend profiles
@@ -38,7 +38,7 @@ which backend actually served it.
 
 - **Normal** uses flat product profiles, published CSV emission factors, the EU DPP
   JSON Schema, lexical evidence retrieval and the shared reliability pipeline.
-- **CE-RISE** adds the consortium data models and the WP3 PEFDPP graph. Questions can
+- **CE-RISE** adds the CE-RISE data models and the PEFDPP graph. Questions can
   cite graph assertions, carbon calculations use the graph for product systems it
   models, and records written in a recognised CE-RISE vocabulary are routed to that
   model's schema.
@@ -148,10 +148,9 @@ and backend-routing decisions.
 
 ## Scope and limitations
 
-This CE-RISE Task 4.2 software is not a legal certification service
-or the evidence package for a scientific publication.
+This software is not a legal certification service.
 
-The WP3 battery case study includes its foreground inventory but not the licensed
+The battery case study includes its foreground inventory but not the licensed
 background database. A documented proxy factor pack is used instead; proxy values are
 labelled and must not be presented as an Environmental Footprint-compliant declaration.
 The six CE-RISE root schemas validate vocabulary and types but declare no required
@@ -211,4 +210,4 @@ Licensed under the [European Union Public Licence v1.2 (EUPL-1.2)](LICENSE).
 Attribution: CE-RISE project (Grant Agreement No. 101092281) and the individual
 authors and partners indicated in the repository metadata.
 
-Maintained by A M Esfar-E-Alam and Riccardo Boero (NILU) within CE-RISE Task 4.2.
+Maintained by A M Esfar-E-Alam and Riccardo Boero (NILU) for CE-RISE.
