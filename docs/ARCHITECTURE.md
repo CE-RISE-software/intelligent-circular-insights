@@ -696,7 +696,7 @@ revamp/
 | Determinism | seeds everywhere; each request's trace carries model, prompt hash, mode, calibrator id and τ, so a response can be explained after the fact |
 | Evaluation code | the harness (`ici_eval`: AURC, ECE, McNemar, Wilson, risk–coverage, figures) ports across and works — running sweeps with it is a separate exercise on a separate budget |
 | LLM spend | every interaction cassette-recorded once and replayed; the test suite runs with no API key |
-| Secrets | `.env` gitignored, `gitleaks` in CI |
+| Secrets | `.env` gitignored; tracked-secret checks run in the CI pytest suite |
 | Licence | **EUPL-1.2** for our code (the target repo already carries it); vendored CE-RISE data models stay segregated under CC-BY-NC-4.0 with REUSE metadata — ADR 0009 |
 | Release | Codeberg tag → GitHub mirror → Zenodo archive + DOI |
 

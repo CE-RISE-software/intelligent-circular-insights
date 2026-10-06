@@ -196,10 +196,10 @@ Codeberg Forgejo Actions run on pushes to `main`, pull requests and manual dispa
 For Python 3.10 and 3.12, the workflow runs Ruff, formatting, mypy,
 import-linter and the offline pytest suite with coverage. No API key is supplied.
 
-The GitHub mirror retains its equivalent Python CI and a separate Gitleaks job
-until the Codeberg workflow has been verified. Frontend build and Playwright smoke
-tests are release checks run with `make web-check` and `make smoke`; they are not
-part of either automated CI workflow. Neither workflow currently runs `pip-audit`.
+The pytest suite includes tracked-secret checks in `tests/test_no_secrets.py`.
+Frontend build and Playwright smoke tests are release checks run with
+`make web-check` and `make smoke`; they are not part of automated CI.
+The workflow does not currently run Gitleaks or `pip-audit`.
 
 ---
 
