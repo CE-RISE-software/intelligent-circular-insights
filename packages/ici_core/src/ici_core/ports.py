@@ -89,8 +89,10 @@ class FactMemory(Protocol):
         """Store a validated fact. Must reject anything not VALIDATED."""
         ...
 
-    def supersede(self, old: FactId, new: Fact, reason: str) -> FactId:
-        """Append a correction. The superseded version stays readable."""
+    def supersede(
+        self, old: FactId, new: Fact, validation: ValidationOutcome, reason: str
+    ) -> FactId:
+        """Append a validated correction to a current fact with the same identity."""
         ...
 
     def history(self, subject: str, scope: ProductScope) -> Sequence[FactVersion]:

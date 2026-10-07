@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 import pytest
 
 from ici_core.domain.facts import Fact, ValidationOutcome
@@ -72,7 +74,9 @@ class TestValidationBeforeStorage:
 class TestSupersession:
     def test_correction_appends_and_does_not_mutate(self, memory) -> None:
         old = memory.commit(fact(A, "60 kWh"), ValidationOutcome.VALIDATED)
-        memory.supersede(old, fact(A, "62 kWh"), reason="datasheet revision B")
+        memory.supersede(
+            old, fact(A, "62 kWh"), ValidationOutcome.VALIDATED, reason="datasheet revision B"
+        )
 
         history = list(memory.history("battery", ProductScope(product_id=A)))
         assert len(history) == 2, "the superseded version must remain readable"
@@ -80,26 +84,70 @@ class TestSupersession:
 
     def test_recall_returns_only_the_current_version(self, memory) -> None:
         old = memory.commit(fact(A, "60 kWh"), ValidationOutcome.VALIDATED)
-        memory.supersede(old, fact(A, "62 kWh"), reason="datasheet revision B")
+        memory.supersede(
+            old, fact(A, "62 kWh"), ValidationOutcome.VALIDATED, reason="datasheet revision B"
+        )
         got = memory.recall(ProductScope(product_id=A), Query(text="battery capacity"))
         assert [f.value for f in got] == ["62 kWh"]
 
     def test_a_correction_must_say_why(self, memory) -> None:
         old = memory.commit(fact(A), ValidationOutcome.VALIDATED)
         with pytest.raises(ValueError, match="must say why"):
-            memory.supersede(old, fact(A, "62 kWh"), reason="")
+            memory.supersede(old, fact(A, "62 kWh"), ValidationOutcome.VALIDATED, reason="")
 
     def test_superseding_an_unknown_fact_is_an_error(self, memory) -> None:
         from ici_core.domain.ids import FactId
 
         with pytest.raises(KeyError):
-            memory.supersede(FactId("nope"), fact(A), reason="x")
+            memory.supersede(FactId("nope"), fact(A), ValidationOutcome.VALIDATED, reason="x")
+
+    def test_rejected_correction_leaves_the_original_current(self, memory) -> None:
+        old = memory.commit(fact(A), ValidationOutcome.VALIDATED)
+        with pytest.raises(UnvalidatedFactError):
+            memory.supersede(old, fact(A, "62 kWh"), ValidationOutcome.REJECTED, reason="x")
+        got = memory.recall(ProductScope(product_id=A), Query(text="capacity"))
+        assert [f.value for f in got] == ["60 kWh"]
+        assert len(memory.history("battery", ProductScope(product_id=A))) == 1
+
+    @pytest.mark.parametrize(
+        "replacement",
+        [fact(B), fact(A, subject="module"), replace(fact(A), predicate="voltage")],
+        ids=["different-product", "different-subject", "different-predicate"],
+    )
+    def test_correction_must_keep_fact_identity(self, memory, replacement) -> None:
+        old = memory.commit(fact(A), ValidationOutcome.VALIDATED)
+        with pytest.raises(ValueError, match="product, subject, and predicate"):
+            memory.supersede(old, replacement, ValidationOutcome.VALIDATED, reason="x")
+        got = memory.recall(ProductScope(product_id=A), Query(text="capacity"))
+        assert [f.value for f in got] == ["60 kWh"]
+        assert memory.recall(ProductScope(product_id=B), Query(text="capacity")) == []
+        assert len(memory.versions) == 1
+
+    def test_only_the_current_version_can_be_corrected(self, memory) -> None:
+        old = memory.commit(fact(A), ValidationOutcome.VALIDATED)
+        current = memory.supersede(
+            old, fact(A, "62 kWh"), ValidationOutcome.VALIDATED, reason="revision B"
+        )
+        with pytest.raises(ValueError, match="no longer current"):
+            memory.supersede(
+                old, fact(A, "64 kWh"), ValidationOutcome.VALIDATED, reason="revision C"
+            )
+        assert len(memory.history("battery", ProductScope(product_id=A))) == 2
+        got = memory.recall(ProductScope(product_id=A), Query(text="capacity"))
+        assert [f.value for f in got] == ["62 kWh"]
+        memory.supersede(
+            current, fact(A, "64 kWh"), ValidationOutcome.VALIDATED, reason="revision C"
+        )
+        got = memory.recall(ProductScope(product_id=A), Query(text="capacity"))
+        assert [f.value for f in got] == ["64 kWh"]
 
 
 class TestHistory:
     def test_history_carries_the_reason(self, memory) -> None:
         old = memory.commit(fact(A), ValidationOutcome.VALIDATED)
-        memory.supersede(old, fact(A, "62 kWh"), reason="datasheet revision B")
+        memory.supersede(
+            old, fact(A, "62 kWh"), ValidationOutcome.VALIDATED, reason="datasheet revision B"
+        )
         corrections = [
             v for v in memory.history("battery", ProductScope(product_id=A)) if v.is_correction
         ]
@@ -114,7 +162,7 @@ def test_optional_log_does_not_restore_memory(tmp_path) -> None:
     path = tmp_path / "memory.jsonl"
     memory = AppendOnlyFactMemory(path=path)
     old = memory.commit(fact(A), ValidationOutcome.VALIDATED)
-    memory.supersede(old, fact(A, "62 kWh"), reason="revision B")
+    memory.supersede(old, fact(A, "62 kWh"), ValidationOutcome.VALIDATED, reason="revision B")
     lines = path.read_text().strip().splitlines()
     assert len(lines) == 2, "append-only means both versions are on disk"
     assert '"supersedes": null' in lines[0]

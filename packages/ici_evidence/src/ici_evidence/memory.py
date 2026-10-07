@@ -68,9 +68,25 @@ class AppendOnlyFactMemory:
             )
         return self._append(fact, supersedes=None, reason=None)
 
-    def supersede(self, old: FactId, new: Fact, reason: str) -> FactId:
-        if not any(v.id == old for v in self.versions):
+    def supersede(
+        self, old: FactId, new: Fact, validation: ValidationOutcome, reason: str
+    ) -> FactId:
+        if validation is not ValidationOutcome.VALIDATED:
+            raise UnvalidatedFactError(
+                f"refusing to store an unvalidated correction about {new.product_id!r}; "
+                f"outcome was {validation.value}"
+            )
+        previous = next((v for v in self.versions if v.id == old), None)
+        if previous is None:
             raise KeyError(f"cannot supersede unknown fact {old!r}")
+        if any(v.supersedes == old for v in self.versions):
+            raise ValueError(f"cannot supersede fact {old!r} again; it is no longer current")
+        if (
+            previous.fact.product_id,
+            previous.fact.subject,
+            previous.fact.predicate,
+        ) != (new.product_id, new.subject, new.predicate):
+            raise ValueError("a correction must keep the product, subject, and predicate")
         if not reason:
             raise ValueError("a correction must say why; an unexplained change is noise")
         return self._append(new, supersedes=old, reason=reason)
