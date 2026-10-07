@@ -78,6 +78,9 @@ export default function Carbon() {
 }
 
 function CarbonReport({ result }: { result: CarbonResult }) {
+  const [derivationOpen, setDerivationOpen] = useState(false);
+  const provenance = result.provenance ?? [];
+
   return (
     <>
       <GlassCard title={result.product_id} testId="carbon-result"
@@ -124,27 +127,72 @@ function CarbonReport({ result }: { result: CarbonResult }) {
         </table>
       </GlassCard>
 
-      {result.provenance && result.provenance.length > 0 && (
-        <GlassCard title={`Derivation · ${result.provenance.length} sources`} testId="carbon-provenance"
-                   subtitle="Where each factor came from. A number with no traceable factor is not publishable, so it is shown rather than summarised.">
+      {provenance.length > 0 && (
+        <GlassCard
+          title={`Derivation · ${provenance.length} sources`}
+          testId="carbon-provenance"
+          subtitle="Where each factor came from. A number with no traceable factor is not publishable, so it is shown rather than summarised."
+          actions={
+            <button
+              className="btn secondary"
+              type="button"
+              data-testid="toggle-carbon-derivation"
+              aria-expanded={derivationOpen}
+              aria-controls="carbon-derivation-steps"
+              onClick={() => setDerivationOpen(open => !open)}
+            >
+              {derivationOpen ? "Hide derivation steps" : "View derivation steps"}
+            </button>
+          }
+        >
           {result.arithmetic && (
             <pre className="mono" style={{
-              margin: "0 0 14px", padding: 12, borderRadius: 10, fontSize: 11.5,
+              margin: derivationOpen ? "0 0 14px" : 0, padding: 12, borderRadius: 10, fontSize: 11.5,
               background: "rgba(27,18,82,0.05)", overflowX: "auto", whiteSpace: "pre-wrap",
             }}>{result.arithmetic}</pre>
           )}
-          <div style={{ display: "grid", gap: 8 }}>
-            {result.provenance.map((p, i) => (
-              <div key={`${p.ref}-${i}`} className="evidence-card" style={{ padding: "10px 12px" }}>
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                  <Pill tone="teal">{p.kind}</Pill>
-                  <span className="mono" style={{ fontSize: 11.5 }}>{p.ref}</span>
-                </div>
-                {p.excerpt && <div className="muted" style={{ fontSize: 12, marginTop: 4 }}>{p.excerpt}</div>}
-                {p.source_file && <div className="faint mono" style={{ marginTop: 4 }}>{p.source_file}</div>}
-              </div>
-            ))}
-          </div>
+          {derivationOpen && (
+            <div
+              id="carbon-derivation-steps"
+              data-testid="carbon-derivation-steps"
+              aria-label="Carbon derivation steps"
+              tabIndex={0}
+              style={{
+                maxHeight: 200,
+                overflowY: "auto",
+                overscrollBehavior: "contain",
+                paddingRight: 4,
+              }}
+            >
+              <div className="label" style={{ marginBottom: 8 }}>Calculation steps</div>
+              <ol style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 8 }}>
+                {provenance.map((p, i) => (
+                  <li key={`${p.ref}-${i}`} className="evidence-card" style={{ padding: "10px 12px" }}>
+                    <div style={{ display: "flex", gap: 9, alignItems: "flex-start" }}>
+                      <Pill tone="teal">{i + 1}</Pill>
+                      <div style={{ minWidth: 0 }}>
+                        <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.5 }}>
+                          {p.excerpt || p.ref}
+                        </div>
+                        <div className="faint mono" style={{ marginTop: 4, overflowWrap: "anywhere" }}>
+                          {p.kind} · {p.ref}
+                        </div>
+                        {p.source_file && (
+                          <div className="faint mono" style={{ marginTop: 4, overflowWrap: "anywhere" }}>
+                            {p.source_file}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <p className="faint" style={{ margin: "10px 0 0" }}>
+                These are the provenance records captured by the engine during this calculation;
+                opening the panel does not rerun or reinterpret the result.
+              </p>
+            </div>
+          )}
         </GlassCard>
       )}
 
