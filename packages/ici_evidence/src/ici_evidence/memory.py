@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: EUPL-1.2
 # SPDX-FileCopyrightText: 2026 CE-RISE consortium
-"""Persistent fact memory: product-scoped, append-only, superseding.
+"""In-process fact memory: product-scoped, append-only, superseding.
 
 The published prototype is scoped by *session* and stores whatever it is handed.
 §4.2 of the paper lists what it does not do — provenance validation, immutable
@@ -35,7 +35,9 @@ class AppendOnlyFactMemory:
     The log is append-only: a correction writes a new version linked to the one it
     replaces, and nothing is ever mutated or deleted. "What did we believe, and
     when" therefore stays answerable, which is the whole point of writing facts
-    down rather than re-reading documents.
+    down rather than re-reading documents. Versions are held in process memory.
+    An optional path appends JSONL entries but does not restore them on startup;
+    durable storage and reload may be added if a deployment requires them.
     """
 
     versions: list[FactVersion] = field(default_factory=list)

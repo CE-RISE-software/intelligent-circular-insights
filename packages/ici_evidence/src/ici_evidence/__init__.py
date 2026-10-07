@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: EUPL-1.2
 # SPDX-FileCopyrightText: 2026 CE-RISE consortium
-"""Evidence acquisition: hybrid retrieval and persistent fact memory."""
+"""Evidence acquisition: hybrid retrieval and in-process fact memory."""
 
 from __future__ import annotations
 

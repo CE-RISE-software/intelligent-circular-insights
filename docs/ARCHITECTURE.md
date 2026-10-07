@@ -29,7 +29,7 @@ touching the call sites, and fix the parts that are plain engineering defects:
 | Published limitation | The seam this architecture provides | Fixed here? |
 |---|---|---|
 | In-domain ECE 0.5247, worse than RAG-Base's 0.487 | `Calibrator` port with isotonic (default), temperature and vector implementations present; signals exposed as a named vector rather than collapsed to a scalar | **No** — swappable, not swept |
-| Memory session-scoped, no provenance validation, supersession or correction history | `FactMemory` port with product-scoped recall, append-only storage, `supersede()`, `history()` | **Yes** — cross-product recall is a correctness bug in a compliance tool |
+| Memory session-scoped, no provenance validation, supersession or correction history | `FactMemory` port with product-scoped recall, in-process append-only versions, `supersede()`, `history()` | **Yes** — cross-product recall is a correctness bug in a compliance tool; durability is not implemented |
 | "Evidence before generation" is prompting, not guarantee | `GroundingVerifier` between composition and confidence; unresolved claim ⟹ abstain | **Yes** — cheap, and it removes a real failure mode |
 | RL router shows no significant improvement | `DecisionPolicy` port; the supervised router ships as default, the bandit and RL seats exist | **No** — the seat exists, the evaluation does not happen here |
 
@@ -122,7 +122,7 @@ graph TB
     subgraph "Python service"
         API["<b>apps/api</b> — FastAPI composition root"]
         CORE["<b>ici_core</b><br/>domain + 15 ports + use cases<br/><i>zero I/O, zero project deps</i>"]
-        EVID["<b>ici_evidence</b><br/>hybrid retrieval · context pack<br/>persistent fact memory"]
+        EVID["<b>ici_evidence</b><br/>hybrid retrieval · context pack<br/>in-process fact memory"]
         SYM["<b>ici_symbolic</b><br/>OWL 2 RL forward chaining<br/>obligation rules · traces · SHACL"]
         SUB["<b>ici_substrates</b><br/>registry · DPP core · CE-RISE models<br/>PEFDPP graph · OFF schema"]
         REL["<b>ici_reliability</b><br/>confidence signals · calibrators<br/>selective policy · risk–coverage"]
@@ -596,6 +596,10 @@ failure available, so `FactMemory` is product-scoped, append-only, and supersede
 overwrites, with `history()` for the correction chain. Four properties, four tests, a
 morning's work.
 
+The current adapter holds versions in process memory, so they do not survive a restart.
+Its optional JSONL path writes an export log but does not reload it. Durable storage
+and restoration remain possible future requirements, not current capabilities.
+
 ### 9.3 Grounding — fixed here, because it is cheap
 
 `GroundingVerifier` sits between composition and the confidence step: decompose the answer
@@ -665,7 +669,7 @@ revamp/
 │                               mode switch, operating-point controls, compare view
 ├── packages/
 │   ├── ici_core/               domain · 15 ports · use cases   (no I/O, no project deps)
-│   ├── ici_evidence/           hybrid retrieval · context pack · persistent fact memory
+│   ├── ici_evidence/           hybrid retrieval · context pack · in-process fact memory
 │   ├── ici_symbolic/           OWL 2 RL · obligation rules · traces · SHACL
 │   ├── ici_substrates/         registry · DPP core · CE-RISE models · PEFDPP · OFF
 │   ├── ici_reliability/        signals · calibrators · selective policy · risk–coverage

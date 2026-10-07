@@ -62,6 +62,9 @@ Additional safeguards include request-local model budgets, disabled SDK retries 
 deliberate live checks, append-only product-scoped memory, provenance for generated
 records, typed capability errors and secret-scanning gates.
 
+Fact memory is in-process and is not restored after a restart. Durable storage
+can be added if a future deployment requires it.
+
 ## Repository structure
 
 ```text

@@ -19,7 +19,7 @@ repository-code: >-
 abstract: >-
   A neuro-symbolic workbench for querying Digital Product Passports, in which
   every output is an evidence-grounded answer with provenance or an explicit
-  abstention. Hybrid retrieval and persistent product-scoped fact memory gather
+  abstention. Hybrid retrieval and product-scoped fact memory gather
   evidence; targeted symbolic validation over a DPP ontology derives obligations
   with rule traces; a grounding verifier rejects any claim that cannot be
   resolved against the gathered evidence; and a calibrated selective layer

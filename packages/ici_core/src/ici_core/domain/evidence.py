@@ -20,7 +20,7 @@ class EvidenceKind(str, Enum):
     """A span of a retrieved document."""
 
     FACT = "fact"
-    """A validated fact recalled from persistent memory."""
+    """A validated fact recalled from product-scoped memory."""
 
     DERIVED_TRIPLE = "derived_triple"
     """A triple entailed by the symbolic layer, carrying its rule trace."""

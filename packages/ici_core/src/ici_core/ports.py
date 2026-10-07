@@ -71,13 +71,14 @@ class EvidenceProvider(Protocol):
 
 @runtime_checkable
 class FactMemory(Protocol):
-    """Persistent facts, product-scoped and append-only.
+    """Product-scoped, append-only fact versions.
 
     The published prototype is session-scoped and mutates in place. This interface
     is the corrected one: recall takes a ``ProductScope`` so facts cannot leak
-    across products, storage takes a validation outcome so unvalidated facts cannot
-    be committed, and corrections append rather than overwrite so the history of
-    what was believed stays readable.
+    across products, commits take a validation outcome so unvalidated facts cannot
+    be stored, and corrections append rather than overwrite so the history of
+    what was believed stays readable. Durability is an optional adapter concern,
+    not a requirement of this port.
     """
 
     def recall(self, scope: ProductScope, q: Query) -> Sequence[Fact]:

@@ -110,7 +110,7 @@ class TestHistory:
         assert list(memory.history("battery", ProductScope(product_id=B))) == []
 
 
-def test_the_log_survives_a_flush_to_disk(tmp_path) -> None:
+def test_optional_log_does_not_restore_memory(tmp_path) -> None:
     path = tmp_path / "memory.jsonl"
     memory = AppendOnlyFactMemory(path=path)
     old = memory.commit(fact(A), ValidationOutcome.VALIDATED)
@@ -119,3 +119,5 @@ def test_the_log_survives_a_flush_to_disk(tmp_path) -> None:
     assert len(lines) == 2, "append-only means both versions are on disk"
     assert '"supersedes": null' in lines[0]
     assert '"reason": "revision B"' in lines[1]
+    restarted = AppendOnlyFactMemory(path=path)
+    assert restarted.recall(ProductScope(product_id=A), Query(text="battery capacity")) == []
