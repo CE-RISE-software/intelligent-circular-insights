@@ -123,7 +123,7 @@ graph TB
         API["<b>apps/api</b> — FastAPI composition root"]
         CORE["<b>ici_core</b><br/>domain + 15 ports + use cases<br/><i>zero I/O, zero project deps</i>"]
         EVID["<b>ici_evidence</b><br/>hybrid retrieval · context pack<br/>in-process fact memory"]
-        SYM["<b>ici_symbolic</b><br/>OWL 2 RL forward chaining<br/>obligation rules · traces · SHACL"]
+        SYM["<b>ici_symbolic</b><br/>OWL 2 RL forward chaining<br/>obligation rules · traces"]
         SUB["<b>ici_substrates</b><br/>registry · DPP core · CE-RISE models<br/>PEFDPP graph · OFF schema"]
         REL["<b>ici_reliability</b><br/>confidence signals · calibrators<br/>selective policy · risk–coverage"]
         TRUST["<b>ici_datatrust</b><br/>latent-bias posterior · clean value<br/>interval · target sensitivity"]
@@ -448,7 +448,6 @@ graph TB
     subgraph "CE-RISE profile — mounted alongside"
         C1["<b>CE-RISE data models (17)</b><br/>record metadata · custody · governance<br/>product/material profile · integrated LCA<br/>circularity · data quality · UQ · traceability"]
         C2["<b>PEFDPP graph</b><br/>LCI datasets · activities · flows<br/>reproducible LCA with triple provenance"]
-        C3["SHACL conformance profiles"]
     end
 
     subgraph "Study profile"
@@ -456,13 +455,16 @@ graph TB
     end
 
     REG --> N1 & N2 & N3
-    REG -.->|ce-rise| C1 & C2 & C3
+    REG -.->|ce-rise| C1 & C2
     REG -.->|study| O1
 
     N1 & N2 & C1 & C2 --> SYM["SymbolicValidator<br/>coverage and precision<br/><b>measured per substrate</b>"]
     style C1 fill:#e8f0fe,stroke:#3d2bba
     style C2 fill:#e8f0fe,stroke:#3d2bba
 ```
+
+SHACL conformance profiles are a possible future development. Current record
+conformance checks use JSON Schema; this service does not yet run SHACL validation.
 
 **Why this matters to the research and not just the demo.** COMPASS's symbolic layer fires
 on 7.96 % of the workload with observed precision 1.000. That precision is the contribution;
@@ -671,14 +673,14 @@ revamp/
 ├── packages/
 │   ├── ici_core/               domain · 15 ports · use cases   (no I/O, no project deps)
 │   ├── ici_evidence/           hybrid retrieval · context pack · in-process fact memory
-│   ├── ici_symbolic/           OWL 2 RL · obligation rules · traces · SHACL
+│   ├── ici_symbolic/           OWL 2 RL · obligation rules · traces
 │   ├── ici_substrates/         registry · DPP core · CE-RISE models · PEFDPP · OFF
 │   ├── ici_reliability/        signals · calibrators · selective policy · risk–coverage
 │   ├── ici_datatrust/          latent-bias posterior · clean value · interval · sensitivity
 │   ├── ici_llm/                provider · prompts · grounding verifier · cassettes
 │   ├── ici_policy/             router · bandit · RL · off-policy evaluation
 │   └── ici_eval/               harness · metrics · manifests · figures
-├── ontology/                   DPP core + domain modules + PEFDPP + SHACL shapes
+├── ontology/                   DPP core + domain modules + PEFDPP
 ├── schemas/                    CE-RISE (vendored) · EU DPP · OFF · mappings
 ├── data/                       corpora · factors · benchmarks · examples
 ├── tests/                      unit · contract · integration · golden · e2e · property

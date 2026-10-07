@@ -1,7 +1,7 @@
 [project]
 name = "ici-symbolic"
 version = "0.1.0"
-description = "OWL 2 RL forward chaining, obligation rules, traces, SHACL."
+description = "OWL 2 RL forward chaining, obligation rules, and traces."
 requires-python = ">=3.10,<3.13"
 license = { text = "EUPL-1.2" }
 authors = [

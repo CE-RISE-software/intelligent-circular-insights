@@ -131,7 +131,7 @@ class SymbolicValidator(Protocol):
 
 @runtime_checkable
 class SchemaRegistry(Protocol):
-    """Conformance checking against EU DPP schemas, CE-RISE modules, SHACL shapes."""
+    """JSON Schema conformance checking; SHACL support is a future extension."""
 
     def profiles(self) -> Sequence[SchemaProfile]: ...
 

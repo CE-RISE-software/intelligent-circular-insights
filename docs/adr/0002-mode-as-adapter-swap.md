@@ -4,7 +4,8 @@
 
 ## Context
 We need Normal mode (flat profiles, CSV factors, JSON Schema) and CE-RISE mode (PEFDPP
-graph, SHACL, CE-RISE data models) available in the same deployment. Options considered:
+graph, CE-RISE data models) available in the same deployment. SHACL conformance checking
+may be added to CE-RISE mode in a future development. Options considered:
 a startup env profile, per-feature overrides, or per-request resolution.
 
 ## Decision

@@ -3,8 +3,8 @@
 """Check a product record against a schema profile, and report typed violations.
 
 The deliverable is never a boolean. Whoever has to repair the record needs to know
-which field, which rule, and what was expected — so violations carry a JSON Pointer
-or a SHACL focus node.
+which field, which rule, and what was expected — so violations currently carry a
+JSON Pointer. A future SHACL validator could report a focus node instead.
 
 Thin on purpose, and worth having anyway. This is where record-level policy lands:
 the check is stamped into the ledger, so a repair that follows can be read back
