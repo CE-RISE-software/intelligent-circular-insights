@@ -8,8 +8,11 @@ import { defineConfig, devices } from "@playwright/test";
  * network call and fails loudly on a miss — so a smoke run can never quietly spend
  * money on the OpenAI account.
  */
-const API = "http://127.0.0.1:8000";
-const WEB = "http://127.0.0.1:5173";
+// Dedicated ports keep the no-spend gate isolated from a developer's presentation
+// servers. Reusing a live backend on port 8000 makes a nominal replay test perform
+// paid model calls and then misreport them as a cassette regression.
+const API = "http://127.0.0.1:18000";
+const WEB = "http://127.0.0.1:15173";
 
 export default defineConfig({
   testDir: "./tests",
@@ -44,18 +47,19 @@ export default defineConfig({
       // Run from the repository root: the API is a uv workspace, not a package
       // in this directory.
       command:
-        "uv run uvicorn apps.api.main:app --host 127.0.0.1 --port 8000 --log-level warning",
+        "uv run uvicorn apps.api.main:app --host 127.0.0.1 --port 18000 --log-level warning",
       cwd: "../..",
       url: `${API}/api/health`,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: false,
       timeout: 180_000,
       env: { LLM_CASSETTE_MODE: "replay", LLM_CASSETTE_DIR: "tests/cassettes/recorded" },
     },
     {
-      command: "npm run dev -- --host 127.0.0.1 --port 5173 --strictPort",
+      command: "npm run dev -- --host 127.0.0.1 --port 15173 --strictPort",
       url: WEB,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: false,
       timeout: 90_000,
+      env: { ICI_API_TARGET: API },
     },
   ],
 });

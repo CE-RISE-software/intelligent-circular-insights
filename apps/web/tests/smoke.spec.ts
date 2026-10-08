@@ -101,6 +101,13 @@ for (const mode of ["normal", "ce-rise"] as const) {
       await subject.click();
       await expect(page.getByTestId("carbon-result")).toBeVisible({ timeout: 20_000 });
       await expect(page.getByTestId("carbon-stages")).toBeVisible();
+      const derivation = page.getByTestId("toggle-carbon-derivation");
+      await expect(derivation).toBeVisible();
+      await expect(derivation).toHaveAttribute("aria-expanded", "false");
+      await expect(page.getByTestId("carbon-derivation-steps")).toBeHidden();
+      await derivation.click();
+      await expect(derivation).toHaveAttribute("aria-expanded", "true");
+      await expect(page.getByTestId("carbon-derivation-steps")).toBeVisible();
       await expectServedBy(page, mode);
     });
 
@@ -170,6 +177,29 @@ test.describe("smoke · where the backends differ", () => {
     await goto(page, "/pef/calculator");
     await expect(page.getByTestId("pef-result")).toBeVisible({ timeout: 25_000 });
     await expect(page.getByTestId("pef-stages")).toBeVisible();
+  });
+
+  test("ce-rise exposes the graph calculation's derivation steps", async ({ page }) => {
+    await useMode(page, "ce-rise");
+    await goto(page, "/carbon");
+    const subject = page.getByTestId("carbon-subject-BatteryPackPEFStudy");
+    await expect(subject).toBeVisible({ timeout: 15_000 });
+    await subject.click();
+
+    const provenance = page.getByTestId("carbon-provenance");
+    await expect(provenance).toContainText("Derivation · 3 sources", { timeout: 20_000 });
+    await page.getByTestId("toggle-carbon-derivation").click();
+    const steps = page.getByTestId("carbon-derivation-steps");
+    await expect(steps).toBeVisible();
+    await expect(steps.locator("li")).toHaveCount(3);
+    await expect(steps).toContainText("Manufacturing");
+    await expect(steps).toContainText("Distribution");
+    await expect(steps).toContainText("EndOfLife");
+    await expect(steps).toHaveCSS("overflow-y", "auto");
+    expect(await steps.evaluate(element => element.scrollHeight > element.clientHeight)).toBe(true);
+    await steps.evaluate(element => { element.scrollTop = element.scrollHeight; });
+    expect(await steps.evaluate(element => element.scrollTop)).toBeGreaterThan(0);
+    await expectServedBy(page, "ce-rise");
   });
 
   test("a competency question shows its rows and the query behind them", async ({ page }) => {

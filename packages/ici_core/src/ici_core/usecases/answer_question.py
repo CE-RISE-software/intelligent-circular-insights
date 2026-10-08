@@ -15,6 +15,7 @@ is exactly the failure this architecture exists to prevent.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 from ici_core.domain.claims import GroundingReport, GroundingVerdict
@@ -60,7 +61,7 @@ class AnswerQuestion:
         # then thrown away unless a rule happened to fire on it, so mounting a richer
         # substrate changed what could be *derived* but not what could be *read*.
         graph, trace = self._facts(query, trace)
-        pack = pack.merge(_substrate_evidence(graph, budget, taken=pack.ids))
+        pack = pack.merge(_substrate_evidence(graph, budget, taken=pack.ids, query=query))
 
         # -- 3. targeted symbolic validation -------------------------------
         # A derived conclusion can itself be the only available answer evidence.
@@ -224,7 +225,11 @@ class AnswerQuestion:
 
 
 def _substrate_evidence(
-    graph: FactGraph, budget: RetrievalBudget, *, taken: frozenset[EvidenceId]
+    graph: FactGraph,
+    budget: RetrievalBudget,
+    *,
+    taken: frozenset[EvidenceId],
+    query: Query | None = None,
 ) -> ContextPack:
     """Mounted triples as citable evidence, bounded by the budget.
 
@@ -236,11 +241,38 @@ def _substrate_evidence(
     ``taken`` is the ids already in the pack, so a collision widens the id rather
     than raising on a duplicate — ``ContextPack`` rejects duplicates by design.
     """
+    # A subject can have dozens of assertions. Taking the first N makes the result
+    # depend on serialisation order: a requested fact may exist in the graph but be
+    # invisible merely because it was emitted later. Rank predicates and values
+    # against the question, keeping the original order as the deterministic tie
+    # breaker. The subject is deliberately excluded because every row in a
+    # product-scoped graph normally has the same subject and would therefore make
+    # every score identical.
+    indexed = list(enumerate(graph.triples))
+    if query is not None:
+        terms = _lexical_terms(query.text)
+        indexed.sort(
+            key=lambda row: (
+                -_triple_relevance(row[1].predicate, row[1].object, terms),
+                row[0],
+            )
+        )
+
     items: list[Evidence] = []
-    for index, triple in enumerate(graph.triples[: budget.top_k_facts]):
-        candidate = f"substrate:{index}"
-        while EvidenceId(candidate) in taken:
-            candidate = f"substrate:{candidate}"
+    used = set(taken)
+    for index, triple in indexed[: budget.top_k_facts]:
+        # Predicate-based ids are stable when the source adds or reorders other
+        # triples, and give the composer an opaque-but-meaningful string it can
+        # copy verbatim. Numeric row ids prompted small models to emit shortened
+        # citations such as ``[12]``, which the safety guard correctly rejected.
+        component = re.sub(r"[^A-Za-z0-9_.:/-]+", "-", triple.predicate).strip("-")
+        base = f"substrate:{component or 'row'}"
+        candidate = base
+        if EvidenceId(candidate) in used:
+            candidate = f"{base}:{index}"
+        while EvidenceId(candidate) in used:
+            candidate = f"{candidate}:{index}"
+        used.add(EvidenceId(candidate))
         items.append(
             Evidence(
                 id=EvidenceId(candidate),
@@ -250,6 +282,57 @@ def _substrate_evidence(
             )
         )
     return ContextPack(tuple(items))
+
+
+_WORD = re.compile(r"[A-Za-z0-9]+")
+_CAMEL_BOUNDARY = re.compile(r"(?<=[a-z0-9])(?=[A-Z])")
+_STOP_WORDS = frozenset(
+    {
+        "a",
+        "an",
+        "and",
+        "are",
+        "does",
+        "for",
+        "from",
+        "how",
+        "is",
+        "of",
+        "the",
+        "this",
+        "to",
+        "what",
+        "which",
+        "who",
+        "with",
+    }
+)
+
+
+def _lexical_terms(value: str) -> frozenset[str]:
+    """Small deterministic term set for selecting graph rows, not full-text search."""
+    separated = _CAMEL_BOUNDARY.sub(" ", value).replace("_", " ").replace(".", " ")
+    terms: set[str] = set()
+    for match in _WORD.finditer(separated.lower()):
+        token = match.group(0)
+        if token in _STOP_WORDS or len(token) < 2:
+            continue
+        terms.add(token)
+        # Enough morphology for graph predicates such as commissioner to match a
+        # natural question phrased as "who commissioned ...". Keep the original
+        # token too so this cannot reduce exact-match recall.
+        for suffix in ("ing", "ed", "er", "es", "s"):
+            if token.endswith(suffix) and len(token) - len(suffix) >= 4:
+                terms.add(token[: -len(suffix)])
+                break
+    return frozenset(terms)
+
+
+def _triple_relevance(predicate: str, value: str, query_terms: frozenset[str]) -> int:
+    predicate_overlap = len(query_terms & _lexical_terms(predicate))
+    value_overlap = len(query_terms & _lexical_terms(value))
+    # Predicate matches carry more intent than words occurring in a long value.
+    return 4 * predicate_overlap + value_overlap
 
 
 def _dedupe(items: list[Evidence]) -> ContextPack:

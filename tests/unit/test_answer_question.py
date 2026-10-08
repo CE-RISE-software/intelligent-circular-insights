@@ -211,6 +211,31 @@ def test_mounted_triples_are_offered_as_evidence_and_bounded(
     assert rows[0].text == "bat-60 p0 v0"
 
 
+def test_mounted_triples_are_ranked_for_the_question(bundle: ProviderBundle, query: Query) -> None:
+    """A relevant graph fact remains visible when it was emitted after the budget."""
+    from dataclasses import replace
+
+    from ici_core.domain.evidence import EvidenceKind
+
+    triples = (
+        *(Triple("study", f"unrelated.{i}", f"value {i}") for i in range(20)),
+        Triple("study", "goal.commissioner.name", "Leiden University"),
+    )
+    mounted = replace(
+        bundle,
+        evidence=FakeEvidenceProvider([]),
+        substrates=FakeSubstrateRegistry(graph=FactGraph(triples)),
+    )
+    natural_query = replace(query, text="Who commissioned this study?")
+
+    env = AnswerQuestion(mounted)(natural_query, budget=RetrievalBudget(top_k_facts=5))
+
+    rows = [e for e in env.evidence if e.kind is EvidenceKind.SUBSTRATE_ROW]
+    assert len(rows) == 5
+    assert rows[0].text == "study goal.commissioner.name Leiden University"
+    assert rows[0].id == "substrate:goal.commissioner.name"
+
+
 def test_an_empty_substrate_adds_nothing(bundle: ProviderBundle, query: Query) -> None:
     """Normal mode's catalogue has no per-product triples, and must stay unchanged."""
     from dataclasses import replace
