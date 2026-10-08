@@ -7,8 +7,8 @@ on:
       - 'v*.*.*-*'  # Matches pre-release tags like v1.0.0-beta
 
 env:
-  PROJECT_NAME: CE-RISE Software Template # PLEASE UPDATE THE PROJECT TITLE HERE
-  PRIMARY_REPO_URL: https://codeberg.org/CE-RISE-software/CE-RISE-software # PLEASE UPDATE THE PROJECT MAIN URL HERE
+  PROJECT_NAME: CE-RISE Intelligent Circular Insights Workbench
+  PRIMARY_REPO_URL: https://codeberg.org/CE-RISE-software/intelligent-circular-insights
 
 jobs:
   create-release:
@@ -44,27 +44,20 @@ jobs:
           cat << EOF > release_notes.md
           ## ${PROJECT_NAME} ${{ steps.tag.outputs.TAG_NAME }}
 
-          This release is automatically mirrored from the primary repository on Codeberg: ${PRIMARY_REPO_URL}
+          This GitHub release corresponds to the version tag in the [canonical Codeberg repository](${PRIMARY_REPO_URL}).
 
           ### Overview
 
-          This tag contains a versioned release of the CE-RISE software components.
-          It is intended to keep GitHub releases aligned with Codeberg tags for downstream automation and archival.
-
-          ### Release Assets
-
-          If configured in CI/CD, this release may be accompanied by:
-          - container images (version tag and commit SHA tags),
-          - OpenAPI artifacts,
-          - generated SDK packages.
+          This tag contains the versioned source for the Intelligent Circular Insights Workbench.
+          See [the changelog](${PRIMARY_REPO_URL}/src/tag/${{ steps.tag.outputs.TAG_NAME }}/CHANGELOG.md) for changes in this version.
 
           ### Documentation
 
-          Project documentation and operational guidance are published from the primary repository.
+          [Project documentation](${PRIMARY_REPO_URL}/src/tag/${{ steps.tag.outputs.TAG_NAME }}/docs/) is available in the tagged source.
 
           ---
 
-          **Note**: This repository is a mirror. For issues, pull requests, and canonical release notes, use the main Codeberg repository (${PRIMARY_REPO_URL}).
+          **Note**: This repository is a mirror. For issues and pull requests, use the [canonical Codeberg repository](${PRIMARY_REPO_URL}).
           EOF
 
       - name: Create GitHub Release
@@ -72,7 +65,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.tag.outputs.TAG_NAME }}
-          name: Release ${{ steps.tag.outputs.TAG_NAME }}
+          name: ${{ env.PROJECT_NAME }} ${{ steps.tag.outputs.TAG_NAME }}
           body_path: release_notes.md
           draft: false
           prerelease: ${{ contains(steps.tag.outputs.TAG_NAME, '-') }}

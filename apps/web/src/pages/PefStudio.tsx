@@ -14,7 +14,7 @@ import { ModeWarningBanner } from "../components/ModeBadge";
 import { useApi } from "../lib/useApi";
 
 /**
- * The WP3 integration: a footprint solved off an RDF graph rather than a table.
+ * A footprint calculated from the PEFDPP RDF graph rather than a factor table.
  *
  * Only CE-RISE mode mounts the graph. In Normal mode every endpoint here returns a
  * typed 422 with a reason, which the shared `DeclinedPanel` renders as an amber
@@ -60,11 +60,11 @@ function Overview() {
           </GlassCard>
 
           <GlassCard title="Competency-question coverage" testId="pef-coverage"
-                     subtitle="Stated against the paper's full set rather than only what works here, so the number is one a reader can judge.">
+                     subtitle="Coverage is measured against the full set of 173 reference questions.">
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 20 }}>
               <Stat label="Implemented" value={data.competency_questions.live} />
               <Stat label="Answering" value={data.competency_questions.answered} />
-              <Stat label="In the paper" value={data.competency_questions.total_in_paper} />
+              <Stat label="Reference set" value={data.competency_questions.total_in_paper} />
               <Stat label="Share" value={`${(data.competency_questions.share_of_paper * 100).toFixed(2)}%`} />
             </div>
           </GlassCard>
@@ -85,7 +85,7 @@ function Calculator() {
     <Outcome result={result} pending={pending} pendingLabel="solving the product system">
       {data => (
         <>
-          <GlassCard title="PEF result" testId="pef-result"
+          <GlassCard title="Climate footprint estimate" testId="pef-result"
                      subtitle={data.functional_unit ?? "per functional unit"}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 20 }}>
               <Stat label="Climate change" value={data.total.toFixed(6)} unit={data.unit} />

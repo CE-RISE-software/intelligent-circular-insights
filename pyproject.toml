@@ -132,7 +132,7 @@ known-first-party = [
 
 # ---------------------------------------------------------------- mypy
 [tool.mypy]
-python_version = "3.10"
+# CI checks each supported Python version with its own interpreter.
 warn_unused_configs = true
 warn_redundant_casts = true
 warn_unused_ignores = true

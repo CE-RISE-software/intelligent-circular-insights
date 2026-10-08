@@ -1,16 +1,15 @@
 # Testing strategy
 
-**Current checkpoint — 22 Sep:** 621 offline Python tests pass
+**Verification checkpoint — 22 September 2026:** 621 offline Python tests passed
 with 91% statement coverage; 45 Playwright smoke tests pass. Both modes
 exercise real recorded repair/synthesis responses. The five HTTP happy-path cases
 are strict failures on missing cassettes, not skips. Training-only review, unrelated
 record exclusion, trace isolation, stale UI results and malformed model output are
-also covered. See `VERIFICATION_2026-09-22.md` for current limits and remaining work.
+also covered. See `VERIFICATION_2026-09-22.md` for limits recorded at that checkpoint.
 The older Sprint 1 checkpoints and target matrix below are historical/design notes.
 
-**Scope note.** This is a CE-RISE software deliverable, not the evidence package behind a
-paper. Testing here exists to keep the software correct and to prove that nothing which
-worked before stopped working — not to reproduce experimental claims. Moderate end-to-end
+**Scope note.** These tests check software behaviour and regressions; they do not
+reproduce experimental claims from research publications. Moderate end-to-end
 coverage on mid and edge cases, with tight unit tests only where the arithmetic matters.
 
 **The constraint that shapes everything:** OpenAI calls cost money and time. Every LLM
@@ -43,7 +42,7 @@ graph TB
 ```
 
 Around 280 tests total, running in under four minutes with zero API calls. That is the
-right size for this deliverable — enough that a refactor cannot quietly break a window,
+target size — enough that a refactor cannot quietly break a window,
 small enough that nobody stops running it.
 
 ---
@@ -142,9 +141,8 @@ someone downstream trusts it:
 - **Memory**: supersession appends and does not mutate; recall is product-scoped
 - **Confidence**: fused confidence is monotone in each signal
 
-Plus the documented LCA outputs as a regression test — those numbers are the visible result
-of the WP3 integration, and a refactor that moves them is the one regression a consortium
-reviewer would actually spot.
+Plus the documented LCA outputs as regression tests, so a refactor cannot silently
+change the reported footprint.
 
 ---
 
@@ -194,20 +192,14 @@ Overall floor 70 %. No mutation testing. Coverage is a sanity check, not a goal:
 
 ## 8. CI
 
-```mermaid
-flowchart LR
-    PR["Push / PR"] --> L["lint + typecheck + layering"]
-    L --> U["unit"]
-    U --> C["contract · both modes"]
-    C --> I["integration"]
-    I --> R["reference set<br/>no regression"]
-    R --> E["e2e · 6 windows × 2 modes"]
-    E --> S["gitleaks · pip-audit"]
-    S --> OK(["mergeable"])
-```
+Codeberg Forgejo Actions run on pushes to `main`, pull requests and manual dispatch.
+For Python 3.10 and 3.12, the workflow runs Ruff, formatting, mypy,
+import-linter and the offline pytest suite with coverage. No API key is supplied.
 
-One pipeline, under five minutes, no API key, no nightly job. If it is slow or flaky people
-stop trusting it, and an untrusted suite is worse than a small one.
+The pytest suite includes tracked-secret checks in `tests/test_no_secrets.py`.
+Frontend build and Playwright smoke tests are release checks run with
+`make web-check` and `make smoke`; they are not part of automated CI.
+The workflow does not currently run Gitleaks or `pip-audit`.
 
 ---
 

@@ -5,6 +5,13 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+Target version: **0.1.0**. No release date or tag has been assigned.
+
+### Changed
+- Named the software CE-RISE Intelligent Circular Insights Workbench across its
+  public documentation and citation metadata
+- Replaced internal work-package and task shorthand in public descriptions
+
 ### Added — Sprint 0, foundation
 - Hexagonal architecture: 15 `typing.Protocol` ports in `ici_core`, which imports
   nothing from the project (enforced by `import-linter` in CI)

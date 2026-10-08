@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: EUPL-1.2
 # SPDX-FileCopyrightText: 2026 CE-RISE consortium
-"""Persistent fact memory: product-scoped, append-only, superseding.
+"""In-process fact memory: product-scoped, append-only, superseding.
 
 The published prototype is scoped by *session* and stores whatever it is handed.
 §4.2 of the paper lists what it does not do — provenance validation, immutable
@@ -35,7 +35,9 @@ class AppendOnlyFactMemory:
     The log is append-only: a correction writes a new version linked to the one it
     replaces, and nothing is ever mutated or deleted. "What did we believe, and
     when" therefore stays answerable, which is the whole point of writing facts
-    down rather than re-reading documents.
+    down rather than re-reading documents. Versions are held in process memory.
+    An optional path appends JSONL entries but does not restore them on startup;
+    durable storage and reload may be added if a deployment requires them.
     """
 
     versions: list[FactVersion] = field(default_factory=list)
@@ -66,9 +68,25 @@ class AppendOnlyFactMemory:
             )
         return self._append(fact, supersedes=None, reason=None)
 
-    def supersede(self, old: FactId, new: Fact, reason: str) -> FactId:
-        if not any(v.id == old for v in self.versions):
+    def supersede(
+        self, old: FactId, new: Fact, validation: ValidationOutcome, reason: str
+    ) -> FactId:
+        if validation is not ValidationOutcome.VALIDATED:
+            raise UnvalidatedFactError(
+                f"refusing to store an unvalidated correction about {new.product_id!r}; "
+                f"outcome was {validation.value}"
+            )
+        previous = next((v for v in self.versions if v.id == old), None)
+        if previous is None:
             raise KeyError(f"cannot supersede unknown fact {old!r}")
+        if any(v.supersedes == old for v in self.versions):
+            raise ValueError(f"cannot supersede fact {old!r} again; it is no longer current")
+        if (
+            previous.fact.product_id,
+            previous.fact.subject,
+            previous.fact.predicate,
+        ) != (new.product_id, new.subject, new.predicate):
+            raise ValueError("a correction must keep the product, subject, and predicate")
         if not reason:
             raise ValueError("a correction must say why; an unexplained change is noise")
         return self._append(new, supersedes=old, reason=reason)

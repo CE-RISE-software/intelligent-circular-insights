@@ -81,8 +81,7 @@ class PefdppImpactEngine:
                 unit=str(headline["climate_change_unit"]),
                 share=float(stage.get("share_pct", 0.0)) / 100.0,
                 # Background flows use a documented proxy pack, not licensed data.
-                # Badging every such number is why the result can be trusted about
-                # what it is, rather than mistaken for an EF-compliant declaration.
+                # Mark each contribution so its proxy basis is visible.
                 is_proxy=True,
             )
             for stage in result.get("by_stage", [])
@@ -241,7 +240,7 @@ class PefdppSubstrateRegistry:
         return [
             Substrate(
                 id=PEFDPP_SUBSTRATE,
-                title="PEFDPP — PEF-compliant LCA in a Digital Product Passport",
+                title="PEFDPP — graph-based life-cycle assessment",
                 kind="graph",
                 source=NAMESPACE,
                 subjects=tuple(self.graph.activities),

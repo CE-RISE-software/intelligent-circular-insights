@@ -49,8 +49,9 @@ class ViolationKind(str, Enum):
 class Violation:
     """One typed conformance failure, located precisely enough to fix.
 
-    ``location`` is a JSON Pointer for schema checks and a focus node IRI for
-    SHACL. A bare boolean 'invalid' is useless to whoever has to repair the record.
+    ``location`` is currently a JSON Pointer for schema checks. A future SHACL
+    validator could use a focus node IRI. A bare boolean 'invalid' is useless
+    to whoever has to repair the record.
     """
 
     kind: ViolationKind
@@ -74,7 +75,7 @@ class ConformanceReport:
 
 @dataclass(frozen=True)
 class SchemaProfile:
-    """One checkable profile: an EU DPP schema, a CE-RISE module, a SHACL shape."""
+    """One checkable JSON Schema profile; SHACL shapes may be supported later."""
 
     id: ProfileId
     title: str
