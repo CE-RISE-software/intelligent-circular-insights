@@ -1,33 +1,41 @@
 # CE-RISE Intelligent Circular Insights Workbench
 
-Evidence-backed querying, validation, repair and generation of Digital Product
-Passport (DPP) records. Answers cite their supporting evidence or the workbench
-abstains; generated records are checked against the applied validation profile and
-return field-level support.
+CE-RISE Intelligent Circular Insights is a workbench for querying, validating,
+repairing and generating Digital Product Passport (DPP) records. Answers cite
+supporting evidence or are declined when support is insufficient. Record generation
+uses supplied facts and retrieved evidence; unverified repair suggestions remain
+separate for human review.
 
-Two backend profiles can be selected per request:
+## What you can do
 
-- **Normal** — flat product profiles, JSON-Schema validation and hybrid lexical
-  retrieval.
-- **CE-RISE** — CE-RISE data models and the PEFDPP knowledge graph for
-  evidence-backed questions and vocabulary/type checks against generated JSON Schemas.
+- **Query** product records and inspect the evidence cited in an answer.
+- **Validate** records against supported DPP and CE-RISE model profiles.
+- **Repair** fields where evidence supports a change, with unverified suggestions
+  kept separate for review.
+- **Generate** a record from supplied facts and retrieved evidence, with field-level
+  support and a check against the applied validation profile.
 
-Both use the same response structure. Repair distinguishes evidence-backed changes
-from unverified suggestions for human review.
+## Get started
 
-## Where to start
+The [run-from-source guide](run-from-source.md) covers local use and a
+long-running installation.
 
-[The architecture](ARCHITECTURE.md) describes the components, ports and planned
-extensions. The [decision records](adr/0001-hexagonal-architecture.md) explain
-the design choices and their revisions.
-[Verification and remaining work](VERIFICATION_2026-09-22.md) records a dated check.
+## Work with records
+
+Follow the [query, validate, repair and generate workflows](workflows.md) in the
+browser interface. [Backends and evidence](backends-and-evidence.md) explains
+which sources support each result.
+
+## Engineering reference
+
+[Architecture](ARCHITECTURE.md) describes the components and their interfaces.
+[Testing](TESTING.md) covers the verification approach, and the
+[decision records](adr/0001-hexagonal-architecture.md) explain design choices.
 
 ## Licensing
 
-Code is **EUPL-1.2**. Vendored CE-RISE data models are **CC-BY-NC-4.0** and live in a
-segregated `schemas/ce-rise/` subtree with their own licence and notice, because
-non-commercial terms and EUPL's permission of commercial use cannot share one
-blanket statement. See [ADR 0010](adr/0010-licensing.md).
+See the [licensing decision](adr/0010-licensing.md) for the software and vendored
+data-model terms.
 
 ---
 

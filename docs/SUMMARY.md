@@ -1,13 +1,17 @@
 # Summary
 
 - [Introduction](index.md)
+- [Run from source](run-from-source.md)
 
-# The project
+# Work with records
+
+- [Query, validate, repair and generate](workflows.md)
+- [Backends and evidence](backends-and-evidence.md)
+
+# Engineering
 
 - [Architecture](ARCHITECTURE.md)
 - [Testing](TESTING.md)
-- [Verification and remaining work](VERIFICATION_2026-09-22.md)
-- [Publishing and release](RELEASE.md)
 
 # Decisions
 
@@ -21,3 +25,6 @@
 - [0008 The policy seat](adr/0008-abstain-is-an-action.md)
 - [0009 Request-scoped LLM audit and grounding](adr/0009-request-scoped-llm-audit-and-grounding.md)
 - [0010 Licensing](adr/0010-licensing.md)
+- [0011 Safe model-assisted record workflows](adr/0011-safe-llm-record-assistance.md)
+- [0012 Report the backend that answered](adr/0012-the-response-says-which-backend-answered.md)
+- [0013 Add substrates without replacing them](adr/0013-a-mode-adds-substrates-it-never-exchanges-them.md)

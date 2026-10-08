@@ -2,8 +2,8 @@
 
 The CE-RISE Intelligent Circular Insights Workbench supports evidence-backed querying,
 validation, repair and generation of Digital Product Passport (DPP) records. It combines
-a FastAPI backend with a React/TypeScript frontend and offers a general-purpose profile
-and a CE-RISE profile using the consortium's data models and the PEFDPP knowledge graph.
+a FastAPI backend with a React/TypeScript frontend and offers general-purpose and
+CE-RISE profiles for evidence access and model-aware validation.
 
 Answers cite supporting evidence or the workbench abstains. Generated records are checked
 against the applied validation profile and return support for their fields. Repair keeps
@@ -33,9 +33,9 @@ which backend actually served it.
 
 - **Normal** uses flat product profiles, the EU DPP JSON Schema, lexical evidence
   retrieval and the shared reliability pipeline.
-- **CE-RISE** adds the consortium data models and the PEFDPP graph. Questions can
-  cite graph assertions, and records written in a recognised CE-RISE vocabulary are
-  routed to that model's schema.
+- **CE-RISE** adds the consortium data models and structured evidence. Questions can
+  cite supported assertions, and records written in a recognised CE-RISE vocabulary
+  are routed to that model's schema.
 
 The CE-RISE profile extends available evidence and validation profiles without
 treating unlike sources as interchangeable. Each response identifies the backend
@@ -70,7 +70,7 @@ packages/ici_substrates/  Schemas, carbon factors, model catalogue and PEFDPP ad
 packages/ici_symbolic/    Ontology and OWL-RL validation
 schemas/                  EU DPP schema and vendored CE-RISE data models
 tests/                    Unit, contract, integration, end-to-end, browser and live tests
-docs/                     Architecture, testing, release notes and decision records
+docs/                     User guides, engineering references and decision records
 ```
 
 ## Local setup
@@ -138,32 +138,20 @@ enforce a cumulative attempt and estimated-cost ceiling:
 make live
 ```
 
-See [Testing](docs/TESTING.md) for the complete test strategy and
-[Architecture](docs/ARCHITECTURE.md) for the component model, ports, inference path
-and backend-routing decisions.
-
-## Scope and limitations
-
-This workbench is not a legal certification or LCA service.
-
-The Carbon and PEF Studio views demonstrate calculation provenance and backend routing
-with study-specific data. The battery study includes its foreground inventory but not
-the licensed background database, so it uses a documented proxy factor pack. These
-outputs are not product declarations.
-
-The six CE-RISE root schemas validate vocabulary and types but declare no required
-fields, so EU DPP completeness and CE-RISE vocabulary conformance remain separate,
-explicit checks.
+See [Testing](docs/TESTING.md) for the current checks and
+[Architecture](docs/ARCHITECTURE.md) for the component boundaries and request paths.
 
 ## Documentation
 
 | Document | Purpose |
 |---|---|
-| [Architecture](docs/ARCHITECTURE.md) | Components, ports, reliability path, substrates and backend routing |
-| [Testing](docs/TESTING.md) | Offline gates, model cassettes, browser coverage and live-test controls |
-| [Release](docs/RELEASE.md) | Codeberg, GitHub mirror, tagging and Zenodo handoff |
+| [Run from source](docs/run-from-source.md) | Local use and a long-running installation |
+| [Work with passport records](docs/workflows.md) | Query, validation, repair and generation workflows |
+| [Backends and evidence](docs/backends-and-evidence.md) | Backend choices, profiles and result support |
+| [Architecture](docs/ARCHITECTURE.md) | Current components, request paths and backend resolution |
+| [Testing](docs/TESTING.md) | Current checks, offline safeguards and CI scope |
 | [Architecture decisions](docs/adr/) | Rationale and consequences for the major design choices |
-| [Dated verification checkpoint](docs/VERIFICATION_2026-09-22.md) | Historical verification state on 22 September 2026; later commits may supersede deferred items |
+| [Dated verification checkpoint](docs/VERIFICATION_2026-09-22.md) | Results recorded on 22 September 2026 |
 
 ## License
 

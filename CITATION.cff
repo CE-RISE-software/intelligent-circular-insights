@@ -21,9 +21,9 @@ abstract: >-
   Digital Product Passport records. Answers cite supporting evidence or are
   declined when support is insufficient. Generated records are checked against
   the applied validation profile and include field-level support; repair keeps
-  evidence-backed changes separate from unverified suggestions. General-purpose
-  and CE-RISE profiles provide access to product records, CE-RISE data models and
-  the PEFDPP knowledge graph.
+  evidence-backed changes separate from unverified suggestions. A CE-RISE profile
+  adds model-aware validation and structured evidence alongside a general-purpose
+  profile.
 keywords:
   - CE-RISE
   - Digital Product Passport
