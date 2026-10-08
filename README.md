@@ -1,15 +1,13 @@
-# CE-RISE Task 4.2 Workbench
+# CE-RISE Intelligent Circular Insights Workbench
 
-The CE-RISE Task 4.2 Workbench is a full-stack tool for exploring, validating,
-repairing and synthesising Digital Product Passport (DPP) records. It combines an
-evidence-grounded FastAPI backend with a React/TypeScript frontend and supports both
-a general-purpose backend profile and a CE-RISE profile over the consortium's data
-models and WP3 PEFDPP knowledge graph.
+The CE-RISE Intelligent Circular Insights Workbench supports evidence-backed querying,
+validation, repair and generation of Digital Product Passport (DPP) records. It combines
+a FastAPI backend with a React/TypeScript frontend and offers a general-purpose profile
+and a CE-RISE profile using the consortium's data models and the PEFDPP knowledge graph.
 
-Every generated answer must be traceable to evidence or the workbench abstains. Model
-training knowledge may be used only to propose lower-confidence, unverified repair
-suggestions for human review; those suggestions are clearly separated from grounded
-values and are never applied automatically.
+Answers cite supporting evidence or the workbench abstains. Generated records are checked
+against the applied validation profile and return support for their fields. Repair keeps
+evidence-backed changes separate from unverified suggestions for human review.
 
 The canonical repository is on
 [Codeberg](https://codeberg.org/CE-RISE-software/intelligent-circular-insights).
@@ -20,14 +18,12 @@ The canonical repository is on
 
 | Area | Current capability |
 |---|---|
-| Search and Answer | Hybrid retrieval, product-scoped memory, mounted substrate facts, symbolic reasoning, evidence citations, calibrated confidence and explicit abstention |
+| Search and Answer | Hybrid retrieval, product-scoped memory, mounted substrate facts, symbolic reasoning, evidence citations and explicit abstention |
 | Single Passport | Stateless parsing and question answering over a user-supplied JSON or text passport without adding it to the corpus |
-| Carbon | Lifecycle calculations with contribution breakdowns, uncertainty, provenance and an explicit identifier for the calculation engine used |
 | Validate | EU DPP completeness checks and CE-RISE vocabulary/type validation with typed, located violations |
 | Repair | Evidence-backed field repair plus separate, lower-confidence suggestions derived from model training for human review |
-| Synthesize | Strict generation of a conforming passport in which every added field must have retrievable support |
+| Generate | DPP record generation from supplied facts and retrieved evidence, with field-level support and validation before return |
 | CE-RISE Models | An 18-model catalogue, 17 generated JSON Schemas and six document-root validation profiles |
-| PEF Studio | WP3 PEFDPP overview, graph-based calculation, fixed competency questions and constrained read-only SPARQL |
 | Compare | Side-by-side execution of the same question through both backend profiles |
 
 ## Backend profiles
@@ -35,17 +31,15 @@ The canonical repository is on
 The frontend sends the selected profile on every request, and every API response states
 which backend actually served it.
 
-- **Normal** uses flat product profiles, published CSV emission factors, the EU DPP
-  JSON Schema, lexical evidence retrieval and the shared reliability pipeline.
-- **CE-RISE** adds the consortium data models and the WP3 PEFDPP graph. Questions can
-  cite graph assertions, carbon calculations use the graph for product systems it
-  models, and records written in a recognised CE-RISE vocabulary are routed to that
-  model's schema.
+- **Normal** uses flat product profiles, the EU DPP JSON Schema, lexical evidence
+  retrieval and the shared reliability pipeline.
+- **CE-RISE** adds the consortium data models and the PEFDPP graph. Questions can
+  cite graph assertions, and records written in a recognised CE-RISE vocabulary are
+  routed to that model's schema.
 
-The CE-RISE profile extends coverage without treating unlike sources as interchangeable.
-For example, a graph result declared per kilowatt-hour is not substituted for a whole
-product lifecycle result. The response identifies the source and calculation path so the
-two cannot be confused.
+The CE-RISE profile extends available evidence and validation profiles without
+treating unlike sources as interchangeable. Each response identifies the backend
+that served it.
 
 ## Reliability and safety
 
@@ -109,8 +103,8 @@ Open <http://localhost:5173>. The API is served at <http://localhost:8000>.
 ### Model configuration
 
 Replay mode is the default: it uses reviewed responses and never calls the model
-provider. Deterministic features such as validation, retrieval, graph queries and
-impact calculations work without an API key.
+provider. Deterministic features such as validation, retrieval and graph queries
+work without an API key.
 
 To deliberately use the live model:
 
@@ -147,12 +141,12 @@ and backend-routing decisions.
 
 ## Scope and limitations
 
-This is the CE-RISE Task 4.2 software workbench, not a legal certification service
-or the evidence package for a scientific publication.
+This workbench is not a legal certification or LCA service.
 
-The WP3 battery case study includes its foreground inventory but not the licensed
-background database. A documented proxy factor pack is used instead; proxy values are
-labelled and must not be presented as an Environmental Footprint-compliant declaration.
+The Carbon and PEF Studio views demonstrate calculation provenance and backend routing
+with study-specific data. The battery study includes its foreground inventory but not
+the licensed background database, so it uses a documented proxy factor pack. These
+outputs are not product declarations.
 The six CE-RISE root schemas validate vocabulary and types but declare no required
 fields, so EU DPP completeness and CE-RISE vocabulary conformance remain separate,
 explicit checks.

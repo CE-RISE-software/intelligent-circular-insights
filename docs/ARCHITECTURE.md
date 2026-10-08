@@ -13,11 +13,17 @@ was wrong: PEFDPP is one mountable substrate, not the architecture.*
 
 **This is COMPASS, rebuilt to carry the research programme forward.**
 
-COMPASS is a reliability-first architecture for querying product records: every output is
+COMPASS is a reliability-first architecture for querying product records: every answer is
 an evidence-grounded answer with provenance, or an explicit abstention. Four stages —
 evidence acquisition, targeted symbolic validation, context-bound composition, calibrated
 decision — with three principles: *evidence before generation*, *targeted validity*,
 *selective output*.
+
+The workbench also validates DPP records, repairs fields supported by evidence, and
+generates records from supplied facts and retrieved evidence. Generated fields carry
+support, and a record is returned only after validation against its applied profile;
+unverified repair suggestions remain separate for human review. These record workflows,
+not the battery calculation demonstration, define the application scope beyond querying.
 
 The published system reaches 0.9749 accuracy on the reliability suite, AURC 0.0117,
 symbolic precision 1.000 at 7.96 % fire rate, and ECE 0.021 on the unseen Open Food Facts
@@ -446,7 +452,7 @@ graph TB
 
     subgraph "CE-RISE profile — mounted alongside"
         C1["<b>CE-RISE data models (17)</b><br/>record metadata · custody · governance<br/>product/material profile · integrated LCA<br/>circularity · data quality · UQ · traceability"]
-        C2["<b>PEFDPP graph</b><br/>LCI datasets · activities · flows<br/>reproducible LCA with triple provenance"]
+        C2["<b>PEFDPP graph</b><br/>study activities · flows · assertions<br/>triple-level provenance"]
         C3["SHACL conformance profiles"]
     end
 
@@ -469,9 +475,11 @@ the coverage is the limitation. Each substrate mounted is a *measured* attempt t
 coverage while holding precision — and `SubstrateCoverage` reports fire rate and conditional
 precision per substrate, so the paper can say exactly which knowledge bought which reach.
 
-PEFDPP is valuable here precisely because it is a real graph with triple-level provenance:
-questions about environmental performance become checkable rather than retrievable. But it
-is one substrate. Nothing in the core knows it exists.
+PEFDPP is valuable here as a graph with triple-level provenance: study assertions can be
+inspected and cited rather than only retrieved as text. It is one substrate; nothing in
+the core knows it exists. This workbench is not the CE-RISE LCA calculator. The battery
+calculation below demonstrates how the interface handles a study-specific result; LCA
+workflows belong to the dedicated CE-RISE data models and calculation service.
 
 ### 7.1 What the switch changes — route, never substitute
 
@@ -504,6 +512,9 @@ other to make the switch *do something* would produce a confidently wrong number
 worse than doing nothing. `LayeredImpactEngine` gives each engine the subjects it declares
 and names the answering engine in every result, so a graph-solved figure is never mistaken
 for a table-multiplied one.
+
+The battery study's licensed background inventory is not included. Its proxy factors
+support an interface demonstration, not a complete LCA or a product declaration.
 
 **Conjoining.** The same reasoning applies to schemas, and the first attempt there failed
 too. The EU DPP schema and the CE-RISE data models share **not one top-level term** — a

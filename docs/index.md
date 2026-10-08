@@ -1,18 +1,19 @@
 # Intelligent Circular Insights
 
-Reliability-first question answering over Digital Product Passports: every output is
-an evidence-grounded answer with provenance, or an explicit abstention.
+Evidence-backed querying, validation, repair and generation of Digital Product
+Passport (DPP) records. Answers cite their supporting evidence or the workbench
+abstains; generated records are checked against the applied validation profile and
+return field-level support.
 
-One workbench, two interchangeable backends, switchable per request.
+Two backend profiles can be selected per request:
 
-- **Normal** — flat product profiles, published emission factors, JSON-Schema
-  validation, hybrid lexical retrieval. Fast, broad, shallow.
-- **CE-RISE** — the consortium data models and the WP3 PEFDPP ontology, with SHACL
-  conformance and a life cycle assessment solved off the RDF graph. Slower, narrower,
-  regulator-grade.
+- **Normal** — flat product profiles, JSON-Schema validation and hybrid lexical
+  retrieval.
+- **CE-RISE** — CE-RISE data models and the PEFDPP knowledge graph for
+  evidence-backed questions and vocabulary/type checks against generated JSON Schemas.
 
-Both return the same envelope, so the interface renders one component tree and an
-auditor reads one shape.
+Both use the same response structure. Repair distinguishes evidence-backed changes
+from unverified suggestions for human review.
 
 ## Where to start
 
@@ -21,15 +22,6 @@ and 10 — an explicit split between what this rewrite fixes and what it only le
 seam for. The [decision records](adr/0001-hexagonal-architecture.md) say why each
 choice was made, including the ones later reconsidered.
 [Verification and remaining work](VERIFICATION_2026-09-22.md) records the latest checks.
-
-## Honest limitations
-
-The battery case study carries a complete *foreground* inventory but not the
-licensed background: ecoinvent is commercial and is referenced in the graph by name
-and UUID only. A documented proxy factor pack stands in, every proxy value is badged
-as such in the API response and on screen, and **this is not an EF-compliant
-declaration**. Point the factor pack at a licensed extract and the same engine
-produces a compliant result with no code change.
 
 ## Licensing
 
