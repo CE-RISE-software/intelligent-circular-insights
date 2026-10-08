@@ -8,7 +8,7 @@ on:
 # LLM requests replay from recorded cassettes; no API key is provided.
 jobs:
   check:
-    runs-on: codeberg-small
+    runs-on: codeberg-medium
     strategy:
       matrix:
         python: ["3.10", "3.12"]
