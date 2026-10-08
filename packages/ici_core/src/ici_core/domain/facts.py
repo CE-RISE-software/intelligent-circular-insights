@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: EUPL-1.2
 # SPDX-FileCopyrightText: 2026 CE-RISE consortium
-"""Persistent facts, and what it takes to store one.
+"""Fact versions, and what it takes to store one.
 
 The published memory prototype is session-scoped and stores whatever it is given.
 This model encodes the four properties §4.2 of the paper lists as missing:

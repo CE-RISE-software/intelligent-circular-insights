@@ -12,6 +12,7 @@ adapters; nothing here changes.
 from __future__ import annotations
 
 import contextlib
+from dataclasses import replace
 
 import pytest
 
@@ -109,7 +110,9 @@ class TestFactMemoryContract:
             product_id=ProductId("p1"),
             provenance_ref="doc:b#2",
         )
-        bundle.memory.supersede(old_id, corrected, reason="datasheet revision B")
+        bundle.memory.supersede(
+            old_id, corrected, ValidationOutcome.VALIDATED, reason="datasheet revision B"
+        )
 
         history = list(bundle.memory.history("battery", scope))
         assert len(history) == 2, "the superseded version must remain readable"
@@ -134,10 +137,38 @@ class TestFactMemoryContract:
                 product_id=ProductId("p1"),
                 provenance_ref="doc:b#2",
             ),
+            ValidationOutcome.VALIDATED,
             reason="datasheet revision B",
         )
         corrections = [v for v in bundle.memory.history("battery", scope) if v.is_correction]
         assert corrections and corrections[0].reason == "datasheet revision B"
+
+    def test_rejected_correction_does_not_change_current_fact(self, bundle: ProviderBundle) -> None:
+        scope = ProductScope(product_id=ProductId("p1"))
+        first = Fact("battery", "capacity", "60 kWh", ProductId("p1"), "doc:a#1")
+        old = bundle.memory.commit(first, ValidationOutcome.VALIDATED)
+        with contextlib.suppress(Exception):
+            bundle.memory.supersede(
+                old, replace(first, value="62 kWh"), ValidationOutcome.REJECTED, reason="x"
+            )
+        assert list(bundle.memory.recall(scope, Query(text="battery capacity"))) == [first]
+        assert len(bundle.memory.history("battery", scope)) == 1
+
+    def test_correction_cannot_replace_another_products_fact(self, bundle: ProviderBundle) -> None:
+        scope_a = ProductScope(product_id=ProductId("p1"))
+        scope_b = ProductScope(product_id=ProductId("p2"))
+        first = Fact("battery", "capacity", "60 kWh", ProductId("p1"), "doc:a#1")
+        old = bundle.memory.commit(first, ValidationOutcome.VALIDATED)
+        with contextlib.suppress(Exception):
+            bundle.memory.supersede(
+                old,
+                replace(first, product_id=ProductId("p2")),
+                ValidationOutcome.VALIDATED,
+                reason="x",
+            )
+        assert list(bundle.memory.recall(scope_a, Query(text="battery capacity"))) == [first]
+        assert list(bundle.memory.recall(scope_b, Query(text="battery capacity"))) == []
+        assert len(bundle.memory.history("battery", scope_a)) == 1
 
 
 class TestSubstrateRegistryContract:

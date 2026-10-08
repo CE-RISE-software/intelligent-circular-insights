@@ -168,7 +168,7 @@ test.describe("smoke · where the backends differ", () => {
     await expect(page.getByTestId("pef-overview")).toBeVisible({ timeout: 25_000 });
     await expect(page.getByTestId("pef-coverage")).toBeVisible();
     // The caveat travels with the result rather than living in a footnote.
-    await expect(page.getByTestId("compliance-note")).toContainText("not an EF-compliant declaration");
+    await expect(page.getByTestId("compliance-note")).toContainText("indicative estimates, not declarations");
     await expectServedBy(page, "ce-rise");
   });
 

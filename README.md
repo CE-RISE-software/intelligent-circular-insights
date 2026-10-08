@@ -55,6 +55,9 @@ Additional safeguards include request-local model budgets, disabled SDK retries 
 deliberate live checks, append-only product-scoped memory, provenance for generated
 records, typed capability errors and secret-scanning gates.
 
+Fact memory is in-process and is not restored after a restart. Durable storage
+can be added if a future deployment requires it.
+
 ## Repository structure
 
 ```text
@@ -147,6 +150,7 @@ The Carbon and PEF Studio views demonstrate calculation provenance and backend r
 with study-specific data. The battery study includes its foreground inventory but not
 the licensed background database, so it uses a documented proxy factor pack. These
 outputs are not product declarations.
+
 The six CE-RISE root schemas validate vocabulary and types but declare no required
 fields, so EU DPP completeness and CE-RISE vocabulary conformance remain separate,
 explicit checks.
@@ -204,4 +208,4 @@ Licensed under the [European Union Public Licence v1.2 (EUPL-1.2)](LICENSE).
 Attribution: CE-RISE project (Grant Agreement No. 101092281) and the individual
 authors and partners indicated in the repository metadata.
 
-Maintained by A M Esfar-E-Alam and Riccardo Boero (NILU) within CE-RISE Task 4.2.
+Maintained by A M Esfar-E-Alam and Riccardo Boero (NILU) for CE-RISE.

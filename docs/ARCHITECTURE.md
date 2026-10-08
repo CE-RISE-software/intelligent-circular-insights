@@ -35,7 +35,7 @@ touching the call sites, and fix the parts that are plain engineering defects:
 | Published limitation | The seam this architecture provides | Fixed here? |
 |---|---|---|
 | In-domain ECE 0.5247, worse than RAG-Base's 0.487 | `Calibrator` port with isotonic (default), temperature and vector implementations present; signals exposed as a named vector rather than collapsed to a scalar | **No** — swappable, not swept |
-| Memory session-scoped, no provenance validation, supersession or correction history | `FactMemory` port with product-scoped recall, append-only storage, `supersede()`, `history()` | **Yes** — cross-product recall is a correctness bug in a compliance tool |
+| Memory session-scoped, no provenance validation, supersession or correction history | `FactMemory` port with product-scoped recall, in-process append-only versions, `supersede()`, `history()` | **Yes** — cross-product recall is a correctness bug in a compliance tool; durability is not implemented |
 | "Evidence before generation" is prompting, not guarantee | `GroundingVerifier` between composition and confidence; unresolved claim ⟹ abstain | **Yes** — cheap, and it removes a real failure mode |
 | RL router shows no significant improvement | `DecisionPolicy` port; the supervised router ships as default, the bandit and RL seats exist | **No** — the seat exists, the evaluation does not happen here |
 
@@ -128,8 +128,8 @@ graph TB
     subgraph "Python service"
         API["<b>apps/api</b> — FastAPI composition root"]
         CORE["<b>ici_core</b><br/>domain + 15 ports + use cases<br/><i>zero I/O, zero project deps</i>"]
-        EVID["<b>ici_evidence</b><br/>hybrid retrieval · context pack<br/>persistent fact memory"]
-        SYM["<b>ici_symbolic</b><br/>OWL 2 RL forward chaining<br/>obligation rules · traces · SHACL"]
+        EVID["<b>ici_evidence</b><br/>hybrid retrieval · context pack<br/>in-process fact memory"]
+        SYM["<b>ici_symbolic</b><br/>OWL 2 RL forward chaining<br/>obligation rules · traces"]
         SUB["<b>ici_substrates</b><br/>registry · DPP core · CE-RISE models<br/>PEFDPP graph · OFF schema"]
         REL["<b>ici_reliability</b><br/>confidence signals · calibrators<br/>selective policy · risk–coverage"]
         TRUST["<b>ici_datatrust</b><br/>latent-bias posterior · clean value<br/>interval · target sensitivity"]
@@ -223,7 +223,8 @@ class EvidenceProvider(Protocol):
 class FactMemory(Protocol):
     def recall(self, scope: ProductScope, q: Query) -> Sequence[Fact]: ...
     def commit(self, fact: Fact, validation: ValidationOutcome) -> FactId: ...
-    def supersede(self, old: FactId, new: Fact, reason: str) -> FactId: ...
+    def supersede(self, old: FactId, new: Fact,
+                  validation: ValidationOutcome, reason: str) -> FactId: ...
     def history(self, subject: SubjectRef) -> Sequence[FactVersion]: ...
 
 
@@ -453,7 +454,6 @@ graph TB
     subgraph "CE-RISE profile — mounted alongside"
         C1["<b>CE-RISE data models (17)</b><br/>record metadata · custody · governance<br/>product/material profile · integrated LCA<br/>circularity · data quality · UQ · traceability"]
         C2["<b>PEFDPP graph</b><br/>study activities · flows · assertions<br/>triple-level provenance"]
-        C3["SHACL conformance profiles"]
     end
 
     subgraph "Study profile"
@@ -461,13 +461,16 @@ graph TB
     end
 
     REG --> N1 & N2 & N3
-    REG -.->|ce-rise| C1 & C2 & C3
+    REG -.->|ce-rise| C1 & C2
     REG -.->|study| O1
 
     N1 & N2 & C1 & C2 --> SYM["SymbolicValidator<br/>coverage and precision<br/><b>measured per substrate</b>"]
     style C1 fill:#e8f0fe,stroke:#3d2bba
     style C2 fill:#e8f0fe,stroke:#3d2bba
 ```
+
+SHACL conformance profiles are a possible future development. Current record
+conformance checks use JSON Schema; this service does not yet run SHACL validation.
 
 **Why this matters to the research and not just the demo.** COMPASS's symbolic layer fires
 on 7.96 % of the workload with observed precision 1.000. That precision is the contribution;
@@ -607,6 +610,10 @@ failure available, so `FactMemory` is product-scoped, append-only, and supersede
 overwrites, with `history()` for the correction chain. Four properties, four tests, a
 morning's work.
 
+The current adapter holds versions in process memory, so they do not survive a restart.
+Its optional JSONL path writes an export log but does not reload it. Durable storage
+and restoration remain possible future requirements, not current capabilities.
+
 ### 9.3 Grounding — fixed here, because it is cheap
 
 `GroundingVerifier` sits between composition and the confidence step: decompose the answer
@@ -676,15 +683,15 @@ revamp/
 │                               mode switch, operating-point controls, compare view
 ├── packages/
 │   ├── ici_core/               domain · 15 ports · use cases   (no I/O, no project deps)
-│   ├── ici_evidence/           hybrid retrieval · context pack · persistent fact memory
-│   ├── ici_symbolic/           OWL 2 RL · obligation rules · traces · SHACL
+│   ├── ici_evidence/           hybrid retrieval · context pack · in-process fact memory
+│   ├── ici_symbolic/           OWL 2 RL · obligation rules · traces
 │   ├── ici_substrates/         registry · DPP core · CE-RISE models · PEFDPP · OFF
 │   ├── ici_reliability/        signals · calibrators · selective policy · risk–coverage
 │   ├── ici_datatrust/          latent-bias posterior · clean value · interval · sensitivity
 │   ├── ici_llm/                provider · prompts · grounding verifier · cassettes
 │   ├── ici_policy/             router · bandit · RL · off-policy evaluation
 │   └── ici_eval/               harness · metrics · manifests · figures
-├── ontology/                   DPP core + domain modules + PEFDPP + SHACL shapes
+├── ontology/                   DPP core + domain modules + PEFDPP
 ├── schemas/                    CE-RISE (vendored) · EU DPP · OFF · mappings
 ├── data/                       corpora · factors · benchmarks · examples
 ├── tests/                      unit · contract · integration · golden · e2e · property
@@ -707,7 +714,7 @@ revamp/
 | Determinism | seeds everywhere; each request's trace carries model, prompt hash, mode, calibrator id and τ, so a response can be explained after the fact |
 | Evaluation code | the harness (`ici_eval`: AURC, ECE, McNemar, Wilson, risk–coverage, figures) ports across and works — running sweeps with it is a separate exercise on a separate budget |
 | LLM spend | every interaction cassette-recorded once and replayed; the test suite runs with no API key |
-| Secrets | `.env` gitignored, `gitleaks` in CI |
+| Secrets | `.env` gitignored; tracked-secret checks run in the CI pytest suite |
 | Licence | **EUPL-1.2** for our code (the target repo already carries it); vendored CE-RISE data models stay segregated under CC-BY-NC-4.0 with REUSE metadata — ADR 0009 |
 | Release | Codeberg tag → GitHub mirror → Zenodo archive + DOI |
 

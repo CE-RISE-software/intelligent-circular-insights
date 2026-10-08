@@ -1,6 +1,6 @@
 {
   "_readme": [
-    "PROXY BACKGROUND FACTOR PACK — CE-RISE DPP Workbench / WP3 PEFDPP integration.",
+    "PROXY BACKGROUND FACTOR PACK — CE-RISE Intelligent Circular Insights Workbench.",
     "",
     "WHY THIS FILE EXISTS:",
     "The PEFDPP case study (Mintjes et al.) carries a COMPLETE machine-readable foreground",
@@ -12,9 +12,8 @@
     "",
     "To produce a demonstrable number, this pack supplies ONE published, citable cradle-to-gate",
     "GWP100 value per background flow. Every value carries its tier, source and uncertainty and",
-    "is rendered in the UI with a visible 'proxy' badge. NOTHING here is presented as an",
-    "EF-compliant result. Swapping this file for a licensed ecoinvent/EF-node extract turns the",
-    "same calculation into a compliant one without touching the engine.",
+    "is rendered in the UI with a visible 'proxy' badge. This pack supports indicative",
+    "estimates only; it does not provide a complete background inventory or a declaration.",
     "",
     "TIERS:",
     "  A — well-established published value for this exact material/process, low spread",
@@ -28,7 +27,7 @@
     "indicator": "Climate change (GWP100)",
     "indicator_unit": "kg CO2 eq",
     "method_reference": "IPCC AR6 GWP100, as adopted in EF 3.1",
-    "compliance": "NOT EF-compliant. Proxy layer for demonstration only.",
+    "compliance": "Indicative proxy factors only; not for declarations.",
     "replaces": "ecoinvent 3.12 cut-off / EF-node background datasets"
   },
 

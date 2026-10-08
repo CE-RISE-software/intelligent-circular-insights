@@ -122,7 +122,9 @@ class FakeFactMemory:
     def recall(self, scope: ProductScope, q: Query) -> Sequence[Fact]:
         if scope.product_id is None:
             return []
-        return [v.fact for v in self.store.get(scope.product_id, [])]
+        versions = self.store.get(scope.product_id, [])
+        replaced = {v.supersedes for v in versions if v.supersedes}
+        return [v.fact for v in versions if v.id not in replaced]
 
     def commit(self, fact: Fact, validation: ValidationOutcome) -> FactId:
         if validation is not ValidationOutcome.VALIDATED:
@@ -132,7 +134,26 @@ class FakeFactMemory:
         self.store.setdefault(fact.product_id, []).append(FactVersion(id=fid, fact=fact))
         return fid
 
-    def supersede(self, old: FactId, new: Fact, reason: str) -> FactId:
+    def supersede(
+        self, old: FactId, new: Fact, validation: ValidationOutcome, reason: str
+    ) -> FactId:
+        if validation is not ValidationOutcome.VALIDATED:
+            raise ValueError("refusing to store an unvalidated correction")
+        previous = next(
+            (v for versions in self.store.values() for v in versions if v.id == old), None
+        )
+        if previous is None:
+            raise KeyError(old)
+        if any(v.supersedes == old for versions in self.store.values() for v in versions):
+            raise ValueError("fact is no longer current")
+        if (
+            previous.fact.product_id,
+            previous.fact.subject,
+            previous.fact.predicate,
+        ) != (new.product_id, new.subject, new.predicate):
+            raise ValueError("a correction must keep the product, subject, and predicate")
+        if not reason:
+            raise ValueError("a correction must say why")
         self._n += 1
         fid = FactId(f"f{self._n}")
         self.store.setdefault(new.product_id, []).append(

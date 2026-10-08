@@ -71,13 +71,14 @@ class EvidenceProvider(Protocol):
 
 @runtime_checkable
 class FactMemory(Protocol):
-    """Persistent facts, product-scoped and append-only.
+    """Product-scoped, append-only fact versions.
 
     The published prototype is session-scoped and mutates in place. This interface
     is the corrected one: recall takes a ``ProductScope`` so facts cannot leak
-    across products, storage takes a validation outcome so unvalidated facts cannot
-    be committed, and corrections append rather than overwrite so the history of
-    what was believed stays readable.
+    across products, commits take a validation outcome so unvalidated facts cannot
+    be stored, and corrections append rather than overwrite so the history of
+    what was believed stays readable. Durability is an optional adapter concern,
+    not a requirement of this port.
     """
 
     def recall(self, scope: ProductScope, q: Query) -> Sequence[Fact]:
@@ -88,8 +89,10 @@ class FactMemory(Protocol):
         """Store a validated fact. Must reject anything not VALIDATED."""
         ...
 
-    def supersede(self, old: FactId, new: Fact, reason: str) -> FactId:
-        """Append a correction. The superseded version stays readable."""
+    def supersede(
+        self, old: FactId, new: Fact, validation: ValidationOutcome, reason: str
+    ) -> FactId:
+        """Append a validated correction to a current fact with the same identity."""
         ...
 
     def history(self, subject: str, scope: ProductScope) -> Sequence[FactVersion]:
@@ -128,7 +131,7 @@ class SymbolicValidator(Protocol):
 
 @runtime_checkable
 class SchemaRegistry(Protocol):
-    """Conformance checking against EU DPP schemas, CE-RISE modules, SHACL shapes."""
+    """JSON Schema conformance checking; SHACL support is a future extension."""
 
     def profiles(self) -> Sequence[SchemaProfile]: ...
 

@@ -1,4 +1,4 @@
-# Intelligent Circular Insights
+# CE-RISE Intelligent Circular Insights Workbench
 
 Evidence-backed querying, validation, repair and generation of Digital Product
 Passport (DPP) records. Answers cite their supporting evidence or the workbench
@@ -17,11 +17,10 @@ from unverified suggestions for human review.
 
 ## Where to start
 
-[The architecture](ARCHITECTURE.md) has the diagrams, the ports, and — in sections 9
-and 10 — an explicit split between what this rewrite fixes and what it only leaves a
-seam for. The [decision records](adr/0001-hexagonal-architecture.md) say why each
-choice was made, including the ones later reconsidered.
-[Verification and remaining work](VERIFICATION_2026-09-22.md) records the latest checks.
+[The architecture](ARCHITECTURE.md) describes the components, ports and planned
+extensions. The [decision records](adr/0001-hexagonal-architecture.md) explain
+the design choices and their revisions.
+[Verification and remaining work](VERIFICATION_2026-09-22.md) records a dated check.
 
 ## Licensing
 

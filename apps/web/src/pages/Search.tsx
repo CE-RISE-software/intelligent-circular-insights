@@ -49,7 +49,7 @@ export default function Search() {
       <ModeWarningBanner />
       <GlassCard
         title="Search & Answer"
-        subtitle="Retrieval, persistent fact memory, symbolic validation and a selective decision. The system answers when its calibrated confidence clears τ, and declines when it does not."
+        subtitle="Retrieval, product-scoped fact memory, symbolic validation and a selective decision. The system answers when its calibrated confidence clears τ, and declines when it does not."
         testId="search-form"
       >
         <form
