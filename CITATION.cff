@@ -3,7 +3,7 @@ title: >-
   CE-RISE Intelligent Circular Insights Workbench
 type: software
 message: >-
-  If you use this software, please cite it using the metadata from this file.
+  v0.1.0 - First release: evidence-backed Digital Product Passport workflows.
 authors:
   - given-names: A M
     family-names: Esfar-E-Alam
