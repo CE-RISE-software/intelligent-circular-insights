@@ -32,6 +32,11 @@ which sources support each result.
 [Testing](TESTING.md) covers the verification approach, and the
 [decision records](adr/0001-hexagonal-architecture.md) explain design choices.
 
+## Citation
+
+Use the [Zenodo concept DOI 10.5281/zenodo.23257806](https://doi.org/10.5281/zenodo.23257806)
+to cite the workbench across all versions.
+
 ## Licensing
 
 See the [licensing decision](adr/0010-licensing.md) for the software and vendored

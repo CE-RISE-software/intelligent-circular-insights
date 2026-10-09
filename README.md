@@ -153,6 +153,12 @@ See [Testing](docs/TESTING.md) for the current checks and
 | [Architecture decisions](docs/adr/) | Rationale and consequences for the major design choices |
 | [Dated verification checkpoint](docs/VERIFICATION_2026-09-22.md) | Results recorded on 22 September 2026 |
 
+## Citation
+
+Use the [Zenodo concept DOI 10.5281/zenodo.23257806](https://doi.org/10.5281/zenodo.23257806)
+to cite the workbench across all versions.
+Machine-readable citation details are in [CITATION.cff](CITATION.cff).
+
 ## License
 
 The workbench software is licensed under the

@@ -4,6 +4,7 @@ title: >-
 type: software
 message: >-
   v0.1.0 - First release: evidence-backed Digital Product Passport workflows.
+  Use the concept DOI 10.5281/zenodo.23257806 to cite the software across all versions.
 authors:
   - given-names: A M
     family-names: Esfar-E-Alam
@@ -16,6 +17,8 @@ authors:
     affiliation: NILU
 repository-code: >-
   https://codeberg.org/CE-RISE-software/intelligent-circular-insights
+doi: 10.5281/zenodo.23257806
+date-released: '2026-10-09'
 abstract: >-
   An AI-assisted workbench for querying, validating, repairing and generating
   Digital Product Passport records. Answers cite supporting evidence or are
